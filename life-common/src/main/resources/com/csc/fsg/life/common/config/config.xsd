@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Modifications: WMA-495, T0143, T0160, T0166, ENH1019, ENH1220 -->
+<xsd:schema xmlns="http://www.csc.com/schema/config" 
+			xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+			xmlns:beans="http://www.springframework.org/schema/beans" 
+			targetNamespace="http://www.csc.com/schema/config" 
+			elementFormDefault="qualified" 
+			attributeFormDefault="unqualified">
+	
+	<xsd:import namespace="http://www.springframework.org/schema/beans"/>
+	
+	<xsd:element name="connection">
+		<xsd:annotation>
+			<xsd:documentation>
+				Defines the properties used for connecting to a backend system through the service manager.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:attribute name="systemId" use="required" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The id of the system this environment is configured to communicate with.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="transactionId" use="required" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The CICS transaction id.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="ipAddress" use="required" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The ip address of the backend system to communicate with.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="port" use="required" type="xsd:int">
+				<xsd:annotation>
+					<xsd:documentation>
+						The port of the backend system to communicate with.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="timeout" use="optional" type="xsd:int">
+				<xsd:annotation>
+					<xsd:documentation>
+						The number of milliseconds the connection will wait for a response before it times out.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="deleteRecords" use="optional" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>
+						Whether or not to delete the XGREPOS records after each successful event.  The
+						default is "false".
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="datasource">
+		<xsd:annotation>
+			<xsd:documentation>
+				Defines the properties used for establishing the database connection.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:attribute name="ref" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						Reference to another bean that represents the datasource configuration.  If
+						this "ref" is configured, there is no need to configure any other datasource
+						properties.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="jndiName" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The JNDI name for the datasource as configured in the application server.  If 
+						this "jndiName" is configured, there is no need to configure any other datasource
+						properties.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="driverClassName" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The name of the driver class used when establishing the database connection.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="url" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The url of the database.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="username" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The username to use when establishing the database connection.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="password" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The password to use when establishing the database connection.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="validationQuery" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						Optional SQL query used to validate database connection.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="environment">
+		<xsd:annotation>
+			<xsd:documentation>
+				Defines a backend environment.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="datasource"/>
+				<xsd:element ref="connection"/>
+			</xsd:sequence>
+			<xsd:attribute name="id" use="required" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The unique id for this environment.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="name" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The name of this environment.  If no name is provided, the id will be used.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="displayName" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The name of this environment used for display purposes.  If no displayName is provided,
+						the id will be used for display purposes.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="debugAllowed" use="optional" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>
+						Whether or not this environment supports host system tracing.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="defaultLogSwitch" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						Specifies the default log switch used when performing host system tracing.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="databaseId" use="optional" type="xsd:string" />
+			<xsd:attribute name="dataSchema" use="required" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The database schema for the "data" tables.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="rulesSchema" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The database schema for the "rules" tables.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="dataFile" use="optional" type="xsd:string" />
+			<xsd:attribute name="rulesFile" use="optional" type="xsd:string" />
+			<xsd:attribute name="converter" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The id of the converter to use to convert the data to/from the backend
+						system format.  For a Mainframe or MFE environment, this attribute is not
+						needed since the default is "cicsConverter".
+						For a NetExpress environment, this should be set to "asciiConverter".
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="archivedEnv" use="optional" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>
+						Is this environment the archive for another environment?
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="archivedDbEnv" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						Reference to another environment that contains the archived data.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="serviceManager" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The service manager class to use when communicating with the backend system.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="highValueEncoding" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						Used for highvalue conversion
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="avm">
+		<xsd:annotation>
+			<xsd:documentation>
+				Defines the properties used for connecting to the Allowable Values Management data.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:attribute name="applicationId" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The id of the application used as the key for AVM data.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="environmentId" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The id of the environment used as the key for AVM data.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="enabled" use="optional" type="xsd:boolean" default="true">
+				<xsd:annotation>
+					<xsd:documentation>
+						Top-level switch to turn on/off access to AVM.  Default value is "true".
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="datasourceRef" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						Reference to another bean that represents the AVM datasource configuration. This attribute takes
+						precedence over jndiName.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="jndiName" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The JNDI name for the AVM datasource as configured in the application server.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="serverLink" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The link to the running AVM application.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="schema" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The schema of the AVM database.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="status" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The status of the AVM cache.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="accessCacheStatus" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The status of the AVM cache.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="delay" use="optional" type="xsd:integer">
+				<xsd:annotation>
+					<xsd:documentation>
+						The number of milliseconds to delay before accessing the cache.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="period" use="optional" type="xsd:integer">
+				<xsd:annotation>
+					<xsd:documentation>
+						The period in milliseconds between cache accesses.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="pageDataUtilized" use="optional" type="xsd:boolean" default="false">
+				<xsd:annotation>
+					<xsd:documentation>
+						A flag indicating whether AVM page data is used by the system.  Default value is "false".
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="usi">
+		<xsd:annotation>
+			<xsd:documentation>
+				Defines the properties used for connecting to the Security Interface data.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:attribute name="datasourceRef" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						Reference to another bean that represents the USI datasource configuration. This attribute takes
+						precedence over jndiName.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="jndiName" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The JNDI name for the USI datasource as configured in the application server.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="performanceLog">
+		<xsd:annotation>
+			<xsd:documentation>
+				Defines the properties used for connecting to the performance monitoring log database.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:attribute name="level" use="optional" type="PerformanceLogLevelType">
+				<xsd:annotation>
+					<xsd:documentation>
+						Requested logging level.  Valid values are:<br/>
+						<ul>
+							<li>0: No logging</li>
+							<li>1: Logging at web level, including JDBC calls directly at web level</li>
+							<li>2: Logging at service level including Service Manager and JDBC calls at service level</li>
+							<li>3: Logging at all levels</li>
+						</ul>
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="datasourceRef" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						Reference to another bean that represents the performance log datasource configuration.
+						This attribute takes precedence over jndiName.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="jndiName" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The JNDI name for the performance log datasource as configured in the application server.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="performanceSchema" use="optional" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						The database schema for the performance log tables.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="minimumElapsedTime" use="optional" type="xsd:long" default="0">
+				<xsd:annotation>
+					<xsd:documentation>
+						The minimum elapsed time to be recorded in a performance log segment.  Segments with 
+						elapsed time shorter than this will be omitted from the log.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:simpleType name="PerformanceLogLevelType">
+		<xsd:restriction base="xsd:int">
+			<xsd:minInclusive value="0"/>
+			<xsd:maxInclusive value="3"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

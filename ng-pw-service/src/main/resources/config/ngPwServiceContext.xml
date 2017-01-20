@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	<context:annotation-config/>
+	<context:component-scan base-package="com.csc.fsg.life.rest.exception,com.csc.fsg.life.rest.model,com.csc.fsg.life.rest.service"/>
+	<bean class="com.csc.fsg.life.common.util.ApplicationContextUtils"/>
+
+	<bean class="com.csc.fsg.life.openam.config.SecurityManagementConfig">
+		<property name="securityManagementUrl" value="http://openam.rest-security.com:6080/openam/json"/>
+		<property name="sessionTokenCookieName" value="ngPwSessionToken"/>
+		<property name="realm" value="/ng-pw"/>
+		<property name="policySetName" value="BRT_ACCESS_POLICY"/>
+		<property name="apiVersions" ref="openAmApiVersions"/>
+	</bean>
+
+	<util:map id="openAmApiVersions">
+		<entry key="/authenticate">
+			<bean class="com.csc.fsg.life.openam.config.EndpointApiVersion">
+				<property name="protocolVersion" value="1.0"/>
+				<property name="resourceVersion" value="2.0"/>
+			</bean>
+		</entry>
+		<entry key="/sessions">
+			<bean class="com.csc.fsg.life.openam.config.EndpointApiVersion">
+				<property name="protocolVersion" value="1.0"/>
+				<property name="resourceVersion" value="1.1"/>
+			</bean>
+		</entry>
+		<entry key="/policies">
+			<bean class="com.csc.fsg.life.openam.config.EndpointApiVersion">
+				<property name="protocolVersion" value="1.0"/>
+				<property name="resourceVersion" value="2.0"/>
+			</bean>
+		</entry>
+	</util:map>
+
+	<bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+		<property name="properties">
+			<value>
+				defaultErrorMessage=Something went wrong - please contact your technical support
+			</value>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="exposeProxy" value="true"/>
+		<property name="beanNames" value="*ServiceImpl"/>
+		<property name="interceptorNames" value="restServiceInterceptor"/>
+	</bean>
+
+	<bean id="restServiceInterceptor" class="com.csc.fsg.life.rest.service.RestServiceInterceptor"/>
+
+	<import resource="classpath:config/AVMConfigContext.xml"/>
+	<import resource="classpath:config/pwEnvContext.xml"/>
+	<import resource="classpath:config/pwConfigContext.xml"/>
+</beans>

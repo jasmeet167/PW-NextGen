@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Modifications: CCCV-D954, ENH863, T0199 -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="XGREPOS">
+	<resultMap id="XGREPOSResult" type="XGREPOS">
+		<result property="systemId" column="SYSTEM_ID"/>
+		<result property="eventId" column="EVENT_ID"/>
+		<result property="messageKey" column="MESSAGE_KEY"/>
+		<result property="operation" column="OPERATION"/>
+		<result property="sequenceNo" column="SEQUENCE_NO"/>
+		<result property="subSeqNo" column="SUB_SEQ_NO"/>
+		<result property="mapId" column="MAP_ID"/>
+		<result property="copybookName" column="COPYBOOK_NAME"/>
+		<result property="statusCode" column="STATUS_CODE" typeHandler="org.apache.ibatis.type.StringTypeHandler"/>
+		<result property="trxCode" column="TRX_CODE"/>
+		<result property="userId" column="USER_ID"/>
+		<result property="responseStatus" column="RESPONSE_STATUS"/>
+		<result property="eventImage" column="EVENT_IMAGE"/>
+		<result property="timeStamp" column="TIME_STAMP"/>
+	</resultMap>
+
+	<insert id="insertXGREPOS" parameterType="XGREPOS">
+		INSERT into ${schema}.XGREPOS(
+					SYSTEM_ID,	
+					EVENT_ID,	
+					MESSAGE_KEY,	
+					OPERATION,	
+					SEQUENCE_NO,	
+					SUB_SEQ_NO,	
+					MAP_ID,	
+					COPYBOOK_NAME,	
+					STATUS_CODE,
+					TRX_CODE,
+					USER_ID,	
+					EVENT_IMAGE
+			) VALUES (
+				#{systemId},	
+				#{eventId},	
+				#{messageKey},	
+				#{operation},	
+				#{sequenceNo},	
+				#{subSeqNo},	
+				#{mapId},	
+				#{copybookName},	
+				#{statusCode},
+				#{trxCode},
+				#{userId},	
+				#{eventImage}
+			)
+	</insert>
+
+	<update id="updateXGREPOS" parameterType="XGREPOS">
+		UPDATE ${schema}.XGREPOS SET (
+			SYSTEM_ID = #{systemId},			
+			EVENT_ID = #{eventId},			
+			MESSAGE_KEY = #{messageKey},			
+			OPERATION = #{operation},			
+			SEQUENCE_NO = #{sequenceNo},			
+			SUB_SEQ_NO = #{subSeqNo},			
+			MAP_ID = #{mapId},			
+			COPYBOOK_NAME = #{copybookName},			
+			STATUS_CODE = #{statusCode},	
+			TRX_CODE = #{trxCode},
+			USER_ID = #{userId},		
+			EVENT_IMAGE = #{eventImage}
+		WHERE 
+			SYSTEM_ID = #{systemId} AND			
+			EVENT_ID = #{eventId} AND			
+			MESSAGE_KEY = #{messageKey} AND			
+			OPERATION = #{operation} AND			
+			SEQUENCE_NO = #{sequenceNo} AND			
+			SUB_SEQ_NO = #{subSeqNo} AND			
+			MAP_ID = #{mapId} AND			
+			COPYBOOK_NAME = #{copybookName} AND			
+			STATUS_CODE = #{statusCode} AND
+			TRX_CODE = #{trxCode} AND
+			USER_ID = #{userId} AND			
+			EVENT_IMAGE = #{eventImage}
+	</update>
+
+	<update id="updateXGREPOSResponse" parameterType="XGREPOS">
+		UPDATE ${schema}.XGREPOS SET
+			RESPONSE_STATUS = 'R'
+		WHERE 
+			SYSTEM_ID = #{systemId} AND			
+			EVENT_ID = #{eventId} AND			
+			MESSAGE_KEY = #{messageKey} AND			
+			OPERATION = #{operation}
+			<if test="sequenceNo != null">
+				AND SEQUENCE_NO = #{sequenceNo}
+			</if>
+	</update>
+
+	<delete id="deleteXGREPOS" parameterType="XGREPOS">
+		DELETE FROM ${schema}.XGREPOS WHERE 
+			SYSTEM_ID = #{systemId} AND			
+			EVENT_ID = #{eventId} AND			
+			MESSAGE_KEY = #{messageKey} AND			
+			OPERATION = #{operation} AND			
+			SEQUENCE_NO = #{sequenceNo} AND			
+			SUB_SEQ_NO = #{subSeqNo} AND			
+			MAP_ID = #{mapId} AND			
+			COPYBOOK_NAME = #{copybookName} AND			
+			STATUS_CODE = #{statusCode} AND	
+			TRX_CODE = #{trxCode} AND
+			USER_ID = #{userId} AND			
+			EVENT_IMAGE = #{eventImage}
+	</delete>
+
+	<delete id="deleteEventFromXGREPOS" parameterType="XGREPOS">
+		DELETE FROM ${schema}.XGREPOS WHERE 
+			SYSTEM_ID = #{systemId} AND			
+			EVENT_ID = #{eventId} AND			
+			MESSAGE_KEY = #{messageKey}
+	</delete>
+
+	<delete id="deleteUserFromXGREPOS" parameterType="XGREPOS">
+		DELETE FROM ${schema}.XGREPOS WHERE 
+			USER_ID = #{userId}
+	</delete>
+	
+	<select id="countUserFromXGREPOS" resultType="int" parameterType="XGREPOS">
+		select count(*) AS TOTAL FROM ${schema}.XGREPOS WHERE 
+			USER_ID = #{userId}
+	</select>
+	
+	<select id="selectAllFromXGREPOS" resultMap="XGREPOSResult">
+		SELECT 
+			SYSTEM_ID,	
+			EVENT_ID,	
+			MESSAGE_KEY,	
+			OPERATION,	
+			SEQUENCE_NO,	
+			SUB_SEQ_NO,	
+			MAP_ID,	
+			COPYBOOK_NAME,	
+			STATUS_CODE,
+			TRX_CODE,
+			USER_ID,
+			TIME_STAMP,
+			RESPONSE_STATUS,
+			EVENT_IMAGE
+		FROM ${schema}.XGREPOS WHERE 1=1
+	</select>
+
+	<select id="selectListFromXGREPOS" resultMap="XGREPOSResult" parameterType="XGREPOS">
+		SELECT 
+			SYSTEM_ID,	
+			EVENT_ID,	
+			MESSAGE_KEY,	
+			OPERATION,	
+			SEQUENCE_NO,	
+			SUB_SEQ_NO,	
+			MAP_ID,	
+			COPYBOOK_NAME,	
+			STATUS_CODE,
+			TRX_CODE,
+			USER_ID,
+			TIME_STAMP,
+			RESPONSE_STATUS,
+			EVENT_IMAGE
+		FROM ${schema}.XGREPOS
+		<where>
+			<if test="systemId != null and systemId != ''">
+				AND SYSTEM_ID = #{systemId}
+			</if>
+			<if test="eventId != null and eventId != ''">
+				AND EVENT_ID = #{eventId}
+			</if>
+			<if test="messageKey != null and messageKey != ''">
+				AND MESSAGE_KEY = #{messageKey}
+			</if>
+			<if test="operation != null and operation != ''">
+				AND OPERATION = #{operation}
+			</if>
+			<if test="sequenceNo != null">
+				AND SEQUENCE_NO = #{sequenceNo}
+			</if>
+			<if test="subSeqNo != null">
+				AND SUB_SEQ_NO = #{subSeqNo}
+			</if>
+			<if test="mapId != null">
+				AND MAP_ID = #{mapId}
+			</if>
+			<if test="copybookName != null and copybookName != ''">
+				AND COPYBOOK_NAME = #{copybookName}
+			</if>
+			<if test="statusCode != null and statusCode != ''">
+				AND STATUS_CODE = #{statusCode}
+			</if>
+			<if test="trxCode != null and trxCode != ''">
+				AND TRX_CODE = #{trxCode}
+			</if>
+			<if test="userId != null and userId != ''">
+				AND USER_ID = #{userId}
+			</if>
+			<if test="eventImage != null and eventImage != ''">
+				AND EVENT_IMAGE = #{eventImage}
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectResultsFromXGREPOS" resultMap="XGREPOSResult" parameterType="XGREPOS">
+		<![CDATA[
+		SELECT 
+			SYSTEM_ID, 
+			EVENT_ID, 
+			MESSAGE_KEY, 
+			OPERATION, 
+			SEQUENCE_NO,
+			SUB_SEQ_NO,	
+			MAP_ID,	
+			COPYBOOK_NAME, 
+			STATUS_CODE, 
+			TRX_CODE,
+			USER_ID,
+			TIME_STAMP,
+			RESPONSE_STATUS,
+			EVENT_IMAGE
+		FROM ${schema}.XGREPOS
+		WHERE 
+			SYSTEM_ID = #{systemId} AND			
+			EVENT_ID = #{eventId} AND			
+			MESSAGE_KEY = #{messageKey} AND			
+			OPERATION = #{operation} AND			
+			SUB_SEQ_NO <> 0 AND		
+			STATUS_CODE <> 'S'
+		ORDER BY SEQUENCE_NO, SUB_SEQ_NO
+		]]>
+	</select>
+	
+	<select id="selectPendingResponsesFromXGREPOS" resultMap="XGREPOSResult" parameterType="XGREPOS">
+		<![CDATA[
+		SELECT 
+			SYSTEM_ID, 
+			EVENT_ID, 
+			MESSAGE_KEY, 
+			OPERATION, 
+			SEQUENCE_NO,
+			SUB_SEQ_NO,	
+			MAP_ID,	
+			COPYBOOK_NAME, 
+			STATUS_CODE, 
+			TRX_CODE,
+			USER_ID,
+			TIME_STAMP,
+			RESPONSE_STATUS,	
+			EVENT_IMAGE
+		FROM ${schema}.XGREPOS
+		WHERE
+			USER_ID = #{userId} AND 
+			OPERATION = 'R' AND	
+			SUB_SEQ_NO = 0 AND 
+			RESPONSE_STATUS = ''
+		ORDER BY SEQUENCE_NO, SUB_SEQ_NO
+		]]>
+	</select>
+	
+	<select id="selectInProgressRecordsFromXGREPOS" resultMap="XGREPOSResult" parameterType="XGREPOS">
+		<![CDATA[
+		SELECT * 
+		FROM ${schema}.XGREPOS as T1 
+         WHERE T1.USER_ID = #{userId} AND 
+         NOT EXISTS 
+         	(SELECT MESSAGE_KEY 
+         	 FROM ${schema}.XGREPOS as T2 
+         	 WHERE T1.MESSAGE_KEY = T2.MESSAGE_KEY and OPERATION = 'R')
+    	]]>
+	</select>
+</mapper>

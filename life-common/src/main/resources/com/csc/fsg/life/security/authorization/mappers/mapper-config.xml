@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!-- Modifications: ENH1220, T0199 -->
+<configuration>
+	<typeAliases>
+		<typeAlias alias="EnvironmentCompanyModel" type="com.csc.fsg.life.security.authorization.bo.EnvironmentCompanyModelImpl"/>
+		<typeAlias alias="AuthorityCacheModel" type="com.csc.fsg.life.security.authorization.bo.AuthorityCacheModelImpl"/>
+	</typeAliases>
+	<mappers>
+		<mapper resource="com/csc/fsg/life/security/authorization/mappers/AuthorizationSupport.xml"/>
+	</mappers>
+</configuration>

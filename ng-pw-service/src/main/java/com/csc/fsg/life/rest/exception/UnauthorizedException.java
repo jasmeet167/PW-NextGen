@@ -1,0 +1,21 @@
+package com.csc.fsg.life.rest.exception;
+
+import org.springframework.http.HttpStatus;
+
+public class UnauthorizedException
+	extends QuietRestServiceException
+{
+	private static final long serialVersionUID = 2132126582671458675L;
+
+	static public HttpStatus HTTP_STATUS = HttpStatus.UNAUTHORIZED;
+
+	public UnauthorizedException()
+	{
+		super();
+	}
+
+	public HttpStatus getHttpStatus()
+	{
+		return HTTP_STATUS;
+	}
+}

@@ -1,0 +1,109 @@
+<!-- Modifications: ENH1053 -->
+
+<TRAD_BASE productPrefix="T" planType="B">
+	<NODE tableId="007" />
+	<NODE tableId="011"  req="Y" />
+	<NODE tableId="012" >
+		<NODE tableId="T72"  var="1"  varText="Male Current" />
+		<NODE tableId="T72"  var="2"  varText="Female Current" />
+		<NODE tableId="T72"  var="3"  varText="Male Guaranteed" />
+		<NODE tableId="T72"  var="4"  varText="Female Guaranteed" />
+		<NODE tableId="T72"  var="5"  varText="Unisex Current" />
+		<NODE tableId="T72"  var="6"  varText="Unisex Guaranteed" />
+		<NODE tableId="T72"  var="7"  varText="Male/Female Current" />
+		<NODE tableId="T72"  var="8"  varText="Male/Female Guaranteed" />
+	</NODE>
+	<NODE tableId="022" />
+	<NODE tableId="025"  var=""  varText="Extended Term Ins" />
+	<NODE tableId="036" />
+	<NODE tableId="038" >
+		<NODE tableId="T24" >
+			<NODE tableId="025"  var=""  varText="Declared" />
+		</NODE>
+	</NODE>
+	<NODE tableId="039" />
+	<NODE tableId="066"  var="T"  varText="Tabular" />
+	<NODE tableId="066"  var="C"  varText="Canadian" />
+	<NODE tableId="071"  var="M"  varText="" />
+	<NODE tableId="071"  var="E"  varText="Extended Term Ins" />
+	<NODE tableId="085" />
+	<NODE tableId="088" />
+	<NODE tableId="124" />
+	<NODE tableId="E04" />
+	<NODE tableId="EC4"  var="M"  varText="Male" />
+	<NODE tableId="EC4"  var="F"  varText="Female" />
+	<NODE tableId="EC5"  var="M"  varText="Male" />
+	<NODE tableId="EC5"  var="F"  varText="Female" />
+	<NODE tableId="ED7" />
+	<NODE tableId="H01" />
+	<NODE tableId="T04"  req="Y" />
+	<NODE tableId="T06" />
+	<NODE tableId="T15"  var="W"  req="Y"  varText="State Withholding" />
+	<NODE tableId="T67" />
+	<NODE tableId="T73"  var=""  varText="Mode Premium" />
+	<NODE tableId="T73"  var="X"  varText="Term Reinsurance" />
+	<NODE tableId="T74"  req="Y" >
+		<NODE tableId="T72"  var="1"  varText="Male Current" />
+		<NODE tableId="T72"  var="2"  varText="Female Current" />
+		<NODE tableId="T72"  var="3"  varText="Male Guaranteed" />
+		<NODE tableId="T72"  var="4"  varText="Female Guaranteed" />
+		<NODE tableId="T72"  var="5"  varText="Unisex Current" />
+		<NODE tableId="T72"  var="6"  varText="Unisex Guaranteed" />
+		<NODE tableId="T72"  var="7"  varText="Male/Female Current" />
+		<NODE tableId="T72"  var="8"  varText="Male/Female Guaranteed" />
+	</NODE>
+	<NODE tableId="T76"  var="B"  varText="" />
+	<NODE tableId="T76"  var="I"  varText="Increase" />
+	<NODE tableId="T78"  req="Y" />
+	<NODE tableId="T79"  var="D"  varText="Calculated Premium" />
+	<NODE tableId="T79"  var="E"  varText="Initial Premium" />
+	<NODE tableId="T79"  var="F"  varText="Subsequent Premium" />
+	<NODE tableId="T81" />
+	<NODE tableId="T82" />
+	<NODE tableId="T84"  req="Y" />
+	<NODE tableId="TB3" >
+		<NODE tableId="025"  var="1"  varText="Declared" />
+		<NODE tableId="025"  var="2"  varText="Loan Dividend" />
+		<NODE tableId="T67"  var="1"  varText="" />
+		<NODE tableId="T67"  var="2"  varText="Paid Up" />
+		<NODE tableId="TB4"  var="1"  varText="Paid Up Additions" >
+			<NODE tableId="TBA" />
+			<NODE tableId="TBB" />
+			<NODE tableId="TBC" />
+			<NODE tableId="TBD" />
+		</NODE>
+		<NODE tableId="TB4"  var="2"  varText="Declared" >
+			<NODE tableId="TBA" />
+			<NODE tableId="TBB" />
+			<NODE tableId="TBC" />
+			<NODE tableId="TBD" />
+		</NODE>
+		<NODE tableId="TB4"  var="3"  varText="Terminal" >
+			<NODE tableId="TBA" />
+			<NODE tableId="TBB" />
+			<NODE tableId="TBC" />
+			<NODE tableId="TBD" />
+		</NODE>
+		<NODE tableId="TB4"  var="4"  varText="Separate Loan" >
+			<NODE tableId="TBA" />
+			<NODE tableId="TBB" />
+			<NODE tableId="TBC" />
+			<NODE tableId="TBD" />
+		</NODE>
+		<NODE tableId="TB4"  var="5"  varText="Paid Up Addition Term" >
+			<NODE tableId="TBA" />
+			<NODE tableId="TBB" />
+			<NODE tableId="TBC" />
+			<NODE tableId="TBD" />
+		</NODE>
+	</NODE>
+	<NODE tableId="TB5"  req="Y" >
+		<NODE tableId="TB6" />
+		<NODE tableId="TB7" />
+	</NODE>
+	<NODE tableId="TC1" />
+	<NODE tableId="TC7" />
+	<NODE tableId="TC8" />
+	<NODE tableId="TD1" />
+	<NODE tableId="XW1" />
+</TRAD_BASE>

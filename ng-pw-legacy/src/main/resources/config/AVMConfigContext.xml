@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Modifications: T0196 -->
+<!--
+   This document contains all the Spring managed beans (not including any beans
+   required for data access).  This includes but is not limited to the following
+   bean types:
+      1.  Business Objects
+      2.  Business Services
+      3.  Business Validations
+      4.  Security Manager
+      5.  Transaction Manager
+      6.  All configured aspects (AOP)
+ -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  	<bean id="avm" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName">
+			<value>java:comp/env/jdbc/avmDataSource</value>			 
+		</property>
+	</bean>
+
+	<bean id="AVMConfigBean"
+		class="com.csc.fsg.life.avm.environments.AVMConfigBean">
+		<property name="applicationId">	<value>WMA</value> </property>
+		<property name="environmentId">	<value>BASE</value> </property>
+		<property name="status"> <value>ON</value> </property>
+		<property name="delay"> <value>60000</value> </property>
+		<property name="period"> <value>60000</value> </property>
+		<property name="avmServerlink">
+			<value>http://xmldev:9084/avm/action/common/Login</value>
+		</property>
+		<property name="dataSource"> <ref bean="avm" /> </property>
+		<property name="accessCacheStatus"> <value>OFF</value></property>
+		<property name="schema"> <value>AVM</value> </property>
+	</bean>
+
+</beans>

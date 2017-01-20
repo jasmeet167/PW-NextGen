@@ -1,0 +1,41 @@
+<!-- Modifications: ENH994, ENH808, ENH1052, ENH1167 -->
+
+<ANNUITY_PAYOUT productPrefix="A" planType="W">
+	<NODE tableId="010" />
+	<NODE tableId="011">
+		<NODE tableId="127" />
+	</NODE>
+	<NODE tableId="040" />
+	<NODE tableId="119" />
+	<NODE tableId="128" />
+	<NODE tableId="0C5" />
+	<NODE tableId="A19" />
+	<NODE tableId="A22" />
+	<NODE tableId="AB1" >
+		<NODE tableId="026" />
+		<NODE tableId="A33" />
+		<NODE tableId="AB2" />
+	</NODE>
+	<NODE tableId="AB6" />
+	<NODE tableId="W04"  req="Y" />
+	<NODE tableId="W05"  req="Y" />
+	<NODE tableId="W15"  req="Y" />
+	<NODE tableId="W24" >
+		<NODE tableId="025"  var="G"  varText="Payout Guaranteed" />
+		<NODE tableId="025"  var="E"  varText="Payout Excess" />
+		<NODE tableId="025"  var="S"  varText="Settlement" />
+		<NODE tableId="025"  var="C"  varText="Commuted Value" />
+		<NODE tableId="025"  var="D"  varText="Death Commuted Value" />
+	</NODE>
+	<NODE tableId="W30" />
+	<NODE tableId="W54" />
+	<NODE tableId="W56" />
+	<NODE tableId="W57" >
+		<NODE tableId="W58" />
+	</NODE>
+	<NODE tableId="W64" >
+		<NODE tableId="W66" />
+	</NODE>
+	<NODE tableId="W65" />
+	<NODE tableId="W71" />
+</ANNUITY_PAYOUT>

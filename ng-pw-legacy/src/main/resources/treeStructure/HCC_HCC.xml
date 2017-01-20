@@ -1,0 +1,15 @@
+
+<HCC_HCC productPrefix="H" planType="H">
+	<NODE tableId="011"  req="Y" />
+	<NODE tableId="EC5"  var="M"  varText="Male" />
+	<NODE tableId="EC5"  var="F"  varText="Female" />
+	<NODE tableId="ED7" />
+	<NODE tableId="H11"  req="Y" />
+	<NODE tableId="H12" />
+	<NODE tableId="H13"  req="Y" >
+		<NODE tableId="H21" />
+		<NODE tableId="H22"  var="1"  varText="Amount" />
+		<NODE tableId="H22"  var="2"  varText="Percent" />
+		<NODE tableId="H23" />
+	</NODE>
+</HCC_HCC>

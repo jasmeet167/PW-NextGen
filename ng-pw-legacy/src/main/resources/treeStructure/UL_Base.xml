@@ -1,0 +1,262 @@
+<!-- Modifications: ENH942, ENH808, ENH850, ENH1052, ENH1130 -->
+
+<UL_BASE productPrefix="U" planType="B">
+	<NODE tableId="004"  req="Y" >
+		<NODE tableId="005" />
+	</NODE>
+	<NODE tableId="007" />
+	<NODE tableId="010"  req="Y" />
+	<NODE tableId="011"  req="Y">
+		<NODE tableId="127" />
+	</NODE>
+	<NODE tableId="012" >
+		<NODE tableId="029"  var="1"  varText="Male" />
+		<NODE tableId="029"  var="2"  varText="Female" />
+		<NODE tableId="029"  var="3"  varText="Male Guar" />
+		<NODE tableId="029"  var="4"  varText="Female Guar" />
+		<NODE tableId="030"  var="1"  varText="Male" />
+		<NODE tableId="030"  var="2"  varText="Female" />
+		<NODE tableId="030"  var="3"  varText="Male Guar" />
+		<NODE tableId="030"  var="4"  varText="Female Guar" />
+	</NODE>
+	<NODE tableId="013"  req="Y" />
+	<NODE tableId="019"  var="A"  varText="Current Admin" />
+	<NODE tableId="019"  var="S"  varText="Current Sales" />
+	<NODE tableId="019"  var="C"  varText="Guideline Admin" />
+	<NODE tableId="019"  var="U"  varText="Guideline Sales" />
+	<NODE tableId="020"  var="A"  varText="Admin" />
+	<NODE tableId="020"  var="S"  varText="Sales" />
+	<NODE tableId="022"  var=""  varText="Current" />
+	<NODE tableId="022"  var="C"  varText="Guideline" />
+	<NODE tableId="023" />
+	<NODE tableId="024"  req="Y" >
+		<NODE tableId="025"  var=""  varText="Declared" />
+		<NODE tableId="026" />
+		<NODE tableId="027" />
+		<NODE tableId="089" />
+	</NODE>
+	<NODE tableId="028"  req="Y" >
+		<NODE tableId="029"  var="1"  varText="Male" />
+		<NODE tableId="029"  var="2"  varText="Female" />
+		<NODE tableId="029"  var="3"  varText="Male Guar" />
+		<NODE tableId="029"  var="4"  varText="Female Guar" />
+		<NODE tableId="030"  var="1"  varText="Male" />
+		<NODE tableId="030"  var="2"  varText="Female" />
+		<NODE tableId="030"  var="3"  varText="Male Guar" />
+		<NODE tableId="030"  var="4"  varText="Female Guar" />
+	</NODE>
+	<NODE tableId="031"  var="A"  varText="Current Admin" />
+	<NODE tableId="031"  var="S"  varText="Current Sales" />
+	<NODE tableId="031"  var="T"  varText="Max Sales" />
+	<NODE tableId="031"  var="B"  varText="Max Admin" />
+	<NODE tableId="031"  var="C"  varText="Guideline Admin" />
+	<NODE tableId="031"  var="U"  varText="Guideline Sales" />
+	<NODE tableId="031"  var="J"  varText="Percent Guar COI" />
+	<NODE tableId="031"  var="Q"  varText="Contagion Factor" />
+	<NODE tableId="032"  var="A"  varText="Current Admin" >
+		<NODE tableId="034" />
+		<NODE tableId="042" />
+		<NODE tableId="043" />
+	</NODE>
+	<NODE tableId="032"  var="S"  varText="Current Sales" >
+		<NODE tableId="034" />
+		<NODE tableId="042" />
+		<NODE tableId="043" />
+	</NODE>
+	<NODE tableId="033" />
+	<NODE tableId="036" />
+	<NODE tableId="037"  var="A"  varText="Current Admin" />
+	<NODE tableId="037"  var="S"  varText="Current Sales" />
+	<NODE tableId="037"  var="C"  varText="Guideline Admin" />
+	<NODE tableId="037"  var="U"  varText="Guideline Sales" />
+	<NODE tableId="038" >
+		<NODE tableId="024"  var="1"  varText="Loan" >
+			<NODE tableId="025"  var=""  varText="Declared" />
+			<NODE tableId="026" />
+			<NODE tableId="027" />
+			<NODE tableId="089" />
+		</NODE>
+		<NODE tableId="024"  var="2"  varText="Collateral" >
+			<NODE tableId="025"  var=""  varText="Declared" />
+			<NODE tableId="026" />
+			<NODE tableId="027" />
+			<NODE tableId="089" />
+		</NODE>
+	</NODE>
+	<NODE tableId="039" />
+	<NODE tableId="040" />
+	<NODE tableId="041" />
+	<NODE tableId="046" >
+		<NODE tableId="024"  var="1"  varText="Preferred Loan" >
+			<NODE tableId="025"  var=""  varText="Declared" />
+			<NODE tableId="026" />
+			<NODE tableId="027" />
+			<NODE tableId="089" />
+		</NODE>
+		<NODE tableId="024"  var="2"  varText="Preferred Collateral" >
+			<NODE tableId="025"  var=""  varText="Declared" />
+			<NODE tableId="026" />
+			<NODE tableId="027" />
+			<NODE tableId="089" />
+		</NODE>
+		<NODE tableId="024"  var="3"  varText="Pct of Initial Premium" >
+			<NODE tableId="025"  var=""  varText="Declared" />
+			<NODE tableId="026" />
+			<NODE tableId="027" />
+			<NODE tableId="089" />
+		</NODE>
+	</NODE>
+	<NODE tableId="052"  var="P"  varText="Payment Load" >
+		<NODE tableId="053"  var="1"  varText="Male" />
+		<NODE tableId="053"  var="2"  varText="Female" />
+	</NODE>
+	<NODE tableId="052"  var="O"  varText="Surrender" >
+		<NODE tableId="053"  var="1"  varText="Male" />
+		<NODE tableId="053"  var="2"  varText="Female" />
+	</NODE>
+	<NODE tableId="052"  var="N"  varText="Commission" >
+		<NODE tableId="053"  var="1"  varText="Male" />
+		<NODE tableId="053"  var="2"  varText="Female" />
+	</NODE>
+	<NODE tableId="052"  var="M"  varText="Minimum Payment" >
+		<NODE tableId="053"  var="1"  varText="Male" />
+		<NODE tableId="053"  var="2"  varText="Female" />
+	</NODE>
+	<NODE tableId="052"  var="B"  varText="Shadow Account" >
+		<NODE tableId="053"  var="1"  varText="Male" />
+		<NODE tableId="053"  var="2"  varText="Female" />
+	</NODE>
+	<NODE tableId="054"  var="A"  varText="Current Admin" />
+	<NODE tableId="054"  var="S"  varText="Current Sales" />
+	<NODE tableId="054"  var="C"  varText="Guideline Admin" />
+	<NODE tableId="054"  var="U"  varText="Guideline Sales" />
+	<NODE tableId="056" />
+	<NODE tableId="058" />
+	<NODE tableId="061">
+		<NODE tableId="005" />
+		<NODE tableId="61E" />
+		<NODE tableId="062">
+			<NODE tableId="063" />
+		</NODE>
+		<NODE tableId="083">
+			<NODE tableId="026" />
+		</NODE>
+	</NODE>
+	<NODE tableId="065"  var="Z"  varText="Statement" >
+		<NODE tableId="026"  var="1"  varText="Proj 1 Fix Fund" />
+		<NODE tableId="026"  var="2"  varText="Proj 2 Fix Fund" />
+		<NODE tableId="026"  var="3"  varText="Proj 3 Fix Fund" />
+		<NODE tableId="026"  var="4"  varText="Proj 4 Fix Fund" />
+		<NODE tableId="026"  var="5"  varText="Proj 5 Fix Fund" />
+		<NODE tableId="026"  var="6"  varText="Proj 6 Fix Fund" />
+		<NODE tableId="026"  var="7"  varText="Proj 7 Fix Fund" />
+		<NODE tableId="026"  var="8"  varText="Proj 8 Fix Fund" />
+		<NODE tableId="026"  var="9"  varText="Proj 9 Fix Fund" />
+		<NODE tableId="026"  var="A"  varText="Proj 1 Var Fund" />
+		<NODE tableId="026"  var="B"  varText="Proj 2 Var Fund" />
+		<NODE tableId="026"  var="C"  varText="Proj 3 Var Fund" />
+		<NODE tableId="026"  var="D"  varText="Proj 4 Var Fund" />
+		<NODE tableId="026"  var="E"  varText="Proj 5 Var Fund" />
+		<NODE tableId="026"  var="F"  varText="Proj 6 Var Fund" />
+		<NODE tableId="026"  var="G"  varText="Proj 7 Var Fund" />
+		<NODE tableId="026"  var="H"  varText="Proj 8 Var Fund" />
+		<NODE tableId="026"  var="I"  varText="Proj 9 Var Fund" />
+		<NODE tableId="027" />
+	</NODE>
+	<NODE tableId="065"  var=""  varText="Reproposal" >
+		<NODE tableId="026"  var="1"  varText="Proj 1 Fix Fund" />
+		<NODE tableId="026"  var="2"  varText="Proj 2 Fix Fund" />
+		<NODE tableId="026"  var="3"  varText="Proj 3 Fix Fund" />
+		<NODE tableId="026"  var="4"  varText="Proj 4 Fix Fund" />
+		<NODE tableId="026"  var="5"  varText="Proj 5 Fix Fund" />
+		<NODE tableId="026"  var="6"  varText="Proj 6 Fix Fund" />
+		<NODE tableId="026"  var="7"  varText="Proj 7 Fix Fund" />
+		<NODE tableId="026"  var="8"  varText="Proj 8 Fix Fund" />
+		<NODE tableId="026"  var="9"  varText="Proj 9 Fix Fund" />
+		<NODE tableId="026"  var="A"  varText="Proj 1 Var Fund" />
+		<NODE tableId="026"  var="B"  varText="Proj 2 Var Fund" />
+		<NODE tableId="026"  var="C"  varText="Proj 3 Var Fund" />
+		<NODE tableId="026"  var="D"  varText="Proj 4 Var Fund" />
+		<NODE tableId="026"  var="E"  varText="Proj 5 Var Fund" />
+		<NODE tableId="026"  var="F"  varText="Proj 6 Var Fund" />
+		<NODE tableId="026"  var="G"  varText="Proj 7 Var Fund" />
+		<NODE tableId="026"  var="H"  varText="Proj 8 Var Fund" />
+		<NODE tableId="026"  var="I"  varText="Proj 9 Var Fund" />
+		<NODE tableId="027" />
+	</NODE>
+	<NODE tableId="066" />
+	<NODE tableId="071" />
+	<NODE tableId="083" >
+		<NODE tableId="026" />
+	</NODE>
+	<NODE tableId="086" />
+	<NODE tableId="087" />
+	<NODE tableId="088" />
+	<NODE tableId="097" >
+		<NODE tableId="012" >
+			<NODE tableId="029"  var="1"  varText="Male" />
+			<NODE tableId="029"  var="2"  varText="Female" />
+			<NODE tableId="029"  var="3"  varText="Male Guar" />
+			<NODE tableId="029"  var="4"  varText="Female Guar" />
+			<NODE tableId="030"  var="1"  varText="Male" />
+			<NODE tableId="030"  var="2"  varText="Female" />
+			<NODE tableId="030"  var="3"  varText="Male Guar" />
+			<NODE tableId="030"  var="4"  varText="Female Guar" />
+		</NODE>
+		<NODE tableId="019"  var="1"  varText="Admin" />
+		<NODE tableId="019"  var="2"  varText="Sales" />
+		<NODE tableId="020"  var="1"  varText="Admin" />
+		<NODE tableId="020"  var="2"  varText="Sales" />
+		<NODE tableId="022" />
+		<NODE tableId="024" >
+			<NODE tableId="025"  var=""  varText="Declared" />
+			<NODE tableId="026" />
+			<NODE tableId="027" />
+			<NODE tableId="089" />
+		</NODE>
+		<NODE tableId="026" />
+		<NODE tableId="028" >
+			<NODE tableId="029"  var="1"  varText="Male" />
+			<NODE tableId="029"  var="2"  varText="Female" />
+			<NODE tableId="029"  var="3"  varText="Male Guar" />
+			<NODE tableId="029"  var="4"  varText="Female Guar" />
+			<NODE tableId="030"  var="1"  varText="Male" />
+			<NODE tableId="030"  var="2"  varText="Female" />
+			<NODE tableId="030"  var="3"  varText="Male Guar" />
+			<NODE tableId="030"  var="4"  varText="Female Guar" />
+		</NODE>
+		<NODE tableId="031"  var="1"  varText="Admin" />
+		<NODE tableId="031"  var="2"  varText="Sales" />
+		<NODE tableId="031"  var="3"  varText="Percent Guar COI" />
+		<NODE tableId="031"  var="4"  varText="Contagion Factor" />
+		<NODE tableId="032"  var="1"  varText="Admin" >
+			<NODE tableId="034" />
+			<NODE tableId="042" />
+			<NODE tableId="043" />
+		</NODE>
+		<NODE tableId="032"  var="2"  varText="Sales" >
+			<NODE tableId="034" />
+			<NODE tableId="042" />
+			<NODE tableId="043" />
+		</NODE>
+		<NODE tableId="037"  var="1"  varText="Admin" />
+		<NODE tableId="037"  var="2"  varText="Sales" />
+		<NODE tableId="054"  var="1"  varText="Admin" />
+		<NODE tableId="054"  var="2"  varText="Sales" />
+	</NODE>
+	<NODE tableId="119" />
+	<NODE tableId="0C5" />
+	<NODE tableId="0C8" >
+		<NODE tableId="0C3" />
+		<NODE tableId="0C6"  var="N"  varText="New Business" />
+		<NODE tableId="0C6"  var="R"  varText="Renewal" />
+		<NODE tableId="0C7" />
+	</NODE>
+	<NODE tableId="E04" />
+	<NODE tableId="EC4"  var="M"  varText="Male" />
+	<NODE tableId="EC4"  var="F"  varText="Female" />
+	<NODE tableId="EC5"  var="M"  varText="Male" />
+	<NODE tableId="EC5"  var="F"  varText="Female" />
+	<NODE tableId="ED7" />
+	<NODE tableId="H01" />
+</UL_BASE>

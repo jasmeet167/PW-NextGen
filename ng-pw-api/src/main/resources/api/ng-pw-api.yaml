@@ -1,0 +1,345 @@
+# Product Wizard REST API Prototype
+swagger: '2.0'
+
+info:
+  title: Product Wizard REST API
+  description: REST API for Product Wizard reimplementation prototype
+  version: "0.0.1"
+
+host: localhost:8443
+
+schemes:
+  - https
+
+basePath: /ng-pw-rest
+
+paths:
+  /authentication:
+    post:
+      summary: Authenticate a user
+      description: |
+        This endpoint will accept user's credentials, then authenticate
+        the user, and return the corresponding token value.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: credentials
+          in: body
+          description: |
+            Credentials required to authenticate a user
+          required: true
+          schema: 
+            $ref: '#/definitions/userCredentials'
+      tags:
+        - Security
+      responses:
+        200:
+          description: |
+            A token to use for linking of future REST calls 
+            to the OpenAM session, which has just been established.
+          schema:
+            $ref: '#/definitions/authenticationResponse'
+        401:
+          description: Unauthorized
+        default:
+          description: Unexpected Error
+          schema: 
+            $ref: '#/definitions/errorModel'
+
+  /logout:
+    post:
+      summary: Logout the current user 
+      description: |
+        Logout the current user by terminating the session indicated
+        by the provided authorization token. 
+      produces:
+        - application/json
+      parameters:
+        - name: sessionToken
+          in: header
+          description: | 
+            Session Token
+          required: true
+          type: string
+      tags:
+        - Security
+      responses:
+        200:
+          description: Logoff successfully completed
+        401:
+          description: Unauthorized
+        default:
+          description: Unexpected Error
+          schema: 
+            $ref: '#/definitions/errorModel'
+
+  /environment:
+    get:
+      summary: Retrieve a list of Environments
+      description: |
+        This endpoint returns a list of Environments configured in
+        the Product Wizard installation, which the authenticated user
+        is authorized to access. 
+      produces:
+        - application/json
+      parameters:
+        - name: sessionToken
+          in: header
+          description: | 
+            Session Token
+          required: true
+          type: string
+      tags:
+        - Environments
+      responses:
+        200:
+          description: A list of Environments
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/environment'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        default:
+          description: Unexpected Error
+          schema: 
+            $ref: '#/definitions/errorModel'
+
+  /environment/{env}/companies:
+    get:
+      summary: List of Companies within an Environment
+      description: |
+        This endpoint returns a list of Companies within the given
+        Environment, which the authenticated user is authorized
+        to access.
+      produces:
+        - application/json
+      parameters:
+        - name: sessionToken
+          in: header
+          description: | 
+            Session Token
+          required: true
+          type: string
+        - name: env
+          in: path
+          description: | 
+            The environment code corresponding to the Environment,
+            from which the list of Companies is to be retrieved 
+          required: true
+          type: string
+      tags:
+        - Companies
+      responses:
+        200:
+          description: An list of Companies
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/company'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+          schema: 
+            $ref: '#/definitions/errorModel'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+  /businessrule:
+    get:
+      summary: List of Business Rules in Product Wizard.
+      description: |
+        This endpoint returns a list of Business Rule table IDs.
+      produces:
+        - application/json
+      parameters:
+        - name: sessionToken
+          in: header
+          description: | 
+            Session Token
+          required: true
+          type: string
+        - name: env
+          in: query
+          description: |
+            The environment code corresponding to the Environment,
+            from which the list of Business Rules is to be retrieved 
+          required: true
+          type: string
+        - name: company
+          in: query
+          description: |
+            The company code corresponding to the Company,
+            for which the list of Business Rules is to be retrieved
+          required: true
+          type: string
+      tags:
+        - Business Rules
+      responses:
+        200:
+          description: A list of Business Rules
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/businessRule'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+          schema: 
+            $ref: '#/definitions/errorModel'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+  /businessrule/{rule}:
+    get:
+      summary: |
+        Contents of an entire Business Rule table within 
+        the indicated Environment and Company. 
+      description: |
+        This endpoint returns an entire Business Rule table within 
+        the indicated Environment and Company.
+      produces:
+        - application/json
+      parameters:
+        - name: sessionToken
+          in: header
+          description: | 
+            Session Token
+          required: true
+          type: string
+        - name: rule
+          in: path
+          description: | 
+            Name of the business rule table, contents of which
+            are to be retrieved 
+          required: true
+          type: string
+        - name: env
+          in: query
+          description: |
+            The environment code corresponding to the Environment,
+            from which the Business Rule is to be retrieved 
+          required: true
+          type: string
+        - name: company
+          in: query
+          description: |
+            The company code corresponding to the Company,
+            for which the Business Rule is to be retrieved
+          required: true
+          type: string
+      tags:
+        - Business Rules
+      responses:
+        200:
+          description: A list of rows comprising the specified Business Rule
+          schema:
+            $ref: '#/definitions/tableModel'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+          schema: 
+            $ref: '#/definitions/errorModel'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/errorModel'
+
+definitions:
+  userCredentials:
+    type: object
+    properties:
+      userName:
+        type: string
+        description: Unique Identification of the user, who is logging in
+      password:
+        type: string
+        description: Password to be used to log in.
+
+  authenticationResponse:
+    type: object
+    properties:
+      tokenId:
+        type: string
+        description: A token used to link service requests to a security session. 
+      successUrl:
+        type: string
+        description: ""
+
+  environment:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Unique identifier of an Environment.
+      displayName:
+        type: string
+        description: Name of the Environment suitable for display purposes.
+  
+  company:
+    type: object
+    properties:
+      companyCode:
+        type: string
+        description: Unique identifier of a Company.
+      companyName:
+        type: string
+        description: Name of the Company suitable for display purposes.
+  
+  businessRule:
+    type: object
+    properties:
+      tableId:
+        type: string
+        description: |
+          Table ID corresponding to a Business Rule.
+      tableName:
+        type: string
+        description: |
+          Name of the table corresponding a Business Rule.
+  
+  tableModel:
+    type: object
+    properties:
+      columnHeaders:
+        type: array
+        items: 
+          type: string
+      rows:
+        type: array
+        items:
+          type: object
+
+  errorModel:
+    type: object
+    properties:
+      severity:
+        type: string
+        enum:
+          - ERROR
+          - WARNING
+      errorCode:
+        type: string
+      message:
+        type: string
+      fields:
+        type: array
+        items:
+          type: string

@@ -1,0 +1,98 @@
+<!-- Modifications: ENH808, WMA-1048, ENH1052, ENH1046, ENH1253 -->
+
+<ANNUITY_BASE productPrefix="A" planType="B">
+	<NODE tableId="010"  req="Y" />
+	<NODE tableId="011"  req="Y">
+		<NODE tableId="127" />
+	</NODE>
+	<NODE tableId="023" />
+	<NODE tableId="024"  req="Y" >
+		<NODE tableId="025"  var=""  varText="Declared" />
+		<NODE tableId="025"  var="S"  varText="Settlement" />
+		<NODE tableId="026" />
+		<NODE tableId="AD3" >
+			<NODE tableId="025"  var=""  varText="Declared" />
+		</NODE>
+	</NODE>
+	<NODE tableId="038" >
+		<NODE tableId="024"  var="1"  varText="Loan" >
+			<NODE tableId="025"  var=""  varText="Declared" />
+			<NODE tableId="026" />
+			<NODE tableId="AD3" >
+				<NODE tableId="025"  var=""  varText="Declared" />
+			</NODE>
+		</NODE>
+		<NODE tableId="024"  var="2"  varText="Collateral" >
+			<NODE tableId="025"  var=""  varText="Declared" />
+			<NODE tableId="026" />
+			<NODE tableId="AD3" >
+				<NODE tableId="025"  var=""  varText="Declared" />
+			</NODE>
+		</NODE>
+	</NODE>
+	<NODE tableId="039" />
+	<NODE tableId="040" />
+	<NODE tableId="058" />
+	<NODE tableId="119" />
+	<NODE tableId="128" />
+	<NODE tableId="0C5" />
+	<NODE tableId="0C8" >
+		<NODE tableId="0C3" />
+		<NODE tableId="0C6"  var="N"  varText="New Business" />
+		<NODE tableId="0C6"  var="R"  varText="Renewal" />
+		<NODE tableId="0C7" />
+	</NODE>
+	<NODE tableId="0D4" >
+		<NODE tableId="0D5" >
+			<NODE tableId="025" />
+		</NODE>
+	</NODE>
+	<NODE tableId="A04"  req="Y" />
+	<NODE tableId="A19"  var="S"  varText="Sales" />
+	<NODE tableId="A19"  var="A"  varText="Admin" />
+	<NODE tableId="A19"  var="B"  varText="SEC Specified Maximum" />
+	<NODE tableId="A22" />
+	<NODE tableId="A59" >
+		<NODE tableId="060" />
+		<NODE tableId="A61" />
+		<NODE tableId="A62" />
+		<NODE tableId="AB1" >
+			<NODE tableId="A33" />
+			<NODE tableId="AB2" />
+		</NODE>
+		<NODE tableId="AE1" />
+		<NODE tableId="AE2" />
+	</NODE>
+	<NODE tableId="AB1" >
+		<NODE tableId="026" />
+		<NODE tableId="A33" />
+		<NODE tableId="AB2" />
+	</NODE>
+	<NODE tableId="AB3"  var="A"  varText="Admin" />
+	<NODE tableId="AB3"  var="S"  varText="Sales" />
+	<NODE tableId="AB6" />
+	<NODE tableId="AB7" >
+		<NODE tableId="011">
+			<NODE tableId="127" />
+		</NODE>
+		<NODE tableId="AB8" />
+	</NODE>
+	<NODE tableId="AC1" />
+	<NODE tableId="AC2" />
+	<NODE tableId="AD1" />
+	<NODE tableId="AD2" />
+	<NODE tableId="AE3" />
+	<NODE tableId="AE4" />
+	<NODE tableId="E04" />
+	<NODE tableId="EC4"  var="M"  varText="Male" />
+	<NODE tableId="EC4"  var="F"  varText="Female" />
+	<NODE tableId="EC5"  var="M"  varText="Male" />
+	<NODE tableId="EC5"  var="F"  varText="Female" />
+	<NODE tableId="ED7" />
+	<NODE tableId="H01" />
+	<NODE tableId="W64" >
+		<NODE tableId="W66" />
+	</NODE>
+	<NODE tableId="XW1"  req="Y" /> 
+	<NODE tableId="091" />
+</ANNUITY_BASE>

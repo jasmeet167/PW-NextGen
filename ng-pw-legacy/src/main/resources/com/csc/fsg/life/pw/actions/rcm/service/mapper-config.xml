@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Modifications: T0199 -->
+
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias alias="XGREPOS" type="com.csc.fsg.life.biz.bo.XgreposModelImpl"/>
+	</typeAliases>
+	<typeHandlers>
+		<typeHandler javaType="java.util.Date" handler="org.apache.ibatis.type.DateOnlyTypeHandler"/>
+	</typeHandlers>
+	<mappers>
+		<mapper resource="com/csc/fsg/life/pw/web/actions/rcm/service/XGREPOS.xml"/>
+	</mappers>
+</configuration>

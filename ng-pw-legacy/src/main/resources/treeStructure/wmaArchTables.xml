@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ARCHITECTURE_TABLES>
+	<NODE ID="T001X" TYPE="B">
+		<NODE ID="T001X1" TYPE="T" />
+	</NODE>
+	<NODE ID="T002X" TYPE="T" />
+	<NODE ID="T008X" TYPE="T" />
+	<NODE ID="T009X" TYPE="B">
+		<NODE ID="T125X" TYPE="B" >
+			<NODE ID="T126X" TYPE="T" />
+		</NODE>
+	</NODE>
+	<NODE ID="T014X" TYPE="T" />
+	<NODE ID="T015X" TYPE="T" />
+	<NODE ID="T016X" TYPE="T" />
+	<NODE ID="T018X" TYPE="T" />
+	<NODE ID="T045X" TYPE="T" />
+	<NODE ID="Guideline Processing" TYPE="F">
+		<NODE ID="T047X" TYPE="T" />
+		<NODE ID="T049X" TYPE="B">
+			<NODE ID="T049X1" TYPE="T" />
+		</NODE>
+		<NODE ID="T051X" TYPE="B">
+			<NODE ID="T051X1" TYPE="T" />
+		</NODE>
+		<NODE ID="T055X" TYPE="B">
+			<NODE ID="T055X1" TYPE="T" />
+		</NODE>
+	</NODE>
+	<NODE ID="T057X" TYPE="T" />
+	<NODE ID="T080X" TYPE="T" />
+	<NODE ID="T090X" TYPE="T" />
+	<NODE ID="T105X" TYPE="T" />
+	<NODE ID="T107X" TYPE="T" />
+	<NODE ID="T108X" TYPE="T" />
+	<NODE ID="T109X" TYPE="T" />
+	<NODE ID="T110X" TYPE="T" />
+	<NODE ID="T112X" TYPE="T" />
+	<NODE ID="24/7 Control" TYPE="F">
+		<NODE ID="T116X" TYPE="T" />
+	</NODE>
+	<NODE ID="Fund Asset Variation" TYPE="F">
+		<NODE ID="T113X" TYPE="B">
+			<NODE ID="TW65X" TYPE="T" />
+		</NODE>
+		<NODE ID="T114X" TYPE="B">
+			<NODE ID="T115X" TYPE="T" />
+		</NODE>
+	</NODE>
+	<NODE ID="TW10X" TYPE="T" />
+	<NODE ID="Payout Income Tax Withholding" TYPE="F">
+		<NODE ID="TW06X" TYPE="T" />
+		<NODE ID="TW08X" TYPE="T" />
+		<NODE ID="TW09X" TYPE="T" />
+	</NODE>
+	<NODE ID="Payout Reserves" TYPE="F">
+		<NODE ID="TW67X" TYPE="T" />
+		<NODE ID="TW68X" TYPE="B">
+			<NODE ID="TW68X1" TYPE="T" />
+		</NODE>
+		<NODE ID="TW69X" TYPE="B">
+			<NODE ID="TW69X1" TYPE="T" />
+		</NODE>
+		<NODE ID="TW70X" TYPE="B">
+			<NODE ID="TW70X1" TYPE="T" />
+		</NODE>
+	</NODE>
+</ARCHITECTURE_TABLES>

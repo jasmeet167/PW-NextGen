@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Modifications: ENH1220, T0199, T0196 -->
+<beans xmlns="http://www.springframework.org/schema/beans" 
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xmlns:context="http://www.springframework.org/schema/context" 
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+                           http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.1.xsd
+                           http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.1.xsd
+                           http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.1.xsd">
+
+	<!-- Set applicable attributes of <security:global-method-security> to "enabled", in order to    -->
+	<!-- enable security based on the corresponding annotations, such as @PreAuthorize, or @Secured: -->
+	<security:global-method-security pre-post-annotations="disabled" secured-annotations="disabled"/>
+
+	<context:component-scan base-package="com.csc.fsg.life.security"/>
+	<jee:jndi-lookup id="securityDataSource" jndi-name="java:comp/env/jdbc/securityDataSource"/>
+
+	<bean id="securitySqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:com/csc/fsg/life/security/authorization/mappers/mapper-config.xml"/>
+		<property name="dataSource" ref="securityDataSource"/>
+	</bean>
+
+	<bean id="securitySqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="securitySqlSessionFactory"/>
+	</bean>
+
+	<!-- The bean aclServiceComponent is not named aclService, as indicated by convention, -->
+	<!-- in order to prevent its name from matching the pattern used by ServiceInterceptor -->
+	<bean id="aclServiceComponent" class="org.springframework.security.acls.jdbc.JdbcAclService">
+		<constructor-arg ref="securityDataSource" />
+		<constructor-arg ref="lookupStrategy" />
+	</bean>
+
+	<bean id="lookupStrategy" class="org.springframework.security.acls.jdbc.BasicLookupStrategy">
+		<constructor-arg ref="securityDataSource"/>
+		<constructor-arg ref="aclCache"/>
+		<constructor-arg ref="authorizationStrategy"/>
+		<constructor-arg ref="auditLogger"/>
+		<property name="permissionFactory" ref="permissionFactory"/>
+	</bean>
+
+	<bean id="aclCache" class="org.springframework.security.acls.domain.SpringCacheBasedAclCache">
+		<constructor-arg>
+			<bean class="org.springframework.cache.concurrent.ConcurrentMapCache">
+				<constructor-arg value="aclCache" />
+			</bean>
+		</constructor-arg>
+		<constructor-arg ref="permissionGrantingStrategy"/>
+		<constructor-arg ref="authorizationStrategy"/>
+	</bean>
+
+	<bean id="permissionGrantingStrategy" class="org.springframework.security.acls.domain.DefaultPermissionGrantingStrategy">
+		<constructor-arg ref="auditLogger"/>
+	</bean>
+
+	<bean id="authorizationStrategy" class="com.csc.fsg.life.security.authorization.strategy.AclAuthorizationCustomStrategyImpl">
+		<constructor-arg ref="grantedAuthority" />
+	</bean>
+
+	<bean id="grantedAuthority" class="org.springframework.security.core.authority.SimpleGrantedAuthority">
+		<!-- Membership in this role is one of the methods, which will enable a user to maintain ACLs; --> 
+		<!-- for details of this and other methods, see class AclAuthorizationCustomStrategyImpl       -->
+		<constructor-arg value="USI.ACL.Admin"/>
+	</bean>
+
+	<bean id="auditLogger" class="org.springframework.security.acls.domain.ConsoleAuditLogger"/>
+	<bean id="permissionFactory" class="com.csc.fsg.life.security.authorization.permissions.CustomPermissionFactory"/>
+
+	<task:scheduled-tasks>
+		<task:scheduled ref="securityCacheManager" method="refreshCachedSecurityData" fixed-delay="${securityCacheRefreshInterval}"/>
+	</task:scheduled-tasks>
+</beans>

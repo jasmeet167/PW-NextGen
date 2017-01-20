@@ -1,0 +1,69 @@
+
+<TRAD_RIDER productPrefix="T" planType="R">
+	<NODE tableId="007" />
+	<NODE tableId="011"  req="Y" />
+	<NODE tableId="012" >
+		<NODE tableId="T72"  var="1"  varText="Male" />
+		<NODE tableId="T72"  var="2"  varText="Female" />
+		<NODE tableId="T72"  var="3"  varText="Male Guar" />
+		<NODE tableId="T72"  var="4"  varText="Female Guar" />
+		<NODE tableId="T72"  var="5"  varText="Unisex" />
+		<NODE tableId="T72"  var="6"  varText="Unisex Guar" />
+		<NODE tableId="T72"  var="7"  varText="Male Female" />
+		<NODE tableId="T72"  var="8"  varText="Male Female Guar" />
+	</NODE>
+	<NODE tableId="021" />
+	<NODE tableId="022" />
+	<NODE tableId="058" />
+	<NODE tableId="085" />
+	<NODE tableId="085"  var="A"  varText="PUAR" />
+	<NODE tableId="088" />
+	<NODE tableId="120" />
+	<NODE tableId="124" />
+	<NODE tableId="E04" />
+	<NODE tableId="EC4"  var="M"  varText="Male" />
+	<NODE tableId="EC4"  var="F"  varText="Female" />
+	<NODE tableId="EC5"  var="M"  varText="Male" />
+	<NODE tableId="EC5"  var="F"  varText="Female" />
+	<NODE tableId="ED7" />
+	<NODE tableId="T06"  req="Y" />
+	<NODE tableId="T19" />
+	<NODE tableId="T24" >
+		<NODE tableId="025"  var=""  varText="Declared" />
+	</NODE>
+	<NODE tableId="T33" />
+	<NODE tableId="T67" />
+	<NODE tableId="T67"  var="C"  varText="Cash Value" />
+	<NODE tableId="T74"  req="Y" >
+		<NODE tableId="T72"  var="1"  varText="Male" />
+		<NODE tableId="T72"  var="2"  varText="Female" />
+		<NODE tableId="T72"  var="3"  varText="Male Guar" />
+		<NODE tableId="T72"  var="4"  varText="Female Guar" />
+		<NODE tableId="T72"  var="5"  varText="Unisex" />
+		<NODE tableId="T72"  var="6"  varText="Unisex Guar" />
+		<NODE tableId="T72"  var="7"  varText="Male Female" />
+		<NODE tableId="T72"  var="8"  varText="Male Female Guar" />
+	</NODE>
+	<NODE tableId="T76" />
+	<NODE tableId="T78"  req="Y" />
+	<NODE tableId="T82" />
+	<NODE tableId="T84" />
+	<NODE tableId="TB1"  req="Y" />
+	<NODE tableId="TB4"  var="D"  varText="" >
+		<NODE tableId="TBA" />
+		<NODE tableId="TBB" />
+		<NODE tableId="TBC" />
+		<NODE tableId="TBD" />
+	</NODE>
+	<NODE tableId="TB4"  var="T"  varText="Term" >
+		<NODE tableId="TBA" />
+		<NODE tableId="TBB" />
+		<NODE tableId="TBC" />
+		<NODE tableId="TBD" />
+	</NODE>
+	<NODE tableId="TB5" >
+		<NODE tableId="TB6" />
+		<NODE tableId="TB7" />
+	</NODE>
+	<NODE tableId="TD1" />
+</TRAD_RIDER>

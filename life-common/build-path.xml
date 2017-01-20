@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." name="life-common.path" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+	<dirname property="life-common.root" file="${ant.file.life-common.path}" />
+	<property name="workspace.root.dir" location="${life-common.root}/.." />
+</project>

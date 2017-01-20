@@ -1,0 +1,165 @@
+
+<UL_RIDER productPrefix="U" planType="R">
+	<NODE tableId="006"  req="Y" />
+	<NODE tableId="007" />
+	<NODE tableId="011"  req="Y" />
+	<NODE tableId="012" >
+		<NODE tableId="029"  var="1"  varText="Male" />
+		<NODE tableId="029"  var="2"  varText="Female" />
+		<NODE tableId="029"  var="3"  varText="Male Guar" />
+		<NODE tableId="029"  var="4"  varText="Female Guar" />
+		<NODE tableId="030"  var="1"  varText="Male" />
+		<NODE tableId="030"  var="2"  varText="Female" />
+		<NODE tableId="030"  var="3"  varText="Male Guar" />
+		<NODE tableId="030"  var="4"  varText="Female Guar" />
+	</NODE>
+	<NODE tableId="012"  var="H"  varText="Death" >
+		<NODE tableId="029"  var="1"  varText="Death - Male" />
+		<NODE tableId="029"  var="2"  varText="Death - Female" />
+		<NODE tableId="029"  var="3"  varText="Death - Male Guar" />
+		<NODE tableId="029"  var="4"  varText="Death - Female Guar" />
+		<NODE tableId="030"  var="1"  varText="Death - Male" />
+		<NODE tableId="030"  var="2"  varText="Death - Female" />
+		<NODE tableId="030"  var="3"  varText="Death - Male Guar" />
+		<NODE tableId="030"  var="4"  varText="Death - Female Guar" />
+	</NODE>
+	<NODE tableId="020"  var="A"  varText="Admin" />
+	<NODE tableId="020"  var="S"  varText="Sales" />
+	<NODE tableId="021" />
+	<NODE tableId="028" >
+		<NODE tableId="029"  var="1"  varText="Male" />
+		<NODE tableId="029"  var="2"  varText="Female" />
+		<NODE tableId="029"  var="3"  varText="Male Guar" />
+		<NODE tableId="029"  var="4"  varText="Female Guar" />
+		<NODE tableId="030"  var="1"  varText="Male" />
+		<NODE tableId="030"  var="2"  varText="Female" />
+		<NODE tableId="030"  var="3"  varText="Male Guar" />
+		<NODE tableId="030"  var="4"  varText="Female Guar" />
+	</NODE>
+	<NODE tableId="028"  var="H"  varText="Death" >
+		<NODE tableId="029"  var="1"  varText="Death - Male" />
+		<NODE tableId="029"  var="2"  varText="Death - Female" />
+		<NODE tableId="029"  var="3"  varText="Death - Male Guar" />
+		<NODE tableId="029"  var="4"  varText="Death - Female Guar" />
+		<NODE tableId="030"  var="1"  varText="Death - Male" />
+		<NODE tableId="030"  var="2"  varText="Death - Female" />
+		<NODE tableId="030"  var="3"  varText="Death - Male Guar" />
+		<NODE tableId="030"  var="4"  varText="Death - Female Guar" />
+	</NODE>
+	<NODE tableId="031"  var="A"  varText="Current Admin" />
+	<NODE tableId="031"  var="J"  varText="Percent Guar COI" />
+	<NODE tableId="031"  var="Q"  varText="Contagion Factor" />
+	<NODE tableId="031"  var="S"  varText="Current Sales" />
+	<NODE tableId="031"  var="T"  varText="Max Sales" />
+	<NODE tableId="031"  var="B"  varText="Max Admin" />
+	<NODE tableId="035" >
+		<NODE tableId="025"  var=""  varText="Declared" />
+	</NODE>
+	<NODE tableId="048" >
+		<NODE tableId="012" >
+			<NODE tableId="029"  var="1"  varText="Male" />
+			<NODE tableId="029"  var="2"  varText="Female" />
+			<NODE tableId="029"  var="3"  varText="Male Guar" />
+			<NODE tableId="029"  var="4"  varText="Female Guar" />
+			<NODE tableId="030"  var="1"  varText="Male" />
+			<NODE tableId="030"  var="2"  varText="Female" />
+			<NODE tableId="030"  var="3"  varText="Male Guar" />
+			<NODE tableId="030"  var="4"  varText="Female Guar" />
+		</NODE>
+		<NODE tableId="028" >
+			<NODE tableId="029"  var="1"  varText="Male" />
+			<NODE tableId="029"  var="2"  varText="Female" />
+			<NODE tableId="029"  var="3"  varText="Male Guar" />
+			<NODE tableId="029"  var="4"  varText="Female Guar" />
+			<NODE tableId="030"  var="1"  varText="Male" />
+			<NODE tableId="030"  var="2"  varText="Female" />
+			<NODE tableId="030"  var="3"  varText="Male Guar" />
+			<NODE tableId="030"  var="4"  varText="Female Guar" />
+		</NODE>
+		<NODE tableId="031"  var="1"  varText="Admin" />
+		<NODE tableId="031"  var="2"  varText="Sales" />
+	</NODE>
+	<NODE tableId="052"  var="P"  varText="Payment Load" >
+		<NODE tableId="053"  var="1"  varText="Male" />
+		<NODE tableId="053"  var="2"  varText="Female" />
+	</NODE>
+	<NODE tableId="052"  var="O"  varText="Surrender" >
+		<NODE tableId="053"  var="1"  varText="Male" />
+		<NODE tableId="053"  var="2"  varText="Female" />
+	</NODE>
+	<NODE tableId="052"  var="N"  varText="Commission" >
+		<NODE tableId="053"  var="1"  varText="Male" />
+		<NODE tableId="053"  var="2"  varText="Female" />
+	</NODE>
+	<NODE tableId="052"  var="M"  varText="Minimum Payment" >
+		<NODE tableId="053"  var="1"  varText="Male" />
+		<NODE tableId="053"  var="2"  varText="Female" />
+	</NODE>
+	<NODE tableId="052"  var="B"  varText="Shadow Account" >
+		<NODE tableId="053"  var="1"  varText="Male" />
+		<NODE tableId="053"  var="2"  varText="Female" />
+	</NODE>
+	<NODE tableId="064" />
+	<NODE tableId="085"  var="I"  varText="Male Spouse" />
+	<NODE tableId="085"  var="J"  varText="Female Spouse" />
+	<NODE tableId="085"  var="K"  varText="Child" />
+	<NODE tableId="097" >
+		<NODE tableId="012" >
+			<NODE tableId="029"  var="1"  varText="Male" />
+			<NODE tableId="029"  var="2"  varText="Female" />
+			<NODE tableId="029"  var="3"  varText="Male Guar" />
+			<NODE tableId="029"  var="4"  varText="Female Guar" />
+			<NODE tableId="030"  var="1"  varText="Male" />
+			<NODE tableId="030"  var="2"  varText="Female" />
+			<NODE tableId="030"  var="3"  varText="Male Guar" />
+			<NODE tableId="030"  var="4"  varText="Female Guar" />
+		</NODE>
+		<NODE tableId="019"  var="1"  varText="Admin" />
+		<NODE tableId="019"  var="2"  varText="Sales" />
+		<NODE tableId="020"  var="1"  varText="Admin" />
+		<NODE tableId="020"  var="2"  varText="Sales" />
+		<NODE tableId="022" />
+		<NODE tableId="024" >
+			<NODE tableId="025"  var=""  varText="Declared" />
+			<NODE tableId="026" />
+			<NODE tableId="027" />
+			<NODE tableId="089" />
+		</NODE>
+		<NODE tableId="026" />
+		<NODE tableId="028" >
+			<NODE tableId="029"  var="1"  varText="Male" />
+			<NODE tableId="029"  var="2"  varText="Female" />
+			<NODE tableId="029"  var="3"  varText="Male Guar" />
+			<NODE tableId="029"  var="4"  varText="Female Guar" />
+			<NODE tableId="030"  var="1"  varText="Male" />
+			<NODE tableId="030"  var="2"  varText="Female" />
+			<NODE tableId="030"  var="3"  varText="Male Guar" />
+			<NODE tableId="030"  var="4"  varText="Female Guar" />
+		</NODE>
+		<NODE tableId="031"  var="1"  varText="Admin" />
+		<NODE tableId="031"  var="2"  varText="Sales" />
+		<NODE tableId="031"  var="3"  varText="Percent Guar COI" />
+		<NODE tableId="031"  var="4"  varText="Contagion Factor" />
+		<NODE tableId="032"  var="1"  varText="Admin" >
+			<NODE tableId="034" />
+			<NODE tableId="042" />
+			<NODE tableId="043" />
+		</NODE>
+		<NODE tableId="032"  var="2"  varText="Sales" >
+			<NODE tableId="034" />
+			<NODE tableId="042" />
+			<NODE tableId="043" />
+		</NODE>
+		<NODE tableId="037"  var="1"  varText="Admin" />
+		<NODE tableId="037"  var="2"  varText="Sales" />
+		<NODE tableId="054"  var="1"  varText="Admin" />
+		<NODE tableId="054"  var="2"  varText="Sales" />
+	</NODE>
+	<NODE tableId="120" />
+	<NODE tableId="E04" />
+	<NODE tableId="EC4"  var="M"  varText="Male" />
+	<NODE tableId="EC4"  var="F"  varText="Female" />
+	<NODE tableId="EC5"  var="M"  varText="Male" />
+	<NODE tableId="EC5"  var="F"  varText="Female" />
+	<NODE tableId="ED7" />
+</UL_RIDER>

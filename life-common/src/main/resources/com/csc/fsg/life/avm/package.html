@@ -1,0 +1,34 @@
+<HTML>
+<BODY>
+The Allowable Values sub-system is the API used for inquiry only access 
+to the AVM database. 
+<p>
+
+Allowable values are identified by a field name in the AVM database.  An AVM field can 
+support allowable values as:
+
+<UL> <LI> A list of specified core (internal) and display (english) values. </LI>
+     <LI> A range of values. </LI>
+</UL>
+
+<p>
+
+While each application will tie that allowble value field name to an object/field in 
+different ways.  Two common approaches are used:
+
+<UL>
+    <LI> The field name is exactly the same as in the object. </LI>
+	<LI> The field is tied to the object via meta data.  The two meta data approaches are:
+	      <UL><LI>FSConnect Domains</LI>
+	          <LI>Attributes (Apache Commons attributes for Java 1.4.x)</LI></UL>
+    </LI>
+</UL>
+
+<p>
+
+This API supports generic access by AVM field name, and support for acces by class/field
+name where it will use the <code>com.csc.fsg.life.biz.meta</code> package to 
+access the apache commons attributes.
+
+</BODY>
+</HTML>
