@@ -8,15 +8,22 @@
 /life-common/target
 
 # /ng-pw-api/
+/ng-pw-api/.apt_generated
 /ng-pw-api/LICENSE
 /ng-pw-api/src/main/java
 /ng-pw-api/target
 
+# /ng-pw-app/
+/ng-pw-app/.apt_generated
+
 # /ng-pw-legacy/
+/ng-pw-legacy/.apt_generated
 /ng-pw-legacy/target
 
 # /ng-pw-rest/
+/ng-pw-rest/.apt_generated
 /ng-pw-rest/target
 
 # /ng-pw-service/
+/ng-pw-service/.apt_generated
 /ng-pw-service/target
