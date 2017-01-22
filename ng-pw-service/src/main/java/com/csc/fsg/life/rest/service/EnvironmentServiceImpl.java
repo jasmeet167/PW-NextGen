@@ -15,11 +15,11 @@ import org.springframework.stereotype.Service;
 
 import com.csc.fsg.life.common.config.CommonApplicationConfigBean;
 import com.csc.fsg.life.common.config.MyBatisApplicationEnvironmentBean;
-import com.csc.fsg.life.pw.environment.EnvironmentManager;
-import com.csc.fsg.life.pw.io.FieldNames;
-import com.csc.fsg.life.pw.io.Row;
-import com.csc.fsg.life.pw.io.TableDescriptor;
-import com.csc.fsg.life.pw.io.TableFilter;
+import com.csc.fsg.life.pw.web.environment.EnvironmentManager;
+import com.csc.fsg.life.pw.web.io.FieldNames;
+import com.csc.fsg.life.pw.web.io.Row;
+import com.csc.fsg.life.pw.web.io.TableDescriptor;
+import com.csc.fsg.life.pw.web.io.TableFilter;
 import com.csc.fsg.life.rest.exception.NotFoundException;
 import com.csc.fsg.life.rest.exception.RestServiceException;
 import com.csc.fsg.life.rest.exception.UnexpectedException;
@@ -76,8 +76,8 @@ public class EnvironmentServiceImpl
 		try {
 			env = env.trim().toUpperCase();
 
-			Map<String, com.csc.fsg.life.pw.environment.Environment> environments = EnvironmentManager.getInstance().getEnvironments();
-			com.csc.fsg.life.pw.environment.Environment environment = environments.get(env);
+			Map<String, com.csc.fsg.life.pw.web.environment.Environment> environments = EnvironmentManager.getInstance().getEnvironments();
+			com.csc.fsg.life.pw.web.environment.Environment environment = environments.get(env);
 
 			if (environment == null) {
 				log.error(getMessage("environment_not_found_LONG", env));

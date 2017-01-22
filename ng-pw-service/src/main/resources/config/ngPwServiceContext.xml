@@ -55,7 +55,6 @@
 
 	<bean id="restServiceInterceptor" class="com.csc.fsg.life.rest.service.RestServiceInterceptor"/>
 
-	<import resource="classpath:config/AVMConfigContext.xml"/>
 	<import resource="classpath:config/pwEnvContext.xml"/>
 	<import resource="classpath:config/pwConfigContext.xml"/>
 </beans>
