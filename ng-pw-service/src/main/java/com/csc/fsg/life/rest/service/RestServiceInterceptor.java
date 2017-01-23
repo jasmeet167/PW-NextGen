@@ -6,12 +6,11 @@ import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-import javax.inject.Inject;
-
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.csc.fsg.life.openam.model.AuthorizationArgument;
 import com.csc.fsg.life.rest.annotation.AuthorizationAction;
@@ -26,7 +25,7 @@ public class RestServiceInterceptor
 
 	private ResourceBundle messages = null;
 
-	@Inject
+	@Autowired
 	private SecurityService securityService = null;
 
 	public RestServiceInterceptor()

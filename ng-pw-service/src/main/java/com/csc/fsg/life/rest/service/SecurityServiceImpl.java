@@ -4,8 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -25,10 +24,10 @@ import com.csc.fsg.life.openam.model.TokenValidationResponse;
 import com.csc.fsg.life.rest.exception.RestServiceException;
 import com.csc.fsg.life.rest.exception.UnauthorizedException;
 import com.csc.fsg.life.rest.exception.UnexpectedException;
-import com.csc.fsg.life.rest.model.AuthenticationResponse;
+import com.csc.fsg.life.rest.model.Credentials;
 import com.csc.fsg.life.rest.model.ErrorModel;
 import com.csc.fsg.life.rest.model.ErrorModelFactory;
-import com.csc.fsg.life.rest.model.UserCredentials;
+import com.csc.fsg.life.rest.model.SessionToken;
 
 // Custom service name is used in order to prevent matching against the pattern used for creation of AOP proxies.
 @Service("SecurityServiceComponent")
@@ -47,13 +46,13 @@ public class SecurityServiceImpl
 
 	static private final String HEADER_ACCEPT_API_VERSION = "Accept-API-Version";
 
-	@Inject
+	@Autowired
 	protected SecurityManagementConfig secConfig = null;
 
-	@Inject
+	@Autowired
 	protected ErrorModelFactory errorModelFactory = null;
 
-	public AuthenticationResponse authenticate(UserCredentials credentials)
+	public SessionToken authenticate(Credentials credentials)
 	{
 		try {
 			if (credentials == null
@@ -71,7 +70,7 @@ public class SecurityServiceImpl
 			RestTemplate restTemplate = new RestTemplate();
 
 			String url = secConfig.getSecurityManagementUrl() + ACTION_AUTHENTICATE;
-			ResponseEntity<AuthenticationResponse> response = restTemplate.exchange(url, HttpMethod.POST, entity, AuthenticationResponse.class);
+			ResponseEntity<SessionToken> response = restTemplate.exchange(url, HttpMethod.POST, entity, SessionToken.class);
 			return response.getBody();
 		}
 		catch (HttpClientErrorException e) {
