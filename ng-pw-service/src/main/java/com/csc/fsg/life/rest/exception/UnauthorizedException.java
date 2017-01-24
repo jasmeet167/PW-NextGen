@@ -14,6 +14,7 @@ public class UnauthorizedException
 		super();
 	}
 
+	@Override
 	public HttpStatus getHttpStatus()
 	{
 		return HTTP_STATUS;

@@ -15,26 +15,25 @@ public class ErrorModelFactory
 
 	public ErrorModel newErrorModel(HttpStatus httpStatus)
 	{
-		String errorCode = String.valueOf(httpStatus.value());
-		return newErrorModel(SeverityEnum.ERROR, errorCode, null);
+		return newErrorModel(httpStatus, SeverityEnum.ERROR, null);
 	}
 
-	public ErrorModel newErrorModel(String errorCode)
+	public ErrorModel newErrorModel(HttpStatus httpStatus, String message)
 	{
-		return newErrorModel(SeverityEnum.ERROR, errorCode, null);
+		return newErrorModel(httpStatus, SeverityEnum.ERROR, message);
 	}
 
-	public ErrorModel newErrorModel(String errorCode, String message)
-	{
-		return newErrorModel(SeverityEnum.ERROR, errorCode, message);
-	}
-
-	public ErrorModel newErrorModel(SeverityEnum severity, String errorCode, String message)
+	private ErrorModel newErrorModel(HttpStatus httpStatus, SeverityEnum severity, String message)
 	{
 		ErrorModel model = new ErrorModel();
 		model.setSeverity(severity);
-		model.setErrorCode(errorCode);
-		model.setMessage(StringUtils.hasText(message) ? message : defaultErrorMessage);
+		model.setErrorCode(String.valueOf(httpStatus.value()));
+
+		if (StringUtils.hasText(message))
+			model.setMessage(message);
+		else
+			model.setMessage(httpStatus.getReasonPhrase() + ": " + defaultErrorMessage);
+
 		return model;
 	}
 }

@@ -7,6 +7,7 @@ abstract public class QuietRestServiceException
 {
 	private static final long serialVersionUID = -6873731241803759594L;
 
+	@Override
 	protected ErrorModel getErrorModel()
 	{
 		return null;

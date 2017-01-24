@@ -19,11 +19,13 @@ public class UnexpectedException
 		this.errorModel = errorModel;
 	}
 
+	@Override
 	public HttpStatus getHttpStatus()
 	{
 		return HTTP_STATUS;
 	}
 
+	@Override
 	protected ErrorModel getErrorModel()
 	{
 		return errorModel;

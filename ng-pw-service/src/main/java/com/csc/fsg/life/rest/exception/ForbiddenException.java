@@ -14,6 +14,7 @@ public class ForbiddenException
 		super();
 	}
 
+	@Override
 	public HttpStatus getHttpStatus()
 	{
 		return HTTP_STATUS;

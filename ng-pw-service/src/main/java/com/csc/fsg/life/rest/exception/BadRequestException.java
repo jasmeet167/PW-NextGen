@@ -4,16 +4,16 @@ import org.springframework.http.HttpStatus;
 
 import com.csc.fsg.life.rest.model.ErrorModel;
 
-public class NotFoundException
+public class BadRequestException
 	extends VerboseRestServiceException
 {
-	static private final long serialVersionUID = -4580137477303021141L;
+	static private final long serialVersionUID = -6887132179428237225L;
 
-	static public HttpStatus HTTP_STATUS = HttpStatus.NOT_FOUND;
+	static public HttpStatus HTTP_STATUS = HttpStatus.BAD_REQUEST;
 
 	private ErrorModel errorModel = null;
 
-	public NotFoundException(ErrorModel errorModel)
+	public BadRequestException(ErrorModel errorModel)
 	{
 		super(errorModel.getMessage());
 		this.errorModel = errorModel;

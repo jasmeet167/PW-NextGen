@@ -96,23 +96,33 @@ public class SecurityServiceImpl
 
 	public void validateSession(String sessionToken)
 	{
-		if (!StringUtils.hasText(sessionToken))
-			throw new UnauthorizedException();
+		try {
+			if (!StringUtils.hasText(sessionToken))
+				throw new UnauthorizedException();
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.set(HEADER_ACCEPT_API_VERSION, secConfig.getApiVersionHeaderForEndpoint(ENDPOINT_SESSIONS));
-		HttpEntity<String> entity = new HttpEntity<>(headers);
-		RestTemplate restTemplate = new RestTemplate();
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+			headers.set(HEADER_ACCEPT_API_VERSION, secConfig.getApiVersionHeaderForEndpoint(ENDPOINT_SESSIONS));
+			HttpEntity<String> entity = new HttpEntity<>(headers);
+			RestTemplate restTemplate = new RestTemplate();
 
-		String customizedAction = ACTION_VALIDATE_TOKEN.replaceFirst("\\{0\\}", sessionToken);
-		String url = secConfig.getSecurityManagementUrl() + customizedAction;
+			String customizedAction = ACTION_VALIDATE_TOKEN.replaceFirst("\\{0\\}", sessionToken);
+			String url = secConfig.getSecurityManagementUrl() + customizedAction;
 
-		ResponseEntity<TokenValidationResponse> httpResponse = restTemplate.exchange(url, HttpMethod.POST, entity, TokenValidationResponse.class);
-		TokenValidationResponse validationResponse = httpResponse.getBody();
-		if (!validationResponse.isValid())
-			throw new UnauthorizedException();
+			ResponseEntity<TokenValidationResponse> httpResponse = restTemplate.exchange(url, HttpMethod.POST, entity, TokenValidationResponse.class);
+			TokenValidationResponse validationResponse = httpResponse.getBody();
+			if (!validationResponse.isValid())
+				throw new UnauthorizedException();
+		}
+		catch (RestServiceException e) {
+			throw e;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			ErrorModel model = errorModelFactory.newErrorModel(UnexpectedException.HTTP_STATUS);
+			throw new UnexpectedException(model);
+		}
 	}
 
 	public void logout(String sessionToken)
@@ -152,37 +162,45 @@ public class SecurityServiceImpl
 
 	public void assertAuthority(String sessionToken, AuthorizationArgument... arguments)
 	{
-		AuthorizationQuery query = new AuthorizationQuery();
-		for (AuthorizationArgument argument : arguments)
-			query.addResource(argument.getResource());
+		try {
+			AuthorizationQuery query = new AuthorizationQuery();
+			for (AuthorizationArgument argument : arguments)
+				query.addResource(argument.getResource());
 
-		query.setApplication(secConfig.getPolicySetName());
-		query.getSubject().setSsoToken(sessionToken);
+			query.setApplication(secConfig.getPolicySetName());
+			query.getSubject().setSsoToken(sessionToken);
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.set(HEADER_ACCEPT_API_VERSION, secConfig.getApiVersionHeaderForEndpoint(ENDPOINT_POLICIES));
-		headers.set(secConfig.getSessionTokenCookieName(), sessionToken);
-		HttpEntity<AuthorizationQuery> entity = new HttpEntity<>(query, headers);
-		RestTemplate restTemplate = new RestTemplate();
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+			headers.set(HEADER_ACCEPT_API_VERSION, secConfig.getApiVersionHeaderForEndpoint(ENDPOINT_POLICIES));
+			headers.set(secConfig.getSessionTokenCookieName(), sessionToken);
+			HttpEntity<AuthorizationQuery> entity = new HttpEntity<>(query, headers);
+			RestTemplate restTemplate = new RestTemplate();
 
-		String url = secConfig.getSecurityManagementUrl()
-				   + secConfig.getRealm()
-				   + ACTION_EVALUATE_AUTHORITY;
+			String url = secConfig.getSecurityManagementUrl() + secConfig.getRealm() + ACTION_EVALUATE_AUTHORITY;
 
-		ResponseEntity<AuthorizationResponse[]> httpResponse = restTemplate.exchange(url, HttpMethod.POST, entity, AuthorizationResponse[].class);
-		AuthorizationResponse[] responses = httpResponse.getBody();
+			ResponseEntity<AuthorizationResponse[]> httpResponse = restTemplate.exchange(url, HttpMethod.POST, entity, AuthorizationResponse[].class);
+			AuthorizationResponse[] responses = httpResponse.getBody();
 
-		Map<String, AuthorizationResponse> responseMap = new HashMap<>();
-		for (AuthorizationResponse response : responses)
-			responseMap.put(response.getResource(), response);
+			Map<String, AuthorizationResponse> responseMap = new HashMap<>();
+			for (AuthorizationResponse response : responses)
+				responseMap.put(response.getResource(), response);
 
-		for (AuthorizationArgument argument : arguments) {
-			AuthorizationResponse response = responseMap.get(argument.getResource());
-			Map<String, Boolean> actionMap = response.getActions();
-			if (!Boolean.TRUE.equals(actionMap.get(argument.getAction().toString())))
-				throw new UnauthorizedException();
+			for (AuthorizationArgument argument : arguments) {
+				AuthorizationResponse response = responseMap.get(argument.getResource());
+				Map<String, Boolean> actionMap = response.getActions();
+				if (!Boolean.TRUE.equals(actionMap.get(argument.getAction().toString())))
+					throw new UnauthorizedException();
+			}
+		}
+		catch (RestServiceException e) {
+			throw e;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			ErrorModel model = errorModelFactory.newErrorModel(UnexpectedException.HTTP_STATUS);
+			throw new UnexpectedException(model);
 		}
 	}
 }

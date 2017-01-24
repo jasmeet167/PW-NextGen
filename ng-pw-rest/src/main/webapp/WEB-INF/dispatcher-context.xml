@@ -6,8 +6,18 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
                            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
-	<mvc:annotation-driven/>
+
 	<context:component-scan base-package="com.csc.fsg.life.rest.api,com.csc.fsg.life.rest.controller"/>
+
+	<bean id="jacksonObjectMapper" class="com.csc.fsg.life.rest.serialization.CustomObjectMapper"/>
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="objectMapper" ref="jacksonObjectMapper"/>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
 	<mvc:resources mapping="/*.html" location="/static/"/>
 	<mvc:resources mapping="/html/**" location="/html/"/>
 	<mvc:resources mapping="/css/**" location="/css/"/>

@@ -6,9 +6,9 @@ import java.util.ArrayList;
 
 import com.csc.fsg.life.pw.common.transferobjects.PlanCriteriaTO;
 import com.csc.fsg.life.pw.common.util.Utils;
-//import com.csc.fsg.life.pw.web.actions.tree.PlanMergeAssistent;
+import com.csc.fsg.life.pw.web.actions.tree.PlanMergeAssistent;
 import com.csc.fsg.life.pw.web.utils.*;
-//import com.csc.fsg.life.pw.web.utils.sql.SQLBuilderMERGEDX;
+import com.csc.fsg.life.pw.web.utils.sql.SQLBuilderMERGEDX;
 //import com.csc.fsg.life.pw.web.utils.sql.SQLBuilderPLANWIP;
 //import com.csc.fsg.life.pw.web.utils.sql.SQLBuilderT000X;
 
@@ -85,21 +85,21 @@ public class PlanTableInfo {
 	// WMABASEIXI-2749 - use PlanMergeAssistent to handle WIP merge
 	public ArrayList<String> getNextPlanKey(PlanCriteriaTO planCriteria)
 	throws Exception {
-//		Connection conn = null;
+		Connection conn = null;
 		ArrayList<String> products = new ArrayList<String>();
-//		ResultSet rs = null;
-//		Statement stmt = null;
-//		PlanMergeAssistent pma = null;
-//
-//		try {
-//			conn = DBConnMgr.getInstance().getConnection(env.getId(),DBConnMgr.APPL);
-//			stmt = conn.createStatement();
-//			
-//			pma = new PlanMergeAssistent(conn, planCriteria);
-//			String sql = new SQLBuilderMERGEDX(planCriteria.getEnvironment(), planCriteria).buildSelectForFilterStatement();
-//			rs = SqlPW.query(SqlPW.SQL_SRC_PLAN_FILTER, stmt, sql);
-//			PlanTableInfo.convertToAL(rs, products);
-//
+		ResultSet rs = null;
+		Statement stmt = null;
+		PlanMergeAssistent pma = null;
+
+		try {
+			conn = DBConnMgr.getInstance().getConnection(env.getId(),DBConnMgr.APPL);
+			stmt = conn.createStatement();
+			
+			pma = new PlanMergeAssistent(conn, planCriteria);
+			String sql = new SQLBuilderMERGEDX(planCriteria.getEnvironment(), planCriteria).buildSelectForFilterStatement();
+			rs = SqlPW.query(SqlPW.SQL_SRC_PLAN_FILTER, stmt, sql);
+			PlanTableInfo.convertToAL(rs, products);
+
 			/*
 			rs = SqlPW.query(SqlPW.SQL_SRC_PLAN_FILTER, stmt, 
 					new SQLBuilderT000X(planCriteria).buildSelectForFilterStatement());
@@ -116,13 +116,13 @@ public class PlanTableInfo {
 			}
 			// wip end
 			*/
-//		} finally {
-//			if (pma != null)
-//				pma.clean(conn);
-//			Utils.closeStatement(stmt);
-//			Utils.closeResultSet(rs);
-//			DBConnMgr.getInstance().releaseConnection(conn);
-//		}
+		} finally {
+			if (pma != null)
+				pma.clean(conn);
+			Utils.closeStatement(stmt);
+			Utils.closeResultSet(rs);
+			DBConnMgr.getInstance().releaseConnection(conn);
+		}
 		return products;
 	}
 	
