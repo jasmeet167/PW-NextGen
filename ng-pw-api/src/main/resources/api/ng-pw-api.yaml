@@ -38,12 +38,15 @@ paths:
       responses:
         200:
           description: |
-            A token used to link service requests to
-            the corresponding security session.
+            OK.  Authentication completed successfully.  A token
+            used to link service requests to the corresponding security
+            session, is returned.
           schema:
             $ref: '#/definitions/sessionToken'
         401:
-          description: Unauthorized
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Session token is either missing or invalid. 
         default:
           description: Unexpected Error
           schema: 
@@ -69,9 +72,13 @@ paths:
         - Security
       responses:
         200:
-          description: Logout successfully completed
+          description: |
+            OK.  Logout has been successfully completed, and
+            the corresponding security session has been invalidated. 
         401:
-          description: Unauthorized
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Session token is either missing or invalid. 
         default:
           description: Unexpected Error
           schema: 
@@ -98,19 +105,31 @@ paths:
         - Search
       responses:
         200:
-          description: A list of Environments
+          description: |
+            OK.  The list of Environments has been
+            successfully retrieved.
           schema:
             type: array
             items:
               $ref: '#/definitions/commonSelectItem'
         400:
-          description: Bad Request
+          description: |
+            Bad Request.  Invalid or malformed request detected.
           schema: 
             $ref: '#/definitions/errorModel'
         401:
-          description: Unauthorized
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Session token is either missing or invalid. 
         403:
-          description: Forbidden
+          description: |
+            Forbidden.  The user is not authorized to access
+            any of the configured environments.
+        404:
+          description: |
+            Not Found.  No configured environments have been found. 
+          schema: 
+            $ref: '#/definitions/errorModel'
         default:
           description: Unexpected Error
           schema: 
@@ -145,17 +164,31 @@ paths:
         - Search
       responses:
         200:
-          description: Search results
+          description: |
+            OK.  The requested plan information has been
+            successfully retrieved.
           schema:
             type: array
             items:
               $ref: '#/definitions/commonSelectItem'
         400:
-          description: Bad Request
+          description: |
+            Bad Request.  Invalid or malformed request detected.
           schema: 
             $ref: '#/definitions/errorModel'
         401:
-          description: Unauthorized
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Session token is either missing or invalid. 
+        403:
+          description: |
+            Forbidden.  The user is not authorized to access
+            any of the configured environments and/or companies.
+        404:
+          description: |
+            Not Found.  No data found matching the provided plan key values. 
+          schema: 
+            $ref: '#/definitions/errorModel'
         default:
           description: Unexpected Error
           schema: 
@@ -190,21 +223,156 @@ paths:
         - Search
       responses:
         200:
-          description: Search results
+          description: |
+            OK.  The requested plan information has been
+            successfully retrieved.
           schema:
             type: array
             items:
               $ref: '#/definitions/dateSelectItem'
         400:
-          description: Bad Request
+          description: |
+            Bad Request.  Invalid or malformed request detected.
           schema: 
             $ref: '#/definitions/errorModel'
         401:
-          description: Unauthorized
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Session token is either missing or invalid. 
+        403:
+          description: |
+            Forbidden.  The user is not authorized to access
+            any of the configured environments and/or companies.
+        404:
+          description: |
+            Not Found.  No data found matching the provided plan key values. 
+          schema: 
+            $ref: '#/definitions/errorModel'
         default:
           description: Unexpected Error
           schema: 
             $ref: '#/definitions/errorModel'
+
+  /search/project:
+    get:
+      summary: Search for projects.
+      description: |
+        This endpoint is used to search for projects existing
+        in the indicated environment.
+      produces:
+        - application/json
+      operationId: getProjects
+      parameters:
+        - name: sessionToken
+          in: header
+          description: | 
+            Session Token
+          required: true
+          type: string
+        - name: envId
+          in: header
+          description: |
+            Environment code
+          required: true
+          type: string
+      tags:
+        - Search
+      responses:
+        200:
+          description: |
+            OK.  The requested list of projects has been
+            successfully retrieved.
+          schema:
+            type: array
+            items:
+              type: string
+        400:
+          description: |
+            Bad Request.  Invalid or malformed request detected.
+          schema: 
+            $ref: '#/definitions/errorModel'
+        401:
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Session token is either missing or invalid. 
+        403:
+          description: |
+            Forbidden.  The user is not authorized to access
+            the indicated environment.
+        404:
+          description: |
+            Not Found.  No projects found matching the provided key values. 
+          schema: 
+            $ref: '#/definitions/errorModel'
+        default:
+          description: Unexpected Error
+          schema: 
+            $ref: '#/definitions/errorModel'
+
+  /search/table:
+    get:
+      summary: Search for business rule tables.
+      description: |
+        This endpoint is used to search for
+        business rule tables.
+      produces:
+        - application/json
+      operationId: getTables
+      parameters:
+        - name: sessionToken
+          in: header
+          description: | 
+            Session Token
+          required: true
+          type: string
+        - name: envId
+          in: header
+          description: |
+            Environment
+          required: true
+          type: string
+        - name: companyCode
+          in: header
+          description: |
+            Company Code
+          required: true
+          type: string
+      tags:
+        - Search
+      responses:
+        200:
+          description: |
+            OK.  The requested list of business rule
+            tables projects has been successfully retrieved.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/commonSelectItem'
+        400:
+          description: |
+            Bad Request.  Invalid or malformed request detected.
+          schema: 
+            $ref: '#/definitions/errorModel'
+        401:
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Session token is either missing or invalid. 
+        403:
+          description: |
+            Forbidden.  The user is not authorized to access
+            the indicated environment or company.
+        404:
+          description: |
+            Not Found.  No business rule tables found matching
+            the provided key values. 
+          schema: 
+            $ref: '#/definitions/errorModel'
+        default:
+          description: Unexpected Error
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/commonSelectItem'
 
 definitions:
   credentials:
@@ -229,7 +397,7 @@ definitions:
     properties:
       mergedView:
         type: boolean
-      environment:
+      envId:
         type: string
       companyCode:
         type: string

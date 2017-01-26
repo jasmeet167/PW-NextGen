@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,12 @@ import com.csc.fsg.life.common.config.CommonApplicationConfigBean;
 import com.csc.fsg.life.common.config.MyBatisApplicationEnvironmentBean;
 import com.csc.fsg.life.pw.common.transferobjects.PlanCriteriaTO;
 import com.csc.fsg.life.pw.common.transferobjects.PlanTOBase;
+import com.csc.fsg.life.pw.common.util.WIPProperties;
+import com.csc.fsg.life.pw.web.environment.Environment;
+import com.csc.fsg.life.pw.web.environment.EnvironmentManager;
+import com.csc.fsg.life.pw.web.io.EntireTableFilterContext;
 import com.csc.fsg.life.pw.web.io.PlanFilterSpecContext;
+import com.csc.fsg.life.pw.web.io.WIPRows;
 import com.csc.fsg.life.rest.exception.BadRequestException;
 import com.csc.fsg.life.rest.exception.RestServiceException;
 import com.csc.fsg.life.rest.exception.UnexpectedException;
@@ -44,6 +51,7 @@ public class SearchServiceImpl
 	{
 		try {
 			// TODO: +++ Security
+
 			CommonApplicationConfigBean pwConfig = getBean(CommonApplicationConfigBean.class);
 			Map<String, MyBatisApplicationEnvironmentBean> environmentMap = pwConfig.getEnvironments();
 
@@ -70,7 +78,9 @@ public class SearchServiceImpl
 	public List<CommonSelectItem> getPlanCommonValues(RestServiceParam param, PlanSearchInput searchInput)
 	{
 		try {
-			String env = searchInput.getEnvironment();
+			// TODO: +++ Security
+
+			String env = searchInput.getEnvId();
 			if (!StringUtils.hasText(env)) {
 				HttpStatus status = BadRequestException.HTTP_STATUS;
 				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_environment"));
@@ -81,7 +91,6 @@ public class SearchServiceImpl
 			PlanFilterSpecContext context = new PlanFilterSpecContext(env);
 			Map<String, String> commonValuesMap = null;
 
-			// TODO: +++ Security
 			if (!StringUtils.hasText(searchInput.getCompanyCode()))
 				commonValuesMap = context.getCompanyCodes(planCriteria);
 			else if (!StringUtils.hasText(searchInput.getProductCode()))
@@ -126,7 +135,9 @@ public class SearchServiceImpl
 	public List<DateSelectItem> getPlanDateValues(RestServiceParam param, PlanSearchInput searchInput)
 	{
 		try {
-			String env = searchInput.getEnvironment();
+			// TODO: +++ Security
+
+			String env = searchInput.getEnvId();
 			if (!StringUtils.hasText(env)) {
 				HttpStatus status = BadRequestException.HTTP_STATUS;
 				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_environment"));
@@ -197,7 +208,7 @@ public class SearchServiceImpl
 	private PlanCriteriaTO buildPlanCriteria(PlanSearchInput searchInput)
 	{
 		HashMap<String, Object> planKeys = new HashMap<>();
-		planKeys.put(PlanTOBase.ENVIRONMENT_KEY, searchInput.getEnvironment());
+		planKeys.put(PlanTOBase.ENVIRONMENT_KEY, searchInput.getEnvId());
 		planKeys.put(PlanTOBase.COMPANY_CODE_KEY, searchInput.getCompanyCode());
 
 		String productCode = searchInput.getProductCode();
@@ -215,5 +226,77 @@ public class SearchServiceImpl
 
 		PlanCriteriaTO planCriteria = new PlanCriteriaTO(planKeys);
 		return planCriteria;
+	}
+
+	public List<String> getProjects(RestServiceParam param, String envId)
+	{
+		try {
+			// TODO: +++ Security
+
+			WIPProperties wipProps = WIPProperties.getInstance();
+			Environment env = EnvironmentManager.getInstance().getEnvironment(envId);
+			if (env == null) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_environment"));
+				throw new BadRequestException(model);
+			}
+
+			List<String> rawProjects = WIPRows.getDistinctItemsFromWIP(env, wipProps.getProjectName(), false);
+			List<String> projects = new ArrayList<>();
+			if (rawProjects != null)
+				for (String rawProject : rawProjects)
+					if (rawProject != null)
+						projects.add(rawProject.trim());
+
+			return projects;
+		}
+		catch (RestServiceException e) {
+			throw e;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			ErrorModel model = errorModelFactory.newErrorModel(UnexpectedException.HTTP_STATUS);
+			throw new UnexpectedException(model);
+		}
+	}
+
+	public List<CommonSelectItem> getTables(RestServiceParam param, String envId, String companyCode)
+	{
+		try {
+			// TODO: +++ Security
+
+			Map<String, Environment> environments = EnvironmentManager.getInstance().getEnvironments();
+			Environment env = environments.get(envId);
+
+			if (env == null) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_environment"));
+				throw new BadRequestException(model);
+			}
+
+			EntireTableFilterContext entireTableFilterContext = new EntireTableFilterContext(env, companyCode, null);
+			Map<String, String> tables = new TreeMap<>(entireTableFilterContext.get_tableDDLNames());
+			String key = null;
+
+			List<CommonSelectItem> tableList = new ArrayList<>();
+			Set<Map.Entry<String, String>> entries = tables.entrySet();
+			for (Map.Entry<String, String> entry : entries) {
+				key = entry.getKey();
+				CommonSelectItem rule = new CommonSelectItem();
+				tableList.add(rule);
+				rule.setCoreValue(key);
+				rule.setDisplayValue(key + "-" + entry.getValue());
+			}
+
+			return tableList;
+		}
+		catch (RestServiceException e) {
+			throw e;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			ErrorModel model = errorModelFactory.newErrorModel(UnexpectedException.HTTP_STATUS);
+			throw new UnexpectedException(model);
+		}
 	}
 }

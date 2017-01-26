@@ -1,5 +1,6 @@
 package com.csc.fsg.life.rest.controller;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,27 @@ public class SearchApiController
 	{
 		RestServiceParam param = buildRestServiceParam(sessionToken);
 		List<DateSelectItem> envList = searchService.getPlanDateValues(param, searchInput);
+		PropertyComparator.sort(envList, new MutableSortDefinition("coreValue", true, true));
+		return new ResponseEntity<>(envList, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/search/project", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<List<String>> getProjects(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+													@RequestHeader(value = "envId", required = true) String envId)
+	{
+		RestServiceParam param = buildRestServiceParam(sessionToken);
+		List<String> envList = searchService.getProjects(param, envId);
+		Collections.sort(envList);
+		return new ResponseEntity<>(envList, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/search/table", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<List<CommonSelectItem>> getTables(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+															@RequestHeader(value = "envId", required = true) String envId,
+															@RequestHeader(value = "companyCode", required = true) String companyCode)	
+	{
+		RestServiceParam param = buildRestServiceParam(sessionToken);
+		List<CommonSelectItem> envList = searchService.getTables(param, envId, companyCode);
 		PropertyComparator.sort(envList, new MutableSortDefinition("coreValue", true, true));
 		return new ResponseEntity<>(envList, HttpStatus.OK);
 	}

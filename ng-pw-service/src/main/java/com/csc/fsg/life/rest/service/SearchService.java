@@ -18,4 +18,10 @@ public interface SearchService
 
 	@SecuredMethod
 	public List<DateSelectItem> getPlanDateValues(RestServiceParam param, PlanSearchInput searchInput);
+
+	@SecuredMethod
+	public List<String> getProjects(RestServiceParam param, String environment);
+
+	@SecuredMethod
+	public List<CommonSelectItem> getTables(RestServiceParam param, String environment, String company);
 }
