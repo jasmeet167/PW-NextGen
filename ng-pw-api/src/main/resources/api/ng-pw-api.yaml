@@ -135,17 +135,15 @@ paths:
           schema: 
             $ref: '#/definitions/errorModel'
 
-  /search/rules/common:
-    post:
-      summary: Search for common plan key information.
+  /search/rules/company:
+    get:
+      summary: Retrieve a list of Company Codes for the Business Rule Search view.
       description: |
-        This endpoint is used to search for common plan key information,
-        which includes key values of type string.
-      consumes:
-        - application/json
+        This endpoint returns a list of Company Codes for the Business Rule Search
+        view filter, which the authenticated user is authorized to access. 
       produces:
         - application/json
-      operationId: getPlanCommonValues
+      operationId: getCompanyCodes
       parameters:
         - name: sessionToken
           in: header
@@ -153,19 +151,20 @@ paths:
             Session Token
           required: true
           type: string
-        - name: searchInput
-          in: body
-          description: |
-            Container with search input parameters.
+        - name: viewChanges
+          in: header
           required: true
-          schema: 
-            $ref: '#/definitions/planSearchInput'
+          type: boolean
+        - name: envId
+          in: header
+          required: true
+          type: string
       tags:
         - Search
       responses:
         200:
           description: |
-            OK.  The requested plan information has been
+            OK.  The list of Company Codes has been
             successfully retrieved.
           schema:
             type: array
@@ -186,7 +185,7 @@ paths:
             any of the configured environments and/or companies.
         404:
           description: |
-            Not Found.  No data found matching the provided plan key values. 
+            Not Found.  No data found matching the provided key values. 
           schema: 
             $ref: '#/definitions/errorModel'
         default:
@@ -194,17 +193,15 @@ paths:
           schema: 
             $ref: '#/definitions/errorModel'
 
-  /search/rules/date:
-    post:
-      summary: Search for plan key information of type date.
+  /search/rules/product:
+    get:
+      summary: Retrieve a list of Product Codes for the Business Rule Search view.
       description: |
-        This endpoint is used to search for plan key information,
-        which includes key values of type date.
-      consumes:
-        - application/json
+        This endpoint returns a list of Product Codes for the Business Rule Search
+        view filter.
       produces:
         - application/json
-      operationId: getPlanDateValues
+      operationId: getProductCodes
       parameters:
         - name: sessionToken
           in: header
@@ -212,19 +209,312 @@ paths:
             Session Token
           required: true
           type: string
-        - name: searchInput
-          in: body
-          description: |
-            Container with search input parameters.
+        - name: viewChanges
+          in: header
           required: true
-          schema: 
-            $ref: '#/definitions/planSearchInput'
+          type: boolean
+        - name: envId
+          in: header
+          required: true
+          type: string
+        - name: companyCode
+          in: header
+          required: true
+          type: string
       tags:
         - Search
       responses:
         200:
           description: |
-            OK.  The requested plan information has been
+            OK.  The list of Product Codes has been
+            successfully retrieved.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/commonSelectItem'
+        400:
+          description: |
+            Bad Request.  Invalid or malformed request detected.
+          schema: 
+            $ref: '#/definitions/errorModel'
+        401:
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Session token is either missing or invalid. 
+        403:
+          description: |
+            Forbidden.  The user is not authorized to access
+            any of the configured environments and/or companies.
+        404:
+          description: |
+            Not Found.  No data found matching the provided key values. 
+          schema: 
+            $ref: '#/definitions/errorModel'
+        default:
+          description: Unexpected Error
+          schema: 
+            $ref: '#/definitions/errorModel'
+
+  /search/rules/plan:
+    get:
+      summary: Retrieve a list of Plan Codes for the Business Rule Search view.
+      description: |
+        This endpoint returns a list of Plan Codes for the Business Rule Search
+        view filter.
+      produces:
+        - application/json
+      operationId: getPlanCodes
+      parameters:
+        - name: sessionToken
+          in: header
+          description: | 
+            Session Token
+          required: true
+          type: string
+        - name: viewChanges
+          in: header
+          required: true
+          type: boolean
+        - name: envId
+          in: header
+          required: true
+          type: string
+        - name: companyCode
+          in: header
+          required: true
+          type: string
+        - name: productCode
+          in: header
+          required: true
+          type: string
+      tags:
+        - Search
+      responses:
+        200:
+          description: |
+            OK.  The list of Plan Codes has been
+            successfully retrieved.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/commonSelectItem'
+        400:
+          description: |
+            Bad Request.  Invalid or malformed request detected.
+          schema: 
+            $ref: '#/definitions/errorModel'
+        401:
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Session token is either missing or invalid. 
+        403:
+          description: |
+            Forbidden.  The user is not authorized to access
+            any of the configured environments and/or companies.
+        404:
+          description: |
+            Not Found.  No data found matching the provided key values. 
+          schema: 
+            $ref: '#/definitions/errorModel'
+        default:
+          description: Unexpected Error
+          schema: 
+            $ref: '#/definitions/errorModel'
+
+  /search/rules/state:
+    get:
+      summary: Retrieve a list of Issue States for the Business Rule Search view.
+      description: |
+        This endpoint returns a list of Issue States for the Business Rule Search
+        view filter.
+      produces:
+        - application/json
+      operationId: getIssueStates
+      parameters:
+        - name: sessionToken
+          in: header
+          description: | 
+            Session Token
+          required: true
+          type: string
+        - name: viewChanges
+          in: header
+          required: true
+          type: boolean
+        - name: envId
+          in: header
+          required: true
+          type: string
+        - name: companyCode
+          in: header
+          required: true
+          type: string
+        - name: productCode
+          in: header
+          required: true
+          type: string
+        - name: planCode
+          in: header
+          required: true
+          type: string
+      tags:
+        - Search
+      responses:
+        200:
+          description: |
+            OK.  The list of Issue States has been
+            successfully retrieved.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/commonSelectItem'
+        400:
+          description: |
+            Bad Request.  Invalid or malformed request detected.
+          schema: 
+            $ref: '#/definitions/errorModel'
+        401:
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Session token is either missing or invalid. 
+        403:
+          description: |
+            Forbidden.  The user is not authorized to access
+            any of the configured environments and/or companies.
+        404:
+          description: |
+            Not Found.  No data found matching the provided key values. 
+          schema: 
+            $ref: '#/definitions/errorModel'
+        default:
+          description: Unexpected Error
+          schema: 
+            $ref: '#/definitions/errorModel'
+
+  /search/rules/lob:
+    get:
+      summary: Retrieve a list of Lines of Business for the Business Rule Search view.
+      description: |
+        This endpoint returns a list of Lines of Business for the Business Rule Search
+        view filter.
+      produces:
+        - application/json
+      operationId: getLobs
+      parameters:
+        - name: sessionToken
+          in: header
+          description: | 
+            Session Token
+          required: true
+          type: string
+        - name: viewChanges
+          in: header
+          required: true
+          type: boolean
+        - name: envId
+          in: header
+          required: true
+          type: string
+        - name: companyCode
+          in: header
+          required: true
+          type: string
+        - name: productCode
+          in: header
+          required: true
+          type: string
+        - name: planCode
+          in: header
+          required: true
+          type: string
+        - name: issueState
+          in: header
+          required: true
+          type: string
+      tags:
+        - Search
+      responses:
+        200:
+          description: |
+            OK.  The list of Lines of Business has been
+            successfully retrieved.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/commonSelectItem'
+        400:
+          description: |
+            Bad Request.  Invalid or malformed request detected.
+          schema: 
+            $ref: '#/definitions/errorModel'
+        401:
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Session token is either missing or invalid. 
+        403:
+          description: |
+            Forbidden.  The user is not authorized to access
+            any of the configured environments and/or companies.
+        404:
+          description: |
+            Not Found.  No data found matching the provided key values. 
+          schema: 
+            $ref: '#/definitions/errorModel'
+        default:
+          description: Unexpected Error
+          schema: 
+            $ref: '#/definitions/errorModel'
+
+  /search/rules/effdate:
+    get:
+      summary: Retrieve a list of Effective Dates for the Business Rule Search view.
+      description: |
+        This endpoint returns a list of Effective Dates for the Business Rule Search
+        view filter.
+      produces:
+        - application/json
+      operationId: getRulesEffDates
+      parameters:
+        - name: sessionToken
+          in: header
+          description: | 
+            Session Token
+          required: true
+          type: string
+        - name: viewChanges
+          in: header
+          required: true
+          type: boolean
+        - name: envId
+          in: header
+          required: true
+          type: string
+        - name: companyCode
+          in: header
+          required: true
+          type: string
+        - name: productCode
+          in: header
+          required: true
+          type: string
+        - name: planCode
+          in: header
+          required: true
+          type: string
+        - name: issueState
+          in: header
+          required: true
+          type: string
+        - name: lob
+          in: header
+          required: true
+          type: string
+      tags:
+        - Search
+      responses:
+        200:
+          description: |
+            OK.  The list of Effective Dates has been
             successfully retrieved.
           schema:
             type: array
@@ -245,7 +535,7 @@ paths:
             any of the configured environments and/or companies.
         404:
           description: |
-            Not Found.  No data found matching the provided plan key values. 
+            Not Found.  No data found matching the provided key values. 
           schema: 
             $ref: '#/definitions/errorModel'
         default:
@@ -255,9 +545,9 @@ paths:
 
   /search/rules/project:
     get:
-      summary: Search for projects.
+      summary: Retrieve a list of Projects for the Business Rule Search view.
       description: |
-        This endpoint is used to search for projects existing
+        This endpoint returns a list of Projects existing
         in the indicated environment.
       produces:
         - application/json
@@ -311,10 +601,10 @@ paths:
 
   /search/etv/table:
     get:
-      summary: Search for business rule tables.
+      summary: Search for business rule tables for the Entire Table View.
       description: |
-        This endpoint is used to search for
-        business rule tables.
+        This endpoint is used to search for business rule tables for
+        the Entire Table View.
       produces:
         - application/json
       operationId: getTables
@@ -500,27 +790,6 @@ definitions:
       tokenId:
         type: string
         description: A token used to link service requests to the corresponding security session. 
-
-  planSearchInput:
-    type: object
-    properties:
-      mergedView:
-        type: boolean
-      envId:
-        type: string
-      companyCode:
-        type: string
-      productCode:
-        type: string
-      planCode:
-        type: string
-      issueState:
-        type: string
-      lob:
-        type: string
-      effDate:
-        type: string
-        format: date
 
   commonSelectItem:
     type: object

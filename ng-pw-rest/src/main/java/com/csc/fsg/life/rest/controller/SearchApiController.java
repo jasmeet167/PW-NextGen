@@ -9,7 +9,6 @@ import org.springframework.beans.support.PropertyComparator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -39,22 +38,122 @@ public class SearchApiController
 		return new ResponseEntity<>(envList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/search/rules/common", produces = { "application/json" }, consumes = { "application/json" }, method = RequestMethod.POST)
-	public ResponseEntity<List<CommonSelectItem>> getPlanCommonValues(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
-																	  @RequestBody PlanSearchInput searchInput)
+	@RequestMapping(value = "/search/rules/company", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<List<CommonSelectItem>> getCompanyCodes(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+																  @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
+																  @RequestHeader(value = "envId", required = true) String envId)
 	{
+		PlanSearchInput searchInput = new PlanSearchInput();
+		searchInput.setViewChangesEffective(viewChanges);
+		searchInput.setEnvId(envId);
+
 		RestServiceParam param = buildRestServiceParam(sessionToken);
 		List<CommonSelectItem> envList = searchService.getPlanCommonValues(param, searchInput);
 		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
 		return new ResponseEntity<>(envList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/search/rules/date", produces = { "application/json" }, consumes = { "application/json" }, method = RequestMethod.POST)
-	public ResponseEntity<List<DateSelectItem>> getPlanDateValues(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
-																  @RequestBody PlanSearchInput searchInput)
+	@RequestMapping(value = "/search/rules/product", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<List<CommonSelectItem>> getProductCodes(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+																  @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
+																  @RequestHeader(value = "envId", required = true) String envId,
+																  @RequestHeader(value = "companyCode", required = true) String companyCode)
 	{
+		PlanSearchInput searchInput = new PlanSearchInput();
+		searchInput.setViewChangesEffective(viewChanges);
+		searchInput.setEnvId(envId);
+		searchInput.setCompanyCode(companyCode);
+
 		RestServiceParam param = buildRestServiceParam(sessionToken);
-		List<DateSelectItem> envList = searchService.getPlanDateValues(param, searchInput);
+		List<CommonSelectItem> envList = searchService.getPlanCommonValues(param, searchInput);
+		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
+		return new ResponseEntity<>(envList, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/search/rules/plan", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<List<CommonSelectItem>> getPlanCodes(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+															   @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
+															   @RequestHeader(value = "envId", required = true) String envId,
+															   @RequestHeader(value = "companyCode", required = true) String companyCode,
+															   @RequestHeader(value = "productCode", required = true) String productCode)
+	{
+		PlanSearchInput searchInput = new PlanSearchInput();
+		searchInput.setViewChangesEffective(viewChanges);
+		searchInput.setEnvId(envId);
+		searchInput.setCompanyCode(companyCode);
+		searchInput.setProductCode(productCode);
+
+		RestServiceParam param = buildRestServiceParam(sessionToken);
+		List<CommonSelectItem> envList = searchService.getPlanCommonValues(param, searchInput);
+		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
+		return new ResponseEntity<>(envList, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/search/rules/state", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<List<CommonSelectItem>> getIssueStates(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+																 @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
+																 @RequestHeader(value = "envId", required = true) String envId,
+																 @RequestHeader(value = "companyCode", required = true) String companyCode,
+																 @RequestHeader(value = "productCode", required = true) String productCode,
+																 @RequestHeader(value = "planCode", required = true) String planCode)
+	{
+		PlanSearchInput searchInput = new PlanSearchInput();
+		searchInput.setViewChangesEffective(viewChanges);
+		searchInput.setEnvId(envId);
+		searchInput.setCompanyCode(companyCode);
+		searchInput.setProductCode(productCode);
+		searchInput.setPlanCode(planCode);
+
+		RestServiceParam param = buildRestServiceParam(sessionToken);
+		List<CommonSelectItem> envList = searchService.getPlanCommonValues(param, searchInput);
+		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
+		return new ResponseEntity<>(envList, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/search/rules/lob", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<List<CommonSelectItem>> getLobs(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+														  @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
+														  @RequestHeader(value = "envId", required = true) String envId,
+														  @RequestHeader(value = "companyCode", required = true) String companyCode,
+														  @RequestHeader(value = "productCode", required = true) String productCode,
+														  @RequestHeader(value = "planCode", required = true) String planCode,
+														  @RequestHeader(value = "issueState", required = true) String issueState)
+	{
+		PlanSearchInput searchInput = new PlanSearchInput();
+		searchInput.setViewChangesEffective(viewChanges);
+		searchInput.setEnvId(envId);
+		searchInput.setCompanyCode(companyCode);
+		searchInput.setProductCode(productCode);
+		searchInput.setPlanCode(planCode);
+		searchInput.setIssueState(issueState);
+
+		RestServiceParam param = buildRestServiceParam(sessionToken);
+		List<CommonSelectItem> envList = searchService.getPlanCommonValues(param, searchInput);
+		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
+		return new ResponseEntity<>(envList, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/search/rules/effdate", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<List<DateSelectItem>> getRulesEffDates(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+																 @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
+																 @RequestHeader(value = "envId", required = true) String envId,
+																 @RequestHeader(value = "companyCode", required = true) String companyCode,
+																 @RequestHeader(value = "productCode", required = true) String productCode,
+																 @RequestHeader(value = "planCode", required = true) String planCode,
+																 @RequestHeader(value = "issueState", required = true) String issueState,
+																 @RequestHeader(value = "lob", required = true) String lob)
+	{
+		PlanSearchInput searchInput = new PlanSearchInput();
+		searchInput.setViewChangesEffective(viewChanges);
+		searchInput.setEnvId(envId);
+		searchInput.setCompanyCode(companyCode);
+		searchInput.setProductCode(productCode);
+		searchInput.setPlanCode(planCode);
+		searchInput.setIssueState(issueState);
+		searchInput.setLob(lob);
+
+		RestServiceParam param = buildRestServiceParam(sessionToken);
+		List<DateSelectItem> envList = searchService.getPlanEffectiveDates(param, searchInput);
 		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
 		return new ResponseEntity<>(envList, HttpStatus.OK);
 	}

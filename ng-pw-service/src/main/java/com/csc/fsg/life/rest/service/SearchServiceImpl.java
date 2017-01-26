@@ -105,11 +105,6 @@ public class SearchServiceImpl
 				commonValuesMap = context.getIssueStates(planCriteria);
 			else if (!StringUtils.hasText(searchInput.getLob()))
 				commonValuesMap = context.getLinesOfBusiness(planCriteria);
-			else if (searchInput.getEffDate() != null) {
-				HttpStatus status = BadRequestException.HTTP_STATUS;
-				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("eff_date_not_allowed"));
-				throw new BadRequestException(model);
-			}
 			else {
 				HttpStatus status = BadRequestException.HTTP_STATUS;
 				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("unknown_search_type"));
@@ -136,7 +131,7 @@ public class SearchServiceImpl
 		}
 	}
 
-	public List<DateSelectItem> getPlanDateValues(RestServiceParam param, PlanSearchInput searchInput)
+	public List<DateSelectItem> getPlanEffectiveDates(RestServiceParam param, PlanSearchInput searchInput)
 	{
 		try {
 			// TODO: +++ Security
@@ -177,13 +172,8 @@ public class SearchServiceImpl
 				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_lob"));
 				throw new BadRequestException(model);
 			}
-			else if (searchInput.getEffDate() == null) {
-				dateValuesMap = context.getEffectiveDates(planCriteria);
-			}
 			else {
-				HttpStatus status = BadRequestException.HTTP_STATUS;
-				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("unknown_search_type"));
-				throw new BadRequestException(model);
+				dateValuesMap = context.getEffectiveDates(planCriteria);
 			}
 
 			List<DateSelectItem> dateValues = new ArrayList<>();
@@ -212,6 +202,11 @@ public class SearchServiceImpl
 	private PlanCriteriaTO buildPlanCriteria(PlanSearchInput searchInput)
 	{
 		HashMap<String, Object> planKeys = new HashMap<>();
+		if (searchInput.isViewChangesEffective() == null)
+			planKeys.put(PlanCriteriaTO.MERGED_VIEW_KEY, Boolean.FALSE.toString());
+		else
+			planKeys.put(PlanCriteriaTO.MERGED_VIEW_KEY, searchInput.isViewChangesEffective().toString());
+
 		planKeys.put(PlanTOBase.ENVIRONMENT_KEY, searchInput.getEnvId());
 		planKeys.put(PlanTOBase.COMPANY_CODE_KEY, searchInput.getCompanyCode());
 

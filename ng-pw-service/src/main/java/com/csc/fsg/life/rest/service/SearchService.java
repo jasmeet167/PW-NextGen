@@ -18,7 +18,7 @@ public interface SearchService
 	public List<CommonSelectItem> getPlanCommonValues(RestServiceParam param, PlanSearchInput searchInput);
 
 	@SecuredMethod
-	public List<DateSelectItem> getPlanDateValues(RestServiceParam param, PlanSearchInput searchInput);
+	public List<DateSelectItem> getPlanEffectiveDates(RestServiceParam param, PlanSearchInput searchInput);
 
 	@SecuredMethod
 	public List<String> getProjects(RestServiceParam param, String environment);
