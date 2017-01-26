@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.csc.fsg.life.rest.api.SearchApi;
+import com.csc.fsg.life.rest.model.ChangesOnlyFilterData;
 import com.csc.fsg.life.rest.model.CommonSelectItem;
 import com.csc.fsg.life.rest.model.DateSelectItem;
 import com.csc.fsg.life.rest.model.PlanSearchInput;
 import com.csc.fsg.life.rest.param.RestServiceParam;
 import com.csc.fsg.life.rest.service.SearchService;
+
+import io.swagger.annotations.ApiParam;
 
 @Controller
 public class SearchApiController
@@ -44,7 +47,7 @@ public class SearchApiController
 	{
 		RestServiceParam param = buildRestServiceParam(sessionToken);
 		List<CommonSelectItem> envList = searchService.getPlanCommonValues(param, searchInput);
-		PropertyComparator.sort(envList, new MutableSortDefinition("coreValue", true, true));
+		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
 		return new ResponseEntity<>(envList, HttpStatus.OK);
 	}
 
@@ -54,7 +57,7 @@ public class SearchApiController
 	{
 		RestServiceParam param = buildRestServiceParam(sessionToken);
 		List<DateSelectItem> envList = searchService.getPlanDateValues(param, searchInput);
-		PropertyComparator.sort(envList, new MutableSortDefinition("coreValue", true, true));
+		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
 		return new ResponseEntity<>(envList, HttpStatus.OK);
 	}
 
@@ -75,7 +78,28 @@ public class SearchApiController
 	{
 		RestServiceParam param = buildRestServiceParam(sessionToken);
 		List<CommonSelectItem> envList = searchService.getTables(param, envId, companyCode);
-		PropertyComparator.sort(envList, new MutableSortDefinition("coreValue", true, true));
+		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
 		return new ResponseEntity<>(envList, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/search/changes/environment", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<List<CommonSelectItem>> getEnvironmentsWithChanges(@RequestHeader(value = "sessionToken", required = true) String sessionToken)
+	{
+		RestServiceParam param = buildRestServiceParam(sessionToken);
+		List<CommonSelectItem> envList = searchService.getEnvironmentsWithChanges(param);
+		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
+		return new ResponseEntity<>(envList, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/search/changes/filter", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<ChangesOnlyFilterData> getChangesOnlyFilterValues(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+																			@RequestHeader(value = "envId", required = true) String envId)
+	{
+		RestServiceParam param = buildRestServiceParam(sessionToken);
+		ChangesOnlyFilterData filterData = searchService.getChangesOnlyFilterValues(param, envId);
+		Collections.sort(filterData.getProjects());
+		Collections.sort(filterData.getUsers());
+		PropertyComparator.sort(filterData.getBusinessRuleTables(), new MutableSortDefinition("displayValue", true, true));
+		return new ResponseEntity<>(filterData, HttpStatus.OK);
 	}
 }

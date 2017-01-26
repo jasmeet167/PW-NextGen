@@ -31,6 +31,7 @@
 						</goals>
 						<configuration>
 							<sources>
+								<source>src/pw-client/java</source>
 								<source>src/pw-common/java</source>
 								<source>src/pw-web/java</source>
 							</sources>

@@ -12,8 +12,8 @@ import org.w3c.dom.Document;
 import com.csc.fsg.life.avm.environments.AVMConfigBean;
 import com.csc.fsg.life.pw.common.util.Constants;
 import com.csc.fsg.life.pw.common.util.InstallConfigBean;
-//import com.csc.fsg.life.pw.web.actions.rcm.beans.ExternalAuditBean;
-//import com.csc.fsg.life.pw.web.actions.tree.CommonTablesWriter;
+import com.csc.fsg.life.pw.web.actions.rcm.beans.ExternalAuditBean;
+import com.csc.fsg.life.pw.web.actions.tree.CommonTablesWriter;
 
 /* Modifications: T0111, ENH946, T0129 */
 // ENH946 - remove UL-specific fund handling
@@ -30,7 +30,7 @@ public class ProductObject {
 	private String defaultFund = Constants.DEFAULT_FUND;
 	
 	private InstallConfigBean installBean = null;
-//	private ExternalAuditBean extAuditBean = null;
+	private ExternalAuditBean extAuditBean = null;
 	private Node commonTreeRoot = null;
 	
 	public AVMConfigBean getAvmBean() {
@@ -86,24 +86,24 @@ public class ProductObject {
 		this.version = version;
 	}
 	
-//	public ExternalAuditBean getExtAuditBean() {
-//		return extAuditBean;
-//	}
-//	public void setExtAuditBean(ExternalAuditBean extAuditBean) {
-//		this.extAuditBean = extAuditBean;
-//	}
-//	
-//	public synchronized Node getCommonTreeRoot() throws Exception {
-//		if (commonTreeRoot == null) {
-//			String archTablesFile = getId().toLowerCase() + "ArchTables.xml";
-//			InputStream is = CommonTablesWriter.class.getResourceAsStream("/treeStructure/"
-//			        + archTablesFile);
-//			DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
-//			        .newInstance();
-//			DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-//			Document doc = docBuilder.parse(is);
-//			commonTreeRoot = doc.getElementsByTagName("ARCHITECTURE_TABLES").item(0);
-//		}
-//		return commonTreeRoot;
-//	}
+	public ExternalAuditBean getExtAuditBean() {
+		return extAuditBean;
+	}
+	public void setExtAuditBean(ExternalAuditBean extAuditBean) {
+		this.extAuditBean = extAuditBean;
+	}
+	
+	public synchronized Node getCommonTreeRoot() throws Exception {
+		if (commonTreeRoot == null) {
+			String archTablesFile = getId().toLowerCase() + "ArchTables.xml";
+			InputStream is = CommonTablesWriter.class.getResourceAsStream("/treeStructure/"
+			        + archTablesFile);
+			DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
+			        .newInstance();
+			DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+			Document doc = docBuilder.parse(is);
+			commonTreeRoot = doc.getElementsByTagName("ARCHITECTURE_TABLES").item(0);
+		}
+		return commonTreeRoot;
+	}
 }

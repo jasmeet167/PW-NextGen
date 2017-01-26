@@ -272,7 +272,7 @@ paths:
         - name: envId
           in: header
           description: |
-            Environment code
+            Environment Id
           required: true
           type: string
       tags:
@@ -374,6 +374,115 @@ paths:
             items:
               $ref: '#/definitions/commonSelectItem'
 
+  /search/changes/environment:
+    get:
+      summary: |
+        Retrieve a list of Environments, which have pending changes
+        in WIP
+      description: |
+        This endpoint returns a list of Environments configured in
+        the Product Wizard installation, which the authenticated user
+        is authorized to access, and which have pending changes in WIP.
+      produces:
+        - application/json
+      operationId: getEnvironmentsWithChanges
+      parameters:
+        - name: sessionToken
+          in: header
+          description: | 
+            Session Token
+          required: true
+          type: string
+      tags:
+        - Search
+      responses:
+        200:
+          description: |
+            OK.  The list of Environments matching the required criteria
+            has been successfully retrieved.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/commonSelectItem'
+        400:
+          description: |
+            Bad Request.  Invalid or malformed request detected.
+          schema: 
+            $ref: '#/definitions/errorModel'
+        401:
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Session token is either missing or invalid. 
+        403:
+          description: |
+            Forbidden.  The user is not authorized to access
+            any of the applicable environments.
+        404:
+          description: |
+            Not Found. 
+          schema: 
+            $ref: '#/definitions/errorModel'
+        default:
+          description: Unexpected Error
+          schema: 
+            $ref: '#/definitions/errorModel'
+
+  /search/changes/filter:
+    get:
+      summary: |
+        Retrieve key values used for filtering of data in the Changes Only view
+      description: |
+        This endpoint returns information, which can be used for filtering
+        of changes shown in Changes Only view.  This information includes
+        packages, business rule tables, and User Ids, all reflecting existing
+        rows in WIP, which correspond to the provided Environment Id.
+      produces:
+        - application/json
+      operationId: getChangesOnlyFilterValues
+      parameters:
+        - name: sessionToken
+          in: header
+          description: | 
+            Session Token
+          required: true
+          type: string
+        - name: envId
+          in: header
+          description: |
+            Environment Id
+          required: true
+          type: string
+      tags:
+        - Search
+      responses:
+        200:
+          description: |
+            OK.  All applicable data has been successfully retrieved.
+          schema:
+            $ref: '#/definitions/changesOnlyFilterData'
+        400:
+          description: |
+            Bad Request.  Invalid or malformed request detected.
+          schema: 
+            $ref: '#/definitions/errorModel'
+        401:
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Session token is either missing or invalid. 
+        403:
+          description: |
+            Forbidden.  The user is not authorized to access
+            the indicated environment.
+        404:
+          description: |
+            Not Found. 
+          schema: 
+            $ref: '#/definitions/errorModel'
+        default:
+          description: Unexpected Error
+          schema: 
+            $ref: '#/definitions/errorModel'
+
 definitions:
   credentials:
     type: object
@@ -433,6 +542,22 @@ definitions:
       displayValue:
         type: string
         description: Representation of value of this item suitable for display.
+
+  changesOnlyFilterData:
+    type: object
+    properties:
+      projects:
+        type: array
+        items:
+          type: string
+      businessRuleTables:
+        type: array
+        items:
+          $ref: '#/definitions/commonSelectItem'
+      users:
+        type: array
+        items:
+          type: string
 
   errorModel:
     type: object

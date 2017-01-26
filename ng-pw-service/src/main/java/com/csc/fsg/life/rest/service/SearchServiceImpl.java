@@ -16,9 +16,12 @@ import org.springframework.util.StringUtils;
 
 import com.csc.fsg.life.common.config.CommonApplicationConfigBean;
 import com.csc.fsg.life.common.config.MyBatisApplicationEnvironmentBean;
+import com.csc.fsg.life.pw.client.util.RCMClientUtilities;
 import com.csc.fsg.life.pw.common.transferobjects.PlanCriteriaTO;
 import com.csc.fsg.life.pw.common.transferobjects.PlanTOBase;
+import com.csc.fsg.life.pw.common.util.Constants;
 import com.csc.fsg.life.pw.common.util.WIPProperties;
+import com.csc.fsg.life.pw.web.actions.rcm.beans.PackageBean;
 import com.csc.fsg.life.pw.web.environment.Environment;
 import com.csc.fsg.life.pw.web.environment.EnvironmentManager;
 import com.csc.fsg.life.pw.web.io.EntireTableFilterContext;
@@ -27,6 +30,7 @@ import com.csc.fsg.life.pw.web.io.WIPRows;
 import com.csc.fsg.life.rest.exception.BadRequestException;
 import com.csc.fsg.life.rest.exception.RestServiceException;
 import com.csc.fsg.life.rest.exception.UnexpectedException;
+import com.csc.fsg.life.rest.model.ChangesOnlyFilterData;
 import com.csc.fsg.life.rest.model.CommonSelectItem;
 import com.csc.fsg.life.rest.model.DateSelectItem;
 import com.csc.fsg.life.rest.model.ErrorModel;
@@ -289,6 +293,112 @@ public class SearchServiceImpl
 			}
 
 			return tableList;
+		}
+		catch (RestServiceException e) {
+			throw e;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			ErrorModel model = errorModelFactory.newErrorModel(UnexpectedException.HTTP_STATUS);
+			throw new UnexpectedException(model);
+		}
+	}
+
+	public List<CommonSelectItem> getEnvironmentsWithChanges(RestServiceParam param)
+	{
+		try {
+			// For reference, see method fetchEnvironments() in class
+			// com.csc.fsg.life.pw.client.mdi.ChangesOnly in the old
+			// Product Wizard.
+
+			// Only environemnts the user is authorized to access will be returned
+			List<CommonSelectItem> allEnvironments = getEnvironments(param);
+			String refEnvId = allEnvironments.get(0).getCoreValue();
+			Environment refEnvironment = EnvironmentManager.getInstance().getEnvironment(refEnvId);
+
+			Map<String, CommonSelectItem> envMap = new HashMap<>();
+			for (CommonSelectItem environment : allEnvironments)
+				envMap.put(environment.getCoreValue(), environment);
+
+			PackageBean packageHelper = new PackageBean(refEnvironment, null, null);
+			packageHelper.setSource(Constants.WIP);
+			packageHelper.setProcess(Constants.GET_ENVIRONMENTS);
+			packageHelper.setChangesOnly(null);
+
+			String valueString = packageHelper.getInitialValues();
+			String[] values = valueString.split("\t");
+
+			List<CommonSelectItem> environmentsWithChange = new ArrayList<>();
+			for (String value : values) {
+				if (value != null) {
+					String trimmedValue = value.trim();
+					CommonSelectItem env = envMap.get(trimmedValue);
+					if (env != null)
+						environmentsWithChange.add(env);
+				}
+			}
+
+			return environmentsWithChange;
+		}
+		catch (RestServiceException e) {
+			throw e;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			ErrorModel model = errorModelFactory.newErrorModel(UnexpectedException.HTTP_STATUS);
+			throw new UnexpectedException(model);
+		}
+	}
+
+	public ChangesOnlyFilterData getChangesOnlyFilterValues(RestServiceParam param, String envId)
+	{
+		try {
+			// TODO: +++ Security
+
+			// For reference, see method fillLists(String) in class
+			// com.csc.fsg.life.pw.client.mdi.ChangesOnly in the old
+			// Product Wizard.
+
+			Environment env = EnvironmentManager.getInstance().getEnvironment(envId);
+			if (env == null) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_environment"));
+				throw new BadRequestException(model);
+			}
+
+			PackageBean packageHelper = new PackageBean(env, null, null);
+			packageHelper.setSource(Constants.WIP);
+			packageHelper.setProcess(Constants.GET_FILTER_INFO);
+			packageHelper.setChangesOnly("ChangesOnly");
+
+			String valueString = packageHelper.getInitialValues();
+			String[] values = valueString.split("\t");
+			ChangesOnlyFilterData filterData = new ChangesOnlyFilterData();
+
+			for (String value : values) {
+				int index = -1;
+
+				if ((index = value.indexOf(RCMClientUtilities.PRJ_DELIM)) != -1) {
+					String project = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
+					filterData.addProjectsItem(project);
+				}
+
+				if ((index = value.indexOf(RCMClientUtilities.TAB_DELIM)) != -1) {
+					String displayValue = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
+					String coreValue = displayValue.substring(0, displayValue.indexOf("-")).trim();
+					CommonSelectItem item = new CommonSelectItem();
+					item.setCoreValue(coreValue);
+					item.setDisplayValue(displayValue);
+					filterData.addBusinessRuleTablesItem(item);
+				}
+
+				if ((index = value.indexOf(RCMClientUtilities.USR_DELIM)) != -1) {
+					String user = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
+					filterData.addUsersItem(user);
+				}
+			}
+
+			return filterData;
 		}
 		catch (RestServiceException e) {
 			throw e;
