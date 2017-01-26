@@ -22,8 +22,6 @@ import com.csc.fsg.life.rest.model.PlanSearchInput;
 import com.csc.fsg.life.rest.param.RestServiceParam;
 import com.csc.fsg.life.rest.service.SearchService;
 
-import io.swagger.annotations.ApiParam;
-
 @Controller
 public class SearchApiController
 	extends RestApiController
@@ -32,7 +30,7 @@ public class SearchApiController
 	@Autowired
 	SearchService searchService = null;
 
-	@RequestMapping(value = "/search/environment", produces = { "application/json" }, method = RequestMethod.GET)
+	@RequestMapping(value = "/search/common/environment", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<CommonSelectItem>> getEnvironments(@RequestHeader(value = "sessionToken", required = true) String sessionToken)
 	{
 		RestServiceParam param = buildRestServiceParam(sessionToken);
@@ -41,7 +39,7 @@ public class SearchApiController
 		return new ResponseEntity<>(envList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/search/common", produces = { "application/json" }, consumes = { "application/json" }, method = RequestMethod.POST)
+	@RequestMapping(value = "/search/rules/common", produces = { "application/json" }, consumes = { "application/json" }, method = RequestMethod.POST)
 	public ResponseEntity<List<CommonSelectItem>> getPlanCommonValues(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
 																	  @RequestBody PlanSearchInput searchInput)
 	{
@@ -51,7 +49,7 @@ public class SearchApiController
 		return new ResponseEntity<>(envList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/search/date", produces = { "application/json" }, consumes = { "application/json" }, method = RequestMethod.POST)
+	@RequestMapping(value = "/search/rules/date", produces = { "application/json" }, consumes = { "application/json" }, method = RequestMethod.POST)
 	public ResponseEntity<List<DateSelectItem>> getPlanDateValues(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
 																  @RequestBody PlanSearchInput searchInput)
 	{
@@ -61,7 +59,7 @@ public class SearchApiController
 		return new ResponseEntity<>(envList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/search/project", produces = { "application/json" }, method = RequestMethod.GET)
+	@RequestMapping(value = "/search/rules/project", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<String>> getProjects(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
 													@RequestHeader(value = "envId", required = true) String envId)
 	{
@@ -71,7 +69,7 @@ public class SearchApiController
 		return new ResponseEntity<>(envList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/search/table", produces = { "application/json" }, method = RequestMethod.GET)
+	@RequestMapping(value = "/search/etv/table", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<CommonSelectItem>> getTables(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
 															@RequestHeader(value = "envId", required = true) String envId,
 															@RequestHeader(value = "companyCode", required = true) String companyCode)	

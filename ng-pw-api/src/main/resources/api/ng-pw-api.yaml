@@ -84,7 +84,7 @@ paths:
           schema: 
             $ref: '#/definitions/errorModel'
 
-  /search/environment:
+  /search/common/environment:
     get:
       summary: Retrieve a list of Environments
       description: |
@@ -135,7 +135,7 @@ paths:
           schema: 
             $ref: '#/definitions/errorModel'
 
-  /search/common:
+  /search/rules/common:
     post:
       summary: Search for common plan key information.
       description: |
@@ -194,7 +194,7 @@ paths:
           schema: 
             $ref: '#/definitions/errorModel'
 
-  /search/date:
+  /search/rules/date:
     post:
       summary: Search for plan key information of type date.
       description: |
@@ -253,7 +253,7 @@ paths:
           schema: 
             $ref: '#/definitions/errorModel'
 
-  /search/project:
+  /search/rules/project:
     get:
       summary: Search for projects.
       description: |
@@ -309,7 +309,7 @@ paths:
           schema: 
             $ref: '#/definitions/errorModel'
 
-  /search/table:
+  /search/etv/table:
     get:
       summary: Search for business rule tables.
       description: |
