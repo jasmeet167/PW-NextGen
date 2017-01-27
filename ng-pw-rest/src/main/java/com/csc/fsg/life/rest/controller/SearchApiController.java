@@ -15,12 +15,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.csc.fsg.life.rest.api.SearchApi;
 import com.csc.fsg.life.rest.model.ApplyFilterData;
+import com.csc.fsg.life.rest.model.AuditFilterData;
 import com.csc.fsg.life.rest.model.ChangesFilterData;
 import com.csc.fsg.life.rest.model.CommonSelectItem;
 import com.csc.fsg.life.rest.model.DateSelectItem;
 import com.csc.fsg.life.rest.model.PlanSearchInput;
 import com.csc.fsg.life.rest.param.RestServiceParam;
 import com.csc.fsg.life.rest.service.SearchService;
+
+import io.swagger.annotations.ApiParam;
 
 @Controller
 public class SearchApiController
@@ -209,6 +212,20 @@ public class SearchApiController
 		ApplyFilterData filterData = searchService.getApplyFilterValues(param, envId);
 		Collections.sort(filterData.getPackages());
 		Collections.sort(filterData.getProjects());
+		return new ResponseEntity<>(filterData, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/search/audit/filter", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<AuditFilterData> getAuditFilterValues(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+																@RequestHeader(value = "filterAspect", required = true) String filterAspect,
+																@RequestHeader(value = "envId", required = true) String envId)
+	{
+		RestServiceParam param = buildRestServiceParam(sessionToken);
+		AuditFilterData filterData = searchService.getAuditFilterValues(param, filterAspect, envId);
+		Collections.sort(filterData.getPackages());
+		Collections.sort(filterData.getProjects());
+		PropertyComparator.sort(filterData.getBusinessRuleTables(), new MutableSortDefinition("displayValue", true, true));
+		Collections.sort(filterData.getUsers());
 		return new ResponseEntity<>(filterData, HttpStatus.OK);
 	}
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.csc.fsg.life.rest.annotation.SecuredMethod;
 import com.csc.fsg.life.rest.model.ApplyFilterData;
+import com.csc.fsg.life.rest.model.AuditFilterData;
 import com.csc.fsg.life.rest.model.ChangesFilterData;
 import com.csc.fsg.life.rest.model.CommonSelectItem;
 import com.csc.fsg.life.rest.model.DateSelectItem;
@@ -35,4 +36,7 @@ public interface SearchService
 
 	@SecuredMethod
 	public ApplyFilterData getApplyFilterValues(RestServiceParam param, String envId);
+
+	@SecuredMethod
+	public AuditFilterData getAuditFilterValues(RestServiceParam param, String filterAspect, String envId);
 }

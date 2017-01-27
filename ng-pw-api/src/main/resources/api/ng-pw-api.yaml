@@ -829,6 +829,70 @@ paths:
           schema: 
             $ref: '#/definitions/errorModel'
 
+  /search/audit/filter:
+    get:
+      summary: |
+        Retrieve key values used for filtering of data in the Audit/Error view
+      description: |
+        This endpoint returns information, which can be used for filtering
+        of changes shown in Audit/Error view.  This information includes
+        packages, projects, business rule tables, and users, all reflecting
+        existing data, which corresponds to the provided Environment Id.
+      produces:
+        - application/json
+      operationId: getAuditFilterValues
+      parameters:
+        - name: sessionToken
+          in: header
+          description: | 
+            Session Token
+          required: true
+          type: string
+        - name: filterAspect 
+          in: header
+          description: |
+            Switch used to request filter data for either Audit Log
+            or Error aspect of this view.
+            Supported values are: 'A', and 'E'.
+          required: true
+          type: string
+        - name: envId
+          in: header
+          description: |
+            Environment Id
+          required: true
+          type: string
+      tags:
+        - Search
+      responses:
+        200:
+          description: |
+            OK.  All applicable data has been successfully retrieved.
+          schema:
+            $ref: '#/definitions/auditFilterData'
+        400:
+          description: |
+            Bad Request.  Invalid or malformed request detected.
+          schema: 
+            $ref: '#/definitions/errorModel'
+        401:
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Session token is either missing or invalid. 
+        403:
+          description: |
+            Forbidden.  The user is not authorized to access
+            the indicated environment.
+        404:
+          description: |
+            Not Found. 
+          schema: 
+            $ref: '#/definitions/errorModel'
+        default:
+          description: Unexpected Error
+          schema: 
+            $ref: '#/definitions/errorModel'
+
 definitions:
   credentials:
     type: object
@@ -892,6 +956,26 @@ definitions:
         items:
           type: string
       projects:
+        type: array
+        items:
+          type: string
+
+  auditFilterData:
+    type: object
+    properties:
+      packages:
+        type: array
+        items:
+          type: string
+      projects:
+        type: array
+        items:
+          type: string
+      businessRuleTables:
+        type: array
+        items:
+          $ref: '#/definitions/commonSelectItem'
+      users:
         type: array
         items:
           type: string

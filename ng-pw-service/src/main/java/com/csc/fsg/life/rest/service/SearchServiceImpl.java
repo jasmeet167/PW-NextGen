@@ -3,6 +3,7 @@ package com.csc.fsg.life.rest.service;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +17,7 @@ import org.springframework.util.StringUtils;
 
 import com.csc.fsg.life.common.config.CommonApplicationConfigBean;
 import com.csc.fsg.life.common.config.MyBatisApplicationEnvironmentBean;
+import com.csc.fsg.life.pw.client.mdi.AuditErrorFilter;
 import com.csc.fsg.life.pw.client.util.RCMClientUtilities;
 import com.csc.fsg.life.pw.common.transferobjects.PlanCriteriaTO;
 import com.csc.fsg.life.pw.common.transferobjects.PlanTOBase;
@@ -31,6 +33,7 @@ import com.csc.fsg.life.rest.exception.BadRequestException;
 import com.csc.fsg.life.rest.exception.RestServiceException;
 import com.csc.fsg.life.rest.exception.UnexpectedException;
 import com.csc.fsg.life.rest.model.ApplyFilterData;
+import com.csc.fsg.life.rest.model.AuditFilterData;
 import com.csc.fsg.life.rest.model.ChangesFilterData;
 import com.csc.fsg.life.rest.model.CommonSelectItem;
 import com.csc.fsg.life.rest.model.DateSelectItem;
@@ -371,13 +374,16 @@ public class SearchServiceImpl
 			String[] values = valueString.split("\t");
 			ChangesFilterData filterData = new ChangesFilterData();
 
+			Set<String> projectSet = new HashSet<>();
+			Set<String> userSet = new HashSet<>();
+
 			for (String value : values) {
 				int index = -1;
 
 				if ((index = value.indexOf(RCMClientUtilities.PRJ_DELIM)) != -1) {
 					String project = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
 					if (project.length() > 0)
-						filterData.addProjectsItem(project);
+						projectSet.add(project);
 				}
 
 				if ((index = value.indexOf(RCMClientUtilities.TAB_DELIM)) != -1) {
@@ -394,10 +400,12 @@ public class SearchServiceImpl
 				if ((index = value.indexOf(RCMClientUtilities.USR_DELIM)) != -1) {
 					String user = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
 					if (user.length() > 0)
-						filterData.addUsersItem(user);
+						userSet.add(user);
 				}
 			}
 
+			filterData.setProjects(new ArrayList<>(projectSet));
+			filterData.setUsers(new ArrayList<>(userSet));
 			return filterData;
 		}
 		catch (RestServiceException e) {
@@ -435,22 +443,114 @@ public class SearchServiceImpl
 			String[] values = valueString.split("\t");
 			ApplyFilterData filterData = new ApplyFilterData();
 
+			Set<String> packageSet = new HashSet<>();
+			Set<String> projectSet = new HashSet<>();
+
 			for (String value : values) {
 				int index = -1;
 
 				if ((index = value.indexOf(RCMClientUtilities.PKG_DELIM)) != -1) {
 					String pkg = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
 					if (pkg.length() > 0)
-						filterData.addPackagesItem(pkg);
+						packageSet.add(pkg);
 				}
 
 				if ((index = value.indexOf(RCMClientUtilities.PRJ_DELIM)) != -1) {
 					String project = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
 					if (project.length() > 0)
-						filterData.addProjectsItem(project);
+						projectSet.add(project);
 				}
 			}
 
+			filterData.setPackages(new ArrayList<>(packageSet));
+			filterData.setProjects(new ArrayList<>(projectSet));
+			return filterData;
+		}
+		catch (RestServiceException e) {
+			throw e;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			ErrorModel model = errorModelFactory.newErrorModel(UnexpectedException.HTTP_STATUS);
+			throw new UnexpectedException(model);
+		}
+	}
+
+	public AuditFilterData getAuditFilterValues(RestServiceParam param, String filterAspect, String envId)
+	{
+		try {
+			// For reference, see method populateFilters() in class
+			// com.csc.fsg.life.pw.client.mdi.AuditErrorFilter in the old
+			// Product Wizard.
+
+			// TODO: +++ Security
+
+			if (!"A".equals(filterAspect) && !"E".equals(filterAspect)) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_filter_aspect"));
+				throw new BadRequestException(model);
+			}
+
+			Environment env = EnvironmentManager.getInstance().getEnvironment(envId);
+			if (env == null) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_environment"));
+				throw new BadRequestException(model);
+			}
+
+			PackageBean packageHelper = new PackageBean(env, null, null);
+
+			if ("A".equals(filterAspect))
+				packageHelper.setSource(Constants.AUDIT_VIEW);
+			else
+				packageHelper.setSource(AuditErrorFilter.ERROR);
+
+			packageHelper.setProcess(Constants.GET_FILTER_INFO);
+			packageHelper.setChangesOnly(null);
+			String valueString = packageHelper.getInitialValues();
+			String[] values = valueString.split("\t");
+			AuditFilterData filterData = new AuditFilterData();
+
+			Set<String> packageSet = new HashSet<>();
+			Set<String> projectSet = new HashSet<>();
+			Set<String> userSet = new HashSet<>();
+
+			for (String value : values) {
+				int index = -1;
+
+				if ((index = value.indexOf(RCMClientUtilities.PKG_DELIM)) != -1) {
+					String pkg = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
+					if (pkg.length() > 0)
+						packageSet.add(pkg);
+				}
+
+				if ((index = value.indexOf(RCMClientUtilities.PRJ_DELIM)) != -1) {
+					String project = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
+					if (project.length() > 0)
+						projectSet.add(project);
+				}
+
+				if ((index = value.indexOf(RCMClientUtilities.TAB_DELIM)) != -1) {
+					String displayValue = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
+					if (displayValue.length() > 0) {
+						String coreValue = displayValue.substring(0, displayValue.indexOf("-")).trim();
+						CommonSelectItem item = new CommonSelectItem();
+						item.setCoreValue(coreValue);
+						item.setDisplayValue(displayValue);
+						filterData.addBusinessRuleTablesItem(item);
+					}
+				}
+
+				if ((index = value.indexOf(RCMClientUtilities.USR_DELIM)) != -1) {
+					String user = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
+					if (user.length() > 0)
+						userSet.add(user);
+				}
+			}
+
+			filterData.setPackages(new ArrayList<>(packageSet));
+			filterData.setProjects(new ArrayList<>(projectSet));
+			filterData.setUsers(new ArrayList<>(userSet));
 			return filterData;
 		}
 		catch (RestServiceException e) {
