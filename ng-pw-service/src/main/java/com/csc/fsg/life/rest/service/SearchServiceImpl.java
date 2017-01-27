@@ -56,7 +56,7 @@ public class SearchServiceImpl
 		super("com.csc.fsg.life.rest.service.SearchService");
 	}
 
-	public List<CommonSelectItem> getEnvironments(RestServiceParam param)
+	public List<CommonSelectItem> getCommonEnvironments(RestServiceParam param)
 	{
 		try {
 			// TODO: +++ Security
@@ -136,7 +136,7 @@ public class SearchServiceImpl
 		}
 	}
 
-	public List<DateSelectItem> getPlanEffectiveDates(RestServiceParam param, PlanSearchInput searchInput)
+	public List<DateSelectItem> getPlanEffDates(RestServiceParam param, PlanSearchInput searchInput)
 	{
 		try {
 			// TODO: +++ Security
@@ -232,7 +232,7 @@ public class SearchServiceImpl
 		return planCriteria;
 	}
 
-	public List<String> getProjects(RestServiceParam param, String envId)
+	public List<String> getPlanProjects(RestServiceParam param, String envId)
 	{
 		try {
 			// TODO: +++ Security
@@ -264,7 +264,7 @@ public class SearchServiceImpl
 		}
 	}
 
-	public List<CommonSelectItem> getTables(RestServiceParam param, String envId, String companyCode)
+	public List<CommonSelectItem> getPlanTables(RestServiceParam param, String envId, String companyCode)
 	{
 		try {
 			// TODO: +++ Security
@@ -312,7 +312,7 @@ public class SearchServiceImpl
 			// Product Wizard.
 
 			// Only environemnts the user is authorized to access will be returned
-			List<CommonSelectItem> allEnvironments = getEnvironments(param);
+			List<CommonSelectItem> allEnvironments = getCommonEnvironments(param);
 			String refEnvId = allEnvironments.get(0).getCoreValue();
 			Environment refEnvironment = EnvironmentManager.getInstance().getEnvironment(refEnvId);
 

@@ -33,18 +33,18 @@ public class SearchApiController
 	SearchService searchService = null;
 
 	@RequestMapping(value = "/search/common/environment", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<CommonSelectItem>> getEnvironments(@RequestHeader(value = "sessionToken", required = true) String sessionToken)
+	public ResponseEntity<List<CommonSelectItem>> getCommonEnvironments(@RequestHeader(value = "sessionToken", required = true) String sessionToken)
 	{
 		RestServiceParam param = buildRestServiceParam(sessionToken);
-		List<CommonSelectItem> envList = searchService.getEnvironments(param);
+		List<CommonSelectItem> envList = searchService.getCommonEnvironments(param);
 		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
 		return new ResponseEntity<>(envList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/search/rules/company", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<CommonSelectItem>> getCompanyCodes(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
-																  @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
-																  @RequestHeader(value = "envId", required = true) String envId)
+	@RequestMapping(value = "/search/plan/company", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<List<CommonSelectItem>> getPlanCompanyCodes(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+																	  @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
+																	  @RequestHeader(value = "envId", required = true) String envId)
 	{
 		PlanSearchInput searchInput = new PlanSearchInput();
 		searchInput.setViewChangesEffective(viewChanges);
@@ -56,11 +56,11 @@ public class SearchApiController
 		return new ResponseEntity<>(envList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/search/rules/product", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<CommonSelectItem>> getProductCodes(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
-																  @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
-																  @RequestHeader(value = "envId", required = true) String envId,
-																  @RequestHeader(value = "companyCode", required = true) String companyCode)
+	@RequestMapping(value = "/search/plan/product", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<List<CommonSelectItem>> getPlanProductCodes(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+																	  @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
+																	  @RequestHeader(value = "envId", required = true) String envId,
+																	  @RequestHeader(value = "companyCode", required = true) String companyCode)
 	{
 		PlanSearchInput searchInput = new PlanSearchInput();
 		searchInput.setViewChangesEffective(viewChanges);
@@ -73,12 +73,12 @@ public class SearchApiController
 		return new ResponseEntity<>(envList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/search/rules/plan", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<CommonSelectItem>> getPlanCodes(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
-															   @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
-															   @RequestHeader(value = "envId", required = true) String envId,
-															   @RequestHeader(value = "companyCode", required = true) String companyCode,
-															   @RequestHeader(value = "productCode", required = true) String productCode)
+	@RequestMapping(value = "/search/plan/plan", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<List<CommonSelectItem>> getPlanPlanCodes(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+																   @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
+																   @RequestHeader(value = "envId", required = true) String envId,
+																   @RequestHeader(value = "companyCode", required = true) String companyCode,
+																   @RequestHeader(value = "productCode", required = true) String productCode)
 	{
 		PlanSearchInput searchInput = new PlanSearchInput();
 		searchInput.setViewChangesEffective(viewChanges);
@@ -92,13 +92,13 @@ public class SearchApiController
 		return new ResponseEntity<>(envList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/search/rules/state", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<CommonSelectItem>> getIssueStates(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
-																 @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
-																 @RequestHeader(value = "envId", required = true) String envId,
-																 @RequestHeader(value = "companyCode", required = true) String companyCode,
-																 @RequestHeader(value = "productCode", required = true) String productCode,
-																 @RequestHeader(value = "planCode", required = true) String planCode)
+	@RequestMapping(value = "/search/plan/state", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<List<CommonSelectItem>> getPlanIssueStates(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+																	 @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
+																	 @RequestHeader(value = "envId", required = true) String envId,
+																	 @RequestHeader(value = "companyCode", required = true) String companyCode,
+																	 @RequestHeader(value = "productCode", required = true) String productCode,
+																	 @RequestHeader(value = "planCode", required = true) String planCode)
 	{
 		PlanSearchInput searchInput = new PlanSearchInput();
 		searchInput.setViewChangesEffective(viewChanges);
@@ -113,14 +113,14 @@ public class SearchApiController
 		return new ResponseEntity<>(envList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/search/rules/lob", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<CommonSelectItem>> getLobs(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
-														  @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
-														  @RequestHeader(value = "envId", required = true) String envId,
-														  @RequestHeader(value = "companyCode", required = true) String companyCode,
-														  @RequestHeader(value = "productCode", required = true) String productCode,
-														  @RequestHeader(value = "planCode", required = true) String planCode,
-														  @RequestHeader(value = "issueState", required = true) String issueState)
+	@RequestMapping(value = "/search/plan/lob", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<List<CommonSelectItem>> getPlanLobs(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+															  @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
+															  @RequestHeader(value = "envId", required = true) String envId,
+															  @RequestHeader(value = "companyCode", required = true) String companyCode,
+															  @RequestHeader(value = "productCode", required = true) String productCode,
+															  @RequestHeader(value = "planCode", required = true) String planCode,
+															  @RequestHeader(value = "issueState", required = true) String issueState)
 	{
 		PlanSearchInput searchInput = new PlanSearchInput();
 		searchInput.setViewChangesEffective(viewChanges);
@@ -136,15 +136,15 @@ public class SearchApiController
 		return new ResponseEntity<>(envList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/search/rules/effdate", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<DateSelectItem>> getRulesEffDates(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
-																 @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
-																 @RequestHeader(value = "envId", required = true) String envId,
-																 @RequestHeader(value = "companyCode", required = true) String companyCode,
-																 @RequestHeader(value = "productCode", required = true) String productCode,
-																 @RequestHeader(value = "planCode", required = true) String planCode,
-																 @RequestHeader(value = "issueState", required = true) String issueState,
-																 @RequestHeader(value = "lob", required = true) String lob)
+	@RequestMapping(value = "/search/plan/effdate", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<List<DateSelectItem>> getPlanEffDates(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+																@RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
+																@RequestHeader(value = "envId", required = true) String envId,
+																@RequestHeader(value = "companyCode", required = true) String companyCode,
+																@RequestHeader(value = "productCode", required = true) String productCode,
+																@RequestHeader(value = "planCode", required = true) String planCode,
+																@RequestHeader(value = "issueState", required = true) String issueState,
+																@RequestHeader(value = "lob", required = true) String lob)
 	{
 		PlanSearchInput searchInput = new PlanSearchInput();
 		searchInput.setViewChangesEffective(viewChanges);
@@ -156,28 +156,28 @@ public class SearchApiController
 		searchInput.setLob(lob);
 
 		RestServiceParam param = buildRestServiceParam(sessionToken);
-		List<DateSelectItem> envList = searchService.getPlanEffectiveDates(param, searchInput);
+		List<DateSelectItem> envList = searchService.getPlanEffDates(param, searchInput);
 		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
 		return new ResponseEntity<>(envList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/search/rules/project", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<String>> getProjects(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
-													@RequestHeader(value = "envId", required = true) String envId)
+	@RequestMapping(value = "/search/plan/project", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<List<String>> getPlanProjects(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+														@RequestHeader(value = "envId", required = true) String envId)
 	{
 		RestServiceParam param = buildRestServiceParam(sessionToken);
-		List<String> envList = searchService.getProjects(param, envId);
+		List<String> envList = searchService.getPlanProjects(param, envId);
 		Collections.sort(envList);
 		return new ResponseEntity<>(envList, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/search/etv/table", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<CommonSelectItem>> getTables(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
-															@RequestHeader(value = "envId", required = true) String envId,
-															@RequestHeader(value = "companyCode", required = true) String companyCode)	
+	public ResponseEntity<List<CommonSelectItem>> getPlanTables(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+																@RequestHeader(value = "envId", required = true) String envId,
+																@RequestHeader(value = "companyCode", required = true) String companyCode)	
 	{
 		RestServiceParam param = buildRestServiceParam(sessionToken);
-		List<CommonSelectItem> envList = searchService.getTables(param, envId, companyCode);
+		List<CommonSelectItem> envList = searchService.getPlanTables(param, envId, companyCode);
 		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
 		return new ResponseEntity<>(envList, HttpStatus.OK);
 	}

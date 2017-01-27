@@ -15,19 +15,19 @@ import com.csc.fsg.life.rest.param.RestServiceParam;
 public interface SearchService
 {
 	@SecuredMethod
-	public List<CommonSelectItem> getEnvironments(RestServiceParam param);
+	public List<CommonSelectItem> getCommonEnvironments(RestServiceParam param);
 
 	@SecuredMethod
 	public List<CommonSelectItem> getPlanCommonValues(RestServiceParam param, PlanSearchInput searchInput);
 
 	@SecuredMethod
-	public List<DateSelectItem> getPlanEffectiveDates(RestServiceParam param, PlanSearchInput searchInput);
+	public List<DateSelectItem> getPlanEffDates(RestServiceParam param, PlanSearchInput searchInput);
 
 	@SecuredMethod
-	public List<String> getProjects(RestServiceParam param, String environment);
+	public List<String> getPlanProjects(RestServiceParam param, String environment);
 
 	@SecuredMethod
-	public List<CommonSelectItem> getTables(RestServiceParam param, String environment, String company);
+	public List<CommonSelectItem> getPlanTables(RestServiceParam param, String environment, String company);
 
 	@SecuredMethod
 	public List<CommonSelectItem> getChangesEnvironments(RestServiceParam param);

@@ -16,7 +16,7 @@ basePath: /ng-pw-rest
 paths:
   /security/authentication:
     post:
-      summary: Authenticate a user
+      summary: Authenticate a user.
       description: |
         This endpoint is used to authenticate a user,
         and return the corresponding session token.
@@ -29,7 +29,7 @@ paths:
         - name: credentials
           in: body
           description: |
-            Credentials required to authenticate a user
+            Credentials required to authenticate a user.
           required: true
           schema: 
             $ref: '#/definitions/credentials'
@@ -48,13 +48,13 @@ paths:
             Unauthorized.  Required authorization information not found.
             Session token is either missing or invalid. 
         default:
-          description: Unexpected Error
+          description: Unexpected Error.
           schema: 
             $ref: '#/definitions/errorModel'
 
   /security/logout:
     post:
-      summary: Logout a user 
+      summary: Logout a user.
       description: |
         This endpoint is used to terminate the session corresponding to
         the provided token, thus logging out the user, who created the session. 
@@ -65,7 +65,7 @@ paths:
         - name: sessionToken
           in: header
           description: | 
-            Session Token
+            Session Token.
           required: true
           type: string
       tags:
@@ -80,25 +80,25 @@ paths:
             Unauthorized.  Required authorization information not found.
             Session token is either missing or invalid. 
         default:
-          description: Unexpected Error
+          description: Unexpected Error.
           schema: 
             $ref: '#/definitions/errorModel'
 
   /search/common/environment:
     get:
-      summary: Retrieve a list of Environments
+      summary: Retrieve a list of Environments.
       description: |
         This endpoint returns a list of Environments configured in
         the Product Wizard installation, which the authenticated user
         is authorized to access. 
       produces:
         - application/json
-      operationId: getEnvironments
+      operationId: getCommonEnvironments
       parameters:
         - name: sessionToken
           in: header
           description: | 
-            Session Token
+            Session Token.
           required: true
           type: string
       tags:
@@ -131,24 +131,25 @@ paths:
           schema: 
             $ref: '#/definitions/errorModel'
         default:
-          description: Unexpected Error
+          description: Unexpected Error.
           schema: 
             $ref: '#/definitions/errorModel'
 
-  /search/rules/company:
+  /search/plan/company:
     get:
-      summary: Retrieve a list of Company Codes for the Business Rule Search view.
+      summary: Retrieve a list of Company Codes for Business Rule views.
       description: |
-        This endpoint returns a list of Company Codes for the Business Rule Search
-        view filter, which the authenticated user is authorized to access. 
+        This endpoint returns a list of Company Codes, which
+        the authenticated user is authorized to access, for
+        filters in Business Rule views. 
       produces:
         - application/json
-      operationId: getCompanyCodes
+      operationId: getPlanCompanyCodes
       parameters:
         - name: sessionToken
           in: header
           description: | 
-            Session Token
+            Session Token.
           required: true
           type: string
         - name: viewChanges
@@ -189,24 +190,24 @@ paths:
           schema: 
             $ref: '#/definitions/errorModel'
         default:
-          description: Unexpected Error
+          description: Unexpected Error.
           schema: 
             $ref: '#/definitions/errorModel'
 
-  /search/rules/product:
+  /search/plan/product:
     get:
-      summary: Retrieve a list of Product Codes for the Business Rule Search view.
+      summary: Retrieve a list of Product Codes for Business Rule views.
       description: |
-        This endpoint returns a list of Product Codes for the Business Rule Search
-        view filter.
+        This endpoint returns a list of Product Codes for
+        filters in Business Rule views.
       produces:
         - application/json
-      operationId: getProductCodes
+      operationId: getPlanProductCodes
       parameters:
         - name: sessionToken
           in: header
           description: | 
-            Session Token
+            Session Token.
           required: true
           type: string
         - name: viewChanges
@@ -251,24 +252,24 @@ paths:
           schema: 
             $ref: '#/definitions/errorModel'
         default:
-          description: Unexpected Error
+          description: Unexpected Error.
           schema: 
             $ref: '#/definitions/errorModel'
 
-  /search/rules/plan:
+  /search/plan/plan:
     get:
-      summary: Retrieve a list of Plan Codes for the Business Rule Search view.
+      summary: Retrieve a list of Plan Codes for Business Rule views.
       description: |
-        This endpoint returns a list of Plan Codes for the Business Rule Search
-        view filter.
+        This endpoint returns a list of Plan Codes
+        for filters in Business Rule views.
       produces:
         - application/json
-      operationId: getPlanCodes
+      operationId: getPlanPlanCodes
       parameters:
         - name: sessionToken
           in: header
           description: | 
-            Session Token
+            Session Token.
           required: true
           type: string
         - name: viewChanges
@@ -317,24 +318,24 @@ paths:
           schema: 
             $ref: '#/definitions/errorModel'
         default:
-          description: Unexpected Error
+          description: Unexpected Error.
           schema: 
             $ref: '#/definitions/errorModel'
 
-  /search/rules/state:
+  /search/plan/state:
     get:
-      summary: Retrieve a list of Issue States for the Business Rule Search view.
+      summary: Retrieve a list of Issue States for Business Rule views.
       description: |
-        This endpoint returns a list of Issue States for the Business Rule Search
-        view filter.
+        This endpoint returns a list of Issue States
+        for filters in Business Rule views.
       produces:
         - application/json
-      operationId: getIssueStates
+      operationId: getPlanIssueStates
       parameters:
         - name: sessionToken
           in: header
           description: | 
-            Session Token
+            Session Token.
           required: true
           type: string
         - name: viewChanges
@@ -387,24 +388,24 @@ paths:
           schema: 
             $ref: '#/definitions/errorModel'
         default:
-          description: Unexpected Error
+          description: Unexpected Error.
           schema: 
             $ref: '#/definitions/errorModel'
 
-  /search/rules/lob:
+  /search/plan/lob:
     get:
-      summary: Retrieve a list of Lines of Business for the Business Rule Search view.
+      summary: Retrieve a list of Lines of Business for Business Rule views.
       description: |
-        This endpoint returns a list of Lines of Business for the Business Rule Search
-        view filter.
+        This endpoint returns a list of Lines of Business
+        for filters in Business Rule views.
       produces:
         - application/json
-      operationId: getLobs
+      operationId: getPlanLobs
       parameters:
         - name: sessionToken
           in: header
           description: | 
-            Session Token
+            Session Token.
           required: true
           type: string
         - name: viewChanges
@@ -461,24 +462,24 @@ paths:
           schema: 
             $ref: '#/definitions/errorModel'
         default:
-          description: Unexpected Error
+          description: Unexpected Error.
           schema: 
             $ref: '#/definitions/errorModel'
 
-  /search/rules/effdate:
+  /search/plan/effdate:
     get:
-      summary: Retrieve a list of Effective Dates for the Business Rule Search view.
+      summary: Retrieve a list of Effective Dates for Business Rule views.
       description: |
-        This endpoint returns a list of Effective Dates for the Business Rule Search
-        view filter.
+        This endpoint returns a list of Effective Dates
+        for filters in Business Rule views.
       produces:
         - application/json
-      operationId: getRulesEffDates
+      operationId: getPlanEffDates
       parameters:
         - name: sessionToken
           in: header
           description: | 
-            Session Token
+            Session Token.
           required: true
           type: string
         - name: viewChanges
@@ -539,30 +540,30 @@ paths:
           schema: 
             $ref: '#/definitions/errorModel'
         default:
-          description: Unexpected Error
+          description: Unexpected Error.
           schema: 
             $ref: '#/definitions/errorModel'
 
-  /search/rules/project:
+  /search/plan/project:
     get:
-      summary: Retrieve a list of Projects for the Business Rule Search view.
+      summary: Retrieve a list of Projects for Business Rule views.
       description: |
         This endpoint returns a list of Projects existing
         in the indicated environment.
       produces:
         - application/json
-      operationId: getProjects
+      operationId: getPlanProjects
       parameters:
         - name: sessionToken
           in: header
           description: | 
-            Session Token
+            Session Token.
           required: true
           type: string
         - name: envId
           in: header
           description: |
-            Environment Id
+            Environment Id.
           required: true
           type: string
       tags:
@@ -595,11 +596,11 @@ paths:
           schema: 
             $ref: '#/definitions/errorModel'
         default:
-          description: Unexpected Error
+          description: Unexpected Error.
           schema: 
             $ref: '#/definitions/errorModel'
 
-  /search/etv/table:
+  /search/plan/table:
     get:
       summary: Search for business rule tables for the Entire Table View.
       description: |
@@ -607,24 +608,24 @@ paths:
         the Entire Table View.
       produces:
         - application/json
-      operationId: getTables
+      operationId: getPlanTables
       parameters:
         - name: sessionToken
           in: header
           description: | 
-            Session Token
+            Session Token.
           required: true
           type: string
         - name: envId
           in: header
           description: |
-            Environment
+            Environment.
           required: true
           type: string
         - name: companyCode
           in: header
           description: |
-            Company Code
+            Company Code.
           required: true
           type: string
       tags:
@@ -658,7 +659,7 @@ paths:
           schema: 
             $ref: '#/definitions/errorModel'
         default:
-          description: Unexpected Error
+          description: Unexpected Error.
           schema:
             type: array
             items:
@@ -668,7 +669,7 @@ paths:
     get:
       summary: |
         Retrieve a list of Environments, which have pending changes
-        in WIP
+        in WIP.
       description: |
         This endpoint returns a list of Environments configured in
         the Product Wizard installation, which the authenticated user
@@ -680,7 +681,7 @@ paths:
         - name: sessionToken
           in: header
           description: | 
-            Session Token
+            Session Token.
           required: true
           type: string
       tags:
@@ -713,14 +714,14 @@ paths:
           schema: 
             $ref: '#/definitions/errorModel'
         default:
-          description: Unexpected Error
+          description: Unexpected Error.
           schema: 
             $ref: '#/definitions/errorModel'
 
   /search/changes/filter:
     get:
       summary: |
-        Retrieve key values used for filtering of data in the Changes Only view
+        Retrieve key values used for filtering of data in the Changes Only view.
       description: |
         This endpoint returns information, which can be used for filtering
         of changes shown in Changes Only view.  This information includes
@@ -733,13 +734,13 @@ paths:
         - name: sessionToken
           in: header
           description: | 
-            Session Token
+            Session Token.
           required: true
           type: string
         - name: envId
           in: header
           description: |
-            Environment Id
+            Environment Id.
           required: true
           type: string
       tags:
@@ -769,14 +770,14 @@ paths:
           schema: 
             $ref: '#/definitions/errorModel'
         default:
-          description: Unexpected Error
+          description: Unexpected Error.
           schema: 
             $ref: '#/definitions/errorModel'
 
   /search/apply/filter:
     get:
       summary: |
-        Retrieve key values used for filtering of data in the Apply Changes view
+        Retrieve key values used for filtering of data in the Apply Changes view.
       description: |
         This endpoint returns information, which can be used for filtering
         of changes shown in Apply Changes view.  This information includes
@@ -789,13 +790,13 @@ paths:
         - name: sessionToken
           in: header
           description: | 
-            Session Token
+            Session Token.
           required: true
           type: string
         - name: envId
           in: header
           description: |
-            Environment Id
+            Environment Id.
           required: true
           type: string
       tags:
@@ -825,14 +826,14 @@ paths:
           schema: 
             $ref: '#/definitions/errorModel'
         default:
-          description: Unexpected Error
+          description: Unexpected Error.
           schema: 
             $ref: '#/definitions/errorModel'
 
   /search/audit/filter:
     get:
       summary: |
-        Retrieve key values used for filtering of data in the Audit/Error view
+        Retrieve key values used for filtering of data in the Audit/Error view.
       description: |
         This endpoint returns information, which can be used for filtering
         of changes shown in Audit/Error view.  This information includes
@@ -845,7 +846,7 @@ paths:
         - name: sessionToken
           in: header
           description: | 
-            Session Token
+            Session Token.
           required: true
           type: string
         - name: filterAspect 
@@ -859,7 +860,7 @@ paths:
         - name: envId
           in: header
           description: |
-            Environment Id
+            Environment Id.
           required: true
           type: string
       tags:
@@ -889,14 +890,14 @@ paths:
           schema: 
             $ref: '#/definitions/errorModel'
         default:
-          description: Unexpected Error
+          description: Unexpected Error.
           schema: 
             $ref: '#/definitions/errorModel'
 
   /search/promote/filter:
     get:
       summary: |
-        Retrieve key values used for filtering of data in the Promote view
+        Retrieve key values used for filtering of data in the Promote view.
       description: |
         This endpoint returns information, which can be used for filtering
         of changes shown in Promote view.  This information includes
@@ -909,19 +910,19 @@ paths:
         - name: sessionToken
           in: header
           description: | 
-            Session Token
+            Session Token.
           required: true
           type: string
         - name: sourceEnvId
           in: header
           description: |
-            Source Environment Id
+            Source Environment Id.
           required: true
           type: string
         - name: targetEnvId
           in: header
           description: |
-            Target Environment Id
+            Target Environment Id.
           required: true
           type: string
       tags:
@@ -951,7 +952,7 @@ paths:
           schema: 
             $ref: '#/definitions/errorModel'
         default:
-          description: Unexpected Error
+          description: Unexpected Error.
           schema: 
             $ref: '#/definitions/errorModel'
 
@@ -961,10 +962,10 @@ definitions:
     properties:
       userName:
         type: string
-        description: Unique identification of a user
+        description: Unique identification of a user.
       password:
         type: string
-        description: Password
+        description: Password.
 
   sessionToken:
     type: string
