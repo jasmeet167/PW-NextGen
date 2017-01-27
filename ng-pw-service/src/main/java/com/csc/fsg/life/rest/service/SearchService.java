@@ -3,7 +3,8 @@ package com.csc.fsg.life.rest.service;
 import java.util.List;
 
 import com.csc.fsg.life.rest.annotation.SecuredMethod;
-import com.csc.fsg.life.rest.model.ChangesOnlyFilterData;
+import com.csc.fsg.life.rest.model.ApplyFilterData;
+import com.csc.fsg.life.rest.model.ChangesFilterData;
 import com.csc.fsg.life.rest.model.CommonSelectItem;
 import com.csc.fsg.life.rest.model.DateSelectItem;
 import com.csc.fsg.life.rest.model.PlanSearchInput;
@@ -27,8 +28,11 @@ public interface SearchService
 	public List<CommonSelectItem> getTables(RestServiceParam param, String environment, String company);
 
 	@SecuredMethod
-	public List<CommonSelectItem> getEnvironmentsWithChanges(RestServiceParam param);
+	public List<CommonSelectItem> getChangesEnvironments(RestServiceParam param);
 
 	@SecuredMethod
-	public ChangesOnlyFilterData getChangesOnlyFilterValues(RestServiceParam param, String envId);
+	public ChangesFilterData getChangesFilterValues(RestServiceParam param, String envId);
+
+	@SecuredMethod
+	public ApplyFilterData getApplyFilterValues(RestServiceParam param, String envId);
 }

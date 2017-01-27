@@ -30,7 +30,8 @@ import com.csc.fsg.life.pw.web.io.WIPRows;
 import com.csc.fsg.life.rest.exception.BadRequestException;
 import com.csc.fsg.life.rest.exception.RestServiceException;
 import com.csc.fsg.life.rest.exception.UnexpectedException;
-import com.csc.fsg.life.rest.model.ChangesOnlyFilterData;
+import com.csc.fsg.life.rest.model.ApplyFilterData;
+import com.csc.fsg.life.rest.model.ChangesFilterData;
 import com.csc.fsg.life.rest.model.CommonSelectItem;
 import com.csc.fsg.life.rest.model.DateSelectItem;
 import com.csc.fsg.life.rest.model.ErrorModel;
@@ -299,7 +300,7 @@ public class SearchServiceImpl
 		}
 	}
 
-	public List<CommonSelectItem> getEnvironmentsWithChanges(RestServiceParam param)
+	public List<CommonSelectItem> getChangesEnvironments(RestServiceParam param)
 	{
 		try {
 			// For reference, see method fetchEnvironments() in class
@@ -345,14 +346,14 @@ public class SearchServiceImpl
 		}
 	}
 
-	public ChangesOnlyFilterData getChangesOnlyFilterValues(RestServiceParam param, String envId)
+	public ChangesFilterData getChangesFilterValues(RestServiceParam param, String envId)
 	{
 		try {
-			// TODO: +++ Security
-
 			// For reference, see method fillLists(String) in class
 			// com.csc.fsg.life.pw.client.mdi.ChangesOnly in the old
 			// Product Wizard.
+
+			// TODO: +++ Security
 
 			Environment env = EnvironmentManager.getInstance().getEnvironment(envId);
 			if (env == null) {
@@ -368,28 +369,85 @@ public class SearchServiceImpl
 
 			String valueString = packageHelper.getInitialValues();
 			String[] values = valueString.split("\t");
-			ChangesOnlyFilterData filterData = new ChangesOnlyFilterData();
+			ChangesFilterData filterData = new ChangesFilterData();
 
 			for (String value : values) {
 				int index = -1;
 
 				if ((index = value.indexOf(RCMClientUtilities.PRJ_DELIM)) != -1) {
 					String project = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
-					filterData.addProjectsItem(project);
+					if (project.length() > 0)
+						filterData.addProjectsItem(project);
 				}
 
 				if ((index = value.indexOf(RCMClientUtilities.TAB_DELIM)) != -1) {
 					String displayValue = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
-					String coreValue = displayValue.substring(0, displayValue.indexOf("-")).trim();
-					CommonSelectItem item = new CommonSelectItem();
-					item.setCoreValue(coreValue);
-					item.setDisplayValue(displayValue);
-					filterData.addBusinessRuleTablesItem(item);
+					if (displayValue.length() > 0) {
+						String coreValue = displayValue.substring(0, displayValue.indexOf("-")).trim();
+						CommonSelectItem item = new CommonSelectItem();
+						item.setCoreValue(coreValue);
+						item.setDisplayValue(displayValue);
+						filterData.addBusinessRuleTablesItem(item);
+					}
 				}
 
 				if ((index = value.indexOf(RCMClientUtilities.USR_DELIM)) != -1) {
 					String user = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
-					filterData.addUsersItem(user);
+					if (user.length() > 0)
+						filterData.addUsersItem(user);
+				}
+			}
+
+			return filterData;
+		}
+		catch (RestServiceException e) {
+			throw e;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			ErrorModel model = errorModelFactory.newErrorModel(UnexpectedException.HTTP_STATUS);
+			throw new UnexpectedException(model);
+		}
+	}
+
+	public ApplyFilterData getApplyFilterValues(RestServiceParam param, String envId)
+	{
+		try {
+			// For reference, see method populateFilters() in class
+			// com.csc.fsg.life.pw.client.mdi.PackageFilter in the old
+			// Product Wizard.
+
+			// TODO: +++ Security
+
+			Environment env = EnvironmentManager.getInstance().getEnvironment(envId);
+			if (env == null) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_environment"));
+				throw new BadRequestException(model);
+			}
+
+			PackageBean packageHelper = new PackageBean(env, null, null);
+			packageHelper.setSource(Constants.WIP);
+			packageHelper.setProcess(Constants.GET_FILTER_INFO);
+			packageHelper.setChangesOnly(null);
+
+			String valueString = packageHelper.getInitialValues();
+			String[] values = valueString.split("\t");
+			ApplyFilterData filterData = new ApplyFilterData();
+
+			for (String value : values) {
+				int index = -1;
+
+				if ((index = value.indexOf(RCMClientUtilities.PKG_DELIM)) != -1) {
+					String pkg = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
+					if (pkg.length() > 0)
+						filterData.addPackagesItem(pkg);
+				}
+
+				if ((index = value.indexOf(RCMClientUtilities.PRJ_DELIM)) != -1) {
+					String project = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
+					if (project.length() > 0)
+						filterData.addProjectsItem(project);
 				}
 			}
 

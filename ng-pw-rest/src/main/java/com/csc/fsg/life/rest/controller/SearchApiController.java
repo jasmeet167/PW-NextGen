@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.csc.fsg.life.rest.api.SearchApi;
-import com.csc.fsg.life.rest.model.ChangesOnlyFilterData;
+import com.csc.fsg.life.rest.model.ApplyFilterData;
+import com.csc.fsg.life.rest.model.ChangesFilterData;
 import com.csc.fsg.life.rest.model.CommonSelectItem;
 import com.csc.fsg.life.rest.model.DateSelectItem;
 import com.csc.fsg.life.rest.model.PlanSearchInput;
@@ -180,23 +181,34 @@ public class SearchApiController
 	}
 
 	@RequestMapping(value = "/search/changes/environment", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<CommonSelectItem>> getEnvironmentsWithChanges(@RequestHeader(value = "sessionToken", required = true) String sessionToken)
+	public ResponseEntity<List<CommonSelectItem>> getChangesEnvironments(@RequestHeader(value = "sessionToken", required = true) String sessionToken)
 	{
 		RestServiceParam param = buildRestServiceParam(sessionToken);
-		List<CommonSelectItem> envList = searchService.getEnvironmentsWithChanges(param);
+		List<CommonSelectItem> envList = searchService.getChangesEnvironments(param);
 		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
 		return new ResponseEntity<>(envList, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/search/changes/filter", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<ChangesOnlyFilterData> getChangesOnlyFilterValues(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
-																			@RequestHeader(value = "envId", required = true) String envId)
+	public ResponseEntity<ChangesFilterData> getChangesFilterValues(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+																	@RequestHeader(value = "envId", required = true) String envId)
 	{
 		RestServiceParam param = buildRestServiceParam(sessionToken);
-		ChangesOnlyFilterData filterData = searchService.getChangesOnlyFilterValues(param, envId);
+		ChangesFilterData filterData = searchService.getChangesFilterValues(param, envId);
 		Collections.sort(filterData.getProjects());
 		Collections.sort(filterData.getUsers());
 		PropertyComparator.sort(filterData.getBusinessRuleTables(), new MutableSortDefinition("displayValue", true, true));
+		return new ResponseEntity<>(filterData, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/search/apply/filter", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<ApplyFilterData> getApplyFilterValues(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+																@RequestHeader(value = "envId", required = true) String envId)
+	{
+		RestServiceParam param = buildRestServiceParam(sessionToken);
+		ApplyFilterData filterData = searchService.getApplyFilterValues(param, envId);
+		Collections.sort(filterData.getPackages());
+		Collections.sort(filterData.getProjects());
 		return new ResponseEntity<>(filterData, HttpStatus.OK);
 	}
 }

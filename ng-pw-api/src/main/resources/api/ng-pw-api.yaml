@@ -675,7 +675,7 @@ paths:
         is authorized to access, and which have pending changes in WIP.
       produces:
         - application/json
-      operationId: getEnvironmentsWithChanges
+      operationId: getChangesEnvironments
       parameters:
         - name: sessionToken
           in: header
@@ -728,7 +728,7 @@ paths:
         rows in WIP, which correspond to the provided Environment Id.
       produces:
         - application/json
-      operationId: getChangesOnlyFilterValues
+      operationId: getChangesFilterValues
       parameters:
         - name: sessionToken
           in: header
@@ -749,7 +749,63 @@ paths:
           description: |
             OK.  All applicable data has been successfully retrieved.
           schema:
-            $ref: '#/definitions/changesOnlyFilterData'
+            $ref: '#/definitions/changesFilterData'
+        400:
+          description: |
+            Bad Request.  Invalid or malformed request detected.
+          schema: 
+            $ref: '#/definitions/errorModel'
+        401:
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Session token is either missing or invalid. 
+        403:
+          description: |
+            Forbidden.  The user is not authorized to access
+            the indicated environment.
+        404:
+          description: |
+            Not Found. 
+          schema: 
+            $ref: '#/definitions/errorModel'
+        default:
+          description: Unexpected Error
+          schema: 
+            $ref: '#/definitions/errorModel'
+
+  /search/apply/filter:
+    get:
+      summary: |
+        Retrieve key values used for filtering of data in the Apply Changes view
+      description: |
+        This endpoint returns information, which can be used for filtering
+        of changes shown in Apply Changes view.  This information includes
+        packages and projects, reflecting existing rows in WIP, which correspond
+        to the provided Environment Id.
+      produces:
+        - application/json
+      operationId: getApplyFilterValues
+      parameters:
+        - name: sessionToken
+          in: header
+          description: | 
+            Session Token
+          required: true
+          type: string
+        - name: envId
+          in: header
+          description: |
+            Environment Id
+          required: true
+          type: string
+      tags:
+        - Search
+      responses:
+        200:
+          description: |
+            OK.  All applicable data has been successfully retrieved.
+          schema:
+            $ref: '#/definitions/applyFilterData'
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
@@ -812,7 +868,7 @@ definitions:
         type: string
         description: Representation of value of this item suitable for display.
 
-  changesOnlyFilterData:
+  changesFilterData:
     type: object
     properties:
       projects:
@@ -824,6 +880,18 @@ definitions:
         items:
           $ref: '#/definitions/commonSelectItem'
       users:
+        type: array
+        items:
+          type: string
+
+  applyFilterData:
+    type: object
+    properties:
+      packages:
+        type: array
+        items:
+          type: string
+      projects:
         type: array
         items:
           type: string
