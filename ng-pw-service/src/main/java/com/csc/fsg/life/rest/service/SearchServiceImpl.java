@@ -40,6 +40,7 @@ import com.csc.fsg.life.rest.model.DateSelectItem;
 import com.csc.fsg.life.rest.model.ErrorModel;
 import com.csc.fsg.life.rest.model.ErrorModelFactory;
 import com.csc.fsg.life.rest.model.PlanSearchInput;
+import com.csc.fsg.life.rest.model.PromoteFilterData;
 import com.csc.fsg.life.rest.param.RestServiceParam;
 
 @Service
@@ -551,6 +552,70 @@ public class SearchServiceImpl
 			filterData.setPackages(new ArrayList<>(packageSet));
 			filterData.setProjects(new ArrayList<>(projectSet));
 			filterData.setUsers(new ArrayList<>(userSet));
+			return filterData;
+		}
+		catch (RestServiceException e) {
+			throw e;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			ErrorModel model = errorModelFactory.newErrorModel(UnexpectedException.HTTP_STATUS);
+			throw new UnexpectedException(model);
+		}
+	}
+
+	public PromoteFilterData getPromoteFilterValues(RestServiceParam param, String sourceEnvId, String targetEnvId)
+	{
+		try {
+			// For reference, see method populateFilters() in class
+			// com.csc.fsg.life.pw.client.mdi.AuditErrorFilter in the old
+			// Product Wizard.
+
+			// TODO: +++ Security
+
+			Environment sourceEnv = EnvironmentManager.getInstance().getEnvironment(sourceEnvId);
+			Environment targetEnv = EnvironmentManager.getInstance().getEnvironment(targetEnvId);
+			if (sourceEnv == null || targetEnv == null) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_environment"));
+				throw new BadRequestException(model);
+			}
+
+			if (sourceEnvId.trim().equalsIgnoreCase(targetEnvId.trim())) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("env_not_unique"));
+				throw new BadRequestException(model);
+			}
+
+			PackageBean packageHelper = new PackageBean(sourceEnv, targetEnv, null);
+			packageHelper.setSource(Constants.AUDIT);
+			packageHelper.setProcess(Constants.GET_FILTER_INFO);
+			packageHelper.setChangesOnly(null);
+			String valueString = packageHelper.getInitialValues();
+			String[] values = valueString.split("\t");
+			PromoteFilterData filterData = new PromoteFilterData();
+
+			Set<String> packageSet = new HashSet<>();
+			Set<String> projectSet = new HashSet<>();
+
+			for (String value : values) {
+				int index = -1;
+
+				if ((index = value.indexOf(RCMClientUtilities.PKG_DELIM)) != -1) {
+					String pkg = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
+					if (pkg.length() > 0)
+						packageSet.add(pkg);
+				}
+
+				if ((index = value.indexOf(RCMClientUtilities.PRJ_DELIM)) != -1) {
+					String project = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
+					if (project.length() > 0)
+						projectSet.add(project);
+				}
+			}
+
+			filterData.setPackages(new ArrayList<>(packageSet));
+			filterData.setProjects(new ArrayList<>(projectSet));
 			return filterData;
 		}
 		catch (RestServiceException e) {

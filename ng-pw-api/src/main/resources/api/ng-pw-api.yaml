@@ -893,6 +893,68 @@ paths:
           schema: 
             $ref: '#/definitions/errorModel'
 
+  /search/promote/filter:
+    get:
+      summary: |
+        Retrieve key values used for filtering of data in the Promote view
+      description: |
+        This endpoint returns information, which can be used for filtering
+        of changes shown in Promote view.  This information includes
+        packages and projects reflecting existing data, which corresponds
+        to the provided Environment Id.
+      produces:
+        - application/json
+      operationId: getPromoteFilterValues
+      parameters:
+        - name: sessionToken
+          in: header
+          description: | 
+            Session Token
+          required: true
+          type: string
+        - name: sourceEnvId
+          in: header
+          description: |
+            Source Environment Id
+          required: true
+          type: string
+        - name: targetEnvId
+          in: header
+          description: |
+            Target Environment Id
+          required: true
+          type: string
+      tags:
+        - Search
+      responses:
+        200:
+          description: |
+            OK.  All applicable data has been successfully retrieved.
+          schema:
+            $ref: '#/definitions/promoteFilterData'
+        400:
+          description: |
+            Bad Request.  Invalid or malformed request detected.
+          schema: 
+            $ref: '#/definitions/errorModel'
+        401:
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Session token is either missing or invalid. 
+        403:
+          description: |
+            Forbidden.  The user is not authorized to access
+            the indicated environment.
+        404:
+          description: |
+            Not Found. 
+          schema: 
+            $ref: '#/definitions/errorModel'
+        default:
+          description: Unexpected Error
+          schema: 
+            $ref: '#/definitions/errorModel'
+
 definitions:
   credentials:
     type: object
@@ -980,6 +1042,18 @@ definitions:
         items:
           type: string
 
+  promoteFilterData:
+    type: object
+    properties:
+      packages:
+        type: array
+        items:
+          type: string
+      projects:
+        type: array
+        items:
+          type: string
+
   errorModel:
     type: object
     properties:
@@ -992,7 +1066,3 @@ definitions:
         type: string
       message:
         type: string
-      fields:
-        type: array
-        items:
-          type: string

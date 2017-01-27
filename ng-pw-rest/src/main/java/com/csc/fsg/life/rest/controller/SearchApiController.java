@@ -20,10 +20,9 @@ import com.csc.fsg.life.rest.model.ChangesFilterData;
 import com.csc.fsg.life.rest.model.CommonSelectItem;
 import com.csc.fsg.life.rest.model.DateSelectItem;
 import com.csc.fsg.life.rest.model.PlanSearchInput;
+import com.csc.fsg.life.rest.model.PromoteFilterData;
 import com.csc.fsg.life.rest.param.RestServiceParam;
 import com.csc.fsg.life.rest.service.SearchService;
-
-import io.swagger.annotations.ApiParam;
 
 @Controller
 public class SearchApiController
@@ -226,6 +225,18 @@ public class SearchApiController
 		Collections.sort(filterData.getProjects());
 		PropertyComparator.sort(filterData.getBusinessRuleTables(), new MutableSortDefinition("displayValue", true, true));
 		Collections.sort(filterData.getUsers());
+		return new ResponseEntity<>(filterData, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/search/promote/filter", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<PromoteFilterData> getPromoteFilterValues(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+																	@RequestHeader(value = "sourceEnvId", required = true) String sourceEnvId,
+																	@RequestHeader(value = "targetEnvId", required = true) String targetEnvId)
+	{
+		RestServiceParam param = buildRestServiceParam(sessionToken);
+		PromoteFilterData filterData = searchService.getPromoteFilterValues(param, sourceEnvId, targetEnvId);
+		Collections.sort(filterData.getPackages());
+		Collections.sort(filterData.getProjects());
 		return new ResponseEntity<>(filterData, HttpStatus.OK);
 	}
 }

@@ -9,6 +9,7 @@ import com.csc.fsg.life.rest.model.ChangesFilterData;
 import com.csc.fsg.life.rest.model.CommonSelectItem;
 import com.csc.fsg.life.rest.model.DateSelectItem;
 import com.csc.fsg.life.rest.model.PlanSearchInput;
+import com.csc.fsg.life.rest.model.PromoteFilterData;
 import com.csc.fsg.life.rest.param.RestServiceParam;
 
 public interface SearchService
@@ -39,4 +40,7 @@ public interface SearchService
 
 	@SecuredMethod
 	public AuditFilterData getAuditFilterValues(RestServiceParam param, String filterAspect, String envId);
+
+	@SecuredMethod
+	public PromoteFilterData getPromoteFilterValues(RestServiceParam param, String sourceEnvId, String targetEnvId);
 }
