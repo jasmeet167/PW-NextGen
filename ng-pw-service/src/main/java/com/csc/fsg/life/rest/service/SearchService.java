@@ -10,6 +10,7 @@ import com.csc.fsg.life.rest.model.CommonSelectItem;
 import com.csc.fsg.life.rest.model.DateSelectItem;
 import com.csc.fsg.life.rest.model.PlanSearchInput;
 import com.csc.fsg.life.rest.model.PromoteFilterData;
+import com.csc.fsg.life.rest.model.SummarySearchInput;
 import com.csc.fsg.life.rest.param.RestServiceParam;
 
 public interface SearchService
@@ -43,4 +44,10 @@ public interface SearchService
 
 	@SecuredMethod
 	public PromoteFilterData getPromoteFilterValues(RestServiceParam param, String sourceEnvId, String targetEnvId);
+
+	@SecuredMethod
+	public List<CommonSelectItem> getSummaryCommonValues(RestServiceParam param, SummarySearchInput searchInput);
+
+	@SecuredMethod
+	public List<DateSelectItem> getSummaryEffDates(RestServiceParam param, SummarySearchInput searchInput);
 }

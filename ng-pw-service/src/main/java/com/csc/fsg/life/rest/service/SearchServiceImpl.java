@@ -28,6 +28,7 @@ import com.csc.fsg.life.pw.web.environment.Environment;
 import com.csc.fsg.life.pw.web.environment.EnvironmentManager;
 import com.csc.fsg.life.pw.web.io.EntireTableFilterContext;
 import com.csc.fsg.life.pw.web.io.PlanFilterSpecContext;
+import com.csc.fsg.life.pw.web.io.SummaryFilterSpecContext;
 import com.csc.fsg.life.pw.web.io.WIPRows;
 import com.csc.fsg.life.rest.exception.BadRequestException;
 import com.csc.fsg.life.rest.exception.RestServiceException;
@@ -41,6 +42,7 @@ import com.csc.fsg.life.rest.model.ErrorModel;
 import com.csc.fsg.life.rest.model.ErrorModelFactory;
 import com.csc.fsg.life.rest.model.PlanSearchInput;
 import com.csc.fsg.life.rest.model.PromoteFilterData;
+import com.csc.fsg.life.rest.model.SummarySearchInput;
 import com.csc.fsg.life.rest.param.RestServiceParam;
 
 @Service
@@ -90,7 +92,14 @@ public class SearchServiceImpl
 			// TODO: +++ Security
 
 			String env = searchInput.getEnvId();
-			if (!StringUtils.hasText(env)) {
+			boolean isGoodEnvironment = false;
+
+			if (StringUtils.hasText(env)) {
+				Map<String, Environment> environments = EnvironmentManager.getInstance().getEnvironments();
+				if (environments.get(env) != null)
+					isGoodEnvironment = true;
+			}
+			if (!isGoodEnvironment) {
 				HttpStatus status = BadRequestException.HTTP_STATUS;
 				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_environment"));
 				throw new BadRequestException(model);
@@ -142,7 +151,14 @@ public class SearchServiceImpl
 			// TODO: +++ Security
 
 			String env = searchInput.getEnvId();
-			if (!StringUtils.hasText(env)) {
+			boolean isGoodEnvironment = false;
+
+			if (StringUtils.hasText(env)) {
+				Map<String, Environment> environments = EnvironmentManager.getInstance().getEnvironments();
+				if (environments.get(env) != null)
+					isGoodEnvironment = true;
+			}
+			if (!isGoodEnvironment) {
 				HttpStatus status = BadRequestException.HTTP_STATUS;
 				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_environment"));
 				throw new BadRequestException(model);
@@ -626,5 +642,187 @@ public class SearchServiceImpl
 			ErrorModel model = errorModelFactory.newErrorModel(UnexpectedException.HTTP_STATUS);
 			throw new UnexpectedException(model);
 		}
+	}
+
+	public List<CommonSelectItem> getSummaryCommonValues(RestServiceParam param, SummarySearchInput searchInput)
+	{
+		try {
+			// For reference, see method getNextPlanKey() in class
+			// com.csc.fsg.life.pw.client.mdi.SummaryFilter in the old
+			// Product Wizard.
+
+			// TODO: +++ Security
+
+			String filterAspect = searchInput.getFilterAspect();
+			if (!"C".equals(filterAspect) && !"S".equals(filterAspect)) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_filter_aspect"));
+				throw new BadRequestException(model);
+			}
+
+			String env = searchInput.getEnvId();
+			boolean isGoodEnvironment = false;
+
+			if (StringUtils.hasText(env)) {
+				Map<String, Environment> environments = EnvironmentManager.getInstance().getEnvironments();
+				if (environments.get(env) != null)
+					isGoodEnvironment = true;
+			}
+			if (!isGoodEnvironment) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_environment"));
+				throw new BadRequestException(model);
+			}
+
+			PlanCriteriaTO planCriteria = buildSummaryCriteria(searchInput);
+			boolean isBrccFilter = "C".equals(searchInput.getFilterAspect());
+			SummaryFilterSpecContext context = new SummaryFilterSpecContext(isBrccFilter, planCriteria.getEnvironment());
+			Map<String, String> commonValuesMap = null;
+
+			if (!StringUtils.hasText(searchInput.getCompanyCode()))
+				commonValuesMap = context.getCompanyCodes(planCriteria);
+			else if (!StringUtils.hasText(searchInput.getProductCode()))
+				commonValuesMap = context.getProductCodes(planCriteria);
+			else if (!StringUtils.hasText(searchInput.getPlanCode()))
+				commonValuesMap = context.getPlanCodes(planCriteria);
+			else if (!StringUtils.hasText(searchInput.getIssueState()))
+				commonValuesMap = context.getIssueStates(planCriteria);
+			else if (!StringUtils.hasText(searchInput.getLob()))
+				commonValuesMap = context.getLinesOfBusiness(planCriteria);
+			else {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("unknown_search_type"));
+				throw new BadRequestException(model);
+			}
+
+			List<CommonSelectItem> commonValues = new ArrayList<>();
+			for (Map.Entry<String, String> entry : commonValuesMap.entrySet()) {
+				CommonSelectItem item = new CommonSelectItem();
+				commonValues.add(item);
+				item.setCoreValue(entry.getKey());
+				item.setDisplayValue(entry.getValue());
+			}
+
+			return commonValues;
+		}
+		catch (RestServiceException e) {
+			throw e;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			ErrorModel model = errorModelFactory.newErrorModel(UnexpectedException.HTTP_STATUS);
+			throw new UnexpectedException(model);
+		}
+	}
+
+	public List<DateSelectItem> getSummaryEffDates(RestServiceParam param, SummarySearchInput searchInput)
+	{
+		try {
+			// For reference, see method getNextPlanKey() in class
+			// com.csc.fsg.life.pw.client.mdi.SummaryFilter in the old
+			// Product Wizard.
+
+			// TODO: +++ Security
+
+			String filterAspect = searchInput.getFilterAspect();
+			if (!"C".equals(filterAspect) && !"S".equals(filterAspect)) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_filter_aspect"));
+				throw new BadRequestException(model);
+			}
+
+			String env = searchInput.getEnvId();
+			boolean isGoodEnvironment = false;
+
+			if (StringUtils.hasText(env)) {
+				Map<String, Environment> environments = EnvironmentManager.getInstance().getEnvironments();
+				if (environments.get(env) != null)
+					isGoodEnvironment = true;
+			}
+			if (!isGoodEnvironment) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_environment"));
+				throw new BadRequestException(model);
+			}
+
+			PlanCriteriaTO planCriteria = buildSummaryCriteria(searchInput);
+			boolean isBrccFilter = "C".equals(searchInput.getFilterAspect());
+			SummaryFilterSpecContext context = new SummaryFilterSpecContext(isBrccFilter, planCriteria.getEnvironment());
+			Map<String, String> dateValuesMap = null;
+
+			if (!StringUtils.hasText(searchInput.getCompanyCode())) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_company"));
+				throw new BadRequestException(model);
+			}
+			else if (!StringUtils.hasText(searchInput.getProductCode())) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_product"));
+				throw new BadRequestException(model);
+			}
+			else if (!StringUtils.hasText(searchInput.getPlanCode())) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_plan"));
+				throw new BadRequestException(model);
+			}
+			else if (!StringUtils.hasText(searchInput.getIssueState())) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_state"));
+				throw new BadRequestException(model);
+			}
+			else if (!StringUtils.hasText(searchInput.getLob())) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_lob"));
+				throw new BadRequestException(model);
+			}
+			else {
+				dateValuesMap = context.getEffectiveDates(planCriteria);
+			}
+
+			List<DateSelectItem> dateValues = new ArrayList<>();
+			for (Map.Entry<String, String> entry : dateValuesMap.entrySet()) {
+				DateSelectItem item = new DateSelectItem();
+				dateValues.add(item);
+
+				Date date = Date.valueOf(entry.getKey());
+				LocalDate localDate = new LocalDate(date.getTime());
+				item.setCoreValue(localDate);
+				item.setDisplayValue(entry.getValue());
+			}
+
+			return dateValues;
+		}
+		catch (RestServiceException e) {
+			throw e;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			ErrorModel model = errorModelFactory.newErrorModel(UnexpectedException.HTTP_STATUS);
+			throw new UnexpectedException(model);
+		}
+	}
+
+	private PlanCriteriaTO buildSummaryCriteria(SummarySearchInput searchInput)
+	{
+		HashMap<String, Object> planKeys = new HashMap<>();
+
+		planKeys.put(PlanTOBase.ENVIRONMENT_KEY, searchInput.getEnvId());
+		planKeys.put(PlanTOBase.COMPANY_CODE_KEY, searchInput.getCompanyCode());
+
+		String productCode = searchInput.getProductCode();
+		planKeys.put(PlanTOBase.PRODUCT_CODE_KEY, productCode);
+
+		if (StringUtils.hasText(productCode)) {
+			planKeys.put(PlanTOBase.PRODUCT_PREFIX_KEY, productCode.substring(0, 1));
+			if (productCode.length() > 1)
+				planKeys.put(PlanTOBase.PRODUCT_SUFFIX_KEY, productCode.substring(1, 2));
+		}
+
+		planKeys.put(PlanTOBase.PLAN_CODE_KEY, searchInput.getPlanCode());
+		planKeys.put(PlanTOBase.ISSUE_STATE_KEY, searchInput.getIssueState());
+		planKeys.put(PlanTOBase.LINE_OF_BUSINESS_KEY, searchInput.getLob());
+
+		PlanCriteriaTO planCriteria = new PlanCriteriaTO(planKeys);
+		return planCriteria;
 	}
 }

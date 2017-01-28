@@ -154,10 +154,14 @@ paths:
           type: string
         - name: viewChanges
           in: header
+          description: |
+            Indicator used to request Rules or Rules with changes.  
           required: true
           type: boolean
         - name: envId
           in: header
+          description: |
+            Environment Id. 
           required: true
           type: string
       tags:
@@ -212,14 +216,20 @@ paths:
           type: string
         - name: viewChanges
           in: header
+          description: |
+            Indicator used to request Rules or Rules with changes.  
           required: true
           type: boolean
         - name: envId
           in: header
+          description: |
+            Environment Id. 
           required: true
           type: string
         - name: companyCode
           in: header
+          description: |
+            Company Code.
           required: true
           type: string
       tags:
@@ -274,18 +284,26 @@ paths:
           type: string
         - name: viewChanges
           in: header
+          description: |
+            Indicator used to request Rules or Rules with changes.  
           required: true
           type: boolean
         - name: envId
           in: header
+          description: |
+            Environment Id. 
           required: true
           type: string
         - name: companyCode
           in: header
+          description: |
+            Company Code.
           required: true
           type: string
         - name: productCode
           in: header
+          description: |
+            Product Code.
           required: true
           type: string
       tags:
@@ -340,22 +358,32 @@ paths:
           type: string
         - name: viewChanges
           in: header
+          description: |
+            Indicator used to request Rules or Rules with changes.  
           required: true
           type: boolean
         - name: envId
           in: header
+          description: |
+            Environment Id. 
           required: true
           type: string
         - name: companyCode
           in: header
+          description: |
+            Company Code.
           required: true
           type: string
         - name: productCode
           in: header
           required: true
+          description: |
+            Product Code.
           type: string
         - name: planCode
           in: header
+          description: |
+            Plan Code.
           required: true
           type: string
       tags:
@@ -410,26 +438,38 @@ paths:
           type: string
         - name: viewChanges
           in: header
+          description: |
+            Indicator used to request Rules or Rules with changes.  
           required: true
           type: boolean
         - name: envId
           in: header
+          description: |
+            Environment Id. 
           required: true
           type: string
         - name: companyCode
           in: header
+          description: |
+            Company Code.
           required: true
           type: string
         - name: productCode
           in: header
+          description: |
+            Product Code.
           required: true
           type: string
         - name: planCode
           in: header
+          description: |
+            Plan Code.
           required: true
           type: string
         - name: issueState
           in: header
+          description: |
+            Issue State.
           required: true
           type: string
       tags:
@@ -484,30 +524,44 @@ paths:
           type: string
         - name: viewChanges
           in: header
+          description: |
+            Indicator used to request Rules or Rules with changes.  
           required: true
           type: boolean
         - name: envId
           in: header
+          description: |
+            Environment Id. 
           required: true
           type: string
         - name: companyCode
           in: header
+          description: |
+            Company Code.
           required: true
           type: string
         - name: productCode
           in: header
+          description: |
+            Product Code.
           required: true
           type: string
         - name: planCode
           in: header
+          description: |
+            Plan Code.
           required: true
           type: string
         - name: issueState
           in: header
+          description: |
+            Issue State.
           required: true
           type: string
         - name: lob
           in: header
+          description: |
+            Line of Business.
           required: true
           type: string
       tags:
@@ -949,6 +1003,481 @@ paths:
         404:
           description: |
             Not Found. 
+          schema: 
+            $ref: '#/definitions/errorModel'
+        default:
+          description: Unexpected Error.
+          schema: 
+            $ref: '#/definitions/errorModel'
+
+  /search/summary/company:
+    get:
+      summary: Retrieve a list of Company Codes for Summary views.
+      description: |
+        This endpoint returns a list of Company Codes, which
+        the authenticated user is authorized to access, for
+        filters in Summary views. 
+      produces:
+        - application/json
+      operationId: getSummaryCompanyCodes
+      parameters:
+        - name: sessionToken
+          in: header
+          description: | 
+            Session Token.
+          required: true
+          type: string
+        - name: filterAspect
+          in: header
+          description: |
+            Switch used to request data for either
+            Summary or Continuity Check view.
+            Supported values are: 'S' and 'C'.
+          required: true
+          type: string
+        - name: envId
+          in: header
+          description: |
+            Environment Id.
+          required: true
+          type: string
+      tags:
+        - Search
+      responses:
+        200:
+          description: |
+            OK.  The list of Company Codes has been
+            successfully retrieved.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/commonSelectItem'
+        400:
+          description: |
+            Bad Request.  Invalid or malformed request detected.
+          schema: 
+            $ref: '#/definitions/errorModel'
+        401:
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Session token is either missing or invalid. 
+        403:
+          description: |
+            Forbidden.  The user is not authorized to access
+            any of the configured environments and/or companies.
+        404:
+          description: |
+            Not Found.  No data found matching the provided key values. 
+          schema: 
+            $ref: '#/definitions/errorModel'
+        default:
+          description: Unexpected Error.
+          schema: 
+            $ref: '#/definitions/errorModel'
+
+  /search/summary/product:
+    get:
+      summary: Retrieve a list of Product Codes for Summary views.
+      description: |
+        This endpoint returns a list of Product Codes for
+        filters in Summary views.
+      produces:
+        - application/json
+      operationId: getSummaryProductCodes
+      parameters:
+        - name: sessionToken
+          in: header
+          description: | 
+            Session Token.
+          required: true
+          type: string
+        - name: filterAspect
+          in: header
+          description: |
+            Switch used to request data for either
+            Summary or Continuity Check view.
+            Supported values are: 'S' and 'C'.
+          required: true
+          type: string
+        - name: envId
+          in: header
+          description: |
+            Environment Id.
+          required: true
+          type: string
+        - name: companyCode
+          in: header
+          description: |
+            Company Code.
+          required: true
+          type: string
+      tags:
+        - Search
+      responses:
+        200:
+          description: |
+            OK.  The list of Product Codes has been
+            successfully retrieved.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/commonSelectItem'
+        400:
+          description: |
+            Bad Request.  Invalid or malformed request detected.
+          schema: 
+            $ref: '#/definitions/errorModel'
+        401:
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Session token is either missing or invalid. 
+        403:
+          description: |
+            Forbidden.  The user is not authorized to access
+            any of the configured environments and/or companies.
+        404:
+          description: |
+            Not Found.  No data found matching the provided key values. 
+          schema: 
+            $ref: '#/definitions/errorModel'
+        default:
+          description: Unexpected Error.
+          schema: 
+            $ref: '#/definitions/errorModel'
+
+  /search/summary/plan:
+    get:
+      summary: Retrieve a list of Plan Codes for Summary views.
+      description: |
+        This endpoint returns a list of Plan Codes
+        for filters in Summary views.
+      produces:
+        - application/json
+      operationId: getSummaryPlanCodes
+      parameters:
+        - name: sessionToken
+          in: header
+          description: | 
+            Session Token.
+          required: true
+          type: string
+        - name: filterAspect
+          in: header
+          description: |
+            Switch used to request data for either
+            Summary or Continuity Check view.
+            Supported values are: 'S' and 'C'.
+          required: true
+          type: string
+        - name: envId
+          in: header
+          description: |
+            Environment Id.
+          required: true
+          type: string
+        - name: companyCode
+          in: header
+          description: |
+            Company Code.
+          required: true
+          type: string
+        - name: productCode
+          in: header
+          description: |
+            Product Code.
+          required: true
+          type: string
+      tags:
+        - Search
+      responses:
+        200:
+          description: |
+            OK.  The list of Plan Codes has been
+            successfully retrieved.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/commonSelectItem'
+        400:
+          description: |
+            Bad Request.  Invalid or malformed request detected.
+          schema: 
+            $ref: '#/definitions/errorModel'
+        401:
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Session token is either missing or invalid. 
+        403:
+          description: |
+            Forbidden.  The user is not authorized to access
+            any of the configured environments and/or companies.
+        404:
+          description: |
+            Not Found.  No data found matching the provided key values. 
+          schema: 
+            $ref: '#/definitions/errorModel'
+        default:
+          description: Unexpected Error.
+          schema: 
+            $ref: '#/definitions/errorModel'
+
+  /search/summary/state:
+    get:
+      summary: Retrieve a list of Issue States for Summary views.
+      description: |
+        This endpoint returns a list of Issue States
+        for filters in Summary views.
+      produces:
+        - application/json
+      operationId: getSummaryIssueStates
+      parameters:
+        - name: sessionToken
+          in: header
+          description: | 
+            Session Token.
+          required: true
+          type: string
+        - name: filterAspect
+          in: header
+          description: |
+            Switch used to request data for either
+            Summary or Continuity Check view.
+            Supported values are: 'S' and 'C'.
+          required: true
+          type: string
+        - name: envId
+          in: header
+          description: |
+            Environment Id.
+          required: true
+          type: string
+        - name: companyCode
+          in: header
+          description: |
+            Company Code.
+          required: true
+          type: string
+        - name: productCode
+          in: header
+          description: |
+            Product Code.
+          required: true
+          type: string
+        - name: planCode
+          in: header
+          description: |
+            Plan Code.
+          required: true
+          type: string
+      tags:
+        - Search
+      responses:
+        200:
+          description: |
+            OK.  The list of Issue States has been
+            successfully retrieved.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/commonSelectItem'
+        400:
+          description: |
+            Bad Request.  Invalid or malformed request detected.
+          schema: 
+            $ref: '#/definitions/errorModel'
+        401:
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Session token is either missing or invalid. 
+        403:
+          description: |
+            Forbidden.  The user is not authorized to access
+            any of the configured environments and/or companies.
+        404:
+          description: |
+            Not Found.  No data found matching the provided key values. 
+          schema: 
+            $ref: '#/definitions/errorModel'
+        default:
+          description: Unexpected Error.
+          schema: 
+            $ref: '#/definitions/errorModel'
+
+  /search/summary/lob:
+    get:
+      summary: Retrieve a list of Lines of Business for Summary views.
+      description: |
+        This endpoint returns a list of Lines of Business
+        for filters in Summary views.
+      produces:
+        - application/json
+      operationId: getSummaryLobs
+      parameters:
+        - name: sessionToken
+          in: header
+          description: | 
+            Session Token.
+          required: true
+          type: string
+        - name: filterAspect
+          in: header
+          description: |
+            Switch used to request data for either
+            Summary or Continuity Check view.
+            Supported values are: 'S' and 'C'.
+          required: true
+          type: string
+        - name: envId
+          in: header
+          description: |
+            Environment Id.
+          required: true
+          type: string
+        - name: companyCode
+          in: header
+          description: |
+            Company Code.
+          required: true
+          type: string
+        - name: productCode
+          in: header
+          description: |
+            Product Code.
+          required: true
+          type: string
+        - name: planCode
+          in: header
+          description: |
+            Plan Code.
+          required: true
+          type: string
+        - name: issueState
+          in: header
+          description: |
+            Issue State.
+          required: true
+          type: string
+      tags:
+        - Search
+      responses:
+        200:
+          description: |
+            OK.  The list of Lines of Business has been
+            successfully retrieved.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/commonSelectItem'
+        400:
+          description: |
+            Bad Request.  Invalid or malformed request detected.
+          schema: 
+            $ref: '#/definitions/errorModel'
+        401:
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Session token is either missing or invalid. 
+        403:
+          description: |
+            Forbidden.  The user is not authorized to access
+            any of the configured environments and/or companies.
+        404:
+          description: |
+            Not Found.  No data found matching the provided key values. 
+          schema: 
+            $ref: '#/definitions/errorModel'
+        default:
+          description: Unexpected Error.
+          schema: 
+            $ref: '#/definitions/errorModel'
+
+  /search/summary/effdate:
+    get:
+      summary: Retrieve a list of Effective Dates for Summary views.
+      description: |
+        This endpoint returns a list of Effective Dates
+        for filters in Summary views.
+      produces:
+        - application/json
+      operationId: getSummaryEffDates
+      parameters:
+        - name: sessionToken
+          in: header
+          description: | 
+            Session Token.
+          required: true
+          type: string
+        - name: filterAspect
+          in: header
+          description: |
+            Switch used to request data for either
+            Summary or Continuity Check view.
+            Supported values are: 'S' and 'C'.
+          required: true
+          type: string
+        - name: envId
+          in: header
+          description: |
+            Environment Id.
+          required: true
+          type: string
+        - name: companyCode
+          in: header
+          description: |
+            Company Code.
+          required: true
+          type: string
+        - name: productCode
+          in: header
+          description: |
+            Product Code.
+          required: true
+          type: string
+        - name: planCode
+          in: header
+          description: |
+            Plan Code.
+          required: true
+          type: string
+        - name: issueState
+          in: header
+          description: |
+            Issue State.
+          required: true
+          type: string
+        - name: lob
+          in: header
+          description: |
+            Line of Business.
+          required: true
+          type: string
+      tags:
+        - Search
+      responses:
+        200:
+          description: |
+            OK.  The list of Effective Dates has been
+            successfully retrieved.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/dateSelectItem'
+        400:
+          description: |
+            Bad Request.  Invalid or malformed request detected.
+          schema: 
+            $ref: '#/definitions/errorModel'
+        401:
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Session token is either missing or invalid. 
+        403:
+          description: |
+            Forbidden.  The user is not authorized to access
+            any of the configured environments and/or companies.
+        404:
+          description: |
+            Not Found.  No data found matching the provided key values. 
           schema: 
             $ref: '#/definitions/errorModel'
         default:

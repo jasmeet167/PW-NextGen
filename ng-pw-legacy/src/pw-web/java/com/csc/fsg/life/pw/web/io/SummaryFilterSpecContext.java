@@ -1,23 +1,17 @@
-/*
- * THIS PROGRAM IS THE PROPERTY OF CSC FINANCIAL SERVICES GROUP. IT MAY NOT BE
- * COPIED IN WHOLE OR IN PART WITHOUT THE EXPRESS WRITTEN CONSENT OF CSC
- * FINANCIAL SERVICES GROUP.
- */
-
 package com.csc.fsg.life.pw.web.io;
 
 import java.util.*;
-import java.util.Map.*;
+import java.util.Map.Entry;
 
 import com.csc.fsg.life.pw.web.environment.*;
 import com.csc.fsg.life.pw.common.transferobjects.PlanCriteriaTO;
 import com.csc.fsg.life.pw.web.avm.AVUtils;
 import com.csc.fsg.life.pw.web.utils.HighValueHandler;
 
-/* Modifications: T0103, T0091 ,T0120*/
+/* Modifications: T0103, T0091,T0120 */
 
-public class PlanFilterSpecContext extends WizObject {
-
+public class SummaryFilterSpecContext extends WizObject {
+	
 	private Environment environment;
 	// refactor plan key.
 	/*
@@ -27,11 +21,13 @@ public class PlanFilterSpecContext extends WizObject {
 	private String _lineOfBusiness[];
 	private String _planEffectiveDate[];
 	private String _planCodes[];
-	private boolean _mergedView = false;
 	*/
 	
-	public PlanFilterSpecContext(String envId) throws Exception {
-		
+	private boolean _brccFilter = false;
+
+	public SummaryFilterSpecContext(boolean brccFilter, String envId) throws Exception{
+		super();
+		_brccFilter = brccFilter;
 		environment = EnvironmentManager.getInstance().getEnvironment(envId);
 	}
 
@@ -129,6 +125,13 @@ public class PlanFilterSpecContext extends WizObject {
 	}
 
 	public Map<String, String> getPlanCodes(PlanCriteriaTO planCriteria) throws Exception {
+		if (isBRCCFilter() && planCriteria.getProductPrefix().equals("U")) {
+			// no-op
+		} else if ((planCriteria.getProductPrefix().equals("A")) && (planCriteria.getProductSuffix().equals("5"))) {
+			planCriteria.setPlanType("W");
+		} else {
+			planCriteria.setPlanType("B");
+		}
 		String[] planKeyArray = WizUtils.asStringArray(
 				environment.getAssistent().getNextPlanKey(planCriteria));
 		
@@ -140,87 +143,58 @@ public class PlanFilterSpecContext extends WizObject {
 		String[] planKeyArray = WizUtils.asStringArray(
 				environment.getAssistent().getProductCodes(planCriteria));
 	
+		// only include products with prefix of A, U, or T. 
+		char productPrefix;
+		char productSuffix;
 		ArrayList<String> planKeyList = new ArrayList<String>();
-		for (String element : planKeyArray)
-			planKeyList.add(element);
+		for (String element : planKeyArray) {
+			productPrefix = element.toUpperCase().charAt(0);
+			productSuffix = element.toUpperCase().charAt(1);
+			if (((productPrefix == 'A') || (productPrefix == 'U') || 
+			(productPrefix == 'T')) && (productSuffix != '*'))
+				planKeyList.add(element);
+		}
 		Hashtable<String, String> planKeyHash = AVUtils.getProductNames(envId,planCriteria.getCompanyCode(),planKeyList);
 	
 		return new TreeMap<String, String>(planKeyHash);
 	}
 
+	protected boolean isBRCCFilter() {
+		return _brccFilter;
+	}
+
+	protected void setBRCCFilter(boolean filter) {
+		_brccFilter = filter;
+	}
+
 	// refactor plan key.
 	/*
-//	public String[] get_companyCodes() {
-//
-//		Object[] objectArray = _companyCodesAndNames.keySet().toArray();
-//		String stringArray[] = new String[objectArray.length];
-//		for (int i = 0; i < stringArray.length - 1; i++) 
-//			stringArray[i] = (String) objectArray[i];
-//		return stringArray;
-//	}
+	public SummaryFilterSpecContext(HashMap req) throws Exception {
+		String envId = getRequestParam(req, "environment");
+		_brccFilter = (getRequestParam(req, "brccFilter") != null) ? true : false;
+		environment = EnvironmentManager.getInstance().getEnvironment(envId);
+		initalize_companyCodesAndNames();
+	}
+
 
 	public Hashtable get_companyCodesAndNames() {
 		return _companyCodesAndNames;
 	}
 
-	public void initalize_companyCodesAndNames() throws Exception {
-		_companyCodesAndNames = environment.getAssistent().getCompanyCodesAndNames();
+	public String[] get_productCodes(String[] company) throws Exception {
+		if (company != null) {
+			initalize_productCodes(company);
+		}
+		return _productCodes;
 	}
 
-	public void initalize_issueStateCodes(String companyCodes[],
-	        String productCodes[], String planCodes[]) throws Exception {
-
-		_issueStateCodes = WizUtils.asStringArray(environment.getAssistent()
-		        .getIssueStates(companyCodes[0], productCodes[0], planCodes[0],
-		                _mergedView));
-	}
-
-	public void initalize_lineOfBusiness(String companyCodes[],
-	        String productCodes[], String planCodes[], String issueStates[])
+	public String[] get_planCodes(String[] company, String[] product)
 	        throws Exception {
 
-		_lineOfBusiness = WizUtils.asStringArray(environment.getAssistent()
-		        .getLinesOfBusiness(companyCodes[0], productCodes[0],
-		                planCodes[0], issueStates[0], _mergedView));
-	}
-
-	public void initalize_planCodes(String companyCodes[],
-	        String productCodes[]) throws Exception {
-
-		_planCodes = WizUtils.asStringArray(environment.getAssistent().getPlanCodes(
-		                companyCodes[0], productCodes[0], _mergedView));
-	}
-
-	public void initalize_planEffectiveDate(String companyCodes[],
-	        String productCodes[], String planCodes[], String issueStates[],
-	        String lob[]) throws Exception {
-
-		_planEffectiveDate = WizUtils.asStringArray(environment.getAssistent()
-		        .getPlanEffectiveDate(companyCodes[0], productCodes[0],
-		                planCodes[0], issueStates[0], lob[0], _mergedView));
-	}
-
-	public void initalize_productCodes(String companyCodes[]) {
-
-		try {
-			_productCodes = WizUtils.asStringArray(environment.getAssistent()
-			        .getProducts(companyCodes[0], _mergedView));
-		} catch (Exception e) {
-			throw WrapperException.wrap(e);
+		if ((company != null) && (product != null)) {
+			initalize_planCodes(company, product);
 		}
-	}
-
-	public void setMergedView(boolean mergedView) {
-		_mergedView = mergedView;
-	}
-
-	public String[] get_issueStateCodes(String[] company, String[] product,
-	        String[] plancode) throws Exception {
-
-		if ((company != null) && (product != null) && (plancode != null)) {
-			initalize_issueStateCodes(company, product, plancode);
-		}
-		return _issueStateCodes;
+		return _planCodes;
 	}
 
 	public String[] get_lineOfBusiness(String[] company, String[] product,
@@ -234,13 +208,14 @@ public class PlanFilterSpecContext extends WizObject {
 		return _lineOfBusiness;
 	}
 
-	public String[] get_planCodes(String[] company, String[] product)
-	        throws Exception {
 
-		if ((company != null) && (product != null)) {
-			initalize_planCodes(company, product);
+	public String[] get_issueStateCodes(String[] company, String[] product,
+	        String[] plancode) throws Exception {
+
+		if ((company != null) && (product != null) && (plancode != null)) {
+			initalize_issueStateCodes(company, product, plancode);
 		}
-		return _planCodes;
+		return _issueStateCodes;
 	}
 
 	public String[] get_planEffectiveDate(String[] company, String[] product,
@@ -255,21 +230,74 @@ public class PlanFilterSpecContext extends WizObject {
 		return _planEffectiveDate;
 	}
 
-	public String[] get_productCodes(String[] company) {
+	public void initalize_companyCodesAndNames() throws Exception {
+		_companyCodesAndNames = environment.getAssistent().getCompanyCodesAndNames();
+	}
 
-		if (company != null) {
-			initalize_productCodes(company);
+	public void initalize_issueStateCodes(String companyCodes[],
+	        String productCodes[], String planCodes[]) throws Exception {
+
+		_issueStateCodes = WizUtils.asStringArray(environment.getAssistent()
+		        .getIssueStates(companyCodes[0], productCodes[0], planCodes[0],
+		                false));
+	}
+
+	public void initalize_lineOfBusiness(String companyCodes[],
+	        String productCodes[], String planCodes[], String issueStates[])
+	        throws Exception {
+
+		_lineOfBusiness = WizUtils.asStringArray(environment.getAssistent()
+		        .getLinesOfBusiness(companyCodes[0], productCodes[0],
+		                planCodes[0], issueStates[0], false));
+	}
+
+	public void initalize_planCodes(String companyCodes[],
+	        String productCodes[]) throws Exception {
+
+		String productPrefix = productCodes[0].substring(0, 1);
+		String productSuffix = productCodes[0].substring(1, 2);
+
+		if (_brccFilter && productPrefix.equals("U")) {
+			_planCodes = WizUtils.asStringArray(environment.getAssistent().getPlanCodes(
+			        companyCodes[0], productCodes[0], false));
+		} else if (productPrefix.equals("A")) {
+			if (productSuffix.equals("5"))
+				_planCodes = WizUtils.asStringArray(environment.getAssistent().getPayoutPlanCodes(
+				        companyCodes[0], productCodes[0]));
+			else
+				_planCodes = WizUtils.asStringArray(environment.getAssistent().getBasePlanCodes(
+				        companyCodes[0], productCodes[0]));
+		} else {
+			_planCodes = WizUtils.asStringArray(environment.getAssistent().getBasePlanCodes(
+			        companyCodes[0], productCodes[0]));
 		}
 
-		return _productCodes;
+	}
+
+	public void initalize_planEffectiveDate(String companyCodes[],
+	        String productCodes[], String planCodes[], String issueStates[],
+	        String lob[]) throws Exception {
+
+		_planEffectiveDate = WizUtils.asStringArray(environment.getAssistent()
+		        .getPlanEffectiveDate(companyCodes[0], productCodes[0],
+		                planCodes[0], issueStates[0], lob[0], false));
+	}
+
+	public void initalize_productCodes(String companyCodes[]) throws Exception {
+
+		_productCodes = WizUtils.asStringArray(environment.getAssistent().getProducts(
+		                companyCodes[0], false));
 	}
 
 	public Hashtable getAllLOBCodes() throws Exception {
 		return environment.getAssistent().getLOBCodesAndNames(null);
 	}
 	*/
-	
 
-	
-
+	public Environment getEnvironment() {
+		return environment;
+	}
+	public void setEnvironment(Environment environment) {
+		this.environment = environment;
+	}
 }
