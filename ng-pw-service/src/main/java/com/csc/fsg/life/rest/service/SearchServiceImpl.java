@@ -31,6 +31,7 @@ import com.csc.fsg.life.pw.web.io.PlanFilterSpecContext;
 import com.csc.fsg.life.pw.web.io.SummaryFilterSpecContext;
 import com.csc.fsg.life.pw.web.io.WIPRows;
 import com.csc.fsg.life.rest.exception.BadRequestException;
+import com.csc.fsg.life.rest.exception.NotFoundException;
 import com.csc.fsg.life.rest.exception.RestServiceException;
 import com.csc.fsg.life.rest.exception.UnexpectedException;
 import com.csc.fsg.life.rest.model.ApplyFilterData;
@@ -72,6 +73,13 @@ public class SearchServiceImpl
 				envList.add(env);
 				env.setCoreValue(envBean.getName());
 				env.setDisplayValue(envBean.getDisplayName());
+			}
+
+			// TODO: +++ Different from "User not Authorized to access any environments"
+			if (envList.isEmpty()) {
+				HttpStatus status = NotFoundException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
+				throw new NotFoundException(model);
 			}
 
 			return envList;
@@ -131,6 +139,13 @@ public class SearchServiceImpl
 				commonValues.add(item);
 				item.setCoreValue(entry.getKey());
 				item.setDisplayValue(entry.getValue());
+			}
+
+			// TODO: +++ Different from "User not Authorized to access a company"
+			if (commonValues.isEmpty()) {
+				HttpStatus status = NotFoundException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
+				throw new NotFoundException(model);
 			}
 
 			return commonValues;
@@ -208,6 +223,13 @@ public class SearchServiceImpl
 				item.setDisplayValue(entry.getValue());
 			}
 
+			// TODO: +++ Different from "User not Authorized to access a company"
+			if (dateValues.isEmpty()) {
+				HttpStatus status = NotFoundException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
+				throw new NotFoundException(model);
+			}
+
 			return dateValues;
 		}
 		catch (RestServiceException e) {
@@ -268,6 +290,12 @@ public class SearchServiceImpl
 					if (rawProject != null)
 						projects.add(rawProject.trim());
 
+			if (projects.isEmpty()) {
+				HttpStatus status = NotFoundException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
+				throw new NotFoundException(model);
+			}
+
 			return projects;
 		}
 		catch (RestServiceException e) {
@@ -308,6 +336,12 @@ public class SearchServiceImpl
 				rule.setDisplayValue(key + "-" + entry.getValue());
 			}
 
+			if (tableList.isEmpty()) {
+				HttpStatus status = NotFoundException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
+				throw new NotFoundException(model);
+			}
+
 			return tableList;
 		}
 		catch (RestServiceException e) {
@@ -344,17 +378,21 @@ public class SearchServiceImpl
 			String valueString = packageHelper.getInitialValues();
 			String[] values = valueString.split("\t");
 
-			List<CommonSelectItem> environmentsWithChange = new ArrayList<>();
+			List<CommonSelectItem> envList = new ArrayList<>();
 			for (String value : values) {
 				if (value != null) {
 					String trimmedValue = value.trim();
 					CommonSelectItem env = envMap.get(trimmedValue);
 					if (env != null)
-						environmentsWithChange.add(env);
+						envList.add(env);
 				}
 			}
 
-			return environmentsWithChange;
+			// No need to test for empty list of environments; if there were
+			// none, an exception would have been thrown in
+			// getCommonEnvironments().
+
+			return envList;
 		}
 		catch (RestServiceException e) {
 			throw e;
@@ -703,6 +741,13 @@ public class SearchServiceImpl
 				item.setDisplayValue(entry.getValue());
 			}
 
+			// TODO: +++ Different from "User not Authorized to access a company"
+			if (commonValues.isEmpty()) {
+				HttpStatus status = NotFoundException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
+				throw new NotFoundException(model);
+			}
+
 			return commonValues;
 		}
 		catch (RestServiceException e) {
@@ -788,6 +833,13 @@ public class SearchServiceImpl
 				LocalDate localDate = new LocalDate(date.getTime());
 				item.setCoreValue(localDate);
 				item.setDisplayValue(entry.getValue());
+			}
+
+			// TODO: +++ Different from "User not Authorized to access a company"
+			if (dateValues.isEmpty()) {
+				HttpStatus status = NotFoundException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
+				throw new NotFoundException(model);
 			}
 
 			return dateValues;

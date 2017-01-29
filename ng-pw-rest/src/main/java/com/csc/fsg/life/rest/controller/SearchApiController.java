@@ -172,7 +172,7 @@ public class SearchApiController
 		return new ResponseEntity<>(envList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/search/etv/table", produces = { "application/json" }, method = RequestMethod.GET)
+	@RequestMapping(value = "/search/plan/table", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<CommonSelectItem>> getPlanTables(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
 																@RequestHeader(value = "envId", required = true) String envId,
 																@RequestHeader(value = "companyCode", required = true) String companyCode)	
