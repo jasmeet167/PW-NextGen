@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." name="pw-ear.path">
+	<taskdef resource="net/sf/antcontrib/antlib.xml"/>
+	<dirname property="pw-ear.root" file="${ant.file.pw-ear.path}" />
+	<property name="workspace.root.dir" location="${pw-ear.root}/.." />
+	<property name="pw-ear.target.workspace" location="${pw-ear.root}/target/workspace" />
+	<property name="pw-ear.ear.content" location="${pw-ear.root}/src/main/application" />
+</project>

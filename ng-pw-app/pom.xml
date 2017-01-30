@@ -55,6 +55,17 @@
 				<module>../ng-pw-rest</module>
 			</modules>
 		</profile>
+		<profile>
+			<id>ng-pw-ear</id>
+			<activation>
+				<file>
+					<exists>../ng-pw-ear/pom.xml</exists>
+				</file>
+			</activation>
+			<modules>
+				<module>../ng-pw-ear</module>
+			</modules>
+		</profile>
 	</profiles>
 	<dependencyManagement>
 		<dependencies>
