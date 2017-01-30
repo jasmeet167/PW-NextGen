@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<project name="cleanWorkspaces" basedir="../../.." default="clean">
+	<target name="clean">
+		<deletejob name="life-1010-dev" />
+		<deletejob name="common-1010-dev" />
+		<deletejob name="avm-tools-1010-dev" />
+		<deletejob name="wma-tools-1010-dev" />
+		<deletejob name="avm-ehrpsnt01-9131" />
+		<deletejob name="pw-ehrpsnt01-9139" />
+		<deletejob name="wma-ehrpsnt01-9135" />
+		<deletejob name="wmaxgen-ehrpsnt01-9146" />
+		<deletejob name="xgd-ehrpsnt01-9150" />
+		<deletejob name="xgws-ehrpsnt01-9154"/>
+	</target>
+
+	<macrodef name="deletejob">
+		<attribute name="name" />
+		<sequential>
+			<echo message="Cleaning @{name}..." />
+			<delete dir="${basedir}/@{name}/builds" failonerror="false" />
+			<delete dir="${basedir}/@{name}/modules" failonerror="false" />
+			<delete dir="${basedir}/@{name}/workspace" failonerror="false" />
+		</sequential>
+	</macrodef>
+</project>

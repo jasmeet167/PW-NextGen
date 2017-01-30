@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<project name="hudson-purge-workspaces" default="build" basedir=".">
+	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${basedir}/../lib/ant-contrib-1.0b3.jar" />
+	<property name="hudsonhome" value="D:\hudson\8094" />
+
+	<target name="build">
+		<echo message="Purging workspaces for ${hudsonhome}..." />
+		<for param="dir">
+			<path>
+				<dirset dir="${hudsonhome}/jobs" includes="*/workspace" />
+			</path>
+			<sequential>
+				<echo message="  Deleting: @{dir}..." />
+				<delete dir="@{dir}" failonerror="false" />
+			</sequential>
+		</for>
+	</target>
+</project>

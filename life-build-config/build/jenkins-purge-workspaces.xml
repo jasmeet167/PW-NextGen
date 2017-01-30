@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<project name="jenkins-purge-workspaces" default="build" basedir=".">
+	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${basedir}/../lib/ant-contrib-1.0b3.jar" />
+	<property name="jenkinshome" value="D:\jenkins\8094" />
+
+	<target name="build">
+		<echo message="Purging workspaces for ${jenkinshome}..." />
+		<for param="dir">
+			<path>
+				<dirset dir="${jenkinshome}/jobs" includes="*/**/workspace" excludes="jenkins-purge-workspaces/workspace" />
+			</path>
+			<sequential>
+				<echo message="  Deleting: @{dir}..." />
+				<delete dir="@{dir}" failonerror="false" />
+			</sequential>
+		</for>
+	</target>
+</project>

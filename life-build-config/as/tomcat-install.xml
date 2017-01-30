@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+
+<project name="tomcat-install" basedir="../..">
+	<property environment="env" />
+	<property name="software.home" value="${env.SOFTWARE_HOME}" />
+
+	<!-- Configure the custom Ant tasks for the Manager application -->
+	<property name="tomcat.ant.classpath" location="${software.home}/tomcat-6.0/lib/catalina-ant.jar"/>
+	<taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask" classpath="${tomcat.ant.classpath}"/>
+	<taskdef name="list" classname="org.apache.catalina.ant.ListTask" classpath="${tomcat.ant.classpath}"/>
+	<taskdef name="reload" classname="org.apache.catalina.ant.ReloadTask" classpath="${tomcat.ant.classpath}"/>
+	<!-- taskdef name="resources" classname="org.apache.catalina.ant.ResourcesTask"/ -->
+	<taskdef name="roles" classname="org.apache.catalina.ant.RolesTask" classpath="${tomcat.ant.classpath}"/>
+	<taskdef name="start" classname="org.apache.catalina.ant.StartTask" classpath="${tomcat.ant.classpath}"/>
+	<taskdef name="stop" classname="org.apache.catalina.ant.StopTask" classpath="${tomcat.ant.classpath}"/>
+	<taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask" classpath="${tomcat.ant.classpath}"/>
+	<taskdef name="serverinfo" classname="org.apache.catalina.ant.ServerinfoTask" classpath="${tomcat.ant.classpath}"/>
+
+	<property name="sharename" location="Tomcat60" />
+	<property name="tomcat.server.root.dir" location="\\${hostname}\${sharename}" />
+	<property name="tomcat.webapps.dir" location="${tomcat.server.root.dir}\webapps" />
+	<property name="tomcat.work.dir" location="${tomcat.server.root.dir}\work" />
+	<property name="tomcat.log.dir" location="${tomcat.server.root.dir}\logs" />
+	<property name="webprojectname" value="${appname}-web" />
+	<property name="war.file.dir" location="${basedir}/${webprojectname}/target" />
+	<property name="warfilename" value="${appname}-web.war" />
+	<property name="appnameinstall" value="${appname}" />
+	<property name="warfilename.tomcat" value="${appnameinstall}.war" />
+
+	<target name="install" depends="init,status">
+		<echo message="  Installing ${appnameinstall} to Tomcat server ${hostname}:${port}..." />
+		<antcall target="server.not.running.message" />
+		<antcall target="app.stop" />
+		<antcall target="app.undeploy" />
+		<antcall target="app.deploy" />
+	</target>
+
+	<target name="app.stop" unless="server.not.running">
+		<condition property="app.running">
+			<contains string="${app.status}" substring="${path}:running" />
+		</condition>
+		<antcall target="app.stop.perform" />
+	</target>
+	<target name="app.stop.perform" if="app.running">
+		<echo message="    Stopping application..." />
+		<stop url="${url}" username="${username}" password="${password}" path="${path}" />
+	</target>
+
+	<target name="app.undeploy" unless="server.not.running">
+		<condition property="app.deployed">
+			<contains string="${app.status}" substring="${path}:" />
+		</condition>
+		<antcall target="app.undeploy.perform" />
+	</target>
+	<target name="app.undeploy.perform" if="app.deployed">
+		<echo message="    Uninstalling application..." />
+		<undeploy url="${url}" username="${username}" password="${password}" path="${path}" />
+	</target>
+
+	<target name="app.deploy" unless="server.not.running">
+		<antcall target="app.deploy.add.context" />
+		<copy overwrite="true" file="${war.file.dir}/${warfilename}" tofile="${war.file.dir}/${warfilename.tomcat}" />
+		<echo message="    Installing ${warfilename}..." />
+		<deploy url="${url}" username="${username}" password="${password}" path="${path}" war="${war.file.dir}/${warfilename.tomcat}" />
+		<start url="${url}" username="${username}" password="${password}" path="${path}" />
+	</target>
+
+	<target name="app.deploy.add.context">
+		<echo message="    Adding Tomcat context to application..." />
+		<available file="${basedir}/${hostname}-${port}/${appnameinstall}-context.xml" property="context.file" value="${appnameinstall}-context.xml"/>
+		<property name="context.file" value="context.xml" />
+		<property name="sbe.tomcat.resouce.file" value="${basedir}/${hostname}-${port}/${context.file}" />
+		<echo message="      ${context.file}" />
+		<delete dir="${war.file.dir}\_temp" failonerror="false" />
+		<unzip src="${war.file.dir}\${warfilename}" dest="${war.file.dir}\_temp" />
+		<copy file="${sbe.tomcat.resouce.file}" tofile="${war.file.dir}\_temp\META-INF\context.xml" />
+		<delete file="${war.file.dir}/${warfilename}" failonerror="false" />
+		<zip basedir="${war.file.dir}\_temp" destfile="${war.file.dir}\${warfilename}" />
+		<delete dir="${war.file.dir}\_temp" failonerror="false" />
+	</target>
+
+	<target name="server.running.message" unless="server.not.running">
+		<echo message="    Installing application..." />
+	</target>
+
+	<target name="server.not.running.message" if="server.not.running">
+		<fail message="    Cannot connect to server manager ${hostname}:${port}" />
+	</target>
+
+	<target name="init">
+		<property name="username" value="" />
+		<property name="password" value="" />
+		<property name="url" value="http://${hostname}:${port}/manager" />
+		<property name="path" value="/${appnameinstall}" />
+
+		<!-- Check if server is running -->
+		<echo message="Installing Application..." />
+		<echo message="  Connecting to Tomcat server manager..." />
+		<waitfor maxwait="15" maxwaitunit="second" timeoutproperty="server.not.running">
+			<and>
+				<socket server="${hostname}" port="${port}" />
+			</and>
+		</waitfor>
+	</target>
+
+	<target name="status" unless="server.not.running">
+		<list url="${url}" outputproperty="app.status" username="${username}" password="${password}" />
+	</target>
+</project>

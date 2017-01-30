@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+
+<project name="build" basedir="../..">
+	<target name="patch">
+		<echo message="Patching configuration for ${patchdir}..." />
+		<copy todir="${basedir}" overwrite="true">
+			<fileset dir="${basedir}/${patchdir}">
+				<include name="*/**/" />
+			</fileset>
+		</copy>
+		<echo message="" />
+	</target>
+
+	<target name="build">
+		<ant antfile="${basedir}/${buildfile}" target="build" />
+	</target>
+
+	<target name="expapp">
+		<ant antfile="${basedir}/${buildfile}" target="expapp" />
+	</target>
+
+	<target name="wait">
+		<property name="waittime" value="30" />
+		<echo message="" />
+		<echo message="Waiting for ${waittime} seconds..." />
+		<sleep seconds="${waittime}" />
+		<echo message="" />
+	</target>
+
+	<target name="waitforpage">
+		<property name="maxwaittime" value="30" />
+		<property name="url" value="http://${hostname}:${port}/${path}" />
+		<echo message="" />
+		<echo message="Waiting for ${url} for up to ${maxwaittime} seconds..." />
+		<waitfor maxwait="${maxwaittime}" maxwaitunit="second" checkevery="10" checkeveryunit="second" timeoutproperty="waitforpage.timeout">
+			<and>
+				<socket server="${hostname}" port="${port}" />
+				<http url="${url}" />
+			</and>
+		</waitfor>
+		<echo message="" />
+		<antcall target="waitforpage.fail" />
+	</target>
+	<target name="waitforpage.fail" if="waitforpage.timeout">
+		<fail message="Timed out waiting for page"/>
+	</target>
+</project>

@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<project name="cleanWorkspaces" basedir="../../.." default="clean">
+	<target name="clean">
+		<!-- PPlus -->
+		<deletejob name="avm-cscbseehc001-9090" />
+		<deletejob name="pplus-cscbseehc001-9087" />
+		<deletejob name="pplusportal-cscbseehc001-9088" />
+		<deletejob name="pplusxgen-cscbseehc001-9089" />
+		<deletejob name="xgd-cscbseehc001-9091" />
+		<deletejob name="xgws-cscbseehc001-9092" />
+
+		<!-- pplus-app -->
+		<deletejob name="cd-client-1101-SNAPSHOT" />
+		<deletejob name="cd-common-1101-SNAPSHOT" />
+		<deletejob name="cd-web-1101-SNAPSHOT" />
+		<deletejob name="pplus-app-1101-SNAPSHOT" />
+		<deletejob name="pplus-app-config-1101-SNAPSHOT" />
+		<deletejob name="pplus-biz-spec-1101-SNAPSHOT" />
+		<deletejob name="pplus-gen-1101-SNAPSHOT" />
+		<deletejob name="pplus-service-1101-SNAPSHOT" />
+		<deletejob name="pplus-tools-1101-SNAPSHOT" />
+		<deletejob name="pplus-web-1101-SNAPSHOT" />
+		<deletejob name="pplusxg-service-1101-SNAPSHOT" />
+		<deletejob name="pplusxgen-web-1101-SNAPSHOT" />
+
+		<!-- pplusportal-app -->
+		<deletejob name="pplusportal-app-1101-SNAPSHOT" />
+		<deletejob name="pplusportal-app-config-1101-SNAPSHOT" />
+		<deletejob name="pplusportal-biz-spec-1101-SNAPSHOT" />
+		<deletejob name="pplusportal-gen-1101-SNAPSHOT" />
+		<deletejob name="pplusportal-service-1101-SNAPSHOT" />
+		<deletejob name="pplusportal-tools-1101-SNAPSHOT" />
+		<deletejob name="pplusportal-web-1101-SNAPSHOT" />
+	</target>
+
+	<target name="clean.common">
+		<!-- avm-app -->
+		<deletejob name="avm-app-1101-SNAPSHOT" />
+		<deletejob name="avm-app-config-1101-SNAPSHOT" />
+		<deletejob name="avm-biz-spec-1101-SNAPSHOT" />
+		<deletejob name="avm-gen-1101-SNAPSHOT" />
+		<deletejob name="avm-service-1101-SNAPSHOT" />
+		<deletejob name="avm-tools-1101-SNAPSHOT" />
+		<deletejob name="avm-web-1101-SNAPSHOT" />
+		<deletejob name="avmxgen-web-1101-SNAPSHOT" />
+
+		<!-- common -->
+		<deletejob name="common-1101-SNAPSHOT" />
+		<deletejob name="life-1101-SNAPSHOT" />
+		<deletejob name="life-build-1101-SNAPSHOT" />
+		<deletejob name="life-common-1101-SNAPSHOT" />
+		<deletejob name="life-ctg-1101-SNAPSHOT" />
+		<deletejob name="life-tools-1101-SNAPSHOT" />
+		<deletejob name="life-web-1101-SNAPSHOT" />
+
+		<!-- xg-app -->
+		<deletejob name="ws-common-1101-SNAPSHOT" />
+		<deletejob name="xg-app-1101-SNAPSHOT" />
+		<deletejob name="xg-app-config-1101-SNAPSHOT" />
+		<deletejob name="xg-common-1101-SNAPSHOT" />
+		<deletejob name="xg-db-1101-SNAPSHOT" />
+		<deletejob name="xg-runtime-1101-SNAPSHOT" />
+		<deletejob name="xg-schemas-1101-SNAPSHOT" />
+		<deletejob name="xg-tools-1101-SNAPSHOT" />
+		<deletejob name="xgd-client-1101-SNAPSHOT" />
+		<deletejob name="xgd-web-1101-SNAPSHOT" />
+		<deletejob name="xgws-web-1101-SNAPSHOT" />
+	</target>
+
+	<target name="clean.wma">
+		<!-- wmA -->
+		<deletejob name="avm-ehrpsnt01-9131" />
+		<deletejob name="pw-ehrpsnt01-9139" />
+		<deletejob name="wma-ehrpsnt01-9135" />
+		<deletejob name="wma-ehrpsnt01-9135-webtest" />
+		<deletejob name="wmaxgen-ehrpsnt01-9146" />
+		<deletejob name="xgd-ehrpsnt01-9150" />
+		<deletejob name="xgws-ehrpsnt01-9154" />
+
+		<!-- wma-app -->
+		<deletejob name="pw-client-1101-SNAPSHOT" />
+		<deletejob name="pw-common-1101-SNAPSHOT" />
+		<deletejob name="pw-web-1101-SNAPSHOT" />
+		<deletejob name="wma-app-1101-SNAPSHOT" />
+		<deletejob name="wma-app-config-1101-SNAPSHOT" />
+		<deletejob name="wma-biz-spec-1101-SNAPSHOT" />
+		<deletejob name="wma-gen-1101-SNAPSHOT" />
+		<deletejob name="wma-service-1101-SNAPSHOT" />
+		<deletejob name="wma-tools-1101-SNAPSHOT" />
+		<deletejob name="wma-web-1101-SNAPSHOT" />
+		<deletejob name="wmaws-service-1101-SNAPSHOT" />
+		<deletejob name="wmaxg-ann-service-1101-SNAPSHOT" />
+		<deletejob name="wmaxg-arch-service-1101-SNAPSHOT" />
+		<deletejob name="wmaxg-payout-service-1101-SNAPSHOT" />
+		<deletejob name="wmaxg-trd-service-1101-SNAPSHOT" />
+		<deletejob name="wmaxg-ul-service-1101-SNAPSHOT" />
+		<deletejob name="wmaxgen-web-1101-SNAPSHOT" />
+	</target>
+
+	<macrodef name="deletejob">
+		<attribute name="name" />
+		<sequential>
+			<echo message="Cleaning @{name}..." />
+			<delete dir="@{name}/builds" failonerror="false" />
+			<!-- delete dir="@{name}/modules" failonerror="false" / -->
+			<delete dir="@{name}/workspace" failonerror="false" />
+		</sequential>
+	</macrodef>
+</project>

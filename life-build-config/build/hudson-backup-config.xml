@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<project name="hudson-backup-config" default="build" basedir="../..">
+	<tstamp>
+		<format property="todays.date" pattern="yyyy-MM-dd" />
+	</tstamp>
+	<property name="hudsonhome" value="D:\hudson\8094" />
+	<property name="destdir" value="D:\hudson\8094-backup\" />
+	<property name="destfilename" value="HudsonConfig_${todays.date}.zip" />
+	<property name="destfile" location="${destdir}/${destfilename}" />
+
+	<target name="build">
+		<echo message="Backing up ${hudsonhome}..." />
+		<mkdir dir="${destdir}"/>
+		<delete file="${destfile}" failonerror="false" />
+		<zip destfile="${destfile}">
+			<fileset dir="${hudsonhome}">
+				<include name="*.xml" />
+				<include name="plugins/*.hpi" />
+				<include name="jobs/*/config.xml" />
+			</fileset>
+		</zip>
+	</target>
+</project>

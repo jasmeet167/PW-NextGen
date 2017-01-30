@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<project name="ws-install" default="waitforinstall">
+	<property name="waittime" value="30"/>
+	<target name="waitforinstall">
+		<echo message="Waiting ${waittime} seconds for install to complete..." />
+		<sleep seconds="${waittime}" />
+	</target>
+</project>

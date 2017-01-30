@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RulePack xmlns="xmlns://www.fortifysoftware.com/schema/rules"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="RulePack">
+    <RulePackID>Disable-Global</RulePackID>
+    <SKU>SKU-Disable-Global</SKU>
+    <Name><![CDATA[Disable Global Rule]]></Name>
+    <Version>1.0</Version>
+    <Description/>
+    <Rules version="3.11">
+<RuleDefinitions>
+        	<SuppressionRule formatVersion="3.11">
+        		<RuleID>03FD4351-D3EB-4CC8-8BD8-3B364EDE5193</RuleID>
+        	</SuppressionRule>
+        	<SuppressionRule formatVersion="3.11">
+                <RuleID>A421FC7F-2BE7-4E90-AC17-BE1327974C11</RuleID>
+        	</SuppressionRule>
+        	<SuppressionRule formatVersion="3.11">
+                <RuleID>8D6F5C2B-FF17-4BAA-BD9E-656050B9A69B</RuleID>
+        	</SuppressionRule>
+            <SuppressionRule formatVersion="3.11">
+                <RuleID>00B90A15-1A02-4EB2-A907-0253BE14C0BC</RuleID>
+        	</SuppressionRule>
+        	<SuppressionRule formatVersion="3.11">
+                <RuleID>1D4C7B72-20F3-4492-8C74-7D2F95C2F08D</RuleID>
+        	</SuppressionRule>
+        	<SuppressionRule formatVersion="3.11">
+                <RuleID>7002037F-DBAA-4E10-AAB5-74F425221B1F</RuleID>
+        	</SuppressionRule>
+        	<SuppressionRule formatVersion="3.11">
+                <RuleID>810BEB3F-DC49-4FA5-A7AD-5CDC6E30C26A</RuleID>
+        	</SuppressionRule>
+        	<SuppressionRule formatVersion="3.11">
+                <RuleID>A86464B6-FEAE-44EC-8DD0-ECDEB5E842D6</RuleID>
+        	</SuppressionRule>
+        	<SuppressionRule formatVersion="3.11">
+                <RuleID>92F82E63-6A65-4EA7-8408-2F8D1EAA929C</RuleID>
+        	</SuppressionRule>
+        	<SuppressionRule formatVersion="3.11">
+                <RuleID>5D5D51AA-C394-4432-A5FA-4E7074D4932B</RuleID>
+        	</SuppressionRule>
+        	<SuppressionRule formatVersion="3.11">
+                <RuleID>7676DBF2-E34F-4EC8-BD43-6AD121F51F81</RuleID>
+        	</SuppressionRule>
+            <GlobalClassRule formatVersion="3.11" language="java">
+                <MetaInfo>
+                    <Group name="package">Java J2EE ServletAPI</Group>
+                </MetaInfo>
+                    <RuleID>6AB85963-F493-49F2-A7A7-A3F17DB8B8A7</RuleID>
+                <Match>
+                    <NamespaceName>
+                        <Pattern>javax\.servlet|javax\.portlet|javax\.servlet\.http|org\.springframework\.web\.portlet\.util|org\.springframework\.web\.context\.request|org\.springframework\.web\.bind\.support|org\.springframework\.web\.util</Pattern>
+                    </NamespaceName>
+                        <ClassName>
+                            <Pattern>ServletContext|PortletContext|PortletSession|HttpSession|PortletUtils|SessionAttributeStore|WebUtils</Pattern>
+                        </ClassName>
+                        <ApplyTo implements="true" overrides="true" extends="true"/>
+                </Match>
+            </GlobalClassRule>
+</RuleDefinitions>
+    </Rules>
+</RulePack>

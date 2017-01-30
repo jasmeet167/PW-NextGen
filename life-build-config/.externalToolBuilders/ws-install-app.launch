@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><launchConfiguration type="com.ibm.ws.ast.st.admin.launchConfigurationType">
+<booleanAttribute key="debug_launch_mode" value="false"/>
+<stringAttribute key="default_profile" value="was70profile1"/>
+<stringAttribute key="full_wsadmin_program_arguments" value="-nosplash -application com.ibm.ws.bootstrap.WSLauncher com.ibm.ws.admin.services.WsAdmin   -profileName was70profile1 -lang jython   -f &quot;${workspace_loc}/life-build-config/as/ws-install-app.py&quot; "/>
+<stringAttribute key="jython_debug_command" value="&quot;C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7\optionalLibraries\jython\Lib\pdb.py&quot; &quot;ARG0&quot;"/>
+<stringAttribute key="jython_debug_option_command" value=" -f "/>
+<stringAttribute key="jython_lib_path" value="C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7\optionalLibraries\jython\Lib"/>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/life-build-config/as/ws-install-app.py"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="2"/>
+</listAttribute>
+<listAttribute key="org.eclipse.jdt.launching.CLASSPATH">
+<listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;runtimeClasspathEntry containerPath=&quot;org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/WebSphere Application Server v7.0 JRE&quot; path=&quot;2&quot; type=&quot;4&quot;/&gt;"/>
+<listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;runtimeClasspathEntry externalArchive=&quot;C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7/optionalLibraries/jython/jython.jar&quot; path=&quot;3&quot; type=&quot;2&quot;/&gt;"/>
+<listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;runtimeClasspathEntry externalArchive=&quot;C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7/profiles/was70profile1/properties&quot; path=&quot;3&quot; type=&quot;2&quot;/&gt;"/>
+<listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;runtimeClasspathEntry externalArchive=&quot;C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7/properties&quot; path=&quot;3&quot; type=&quot;2&quot;/&gt;"/>
+<listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;runtimeClasspathEntry externalArchive=&quot;C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7/lib/startup.jar&quot; path=&quot;3&quot; type=&quot;2&quot;/&gt;"/>
+<listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;runtimeClasspathEntry externalArchive=&quot;C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7/lib/bootstrap.jar&quot; path=&quot;3&quot; type=&quot;2&quot;/&gt;"/>
+<listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;runtimeClasspathEntry externalArchive=&quot;C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7/lib/lmproxy.jar&quot; path=&quot;3&quot; type=&quot;2&quot;/&gt;"/>
+<listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;runtimeClasspathEntry externalArchive=&quot;C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7/lib/urlprotocols.jar&quot; path=&quot;3&quot; type=&quot;2&quot;/&gt;"/>
+<listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;runtimeClasspathEntry externalArchive=&quot;C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7/java/lib/tools.jar&quot; path=&quot;3&quot; type=&quot;2&quot;/&gt;"/>
+<listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;runtimeClasspathEntry externalArchive=&quot;C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7/deploytool/itp/batchboot.jar&quot; path=&quot;3&quot; type=&quot;2&quot;/&gt;"/>
+<listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;runtimeClasspathEntry externalArchive=&quot;C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7/deploytool/itp/batch2.jar&quot; path=&quot;3&quot; type=&quot;2&quot;/&gt;"/>
+<listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;runtimeClasspathEntry externalArchive=&quot;C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7/optionalLibraries/jython/Lib&quot; path=&quot;3&quot; type=&quot;2&quot;/&gt;"/>
+<listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;runtimeClasspathEntry externalArchive=&quot;C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7/optionalLibraries/jython&quot; path=&quot;3&quot; type=&quot;2&quot;/&gt;"/>
+</listAttribute>
+<booleanAttribute key="org.eclipse.jdt.launching.DEFAULT_CLASSPATH" value="false"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.ibm.wsspi.bootstrap.WSPreLauncher"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-host ehrpsnt01&#13;&#10;-port 8879&#13;&#10;-conntype SOAP&#13;&#10;-lang jython&#13;&#10;&quot;C:\\workspaces\\rad\wsadmin-dev\\life-build-config\\ear-files\\avm-ear.ear&quot;&#13;&#10;avm-web.war&#13;&#10;AVM&#13;&#10;ehrpsnt01-7&#13;&#10;avm-ehrpsnt01-9096_server&#13;&#10;ehrpsnt01-7&#13;&#10;ehrpsnt01-80_web&#13;&#10;avm-ehrpsnt01-9096_app&#13;&#10;ehrpsnt01-9096_host&#13;&#10;nopreCompileJSPs&#13;&#10;NONE&#13;&#10;NONE&#13;&#10;START"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="&quot;-Dpython.home=C:\software\ibm-sdp-7.5\eclipse\runtimes\base_v7\optionalLibraries\jython&quot; &quot;-Dpython.cachedir=C:\software\ibm-sdp-7.5\eclipse\runtimes\base_v7\profiles\was70profile1\temp&quot; &quot;-Dpython.path=C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7\optionalLibraries\jython\Lib&quot;  &quot;-Dwsadmin.jython.libraries=C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7\optionalLibraries\jython\Lib&quot; &quot;-Dws.ext.dirs=C:\software\ibm-sdp-7.5\eclipse\runtimes\base_v7\classes;C:\software\ibm-sdp-7.5\eclipse\runtimes\base_v7\lib;C:\software\ibm-sdp-7.5\eclipse\runtimes\base_v7\installedChannels;C:\software\ibm-sdp-7.5\eclipse\runtimes\base_v7\lib\ext;C:\software\ibm-sdp-7.5\eclipse\runtimes\base_v7\java\lib;C:\software\ibm-sdp-7.5\eclipse\runtimes\base_v7\web\help;C:\software\ibm-sdp-7.5\eclipse\runtimes\base_v7\deploytool\itp\plugins\com.ibm.etools.ejbdeploy\runtime&quot; &quot;-Dcom.ibm.ws.management.standalone=true&quot; &quot;-Dwas.repository.root=C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7/profiles/was70profile1/config&quot; &quot;-Dcom.ibm.CORBA.ConfigURL=file:C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7/profiles/was70profile1/properties/sas.client.props&quot; &quot;-Dcom.ibm.SOAP.ConfigURL=file:C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7/profiles/was70profile1/properties/soap.client.props&quot; &quot;-Dwas.install.root=C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7&quot; &quot;-Dcom.ibm.itp.location=C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7/bin&quot; &quot;-Dosgi.install.area=C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7&quot; &quot;-Djava.util.logging.manager=com.ibm.ws.bootstrap.WsLogManager&quot; &quot;-Djava.util.logging.configureByServer=true&quot; &quot;-Dosgi.configuration.area=C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7/profiles/was70profile1/configuration&quot; &quot;-Duser.install.root=C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7/profiles/was70profile1&quot; &quot;-Dcom.ibm.SSL.ConfigURL=file:C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7/profiles/was70profile1/properties/ssl.client.props&quot;"/>
+<stringAttribute key="pdb_path" value="&quot;C:/software/ibm-sdp-7.5/eclipse/runtimes/base_v7\optionalLibraries\jython\Lib\pdb.py&quot;"/>
+<stringAttribute key="profile_location" value="C:\software\ibm-sdp-7.5\eclipse\runtimes\base_v7\profiles\was70profile1"/>
+<stringAttribute key="runtime_id" value="was.base.v85"/>
+<stringAttribute key="script_language" value="jython"/>
+<stringAttribute key="script_name" value="${workspace_loc}/life-build-config/as/ws-install-app.py"/>
+<stringAttribute key="script_to_run_name" value="${workspace_loc}/life-build-config/as/ws-install-app.py"/>
+<booleanAttribute key="target_server_secure" value="true"/>
+<stringAttribute key="workspace_project_name" value=""/>
+</launchConfiguration>
