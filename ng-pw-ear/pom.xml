@@ -5,13 +5,13 @@
 		<artifactId>ng-pw-app</artifactId>
 		<groupId>ng-pw-development</groupId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../wma-app</relativePath>
+		<relativePath>../ng-pw-app</relativePath>
 	</parent>
-	<artifactId>pw-ear</artifactId>
+	<artifactId>ng-pw-ear</artifactId>
 	<packaging>ear</packaging>
-	<name>pw-ear</name>
+	<name>ng-pw-ear</name>
 	<build>
-		<finalName>pw-ear</finalName>
+		<finalName>ng-pw-ear</finalName>
 	</build>
 	<profiles>
 		<profile>
@@ -23,25 +23,6 @@
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-dependency-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>get-jdbc-config</id>
-								<phase>initialize</phase>
-								<goals>
-									<goal>build-classpath</goal>
-								</goals>
-								<configuration>
-									<outputFile>${project.build.directory}/workspace/pw-web-jdbc-config-path.txt</outputFile>
-									<includeArtifactIds>pw-web</includeArtifactIds>
-									<includeTypes>zip</includeTypes>
-									<includeClassifiers>jdbc-config</includeClassifiers>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-ear-plugin</artifactId>
 						<configuration>
 							<version>5</version>
@@ -49,9 +30,9 @@
 							<earSourceIncludes>**/deployment.xml</earSourceIncludes>
 							<modules>
 								<webModule>
-									<groupId>${pw-web.groupId}</groupId>
-									<artifactId>pw-web</artifactId>
-									<bundleFileName>pw-web.war</bundleFileName>
+									<groupId>${csc.groupId}</groupId>
+									<artifactId>ng-pw-rest</artifactId>
+									<bundleFileName>ng-pw-rest.war</bundleFileName>
 								</webModule>
 							</modules>
 							<archive>
@@ -68,51 +49,6 @@
 							</archive>
 						</configuration>
 					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>initialize</id>
-								<phase>initialize</phase>
-								<goals>
-									<goal>run</goal>
-								</goals>
-								<configuration>
-									<tasks>
-										<ant antfile="${basedir}/.externalToolBuilders/pw-web Dependency Builder.xml" target="build" />
-									</tasks>
-								</configuration>
-							</execution>
-							<execution>
-								<id>pw-ear-generate-resources</id>
-								<phase>generate-resources</phase>
-								<goals>
-									<goal>run</goal>
-								</goals>
-								<configuration>
-									<tasks>
-										<property name="maven.class.path" refid="maven.compile.classpath" />
-										<ant antfile="${basedir}/.externalToolBuilders/JDBC Config Builder.xml" target="build" />
-									</tasks>
-								</configuration>
-							</execution>
-							<execution>
-								<id>pw-ear-clean</id>
-								<phase>pre-clean</phase>
-								<goals>
-									<goal>run</goal>
-								</goals>
-								<configuration>
-									<tasks>
-										<property name="maven.class.path" refid="maven.compile.classpath" />
-										<ant antfile="${basedir}/.externalToolBuilders/pw-web Dependency Builder.xml" target="clean" />
-										<ant antfile="${basedir}/.externalToolBuilders/JDBC Config Builder.xml" target="clean" />
-									</tasks>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
 				</plugins>
 			</build>
 		</profile>
@@ -120,52 +56,6 @@
 			<id>earconfig</id>
 			<build>
 				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>build-properties-build</id>
-								<phase>initialize</phase>
-								<goals>
-									<goal>run</goal>
-								</goals>
-								<configuration>
-									<tasks>
-										<property name="project.properties.maven.build.timestamp.format" value="${maven.build.timestamp.format}" />
-										<property name="project.properties.build.timestamp" value="${build.timestamp}" />
-										<property name="project.properties.pw.designator" value="${pw.designator}" />
-										<property name="project.properties.pw.version" value="${pw.version}" />
-										<ant antfile="${basedir}/.externalToolBuilders/Build Properties Builder.xml" target="build" />
-									</tasks>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-dependency-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>earconfig-copy</id>
-								<phase>prepare-package</phase>
-								<goals>
-									<goal>copy</goal>
-								</goals>
-								<configuration>
-									<artifactItems>
-										<artifactItem>
-											<groupId>${wma-app-config.groupId}</groupId>
-											<artifactId>wma-app-config</artifactId>
-											<destFileName>wma-app-config.jar</destFileName>
-											<classifier>${pw-ear-configclassifier}</classifier>
-										</artifactItem>
-									</artifactItems>
-									<outputDirectory>${project.build.directory}/pw-ear</outputDirectory>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
 				</plugins>
 			</build>
 		</profile>
@@ -175,19 +65,9 @@
 	</profiles>
 	<dependencies>
 		<dependency>
-			<groupId>${life-build.groupId}</groupId>
-			<artifactId>life-build</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${pw-web.groupId}</groupId>
-			<artifactId>pw-web</artifactId>
+			<groupId>${csc.groupId}</groupId>
+			<artifactId>ng-pw-rest</artifactId>
 			<type>war</type>
-		</dependency>
-		<dependency>
-			<groupId>${pw-web.groupId}</groupId>
-			<artifactId>pw-web</artifactId>
-			<type>zip</type>
-			<classifier>jdbc-config</classifier>
 		</dependency>
 	</dependencies>
 	<properties>

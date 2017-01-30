@@ -80,18 +80,24 @@
 				<version>${springfox.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>ng-pw-development</groupId>
+				<groupId>${csc.groupId}</groupId>
 				<artifactId>ng-pw-service</artifactId>
 				<version>${ng-pw-development.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>ng-pw-development</groupId>
+				<groupId>${csc.groupId}</groupId>
 				<artifactId>ng-pw-api</artifactId>
 				<version>${ng-pw-development.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>ng-pw-development</groupId>
+				<groupId>${csc.groupId}</groupId>
 				<artifactId>ng-pw-legacy</artifactId>
+				<version>${ng-pw-development.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${csc.groupId}</groupId>
+				<artifactId>ng-pw-rest</artifactId>
+				<type>war</type>
 				<version>${ng-pw-development.version}</version>
 			</dependency>
 		</dependencies>

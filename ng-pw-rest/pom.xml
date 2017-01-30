@@ -21,7 +21,7 @@
 	</build>
 	<dependencies>
 		<dependency>
-			<groupId>ng-pw-development</groupId>
+			<groupId>${csc.groupId}</groupId>
 			<artifactId>ng-pw-service</artifactId>
 		</dependency>
 		<dependency>
