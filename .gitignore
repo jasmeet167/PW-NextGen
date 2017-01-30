@@ -16,6 +16,9 @@
 # /ng-pw-app/
 /ng-pw-app/.apt_generated
 
+# /ng-pw-ear/
+/ng-pw-ear/target
+
 # /ng-pw-legacy/
 /ng-pw-legacy/.apt_generated
 /ng-pw-legacy/target
