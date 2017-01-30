@@ -444,7 +444,11 @@ public class SearchServiceImpl
 				if ((index = value.indexOf(RCMClientUtilities.TAB_DELIM)) != -1) {
 					String displayValue = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
 					if (displayValue.length() > 0) {
-						String coreValue = displayValue.substring(0, displayValue.indexOf("-")).trim();
+						String coreValue = displayValue;
+						int delimiterIdx = displayValue.indexOf("-");
+						if (delimiterIdx > 0)
+							coreValue = displayValue.substring(0, displayValue.indexOf("-")).trim();
+
 						CommonSelectItem item = new CommonSelectItem();
 						item.setCoreValue(coreValue);
 						item.setDisplayValue(displayValue);
@@ -507,16 +511,24 @@ public class SearchServiceImpl
 			String[] values = valueString.split("\t");
 			ApplyFilterData filterData = new ApplyFilterData();
 
-			Set<String> packageSet = new HashSet<>();
 			Set<String> projectSet = new HashSet<>();
 
 			for (String value : values) {
 				int index = -1;
 
 				if ((index = value.indexOf(RCMClientUtilities.PKG_DELIM)) != -1) {
-					String pkg = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
-					if (pkg.length() > 0)
-						packageSet.add(pkg);
+					String displayValue = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
+					if (displayValue.length() > 0) {
+						String coreValue = displayValue;
+						int delimiterIdx = displayValue.indexOf("-");
+						if (delimiterIdx > 0)
+							coreValue = displayValue.substring(0, displayValue.indexOf("-")).trim();
+
+						CommonSelectItem item = new CommonSelectItem();
+						item.setCoreValue(coreValue);
+						item.setDisplayValue(displayValue);
+						filterData.addPackagesItem(item);
+					}
 				}
 
 				if ((index = value.indexOf(RCMClientUtilities.PRJ_DELIM)) != -1) {
@@ -526,7 +538,6 @@ public class SearchServiceImpl
 				}
 			}
 
-			filterData.setPackages(new ArrayList<>(packageSet));
 			filterData.setProjects(new ArrayList<>(projectSet));
 
 			if (filterData.getPackages().isEmpty()
@@ -583,7 +594,6 @@ public class SearchServiceImpl
 			String[] values = valueString.split("\t");
 			AuditFilterData filterData = new AuditFilterData();
 
-			Set<String> packageSet = new HashSet<>();
 			Set<String> projectSet = new HashSet<>();
 			Set<String> userSet = new HashSet<>();
 
@@ -591,9 +601,18 @@ public class SearchServiceImpl
 				int index = -1;
 
 				if ((index = value.indexOf(RCMClientUtilities.PKG_DELIM)) != -1) {
-					String pkg = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
-					if (pkg.length() > 0)
-						packageSet.add(pkg);
+					String displayValue = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
+					if (displayValue.length() > 0) {
+						String coreValue = displayValue;
+						int delimiterIdx = displayValue.indexOf("-");
+						if (delimiterIdx > 0)
+							coreValue = displayValue.substring(0, displayValue.indexOf("-")).trim();
+
+						CommonSelectItem item = new CommonSelectItem();
+						item.setCoreValue(coreValue);
+						item.setDisplayValue(displayValue);
+						filterData.addPackagesItem(item);
+					}
 				}
 
 				if ((index = value.indexOf(RCMClientUtilities.PRJ_DELIM)) != -1) {
@@ -605,7 +624,11 @@ public class SearchServiceImpl
 				if ((index = value.indexOf(RCMClientUtilities.TAB_DELIM)) != -1) {
 					String displayValue = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
 					if (displayValue.length() > 0) {
-						String coreValue = displayValue.substring(0, displayValue.indexOf("-")).trim();
+						String coreValue = displayValue;
+						int delimiterIdx = displayValue.indexOf("-");
+						if (delimiterIdx > 0)
+							coreValue = displayValue.substring(0, displayValue.indexOf("-")).trim();
+
 						CommonSelectItem item = new CommonSelectItem();
 						item.setCoreValue(coreValue);
 						item.setDisplayValue(displayValue);
@@ -620,7 +643,6 @@ public class SearchServiceImpl
 				}
 			}
 
-			filterData.setPackages(new ArrayList<>(packageSet));
 			filterData.setProjects(new ArrayList<>(projectSet));
 			filterData.setUsers(new ArrayList<>(userSet));
 
@@ -676,16 +698,24 @@ public class SearchServiceImpl
 			String[] values = valueString.split("\t");
 			PromoteFilterData filterData = new PromoteFilterData();
 
-			Set<String> packageSet = new HashSet<>();
 			Set<String> projectSet = new HashSet<>();
 
 			for (String value : values) {
 				int index = -1;
 
 				if ((index = value.indexOf(RCMClientUtilities.PKG_DELIM)) != -1) {
-					String pkg = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
-					if (pkg.length() > 0)
-						packageSet.add(pkg);
+					String displayValue = value.substring(index + RCMClientUtilities.DELIM_LENGTH).trim();
+					if (displayValue.length() > 0) {
+						String coreValue = displayValue;
+						int delimiterIdx = displayValue.indexOf("-");
+						if (delimiterIdx > 0)
+							coreValue = displayValue.substring(0, displayValue.indexOf("-")).trim();
+
+						CommonSelectItem item = new CommonSelectItem();
+						item.setCoreValue(coreValue);
+						item.setDisplayValue(displayValue);
+						filterData.addPackagesItem(item);
+					}
 				}
 
 				if ((index = value.indexOf(RCMClientUtilities.PRJ_DELIM)) != -1) {
@@ -695,7 +725,6 @@ public class SearchServiceImpl
 				}
 			}
 
-			filterData.setPackages(new ArrayList<>(packageSet));
 			filterData.setProjects(new ArrayList<>(projectSet));
 
 			if (filterData.getPackages().isEmpty()

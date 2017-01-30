@@ -1546,7 +1546,7 @@ definitions:
       packages:
         type: array
         items:
-          type: string
+          $ref: '#/definitions/commonSelectItem'
       projects:
         type: array
         items:
@@ -1558,7 +1558,7 @@ definitions:
       packages:
         type: array
         items:
-          type: string
+          $ref: '#/definitions/commonSelectItem'
       projects:
         type: array
         items:
@@ -1578,7 +1578,7 @@ definitions:
       packages:
         type: array
         items:
-          type: string
+          $ref: '#/definitions/commonSelectItem'
       projects:
         type: array
         items:

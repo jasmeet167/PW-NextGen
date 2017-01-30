@@ -210,7 +210,7 @@ public class SearchApiController
 	{
 		RestServiceParam param = buildRestServiceParam(sessionToken);
 		ApplyFilterData filterData = searchService.getApplyFilterValues(param, envId);
-		Collections.sort(filterData.getPackages());
+		PropertyComparator.sort(filterData.getPackages(), new MutableSortDefinition("displayValue", true, true));
 		Collections.sort(filterData.getProjects());
 		return new ResponseEntity<>(filterData, HttpStatus.OK);
 	}
@@ -222,7 +222,7 @@ public class SearchApiController
 	{
 		RestServiceParam param = buildRestServiceParam(sessionToken);
 		AuditFilterData filterData = searchService.getAuditFilterValues(param, filterAspect, envId);
-		Collections.sort(filterData.getPackages());
+		PropertyComparator.sort(filterData.getPackages(), new MutableSortDefinition("displayValue", true, true));
 		Collections.sort(filterData.getProjects());
 		PropertyComparator.sort(filterData.getBusinessRuleTables(), new MutableSortDefinition("displayValue", true, true));
 		Collections.sort(filterData.getUsers());
@@ -236,7 +236,7 @@ public class SearchApiController
 	{
 		RestServiceParam param = buildRestServiceParam(sessionToken);
 		PromoteFilterData filterData = searchService.getPromoteFilterValues(param, sourceEnvId, targetEnvId);
-		Collections.sort(filterData.getPackages());
+		PropertyComparator.sort(filterData.getPackages(), new MutableSortDefinition("displayValue", true, true));
 		Collections.sort(filterData.getProjects());
 		return new ResponseEntity<>(filterData, HttpStatus.OK);
 	}
