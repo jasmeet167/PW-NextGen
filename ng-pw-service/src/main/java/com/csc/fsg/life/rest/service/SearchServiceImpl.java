@@ -461,6 +461,15 @@ public class SearchServiceImpl
 
 			filterData.setProjects(new ArrayList<>(projectSet));
 			filterData.setUsers(new ArrayList<>(userSet));
+
+			if (filterData.getProjects().isEmpty()
+			 && filterData.getBusinessRuleTables().isEmpty()
+			 && filterData.getUsers().isEmpty()) {
+				HttpStatus status = NotFoundException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
+				throw new NotFoundException(model);
+			}
+
 			return filterData;
 		}
 		catch (RestServiceException e) {
@@ -519,6 +528,14 @@ public class SearchServiceImpl
 
 			filterData.setPackages(new ArrayList<>(packageSet));
 			filterData.setProjects(new ArrayList<>(projectSet));
+
+			if (filterData.getPackages().isEmpty()
+			 && filterData.getProjects().isEmpty()) {
+				HttpStatus status = NotFoundException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
+				throw new NotFoundException(model);
+			}
+
 			return filterData;
 		}
 		catch (RestServiceException e) {
@@ -606,6 +623,16 @@ public class SearchServiceImpl
 			filterData.setPackages(new ArrayList<>(packageSet));
 			filterData.setProjects(new ArrayList<>(projectSet));
 			filterData.setUsers(new ArrayList<>(userSet));
+
+			if (filterData.getPackages().isEmpty()
+			 && filterData.getProjects().isEmpty()
+			 && filterData.getBusinessRuleTables().isEmpty()
+			 && filterData.getUsers().isEmpty()) {
+				HttpStatus status = NotFoundException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
+				throw new NotFoundException(model);
+			}
+
 			return filterData;
 		}
 		catch (RestServiceException e) {
@@ -670,6 +697,14 @@ public class SearchServiceImpl
 
 			filterData.setPackages(new ArrayList<>(packageSet));
 			filterData.setProjects(new ArrayList<>(projectSet));
+
+			if (filterData.getPackages().isEmpty()
+			 && filterData.getProjects().isEmpty()) {
+				HttpStatus status = NotFoundException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
+				throw new NotFoundException(model);
+			}
+
 			return filterData;
 		}
 		catch (RestServiceException e) {
