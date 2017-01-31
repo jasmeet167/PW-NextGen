@@ -7,14 +7,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_NULL)
-public class AuthorizationResponse
+public class AuthorizationTreeResponse
 	implements Serializable
 {
-	static private final long serialVersionUID = -3882554437276891589L;
+	static private final long serialVersionUID = -4730245743668020339L;
 
 	private String resource = null;
-	private String ttl = null;
 	private Map<String, Boolean> actions = null;
+	private String ttl = null;
 
 	public String getResource()
 	{
@@ -26,16 +26,6 @@ public class AuthorizationResponse
 		this.resource = resource;
 	}
 
-	public String getTtl()
-	{
-		return ttl;
-	}
-
-	public void setTtl(String ttl)
-	{
-		this.ttl = ttl;
-	}
-
 	public Map<String, Boolean> getActions()
 	{
 		return actions;
@@ -44,5 +34,15 @@ public class AuthorizationResponse
 	public void setActions(Map<String, Boolean> actions)
 	{
 		this.actions = actions;
+	}
+
+	public String getTtl()
+	{
+		return ttl;
+	}
+
+	public void setTtl(String ttl)
+	{
+		this.ttl = ttl;
 	}
 }

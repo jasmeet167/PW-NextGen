@@ -30,7 +30,9 @@ import com.csc.fsg.life.pw.web.io.EntireTableFilterContext;
 import com.csc.fsg.life.pw.web.io.PlanFilterSpecContext;
 import com.csc.fsg.life.pw.web.io.SummaryFilterSpecContext;
 import com.csc.fsg.life.pw.web.io.WIPRows;
+import com.csc.fsg.life.rest.annotation.AuthorizationAction;
 import com.csc.fsg.life.rest.exception.BadRequestException;
+import com.csc.fsg.life.rest.exception.ForbiddenException;
 import com.csc.fsg.life.rest.exception.NotFoundException;
 import com.csc.fsg.life.rest.exception.RestServiceException;
 import com.csc.fsg.life.rest.exception.UnexpectedException;
@@ -52,7 +54,10 @@ public class SearchServiceImpl
 	implements SearchService
 {
 	@Autowired
-	protected ErrorModelFactory errorModelFactory = null;
+	private ErrorModelFactory errorModelFactory = null;
+
+	@Autowired
+	private SecurityService securityService = null;
 
 	public SearchServiceImpl()
 	{
@@ -62,25 +67,30 @@ public class SearchServiceImpl
 	public List<CommonSelectItem> getCommonEnvironments(RestServiceParam param)
 	{
 		try {
-			// TODO: +++ Security
-
 			CommonApplicationConfigBean pwConfig = getBean(CommonApplicationConfigBean.class);
 			Map<String, MyBatisApplicationEnvironmentBean> environmentMap = pwConfig.getEnvironments();
 
-			List<CommonSelectItem> envList = new ArrayList<>();
-			for (MyBatisApplicationEnvironmentBean envBean : environmentMap.values()) {
-				CommonSelectItem env = new CommonSelectItem();
-				envList.add(env);
-				env.setCoreValue(envBean.getName());
-				env.setDisplayValue(envBean.getDisplayName());
-			}
-
-			// TODO: +++ Different from "User not Authorized to access any environments"
-			if (envList.isEmpty()) {
+			if (environmentMap.isEmpty()) {
 				HttpStatus status = NotFoundException.HTTP_STATUS;
 				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
 				throw new NotFoundException(model);
 			}
+
+			String sessionToken = param.getSessionToken();
+			Set<String> authEnvironments = securityService.filterAuthorizedEnvironments(sessionToken, AuthorizationAction.VIEW, environmentMap.keySet());
+
+			List<CommonSelectItem> envList = new ArrayList<>();
+			for (MyBatisApplicationEnvironmentBean envBean : environmentMap.values()) {
+				if (authEnvironments.contains(envBean.getName())) {
+					CommonSelectItem env = new CommonSelectItem();
+					envList.add(env);
+					env.setCoreValue(envBean.getName());
+					env.setDisplayValue(envBean.getDisplayName());
+				}
+			}
+
+			if (envList.isEmpty())
+				throw new ForbiddenException();
 
 			return envList;
 		}

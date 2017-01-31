@@ -1,20 +1,19 @@
 package com.csc.fsg.life.openam.model;
 
 import java.io.Serializable;
-import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_NULL)
-public class AuthorizationResponse
+public class AuthorizationTreeQuery
 	implements Serializable
 {
-	static private final long serialVersionUID = -3882554437276891589L;
+	static private final long serialVersionUID = 1145913768002789394L;
 
 	private String resource = null;
-	private String ttl = null;
-	private Map<String, Boolean> actions = null;
+	private String application = null;
+	private AuthorizationSubject subject = new AuthorizationSubject();
 
 	public String getResource()
 	{
@@ -26,23 +25,18 @@ public class AuthorizationResponse
 		this.resource = resource;
 	}
 
-	public String getTtl()
+	public String getApplication()
 	{
-		return ttl;
+		return application;
 	}
 
-	public void setTtl(String ttl)
+	public void setApplication(String application)
 	{
-		this.ttl = ttl;
+		this.application = application;
 	}
 
-	public Map<String, Boolean> getActions()
+	public AuthorizationSubject getSubject()
 	{
-		return actions;
-	}
-
-	public void setActions(Map<String, Boolean> actions)
-	{
-		this.actions = actions;
+		return subject;
 	}
 }

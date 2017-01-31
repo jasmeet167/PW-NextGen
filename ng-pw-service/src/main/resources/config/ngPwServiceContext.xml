@@ -14,7 +14,7 @@
 		<property name="securityManagementUrl" value="http://openam.rest-security.com:6080/openam/json"/>
 		<property name="sessionTokenCookieName" value="ngPwSessionToken"/>
 		<property name="realm" value="/ng-pw"/>
-		<property name="policySetName" value="BRT_ACCESS_POLICY"/>
+		<property name="policySetName" value="GENERAL_ACCESS_POLICY_SET"/>
 		<property name="apiVersions" ref="openAmApiVersions"/>
 	</bean>
 

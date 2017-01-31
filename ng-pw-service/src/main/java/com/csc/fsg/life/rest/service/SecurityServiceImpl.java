@@ -2,7 +2,9 @@ package com.csc.fsg.life.rest.service;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -20,7 +22,10 @@ import com.csc.fsg.life.openam.config.SecurityManagementConfig;
 import com.csc.fsg.life.openam.model.AuthorizationArgument;
 import com.csc.fsg.life.openam.model.AuthorizationQuery;
 import com.csc.fsg.life.openam.model.AuthorizationResponse;
+import com.csc.fsg.life.openam.model.AuthorizationTreeQuery;
+import com.csc.fsg.life.openam.model.AuthorizationTreeResponse;
 import com.csc.fsg.life.openam.model.TokenValidationResponse;
+import com.csc.fsg.life.rest.annotation.AuthorizationAction;
 import com.csc.fsg.life.rest.exception.RestServiceException;
 import com.csc.fsg.life.rest.exception.UnauthorizedException;
 import com.csc.fsg.life.rest.exception.UnexpectedException;
@@ -42,9 +47,13 @@ public class SecurityServiceImpl
 	static private final String ACTION_AUTHENTICATE = ENDPOINT_AUTHENTICATE;
 	static private final String ACTION_LOGOUT = ENDPOINT_SESSIONS + "/?_action=logout";
 	static private final String ACTION_VALIDATE_TOKEN = ENDPOINT_SESSIONS + "/{0}?_action=validate";
-	static private final String ACTION_EVALUATE_AUTHORITY = ENDPOINT_POLICIES + "?_action=evaluate";
+	static private final String ACTION_EVAL_AUTHORITY = ENDPOINT_POLICIES + "?_action=evaluate";
+	static private final String ACTION_EVAL_AUTHORITY_TREE = ENDPOINT_POLICIES + "?_action=evaluateTree";
 
 	static private final String HEADER_ACCEPT_API_VERSION = "Accept-API-Version";
+
+	static private final String ENVIRONMENT_URL_ROOT = "auth://environment/";
+	static private final String COMPANY_URL_ROOT = "auth://company/";
 
 	@Autowired
 	protected SecurityManagementConfig secConfig = null;
@@ -178,7 +187,7 @@ public class SecurityServiceImpl
 			HttpEntity<AuthorizationQuery> entity = new HttpEntity<>(query, headers);
 			RestTemplate restTemplate = new RestTemplate();
 
-			String url = secConfig.getSecurityManagementUrl() + secConfig.getRealm() + ACTION_EVALUATE_AUTHORITY;
+			String url = secConfig.getSecurityManagementUrl() + secConfig.getRealm() + ACTION_EVAL_AUTHORITY;
 
 			ResponseEntity<AuthorizationResponse[]> httpResponse = restTemplate.exchange(url, HttpMethod.POST, entity, AuthorizationResponse[].class);
 			AuthorizationResponse[] responses = httpResponse.getBody();
@@ -193,6 +202,78 @@ public class SecurityServiceImpl
 				if (!Boolean.TRUE.equals(actionMap.get(argument.getAction().toString())))
 					throw new UnauthorizedException();
 			}
+		}
+		catch (RestServiceException e) {
+			throw e;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			ErrorModel model = errorModelFactory.newErrorModel(UnexpectedException.HTTP_STATUS);
+			throw new UnexpectedException(model);
+		}
+	}
+
+	public Set<String> filterAuthorizedEnvironments(String sessionToken, AuthorizationAction action, Set<String> allEnvironments)
+	{
+		try {
+			AuthorizationTreeQuery query = new AuthorizationTreeQuery();
+			query.setResource(ENVIRONMENT_URL_ROOT);
+			query.setApplication(secConfig.getPolicySetName());
+			query.getSubject().setSsoToken(sessionToken);
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+			headers.set(HEADER_ACCEPT_API_VERSION, secConfig.getApiVersionHeaderForEndpoint(ENDPOINT_POLICIES));
+			headers.set(secConfig.getSessionTokenCookieName(), sessionToken);
+			HttpEntity<AuthorizationTreeQuery> entity = new HttpEntity<>(query, headers);
+			RestTemplate restTemplate = new RestTemplate();
+
+			String url = secConfig.getSecurityManagementUrl() + secConfig.getRealm() + ACTION_EVAL_AUTHORITY_TREE;
+
+			ResponseEntity<AuthorizationTreeResponse[]> httpResponse = restTemplate.exchange(url, HttpMethod.POST, entity, AuthorizationTreeResponse[].class);
+			AuthorizationTreeResponse[] responses = httpResponse.getBody();
+
+			// Map of authorization decisions for all environments, for which
+			// one or more authorization policies have been established;
+			// the map is keyed by Environment ID, and the corresponding
+			// value represents outcome of authorization evaluation:
+			Map<String, Boolean> authEnvironments = new HashMap<>();
+
+			for (AuthorizationTreeResponse response : responses) {
+				String[] urlComponents = response.getResource().split(ENVIRONMENT_URL_ROOT);
+				if (urlComponents.length == 0)
+					continue;
+
+				String responseEnvironment = urlComponents[1];
+				Map<String, Boolean> authorizations = response.getActions();
+				Boolean isAuthorized = authorizations.get(action.toString());
+				if (isAuthorized != null)
+					authEnvironments.put(responseEnvironment, isAuthorized);
+			}
+
+			Set<String> responseEnvironments = new HashSet<>();
+			Boolean isWildcardAuthorizationGranted = authEnvironments.get("*");
+
+			for (String environment : allEnvironments) {
+				Boolean isAuthorized = authEnvironments.get(environment);
+
+				// Access to this environment is explicitly denied
+				if (Boolean.FALSE.equals(isAuthorized))
+					continue;
+
+				// Access to this environment is explicitly granted
+				else if (Boolean.TRUE.equals(isAuthorized))
+					responseEnvironments.add(environment);
+
+				// Access to the wildcard environment "*" is granted
+				else if (Boolean.TRUE.equals(isWildcardAuthorizationGranted))
+					responseEnvironments.add(environment);
+
+				// Otherwise access to the environment is denied
+			}
+
+			return responseEnvironments;
 		}
 		catch (RestServiceException e) {
 			throw e;
