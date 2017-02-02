@@ -55,6 +55,7 @@ public class SecurityServiceImpl
 
 	static private final String ENVIRONMENT_URL_ROOT = "auth://environment/";
 	static private final String COMPANY_URL_ROOT = "auth://company/";
+	static private final String TABLE_URL_ROOT = "auth://table/";
 
 	@Autowired
 	protected SecurityManagementConfig secConfig = null;
@@ -239,26 +240,11 @@ public class SecurityServiceImpl
 				authEnvironments.put(authEnvironment, isAuthorized);
 		}
 
-		Boolean isWildcarded = authEnvironments.get("*");
 		Map<String, CommonSelectItem> response = new HashMap<>();
-
 		for (CommonSelectItem environment : allEnvironments) {
 			String envId = environment.getCoreValue();
-			Boolean isAuthorized = authEnvironments.get(envId);
-
-			// Access to this environment is denied
-			if (Boolean.FALSE.equals(isAuthorized))
-				continue;
-
-			// Access to this environment is granted
-			else if (Boolean.TRUE.equals(isAuthorized))
+			if (isAccessAuthorized(authEnvironments, envId))
 				response.put(envId, environment);
-
-			// Access to any environment is granted
-			else if (Boolean.TRUE.equals(isWildcarded))
-				response.put(envId, environment);
-
-			// Otherwise access to the environment is denied
 		}
 
 		return new ArrayList<>(response.values());
@@ -290,47 +276,120 @@ public class SecurityServiceImpl
 				authCompanies.put(authCompany, isAuthorized);
 		}
 
-		Boolean isFullyWildcarded = authCompanies.get("*/*");
-		Boolean isCompanyWildcarded = authCompanies.get(envId + "/*");
 		Map<String, CommonSelectItem> response = new HashMap<>();
-
 		for (CommonSelectItem company : allCompanies) {
 			String companyCode = company.getCoreValue();
-			Boolean isAuthorized = authCompanies.get(companyCode);
-			Boolean isEnvWildcarded = authCompanies.get("*" + "/" + companyCode);
-
-			// Access to this company in this anvironment is denied
-			if (Boolean.FALSE.equals(isAuthorized))
-				continue;
-
-			// Access to this company in this anvironment is granted
-			else if (Boolean.TRUE.equals(isAuthorized))
+			if (isAccessAuthorized(authCompanies, envId, companyCode))
 				response.put(companyCode, company);
-
-			// Access to this company in any anvironment is denied
-			if (Boolean.FALSE.equals(isEnvWildcarded))
-				continue;
-
-			// Access to this company in any anvironment is granted
-			else if (Boolean.TRUE.equals(isEnvWildcarded))
-				response.put(companyCode, company);
-
-			// Access to any company in this anvironment is denied
-			if (Boolean.FALSE.equals(isCompanyWildcarded))
-				continue;
-
-			// Access to any company in this anvironment is granted
-			else if (Boolean.TRUE.equals(isCompanyWildcarded))
-				response.put(companyCode, company);
-
-			// Access to any company in any environment is granted
-			else if (Boolean.TRUE.equals(isFullyWildcarded))
-				response.put(companyCode, company);
-
-			// Otherwise access to the environment is denied
 		}
 
 		return new ArrayList<>(response.values());
+	}
+
+	public List<CommonSelectItem> filterAuthorizedTables(String sessionToken, AuthorizationAction action, String envId, String companyCode, List<CommonSelectItem> allTables)
+	{
+		AuthorizationTreeResponse[] responses = evaluateAuthorizationTree(sessionToken, TABLE_URL_ROOT);
+
+		// Map of authorization decisions for all tables, for which
+		// one or more authorization policies have been established;
+		// the map is keyed by Environment ID/Company Code/Table DDL
+		// Name, and the corresponding value represents outcome of
+		// authorization evaluation:
+		Map<String, Boolean> authTables = new HashMap<>();
+
+		for (AuthorizationTreeResponse response : responses) {
+			String[] urlComponents = response.getResource().split(TABLE_URL_ROOT);
+			if (urlComponents.length == 0)
+				continue;
+
+			String authTable = urlComponents[1];
+			if (Boolean.FALSE.equals(authTables.get(authTable)))
+				continue;
+
+			Map<String, Boolean> authorizations = response.getActions();
+			Boolean isAuthorized = authorizations.get(action.toString());
+			if (isAuthorized != null)
+				authTables.put(authTable, isAuthorized);
+		}
+
+		Map<String, CommonSelectItem> response = new HashMap<>();
+		for (CommonSelectItem table : allTables) {
+			String tableDdlName = table.getCoreValue();
+			if (isAccessAuthorized(authTables, envId, companyCode, tableDdlName))
+				response.put(tableDdlName, table);
+		}
+
+		return new ArrayList<>(response.values());
+	}
+
+	private boolean isAccessAuthorized(Map<String, Boolean> authEnvironments, String envId)
+	{
+		if (Boolean.FALSE.equals(authEnvironments.get(envId)))
+			return false;
+		else if (Boolean.TRUE.equals(authEnvironments.get(envId)))
+			return true;
+		else if (Boolean.TRUE.equals(authEnvironments.get("*")))
+			return true;
+		else
+			return false;
+	}
+
+	private boolean isAccessAuthorized(Map<String, Boolean> authCompanies, String envId, String companyCode)
+	{
+		if (Boolean.FALSE.equals(authCompanies.get(envId + "/" + companyCode)))
+			return false;
+		else if (Boolean.TRUE.equals(authCompanies.get(envId + "/" + companyCode)))
+			return true;
+		else if (Boolean.FALSE.equals(authCompanies.get("*/" + companyCode)))
+			return false;
+		else if (Boolean.TRUE.equals(authCompanies.get("*/" + companyCode)))
+			return true;
+		else if (Boolean.FALSE.equals(authCompanies.get(envId + "/*")))
+			return false;
+		else if (Boolean.TRUE.equals(authCompanies.get(envId + "/*")))
+			return true;
+		else if (Boolean.TRUE.equals(authCompanies.get("*/*")))
+			return true;
+		else
+			return false;
+	}
+
+	private boolean isAccessAuthorized(Map<String, Boolean> authTables, String envId, String companyCode, String tableDdlName)
+	{
+		if (Boolean.FALSE.equals(authTables.get(envId + "/" + companyCode + "/" + tableDdlName)))
+			return false;
+		else if (Boolean.TRUE.equals(authTables.get(envId + "/" + companyCode + "/" + tableDdlName)))
+			return true;
+		else if (Boolean.FALSE.equals(authTables.get("*/" + companyCode + "/" + tableDdlName)))
+			return false;
+		else if (Boolean.TRUE.equals(authTables.get("*/" + companyCode + "/" + tableDdlName)))
+			return true;
+		else if (Boolean.FALSE.equals(authTables.get(envId + "/*/" + tableDdlName)))
+			return false;
+		else if (Boolean.TRUE.equals(authTables.get(envId + "/*/" + tableDdlName)))
+			return true;
+		else if (Boolean.FALSE.equals(authTables.get("*/*/" + tableDdlName)))
+			return false;
+		else if (Boolean.TRUE.equals(authTables.get("*/*/" + tableDdlName)))
+			return true;
+		else if (Boolean.FALSE.equals(authTables.get(envId + "/" + companyCode + "/*")))
+			return false;
+		else if (Boolean.TRUE.equals(authTables.get(envId + "/" + companyCode + "/*")))
+			return true;
+		else if (Boolean.FALSE.equals(authTables.get("*/" + companyCode + "/*")))
+			return false;
+		else if (Boolean.TRUE.equals(authTables.get("*/" + companyCode + "/*")))
+			return true;
+		else if (Boolean.FALSE.equals(authTables.get(envId + "/*/*")))
+			return false;
+		else if (Boolean.TRUE.equals(authTables.get(envId + "/*/*")))
+			return true;
+		else if (Boolean.FALSE.equals(authTables.get("*/*/*")))
+			return false;
+		else if (Boolean.TRUE.equals(authTables.get("*/*/*")))
+			return true;
+		else
+			return false;
 	}
 
 	private AuthorizationTreeResponse[] evaluateAuthorizationTree(String sessionToken, String urlRoot)

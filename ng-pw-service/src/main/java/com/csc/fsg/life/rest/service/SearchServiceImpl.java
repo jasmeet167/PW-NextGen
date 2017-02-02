@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -328,8 +327,6 @@ public class SearchServiceImpl
 	public List<CommonSelectItem> getPlanTables(RestServiceParam param, String envId, String companyCode)
 	{
 		try {
-			// TODO: +++ Security
-
 			Map<String, Environment> environments = EnvironmentManager.getInstance().getEnvironments();
 			Environment env = environments.get(envId);
 
@@ -340,26 +337,32 @@ public class SearchServiceImpl
 			}
 
 			EntireTableFilterContext entireTableFilterContext = new EntireTableFilterContext(env, companyCode, null);
-			Map<String, String> tables = new TreeMap<>(entireTableFilterContext.get_tableDDLNames());
-			String key = null;
+			Map<String, String> tables = entireTableFilterContext.get_tableDDLNames();
 
-			List<CommonSelectItem> tableList = new ArrayList<>();
-			Set<Map.Entry<String, String>> entries = tables.entrySet();
-			for (Map.Entry<String, String> entry : entries) {
-				key = entry.getKey();
-				CommonSelectItem rule = new CommonSelectItem();
-				tableList.add(rule);
-				rule.setCoreValue(key);
-				rule.setDisplayValue(key + "-" + entry.getValue());
-			}
-
-			if (tableList.isEmpty()) {
+			if (tables.isEmpty()) {
 				HttpStatus status = NotFoundException.HTTP_STATUS;
 				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
 				throw new NotFoundException(model);
 			}
 
-			return tableList;
+			List<CommonSelectItem> allTables = new ArrayList<>();
+			String key = null;
+
+			Set<Map.Entry<String, String>> entries = tables.entrySet();
+			for (Map.Entry<String, String> entry : entries) {
+				key = entry.getKey();
+				CommonSelectItem rule = new CommonSelectItem();
+				allTables.add(rule);
+				rule.setCoreValue(key);
+				rule.setDisplayValue(key + "-" + entry.getValue());
+			}
+
+			String sessionToken = param.getSessionToken();
+			List<CommonSelectItem> response = securityService.filterAuthorizedTables(sessionToken, AuthorizationAction.VIEW, envId, companyCode, allTables);
+			if (response.isEmpty())
+				throw new ForbiddenException();
+
+			return response;
 		}
 		catch (RestServiceException e) {
 			throw e;

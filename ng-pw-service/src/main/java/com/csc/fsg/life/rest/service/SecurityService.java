@@ -21,4 +21,6 @@ public interface SecurityService
 	public List<CommonSelectItem> filterAuthorizedEnvironments(String sessionToken, AuthorizationAction action, List<CommonSelectItem> allEnvironments);
 
 	public List<CommonSelectItem> filterAuthorizedCompanies(String sessionToken, AuthorizationAction action, String envId, List<CommonSelectItem> allCompanies);
+
+	public List<CommonSelectItem> filterAuthorizedTables(String sessionToken, AuthorizationAction action, String envId, String companyCode, List<CommonSelectItem> allTables);
 }
