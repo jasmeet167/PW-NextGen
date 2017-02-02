@@ -76,23 +76,20 @@ public class SearchServiceImpl
 				throw new NotFoundException(model);
 			}
 
-			String sessionToken = param.getSessionToken();
-			Set<String> authEnvironments = securityService.filterAuthorizedEnvironments(sessionToken, AuthorizationAction.VIEW, environmentMap.keySet());
-
 			List<CommonSelectItem> envList = new ArrayList<>();
 			for (MyBatisApplicationEnvironmentBean envBean : environmentMap.values()) {
-				if (authEnvironments.contains(envBean.getName())) {
-					CommonSelectItem env = new CommonSelectItem();
-					envList.add(env);
-					env.setCoreValue(envBean.getName());
-					env.setDisplayValue(envBean.getDisplayName());
-				}
+				CommonSelectItem env = new CommonSelectItem();
+				envList.add(env);
+				env.setCoreValue(envBean.getName());
+				env.setDisplayValue(envBean.getDisplayName());
 			}
 
-			if (envList.isEmpty())
+			String sessionToken = param.getSessionToken();
+			List<CommonSelectItem> response = securityService.filterAuthorizedEnvironments(sessionToken, AuthorizationAction.VIEW, envList);
+			if (response.isEmpty())
 				throw new ForbiddenException();
 
-			return envList;
+			return response;
 		}
 		catch (RestServiceException e) {
 			throw e;
@@ -107,14 +104,12 @@ public class SearchServiceImpl
 	public List<CommonSelectItem> getPlanCommonValues(RestServiceParam param, PlanSearchInput searchInput)
 	{
 		try {
-			// TODO: +++ Security
-
-			String env = searchInput.getEnvId();
+			String envId = searchInput.getEnvId();
 			boolean isGoodEnvironment = false;
 
-			if (StringUtils.hasText(env)) {
+			if (StringUtils.hasText(envId)) {
 				Map<String, Environment> environments = EnvironmentManager.getInstance().getEnvironments();
-				if (environments.get(env) != null)
+				if (environments.get(envId) != null)
 					isGoodEnvironment = true;
 			}
 			if (!isGoodEnvironment) {
@@ -124,11 +119,14 @@ public class SearchServiceImpl
 			}
 
 			PlanCriteriaTO planCriteria = buildPlanCriteria(searchInput);
-			PlanFilterSpecContext context = new PlanFilterSpecContext(env);
+			PlanFilterSpecContext context = new PlanFilterSpecContext(envId);
 			Map<String, String> commonValuesMap = null;
 
-			if (!StringUtils.hasText(searchInput.getCompanyCode()))
+			boolean isCompanyCodesSearch = false;
+			if (!StringUtils.hasText(searchInput.getCompanyCode())) {
+				isCompanyCodesSearch = true;
 				commonValuesMap = context.getCompanyCodes(planCriteria);
+			}
 			else if (!StringUtils.hasText(searchInput.getProductCode()))
 				commonValuesMap = context.getProductCodes(planCriteria);
 			else if (!StringUtils.hasText(searchInput.getPlanCode()))
@@ -143,6 +141,12 @@ public class SearchServiceImpl
 				throw new BadRequestException(model);
 			}
 
+			if (commonValuesMap.isEmpty()) {
+				HttpStatus status = NotFoundException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
+				throw new NotFoundException(model);
+			}
+
 			List<CommonSelectItem> commonValues = new ArrayList<>();
 			for (Map.Entry<String, String> entry : commonValuesMap.entrySet()) {
 				CommonSelectItem item = new CommonSelectItem();
@@ -151,14 +155,17 @@ public class SearchServiceImpl
 				item.setDisplayValue(entry.getValue());
 			}
 
-			// TODO: +++ Different from "User not Authorized to access a company"
-			if (commonValues.isEmpty()) {
-				HttpStatus status = NotFoundException.HTTP_STATUS;
-				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
-				throw new NotFoundException(model);
-			}
+			if (isCompanyCodesSearch) {
+				String sessionToken = param.getSessionToken();
+				List<CommonSelectItem> response = securityService.filterAuthorizedCompanies(sessionToken, AuthorizationAction.VIEW, envId, commonValues);
+				if (response.isEmpty())
+					throw new ForbiddenException();
 
-			return commonValues;
+				return response;
+			}
+			else {
+				return commonValues;
+			}
 		}
 		catch (RestServiceException e) {
 			throw e;
@@ -398,9 +405,11 @@ public class SearchServiceImpl
 				}
 			}
 
-			// No need to test for empty list of environments; if there were
-			// none, an exception would have been thrown in
-			// getCommonEnvironments().
+			if (envList.isEmpty()) {
+				HttpStatus status = NotFoundException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
+				throw new NotFoundException(model);
+			}
 
 			return envList;
 		}
@@ -763,8 +772,6 @@ public class SearchServiceImpl
 			// com.csc.fsg.life.pw.client.mdi.SummaryFilter in the old
 			// Product Wizard.
 
-			// TODO: +++ Security
-
 			String filterAspect = searchInput.getFilterAspect();
 			if (!"C".equals(filterAspect) && !"S".equals(filterAspect)) {
 				HttpStatus status = BadRequestException.HTTP_STATUS;
@@ -772,12 +779,12 @@ public class SearchServiceImpl
 				throw new BadRequestException(model);
 			}
 
-			String env = searchInput.getEnvId();
+			String envId = searchInput.getEnvId();
 			boolean isGoodEnvironment = false;
 
-			if (StringUtils.hasText(env)) {
+			if (StringUtils.hasText(envId)) {
 				Map<String, Environment> environments = EnvironmentManager.getInstance().getEnvironments();
-				if (environments.get(env) != null)
+				if (environments.get(envId) != null)
 					isGoodEnvironment = true;
 			}
 			if (!isGoodEnvironment) {
@@ -791,8 +798,11 @@ public class SearchServiceImpl
 			SummaryFilterSpecContext context = new SummaryFilterSpecContext(isBrccFilter, planCriteria.getEnvironment());
 			Map<String, String> commonValuesMap = null;
 
-			if (!StringUtils.hasText(searchInput.getCompanyCode()))
+			boolean isCompanyCodesSearch = false;
+			if (!StringUtils.hasText(searchInput.getCompanyCode())) {
+				isCompanyCodesSearch = true;
 				commonValuesMap = context.getCompanyCodes(planCriteria);
+			}
 			else if (!StringUtils.hasText(searchInput.getProductCode()))
 				commonValuesMap = context.getProductCodes(planCriteria);
 			else if (!StringUtils.hasText(searchInput.getPlanCode()))
@@ -807,6 +817,12 @@ public class SearchServiceImpl
 				throw new BadRequestException(model);
 			}
 
+			if (commonValuesMap.isEmpty()) {
+				HttpStatus status = NotFoundException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
+				throw new NotFoundException(model);
+			}
+
 			List<CommonSelectItem> commonValues = new ArrayList<>();
 			for (Map.Entry<String, String> entry : commonValuesMap.entrySet()) {
 				CommonSelectItem item = new CommonSelectItem();
@@ -815,14 +831,17 @@ public class SearchServiceImpl
 				item.setDisplayValue(entry.getValue());
 			}
 
-			// TODO: +++ Different from "User not Authorized to access a company"
-			if (commonValues.isEmpty()) {
-				HttpStatus status = NotFoundException.HTTP_STATUS;
-				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
-				throw new NotFoundException(model);
-			}
+			if (isCompanyCodesSearch) {
+				String sessionToken = param.getSessionToken();
+				List<CommonSelectItem> response = securityService.filterAuthorizedCompanies(sessionToken, AuthorizationAction.VIEW, envId, commonValues);
+				if (response.isEmpty())
+					throw new ForbiddenException();
 
-			return commonValues;
+				return response;
+			}
+			else {
+				return commonValues;
+			}
 		}
 		catch (RestServiceException e) {
 			throw e;

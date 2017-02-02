@@ -1,10 +1,10 @@
 package com.csc.fsg.life.rest.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -29,6 +29,7 @@ import com.csc.fsg.life.rest.annotation.AuthorizationAction;
 import com.csc.fsg.life.rest.exception.RestServiceException;
 import com.csc.fsg.life.rest.exception.UnauthorizedException;
 import com.csc.fsg.life.rest.exception.UnexpectedException;
+import com.csc.fsg.life.rest.model.CommonSelectItem;
 import com.csc.fsg.life.rest.model.Credentials;
 import com.csc.fsg.life.rest.model.ErrorModel;
 import com.csc.fsg.life.rest.model.ErrorModelFactory;
@@ -213,75 +214,144 @@ public class SecurityServiceImpl
 		}
 	}
 
-	public Set<String> filterAuthorizedEnvironments(String sessionToken, AuthorizationAction action, Set<String> allEnvironments)
+	public List<CommonSelectItem> filterAuthorizedEnvironments(String sessionToken, AuthorizationAction action, List<CommonSelectItem> allEnvironments)
 	{
-		try {
-			AuthorizationTreeQuery query = new AuthorizationTreeQuery();
-			query.setResource(ENVIRONMENT_URL_ROOT);
-			query.setApplication(secConfig.getPolicySetName());
-			query.getSubject().setSsoToken(sessionToken);
+		AuthorizationTreeResponse[] responses = evaluateAuthorizationTree(sessionToken, ENVIRONMENT_URL_ROOT);
 
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_JSON);
-			headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-			headers.set(HEADER_ACCEPT_API_VERSION, secConfig.getApiVersionHeaderForEndpoint(ENDPOINT_POLICIES));
-			headers.set(secConfig.getSessionTokenCookieName(), sessionToken);
-			HttpEntity<AuthorizationTreeQuery> entity = new HttpEntity<>(query, headers);
-			RestTemplate restTemplate = new RestTemplate();
+		// Map of authorization decisions for all environments, for which
+		// one or more authorization policies have been established;
+		// the map is keyed by Environment ID, and the corresponding
+		// value represents outcome of authorization evaluation:
+		Map<String, Boolean> authEnvironments = new HashMap<>();
 
-			String url = secConfig.getSecurityManagementUrl() + secConfig.getRealm() + ACTION_EVAL_AUTHORITY_TREE;
+		for (AuthorizationTreeResponse response : responses) {
+			String[] urlComponents = response.getResource().split(ENVIRONMENT_URL_ROOT);
+			if (urlComponents.length == 0)
+				continue;
 
-			ResponseEntity<AuthorizationTreeResponse[]> httpResponse = restTemplate.exchange(url, HttpMethod.POST, entity, AuthorizationTreeResponse[].class);
-			AuthorizationTreeResponse[] responses = httpResponse.getBody();
+			String authEnvironment = urlComponents[1];
+			if (Boolean.FALSE.equals(authEnvironments.get(authEnvironment)))
+				continue;
 
-			// Map of authorization decisions for all environments, for which
-			// one or more authorization policies have been established;
-			// the map is keyed by Environment ID, and the corresponding
-			// value represents outcome of authorization evaluation:
-			Map<String, Boolean> authEnvironments = new HashMap<>();
-
-			for (AuthorizationTreeResponse response : responses) {
-				String[] urlComponents = response.getResource().split(ENVIRONMENT_URL_ROOT);
-				if (urlComponents.length == 0)
-					continue;
-
-				String responseEnvironment = urlComponents[1];
-				Map<String, Boolean> authorizations = response.getActions();
-				Boolean isAuthorized = authorizations.get(action.toString());
-				if (isAuthorized != null)
-					authEnvironments.put(responseEnvironment, isAuthorized);
-			}
-
-			Set<String> responseEnvironments = new HashSet<>();
-			Boolean isWildcardAuthorizationGranted = authEnvironments.get("*");
-
-			for (String environment : allEnvironments) {
-				Boolean isAuthorized = authEnvironments.get(environment);
-
-				// Access to this environment is explicitly denied
-				if (Boolean.FALSE.equals(isAuthorized))
-					continue;
-
-				// Access to this environment is explicitly granted
-				else if (Boolean.TRUE.equals(isAuthorized))
-					responseEnvironments.add(environment);
-
-				// Access to the wildcard environment "*" is granted
-				else if (Boolean.TRUE.equals(isWildcardAuthorizationGranted))
-					responseEnvironments.add(environment);
-
-				// Otherwise access to the environment is denied
-			}
-
-			return responseEnvironments;
+			Map<String, Boolean> authorizations = response.getActions();
+			Boolean isAuthorized = authorizations.get(action.toString());
+			if (isAuthorized != null)
+				authEnvironments.put(authEnvironment, isAuthorized);
 		}
-		catch (RestServiceException e) {
-			throw e;
+
+		Boolean isWildcarded = authEnvironments.get("*");
+		Map<String, CommonSelectItem> response = new HashMap<>();
+
+		for (CommonSelectItem environment : allEnvironments) {
+			String envId = environment.getCoreValue();
+			Boolean isAuthorized = authEnvironments.get(envId);
+
+			// Access to this environment is denied
+			if (Boolean.FALSE.equals(isAuthorized))
+				continue;
+
+			// Access to this environment is granted
+			else if (Boolean.TRUE.equals(isAuthorized))
+				response.put(envId, environment);
+
+			// Access to any environment is granted
+			else if (Boolean.TRUE.equals(isWildcarded))
+				response.put(envId, environment);
+
+			// Otherwise access to the environment is denied
 		}
-		catch (Exception e) {
-			e.printStackTrace();
-			ErrorModel model = errorModelFactory.newErrorModel(UnexpectedException.HTTP_STATUS);
-			throw new UnexpectedException(model);
+
+		return new ArrayList<>(response.values());
+	}
+
+	public List<CommonSelectItem> filterAuthorizedCompanies(String sessionToken, AuthorizationAction action, String envId, List<CommonSelectItem> allCompanies)
+	{
+		AuthorizationTreeResponse[] responses = evaluateAuthorizationTree(sessionToken, COMPANY_URL_ROOT);
+
+		// Map of authorization decisions for all companies, for which
+		// one or more authorization policies have been established;
+		// the map is keyed by Environment ID/Company Code, and
+		// the corresponding value represents outcome of authorization
+		// evaluation:
+		Map<String, Boolean> authCompanies = new HashMap<>();
+
+		for (AuthorizationTreeResponse response : responses) {
+			String[] urlComponents = response.getResource().split(COMPANY_URL_ROOT);
+			if (urlComponents.length == 0)
+				continue;
+
+			String authCompany = urlComponents[1];
+			if (Boolean.FALSE.equals(authCompanies.get(authCompany)))
+				continue;
+
+			Map<String, Boolean> authorizations = response.getActions();
+			Boolean isAuthorized = authorizations.get(action.toString());
+			if (isAuthorized != null)
+				authCompanies.put(authCompany, isAuthorized);
 		}
+
+		Boolean isFullyWildcarded = authCompanies.get("*/*");
+		Boolean isCompanyWildcarded = authCompanies.get(envId + "/*");
+		Map<String, CommonSelectItem> response = new HashMap<>();
+
+		for (CommonSelectItem company : allCompanies) {
+			String companyCode = company.getCoreValue();
+			Boolean isAuthorized = authCompanies.get(companyCode);
+			Boolean isEnvWildcarded = authCompanies.get("*" + "/" + companyCode);
+
+			// Access to this company in this anvironment is denied
+			if (Boolean.FALSE.equals(isAuthorized))
+				continue;
+
+			// Access to this company in this anvironment is granted
+			else if (Boolean.TRUE.equals(isAuthorized))
+				response.put(companyCode, company);
+
+			// Access to this company in any anvironment is denied
+			if (Boolean.FALSE.equals(isEnvWildcarded))
+				continue;
+
+			// Access to this company in any anvironment is granted
+			else if (Boolean.TRUE.equals(isEnvWildcarded))
+				response.put(companyCode, company);
+
+			// Access to any company in this anvironment is denied
+			if (Boolean.FALSE.equals(isCompanyWildcarded))
+				continue;
+
+			// Access to any company in this anvironment is granted
+			else if (Boolean.TRUE.equals(isCompanyWildcarded))
+				response.put(companyCode, company);
+
+			// Access to any company in any environment is granted
+			else if (Boolean.TRUE.equals(isFullyWildcarded))
+				response.put(companyCode, company);
+
+			// Otherwise access to the environment is denied
+		}
+
+		return new ArrayList<>(response.values());
+	}
+
+	private AuthorizationTreeResponse[] evaluateAuthorizationTree(String sessionToken, String urlRoot)
+	{
+		AuthorizationTreeQuery query = new AuthorizationTreeQuery();
+		query.setResource(urlRoot);
+		query.setApplication(secConfig.getPolicySetName());
+		query.getSubject().setSsoToken(sessionToken);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		headers.set(HEADER_ACCEPT_API_VERSION, secConfig.getApiVersionHeaderForEndpoint(ENDPOINT_POLICIES));
+		headers.set(secConfig.getSessionTokenCookieName(), sessionToken);
+		HttpEntity<AuthorizationTreeQuery> entity = new HttpEntity<>(query, headers);
+		RestTemplate restTemplate = new RestTemplate();
+
+		String url = secConfig.getSecurityManagementUrl() + secConfig.getRealm() + ACTION_EVAL_AUTHORITY_TREE;
+
+		ResponseEntity<AuthorizationTreeResponse[]> httpResponse = restTemplate.exchange(url, HttpMethod.POST, entity, AuthorizationTreeResponse[].class);
+		AuthorizationTreeResponse[] responses = httpResponse.getBody();
+		return responses;
 	}
 }
