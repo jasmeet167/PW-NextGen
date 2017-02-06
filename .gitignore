@@ -30,3 +30,6 @@
 # /ng-pw-service/
 /ng-pw-service/.apt_generated
 /ng-pw-service/target
+
+# /ng-pw-ui/
+/ng-pw-ui/target
