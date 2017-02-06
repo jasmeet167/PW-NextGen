@@ -1,0 +1,220 @@
+.navbar-brand {padding-top: 5px; padding-left: 5px;}
+img.img-responsive.logo{width: 90%}
+.p-l-r-none{padding-left: 0px; padding-right:0px;}
+.jumbotron{background-image: url('../../assets/images/bg_homeowner.jpeg'); border-radius: 0px !important}
+.navbar div.container{box-shadow: 0px 3px 10px -2px rgba(0, 0, 0,0.4);}
+.jumbotron{background-size: 100% 100%;}
+nav.anonymous.navbar div.container{/*background-color: rgba(0,0,0,.1);*/ background-color: #fff;}
+.navHeight{background-color: transparent;border: none;}
+nav.anonymous.navbar-default .navbar-nav>li>a {color: #777777;}
+.marketingBox {margin-bottom: 20px;text-align: center;min-height: 200px;display: -webkit-box;}
+.circle {border: 3px solid #fff;
+    width: 90px;
+    height: 90px;
+    margin: 0px auto;
+    border-radius: 50%;
+    cursor: pointer;}
+.box-input-margin{margin-top: 15px; margin-bottom: 20px;}
+
+.box{padding: 20px;width: 100%;}
+.box-title{font-size: 17px;color: #fff;}
+.blue{background-color: #3498db;}
+.green{background-color: #1abc9c;}
+.grey{background-color: #95a5a6;}
+.orange{background-color: #f49b41;}
+
+
+/* Featurettes
+------------------------- */
+
+.featurette-divider {
+	border-top: 1px solid rgba(238,238,238,.2);
+}
+.jumbotron h1{position: absolute;bottom: 30px;font-size: 25px;}
+.jumbotron h1, p {color: #fff; text-align: left;}
+.flaticon-home168:before {
+    content: "\f105";
+    font-size: 60px;
+    margin-left: 0px;
+    line-height: 115px;
+    color: #fff;
+}
+@media (max-width: 700px){
+/*nav.anonymous.navbar-default .navbar-nav>li>a {background-color: #000;}*/
+}
+
+.language{float: right !important;
+    margin-right: 15px;
+    text-align: right;
+    margin-bottom: 5px;}
+.language > span > a{color: #bebebe}
+.language > span{ padding: 0px 5px;}
+.language>span>.active{    
+    color: #777!important;
+    text-decoration: underline;
+    padding-bottom: 2px;
+    border-bottom: 1px solid #777;
+    text-decoration: none;
+    }
+li.login{float: right;clear: both;}
+li.login > a.loginLable{padding-top: 0px;margin-top: 5px !important;padding-right: 0px;margin-right: 20px;}
+
+@media (max-width: 767px){
+.login-mob{margin-bottom: -22px;padding-top: 5px;margin-right: 70px;}
+.mini-btn{    margin-top: -15px!important;}
+.logLabDiv{margin-right: 5px;margin-top: 5px;}
+li.login { float: left; margin-left: 15px; clear: both;}
+.title-icon {margin-left: 15px;}
+.wiz-btn-pad {display: none;}
+.footer {width: 100%; }
+}
+
+[class^="dashBoardIcon flaticon-"]:before, 
+[class*="dashBoardIcon flaticon-"]:before, 
+[class^="dashBoardIcon flaticon-"]:after, 
+[class*="dashBoardIcon flaticon-"]:after {
+    font-size: 40px !important;
+    margin-left: 0px !important;
+    line-height: 80px;
+    color: #fff;
+} 
+.btnGroup{
+    background-color: transparent;
+    border: none;
+    padding-top: 0px;
+}
+/*Temp*/
+.btn{border-radius: 0px !important}
+.box-button{
+	box-shadow: 2px 4px 10px -2px rgba(0, 0, 0,0.4);
+    background-color: #fff;
+    color: #3498db;
+    max-width: 80px;
+    font-weight: bold;}
+.box-input{background-color: transparent;border-color: #fff;color: #fff;}
+input::-webkit-input-placeholder {
+color: rgba(255,255,255,.6) !important;
+}
+ 
+input:-moz-placeholder { /* Firefox 18- */
+color: rgba(255,255,255,.6) !important;
+}
+ 
+input::-moz-placeholder {  /* Firefox 19+ */
+color: rgba(255,255,255,.6) !important;
+}
+ 
+input:-ms-input-placeholder {  
+color: rgba(255,255,255,.6) !important;
+}
+
+@media (min-width: 768px){
+.navbar-brand {padding-left: 15px;}
+.navHeight{height: 70px;background-color: transparent;border: none;}
+.navbar div.container{height: 70px; padding-top: 10px;/*width: 100%;*/}
+.jumbotron {padding-top: 68px;padding-bottom: 48px;min-height: 450px;}
+nav.anonymous.navbar-default .navbar-nav>li>a {padding-bottom: 10px;margin-top: 10px;}
+.p-l-r-none {/*width: 100%;*/}
+.box-button{min-width: 80px;}
+.margin-left-20ps{margin-left: 0%;margin-top: 3px;}
+.jumbotron h1 {font-size: 50px;}
+
+
+}
+@media (max-width: 767px){
+.logoTop-Margin{margin-top: -18px;padding-bottom: 10px;}
+.jumbotron {padding-top: 24px;padding-bottom: 24px;min-height: 180px;}
+
+}
+@media (max-width: 414px){
+.steps-indicator li a {font-size: 11px;font-weight: normal;}
+}
+
+@media (min-width: 1130px){
+.box-button{min-width: 80px;}
+.margin-left-20ps{margin-left: 20%;margin-top: 3px;}
+
+}
+
+.navbar {
+    -webkit-transition: all 0.6s ease-out;
+    -moz-transition: all 0.6s ease-out;
+    -o-transition: all 0.6s ease-out;
+    -ms-transition: all 0.6s ease-out;
+    transition: all 0.6s ease-out;
+}
+
+.navbar.scrolled {
+    background: rgb(68, 68, 68); //IE
+    background: rgba(0, 0, 0, 0.78); //NON-IE
+}
+
+.padding-none {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+.headerActive{
+    box-shadow: 0px 0px 5px 2px rgba(196,196,196,1);
+    border-top: 2px #3498db solid;
+    margin-bottom: 0px;
+    position: relative;
+    background-color: #fff !important;
+}
+
+.dropdown-menu-mrg{border-top: none;margin-left: -1px;margin-top: -1px;}
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+    color: #ffffff !important;
+    text-decoration: none;
+    background-color: #428bca !important;
+} 
+
+.flagicon{
+    border: 1px solid #fff;
+    width: 40px;
+    height: 40px;
+    margin: 0px auto;
+    border-radius: 50%;
+    position: absolute;
+    right: 0px;
+    margin-right: 29%;
+    margin-top: 15%;
+}
+
+/*for flages */
+@media (min-widthmax-width: 700px){
+.flagicon{margin-right: 20%; margin-top: 20%;}
+
+}
+
+@media only screen and (device-width:375px) and (device-height:667px) { 
+    /* CSS rules here */
+    .flagicon{margin-right: 16%; margin-top: 22%;}
+    .steps-indicator li a {font-size: 11px;font-weight: normal;}
+}
+
+@media only screen and (device-width:320px) and (device-height:568px) { 
+    /* CSS rules here */
+    .flagicon{margin-right: 13%; margin-top: 30%;}
+}
+
+@media only screen and (device-width:360px) and (device-height:640px) { 
+    /* CSS rules here */
+    .flagicon{margin-right: 17%; margin-top: 25%;}
+}
+@media only screen and (device-width:412px) and (device-height:732px) { 
+    /* CSS rules here */
+    .flagicon{margin-right: 22%; margin-top: 20%;}
+}
+@media only screen and (device-width:414px) and (device-height:736px) { 
+    /* CSS rules here */
+    .flagicon{margin-right: 22%; margin-top: 20%;}
+}
+@media only screen and (device-width:1024px) and (device-height:768px) { 
+    /* CSS rules here */
+    .flagicon{margin-right: 30%; margin-top: 13%;}
+}
+@media only screen and (device-width:768px) and (device-height:1024px) { 
+    /* CSS rules here */
+    .flagicon{margin-right: 33%; margin-top: 12%;}
+}
+

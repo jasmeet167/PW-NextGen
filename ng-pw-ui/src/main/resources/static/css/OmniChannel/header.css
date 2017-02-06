@@ -1,0 +1,52 @@
+.userProfile{
+  background-color: #fff;
+    border-radius: 50%;
+    border: 2px solid #3498db;
+    width: 32px;
+    height: 32px;
+    margin-right: 20px;
+    margin-top: 0px !important;
+    cursor: pointer;
+}
+
+.flaticon-int-parties:before {
+    margin-left: 4px !important;
+    line-height: 25px;
+}
+.mag-pad0px{margin: 0px !important; padding: 0px !important;}
+
+.mag-pad0px.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+    background-color: #fff;
+} 
+
+
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 80px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+ /* width: 100%;*/
+  /* Set the fixed height of the footer here */
+  min-height: 60px;
+  background-color: #bebebe;
+}
+
+
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+body > .container { padding: 60px 15px 0; padding-top: 0px;}
+.container .text-muted {margin-top: 20px;}
+.container .text-muted p{color: #000;}
+.footer > .container {padding-right: 15px;padding-left: 15px;}
+code {font-size: 80%;}
+
+
