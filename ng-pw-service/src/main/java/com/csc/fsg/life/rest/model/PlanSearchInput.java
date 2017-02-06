@@ -8,8 +8,6 @@ public class PlanSearchInput
 	static private final long serialVersionUID = 1503370388134913074L;
 
 	private Boolean isViewChangesEffective = null;
-	private String envId = null;
-	private String companyCode = null;
 	private String productCode = null;
 	private String planCode = null;
 	private String issueState = null;
@@ -23,26 +21,6 @@ public class PlanSearchInput
 	public void setViewChangesEffective(Boolean isViewChangesEffective)
 	{
 		this.isViewChangesEffective = isViewChangesEffective;
-	}
-
-	public String getEnvId()
-	{
-		return envId;
-	}
-
-	public void setEnvId(String envId)
-	{
-		this.envId = envId;
-	}
-
-	public String getCompanyCode()
-	{
-		return companyCode;
-	}
-
-	public void setCompanyCode(String companyCode)
-	{
-		this.companyCode = companyCode;
 	}
 
 	public String getProductCode()

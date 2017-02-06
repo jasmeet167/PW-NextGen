@@ -1,7 +1,9 @@
 package com.csc.fsg.life.rest.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +18,23 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import com.csc.fsg.life.openam.config.SecurityManagementConfig;
-import com.csc.fsg.life.openam.model.AuthorizationArgument;
+import com.csc.fsg.life.openam.config.PolicyDecisionPointConfig;
 import com.csc.fsg.life.openam.model.AuthorizationQuery;
 import com.csc.fsg.life.openam.model.AuthorizationResponse;
+import com.csc.fsg.life.openam.model.AuthorizationTreeQuery;
+import com.csc.fsg.life.openam.model.AuthorizationTreeResponse;
 import com.csc.fsg.life.openam.model.TokenValidationResponse;
+import com.csc.fsg.life.rest.exception.ForbiddenException;
 import com.csc.fsg.life.rest.exception.RestServiceException;
 import com.csc.fsg.life.rest.exception.UnauthorizedException;
 import com.csc.fsg.life.rest.exception.UnexpectedException;
+import com.csc.fsg.life.rest.model.CommonSelectItem;
 import com.csc.fsg.life.rest.model.Credentials;
 import com.csc.fsg.life.rest.model.ErrorModel;
 import com.csc.fsg.life.rest.model.ErrorModelFactory;
 import com.csc.fsg.life.rest.model.SessionToken;
+import com.csc.fsg.life.rest.param.AuthorizationAction;
+import com.csc.fsg.life.rest.param.RestServiceParam;
 
 // Custom service name is used in order to prevent matching against the pattern used for creation of AOP proxies.
 @Service("SecurityServiceComponent")
@@ -42,18 +49,29 @@ public class SecurityServiceImpl
 	static private final String ACTION_AUTHENTICATE = ENDPOINT_AUTHENTICATE;
 	static private final String ACTION_LOGOUT = ENDPOINT_SESSIONS + "/?_action=logout";
 	static private final String ACTION_VALIDATE_TOKEN = ENDPOINT_SESSIONS + "/{0}?_action=validate";
-	static private final String ACTION_EVALUATE_AUTHORITY = ENDPOINT_POLICIES + "?_action=evaluate";
+	static private final String ACTION_EVAL_AUTHORITY = ENDPOINT_POLICIES + "?_action=evaluate";
+	static private final String ACTION_EVAL_AUTHORITY_TREE = ENDPOINT_POLICIES + "?_action=evaluateTree";
 
 	static private final String HEADER_ACCEPT_API_VERSION = "Accept-API-Version";
 
+	static private final String ENVIRONMENT_URL_ROOT = "auth://environment/";
+	static private final String COMPANY_URL_ROOT = "auth://company/";
+	static private final String TABLE_URL_ROOT = "auth://table/";
+
 	@Autowired
-	protected SecurityManagementConfig secConfig = null;
+	protected PolicyDecisionPointConfig pdpConfig = null;
 
 	@Autowired
 	protected ErrorModelFactory errorModelFactory = null;
 
 	public SessionToken authenticate(Credentials credentials)
 	{
+		if (!pdpConfig.isSecurityEnabled()) {
+			SessionToken sessionToken = new SessionToken();
+			sessionToken.setTokenId("");
+			return sessionToken;
+		}
+
 		try {
 			if (credentials == null
 			 || !StringUtils.hasText(credentials.getUserName())
@@ -65,11 +83,11 @@ public class SecurityServiceImpl
 			headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 			headers.set("X-OpenAM-Username", credentials.getUserName());
 			headers.set("X-OpenAM-Password", credentials.getPassword());
-			headers.set(HEADER_ACCEPT_API_VERSION, secConfig.getApiVersionHeaderForEndpoint(ENDPOINT_AUTHENTICATE));
+			headers.set(HEADER_ACCEPT_API_VERSION, pdpConfig.getApiVersionHeaderForEndpoint(ENDPOINT_AUTHENTICATE));
 			HttpEntity<String> entity = new HttpEntity<>(headers);
 			RestTemplate restTemplate = new RestTemplate();
 
-			String url = secConfig.getSecurityManagementUrl() + ACTION_AUTHENTICATE;
+			String url = pdpConfig.getSecurityManagementUrl() + ACTION_AUTHENTICATE;
 			ResponseEntity<SessionToken> response = restTemplate.exchange(url, HttpMethod.POST, entity, SessionToken.class);
 			return response.getBody();
 		}
@@ -96,6 +114,9 @@ public class SecurityServiceImpl
 
 	public void validateSession(String sessionToken)
 	{
+		if (!pdpConfig.isSecurityEnabled())
+			return;
+
 		try {
 			if (!StringUtils.hasText(sessionToken))
 				throw new UnauthorizedException();
@@ -103,12 +124,12 @@ public class SecurityServiceImpl
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-			headers.set(HEADER_ACCEPT_API_VERSION, secConfig.getApiVersionHeaderForEndpoint(ENDPOINT_SESSIONS));
+			headers.set(HEADER_ACCEPT_API_VERSION, pdpConfig.getApiVersionHeaderForEndpoint(ENDPOINT_SESSIONS));
 			HttpEntity<String> entity = new HttpEntity<>(headers);
 			RestTemplate restTemplate = new RestTemplate();
 
 			String customizedAction = ACTION_VALIDATE_TOKEN.replaceFirst("\\{0\\}", sessionToken);
-			String url = secConfig.getSecurityManagementUrl() + customizedAction;
+			String url = pdpConfig.getSecurityManagementUrl() + customizedAction;
 
 			ResponseEntity<TokenValidationResponse> httpResponse = restTemplate.exchange(url, HttpMethod.POST, entity, TokenValidationResponse.class);
 			TokenValidationResponse validationResponse = httpResponse.getBody();
@@ -127,16 +148,19 @@ public class SecurityServiceImpl
 
 	public void logout(String sessionToken)
 	{
+		if (!pdpConfig.isSecurityEnabled())
+			return;
+
 		try {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-			headers.set(HEADER_ACCEPT_API_VERSION, secConfig.getApiVersionHeaderForEndpoint(ENDPOINT_SESSIONS));
-			headers.set(secConfig.getSessionTokenCookieName(), sessionToken);
+			headers.set(HEADER_ACCEPT_API_VERSION, pdpConfig.getApiVersionHeaderForEndpoint(ENDPOINT_SESSIONS));
+			headers.set(pdpConfig.getSessionTokenCookieName(), sessionToken);
 			HttpEntity<String> entity = new HttpEntity<>(headers);
 			RestTemplate restTemplate = new RestTemplate();
 
-			String url = secConfig.getSecurityManagementUrl() + ACTION_LOGOUT;
+			String url = pdpConfig.getSecurityManagementUrl() + ACTION_LOGOUT;
 			restTemplate.exchange(url, HttpMethod.POST, entity, Void.class);
 		}
 		catch (HttpClientErrorException e) {
@@ -160,47 +184,200 @@ public class SecurityServiceImpl
 		}
 	}
 
-	public void assertAuthority(String sessionToken, AuthorizationArgument... arguments)
+	public void assertAuthorization(RestServiceParam param, AuthorizationAction action)
 	{
-		try {
-			AuthorizationQuery query = new AuthorizationQuery();
-			for (AuthorizationArgument argument : arguments)
-				query.addResource(argument.getResource());
+		if (!pdpConfig.isSecurityEnabled())
+			return;
+		if (action == AuthorizationAction.NONE)
+			return;
 
-			query.setApplication(secConfig.getPolicySetName());
-			query.getSubject().setSsoToken(sessionToken);
+		List<String> resources = new ArrayList<>();
 
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_JSON);
-			headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-			headers.set(HEADER_ACCEPT_API_VERSION, secConfig.getApiVersionHeaderForEndpoint(ENDPOINT_POLICIES));
-			headers.set(secConfig.getSessionTokenCookieName(), sessionToken);
-			HttpEntity<AuthorizationQuery> entity = new HttpEntity<>(query, headers);
-			RestTemplate restTemplate = new RestTemplate();
+		boolean isEnv1Found = false;
+		String envId1 = param.getSourceEnvId();
+		if (StringUtils.hasText(envId1)) {
+			isEnv1Found = true;
+			resources.add(ENVIRONMENT_URL_ROOT + envId1);
+		}
 
-			String url = secConfig.getSecurityManagementUrl() + secConfig.getRealm() + ACTION_EVALUATE_AUTHORITY;
+		boolean isEnv2Found = false;
+		String envId2 = param.getTargetEnvId();
+		if (StringUtils.hasText(envId2)) {
+			isEnv2Found = true;
+			resources.add(ENVIRONMENT_URL_ROOT + envId2);
+		}
 
-			ResponseEntity<AuthorizationResponse[]> httpResponse = restTemplate.exchange(url, HttpMethod.POST, entity, AuthorizationResponse[].class);
-			AuthorizationResponse[] responses = httpResponse.getBody();
+		if (resources.isEmpty())
+			return;
 
-			Map<String, AuthorizationResponse> responseMap = new HashMap<>();
-			for (AuthorizationResponse response : responses)
-				responseMap.put(response.getResource(), response);
+		String companyCode = param.getCompanyCode();
+		if (StringUtils.hasText(companyCode)) {
+			if (isEnv1Found)
+				resources.add(COMPANY_URL_ROOT + envId1 + '/' + companyCode);
+			if (isEnv2Found)
+				resources.add(COMPANY_URL_ROOT + envId2 + '/' + companyCode);
 
-			for (AuthorizationArgument argument : arguments) {
-				AuthorizationResponse response = responseMap.get(argument.getResource());
-				Map<String, Boolean> actionMap = response.getActions();
-				if (!Boolean.TRUE.equals(actionMap.get(argument.getAction().toString())))
-					throw new UnauthorizedException();
+			String tableDdlName = param.getTableDdlName();
+			if (StringUtils.hasText(tableDdlName)) {
+				if (isEnv1Found)
+					resources.add(TABLE_URL_ROOT + envId1 + '/' + companyCode + '/');
+				if (isEnv2Found)
+					resources.add(TABLE_URL_ROOT + envId2 + '/' + companyCode + '/');
 			}
 		}
-		catch (RestServiceException e) {
-			throw e;
+
+		String sessionToken = param.getSessionToken();
+		Map<String, AuthorizationResponse> authMap = evaluateAuthorization(sessionToken, resources);
+
+		for (AuthorizationResponse auth : authMap.values()) {
+			Map<String, Boolean> actions = auth.getActions();
+			if (!Boolean.TRUE.equals(actions.get(action.toString())))
+				throw new ForbiddenException();
 		}
-		catch (Exception e) {
-			e.printStackTrace();
-			ErrorModel model = errorModelFactory.newErrorModel(UnexpectedException.HTTP_STATUS);
-			throw new UnexpectedException(model);
+	}
+
+	public List<CommonSelectItem> filterAuthorizedEnvironments(String sessionToken, List<CommonSelectItem> allEnvironments)
+	{
+		if (!pdpConfig.isSecurityEnabled())
+			return new ArrayList<>(allEnvironments);
+
+		List<String> resources = new ArrayList<>();
+		for (CommonSelectItem env : allEnvironments)
+			resources.add(ENVIRONMENT_URL_ROOT + env.getCoreValue());
+
+		// Map of authorization decisions for all environments, for which
+		// one or more authorization policies have been established;
+		// the map is keyed by Environment ID, and the corresponding
+		// value represents outcome of authorization evaluation:
+		Map<String, AuthorizationResponse> authMap = evaluateAuthorization(sessionToken, resources);
+
+		List<CommonSelectItem> response = new ArrayList<>();
+		for (CommonSelectItem env : allEnvironments) {
+			AuthorizationResponse auth = authMap.get(ENVIRONMENT_URL_ROOT + env.getCoreValue());
+			if (auth != null) {
+				Map<String, Boolean> actionMap = auth.getActions();
+				if (actionMap != null
+				 && Boolean.TRUE.equals(actionMap.get(AuthorizationAction.VIEW.toString())))
+					response.add(env);
+			}
 		}
+
+		return response;
+	}
+
+	public List<CommonSelectItem> filterAuthorizedCompanies(String sessionToken, String envId, List<CommonSelectItem> allCompanies)
+	{
+		if (!pdpConfig.isSecurityEnabled())
+			return new ArrayList<>(allCompanies);
+
+		String urlPrefix = COMPANY_URL_ROOT + envId + '/';
+
+		List<String> resources = new ArrayList<>();
+		for (CommonSelectItem company : allCompanies)
+			resources.add(urlPrefix + company.getCoreValue());
+
+		// Map of authorization decisions for all companies, for which
+		// one or more authorization policies have been established;
+		// the map is keyed by Environment ID/Company Code, and
+		// the corresponding value represents outcome of authorization
+		// evaluation:
+		Map<String, AuthorizationResponse> authMap = evaluateAuthorization(sessionToken, resources);
+
+		List<CommonSelectItem> response = new ArrayList<>();
+		for (CommonSelectItem company : allCompanies) {
+			AuthorizationResponse auth = authMap.get(urlPrefix + company.getCoreValue());
+			if (auth != null) {
+				Map<String, Boolean> actionMap = auth.getActions();
+				if (actionMap != null
+				 && Boolean.TRUE.equals(actionMap.get(AuthorizationAction.VIEW.toString())))
+					response.add(company);
+			}
+		}
+
+		return response;
+	}
+
+	public List<CommonSelectItem> filterAuthorizedTables(String sessionToken, String envId, String companyCode, List<CommonSelectItem> allTables)
+	{
+		if (!pdpConfig.isSecurityEnabled())
+			return new ArrayList<>(allTables);
+
+		String urlPrefix = TABLE_URL_ROOT + envId + '/' + companyCode + '/';
+
+		List<String> resources = new ArrayList<>();
+		for (CommonSelectItem table : allTables)
+			resources.add(urlPrefix + table.getCoreValue());
+
+		// Map of authorization decisions for all tables, for which
+		// one or more authorization policies have been established;
+		// the map is keyed by Environment ID/Company Code/Table DDL
+		// Name, and the corresponding value represents outcome of
+		// authorization evaluation:
+		Map<String, AuthorizationResponse> authMap = evaluateAuthorization(sessionToken, resources);
+
+		List<CommonSelectItem> response = new ArrayList<>();
+		for (CommonSelectItem table : allTables) {
+			AuthorizationResponse auth = authMap.get(urlPrefix + table.getCoreValue());
+			if (auth != null) {
+				Map<String, Boolean> actionMap = auth.getActions();
+				if (actionMap != null
+				 && Boolean.TRUE.equals(actionMap.get(AuthorizationAction.VIEW.toString())))
+					response.add(table);
+			}
+		}
+
+		return response;
+	}
+
+	private Map<String, AuthorizationResponse> evaluateAuthorization(String sessionToken, List<String> resources)
+	{
+		AuthorizationQuery query = new AuthorizationQuery();
+		for (String resource : resources)
+			query.addResource(resource);
+
+		query.setApplication(pdpConfig.getPolicySetName());
+		query.getSubject().setSsoToken(sessionToken);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		headers.set(HEADER_ACCEPT_API_VERSION, pdpConfig.getApiVersionHeaderForEndpoint(ENDPOINT_POLICIES));
+		headers.set(pdpConfig.getSessionTokenCookieName(), sessionToken);
+		HttpEntity<AuthorizationQuery> entity = new HttpEntity<>(query, headers);
+		RestTemplate restTemplate = new RestTemplate();
+
+		String url = pdpConfig.getSecurityManagementUrl() + pdpConfig.getRealm() + ACTION_EVAL_AUTHORITY;
+
+		ResponseEntity<AuthorizationResponse[]> httpResponse = restTemplate.exchange(url, HttpMethod.POST, entity, AuthorizationResponse[].class);
+		AuthorizationResponse[] responses = httpResponse.getBody();
+
+		Map<String, AuthorizationResponse> responseMap = new HashMap<>();
+		for (AuthorizationResponse response : responses)
+			responseMap.put(response.getResource(), response);
+
+		return responseMap;
+	}
+
+	@SuppressWarnings("unused")
+	private AuthorizationTreeResponse[] evaluateAuthorizationTree(String sessionToken, String urlRoot)
+	{
+		AuthorizationTreeQuery query = new AuthorizationTreeQuery();
+		query.setResource(urlRoot);
+		query.setApplication(pdpConfig.getPolicySetName());
+		query.getSubject().setSsoToken(sessionToken);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		headers.set(HEADER_ACCEPT_API_VERSION, pdpConfig.getApiVersionHeaderForEndpoint(ENDPOINT_POLICIES));
+		headers.set(pdpConfig.getSessionTokenCookieName(), sessionToken);
+		HttpEntity<AuthorizationTreeQuery> entity = new HttpEntity<>(query, headers);
+		RestTemplate restTemplate = new RestTemplate();
+
+		String url = pdpConfig.getSecurityManagementUrl() + pdpConfig.getRealm() + ACTION_EVAL_AUTHORITY_TREE;
+
+		ResponseEntity<AuthorizationTreeResponse[]> httpResponse = restTemplate.exchange(url, HttpMethod.POST, entity, AuthorizationTreeResponse[].class);
+		AuthorizationTreeResponse[] responses = httpResponse.getBody();
+		return responses;
 	}
 }

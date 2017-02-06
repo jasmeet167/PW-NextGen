@@ -15,7 +15,6 @@ public class AuthorizationResponse
 	private String resource = null;
 	private String ttl = null;
 	private Map<String, Boolean> actions = null;
-	private Map<String, Boolean> attributes = null;
 
 	public String getResource()
 	{
@@ -45,15 +44,5 @@ public class AuthorizationResponse
 	public void setActions(Map<String, Boolean> actions)
 	{
 		this.actions = actions;
-	}
-
-	public Map<String, Boolean> getAttributes()
-	{
-		return attributes;
-	}
-
-	public void setAttributes(Map<String, Boolean> attributes)
-	{
-		this.attributes = attributes;
 	}
 }

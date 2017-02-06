@@ -37,6 +37,7 @@ public class SearchApiController
 	public ResponseEntity<List<CommonSelectItem>> getCommonEnvironments(@RequestHeader(value = "sessionToken", required = true) String sessionToken)
 	{
 		RestServiceParam param = buildRestServiceParam(sessionToken);
+
 		List<CommonSelectItem> envList = searchService.getCommonEnvironments(param);
 		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
 		return new ResponseEntity<>(envList, HttpStatus.OK);
@@ -47,14 +48,13 @@ public class SearchApiController
 																	  @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
 																	  @RequestHeader(value = "envId", required = true) String envId)
 	{
+		RestServiceParam param = buildRestServiceParam(sessionToken, envId);
 		PlanSearchInput searchInput = new PlanSearchInput();
 		searchInput.setViewChangesEffective(viewChanges);
-		searchInput.setEnvId(envId);
 
-		RestServiceParam param = buildRestServiceParam(sessionToken);
-		List<CommonSelectItem> envList = searchService.getPlanCommonValues(param, searchInput);
-		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
-		return new ResponseEntity<>(envList, HttpStatus.OK);
+		List<CommonSelectItem> companyList = searchService.getPlanCommonValues(param, searchInput);
+		PropertyComparator.sort(companyList, new MutableSortDefinition("displayValue", true, true));
+		return new ResponseEntity<>(companyList, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/search/plan/product", produces = { "application/json" }, method = RequestMethod.GET)
@@ -63,15 +63,13 @@ public class SearchApiController
 																	  @RequestHeader(value = "envId", required = true) String envId,
 																	  @RequestHeader(value = "companyCode", required = true) String companyCode)
 	{
+		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
 		PlanSearchInput searchInput = new PlanSearchInput();
 		searchInput.setViewChangesEffective(viewChanges);
-		searchInput.setEnvId(envId);
-		searchInput.setCompanyCode(companyCode);
 
-		RestServiceParam param = buildRestServiceParam(sessionToken);
-		List<CommonSelectItem> envList = searchService.getPlanCommonValues(param, searchInput);
-		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
-		return new ResponseEntity<>(envList, HttpStatus.OK);
+		List<CommonSelectItem> productList = searchService.getPlanCommonValues(param, searchInput);
+		PropertyComparator.sort(productList, new MutableSortDefinition("displayValue", true, true));
+		return new ResponseEntity<>(productList, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/search/plan/plan", produces = { "application/json" }, method = RequestMethod.GET)
@@ -81,16 +79,14 @@ public class SearchApiController
 																   @RequestHeader(value = "companyCode", required = true) String companyCode,
 																   @RequestHeader(value = "productCode", required = true) String productCode)
 	{
+		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
 		PlanSearchInput searchInput = new PlanSearchInput();
 		searchInput.setViewChangesEffective(viewChanges);
-		searchInput.setEnvId(envId);
-		searchInput.setCompanyCode(companyCode);
 		searchInput.setProductCode(productCode);
 
-		RestServiceParam param = buildRestServiceParam(sessionToken);
-		List<CommonSelectItem> envList = searchService.getPlanCommonValues(param, searchInput);
-		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
-		return new ResponseEntity<>(envList, HttpStatus.OK);
+		List<CommonSelectItem> planList = searchService.getPlanCommonValues(param, searchInput);
+		PropertyComparator.sort(planList, new MutableSortDefinition("displayValue", true, true));
+		return new ResponseEntity<>(planList, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/search/plan/state", produces = { "application/json" }, method = RequestMethod.GET)
@@ -101,17 +97,15 @@ public class SearchApiController
 																	 @RequestHeader(value = "productCode", required = true) String productCode,
 																	 @RequestHeader(value = "planCode", required = true) String planCode)
 	{
+		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
 		PlanSearchInput searchInput = new PlanSearchInput();
 		searchInput.setViewChangesEffective(viewChanges);
-		searchInput.setEnvId(envId);
-		searchInput.setCompanyCode(companyCode);
 		searchInput.setProductCode(productCode);
 		searchInput.setPlanCode(planCode);
 
-		RestServiceParam param = buildRestServiceParam(sessionToken);
-		List<CommonSelectItem> envList = searchService.getPlanCommonValues(param, searchInput);
-		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
-		return new ResponseEntity<>(envList, HttpStatus.OK);
+		List<CommonSelectItem> stateList = searchService.getPlanCommonValues(param, searchInput);
+		PropertyComparator.sort(stateList, new MutableSortDefinition("displayValue", true, true));
+		return new ResponseEntity<>(stateList, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/search/plan/lob", produces = { "application/json" }, method = RequestMethod.GET)
@@ -123,18 +117,16 @@ public class SearchApiController
 															  @RequestHeader(value = "planCode", required = true) String planCode,
 															  @RequestHeader(value = "issueState", required = true) String issueState)
 	{
+		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
 		PlanSearchInput searchInput = new PlanSearchInput();
 		searchInput.setViewChangesEffective(viewChanges);
-		searchInput.setEnvId(envId);
-		searchInput.setCompanyCode(companyCode);
 		searchInput.setProductCode(productCode);
 		searchInput.setPlanCode(planCode);
 		searchInput.setIssueState(issueState);
 
-		RestServiceParam param = buildRestServiceParam(sessionToken);
-		List<CommonSelectItem> envList = searchService.getPlanCommonValues(param, searchInput);
-		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
-		return new ResponseEntity<>(envList, HttpStatus.OK);
+		List<CommonSelectItem> lobList = searchService.getPlanCommonValues(param, searchInput);
+		PropertyComparator.sort(lobList, new MutableSortDefinition("displayValue", true, true));
+		return new ResponseEntity<>(lobList, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/search/plan/effdate", produces = { "application/json" }, method = RequestMethod.GET)
@@ -147,29 +139,28 @@ public class SearchApiController
 																@RequestHeader(value = "issueState", required = true) String issueState,
 																@RequestHeader(value = "lob", required = true) String lob)
 	{
+		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
 		PlanSearchInput searchInput = new PlanSearchInput();
 		searchInput.setViewChangesEffective(viewChanges);
-		searchInput.setEnvId(envId);
-		searchInput.setCompanyCode(companyCode);
 		searchInput.setProductCode(productCode);
 		searchInput.setPlanCode(planCode);
 		searchInput.setIssueState(issueState);
 		searchInput.setLob(lob);
 
-		RestServiceParam param = buildRestServiceParam(sessionToken);
-		List<DateSelectItem> envList = searchService.getPlanEffDates(param, searchInput);
-		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
-		return new ResponseEntity<>(envList, HttpStatus.OK);
+		List<DateSelectItem> effDateList = searchService.getPlanEffDates(param, searchInput);
+		PropertyComparator.sort(effDateList, new MutableSortDefinition("displayValue", true, true));
+		return new ResponseEntity<>(effDateList, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/search/plan/project", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<String>> getPlanProjects(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
 														@RequestHeader(value = "envId", required = true) String envId)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken);
-		List<String> envList = searchService.getPlanProjects(param, envId);
-		Collections.sort(envList);
-		return new ResponseEntity<>(envList, HttpStatus.OK);
+		RestServiceParam param = buildRestServiceParam(sessionToken, envId);
+
+		List<String> projectList = searchService.getPlanProjects(param);
+		Collections.sort(projectList);
+		return new ResponseEntity<>(projectList, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/search/plan/table", produces = { "application/json" }, method = RequestMethod.GET)
@@ -177,16 +168,18 @@ public class SearchApiController
 																@RequestHeader(value = "envId", required = true) String envId,
 																@RequestHeader(value = "companyCode", required = true) String companyCode)	
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken);
-		List<CommonSelectItem> envList = searchService.getPlanTables(param, envId, companyCode);
-		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
-		return new ResponseEntity<>(envList, HttpStatus.OK);
+		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
+
+		List<CommonSelectItem> tableList = searchService.getPlanTables(param);
+		PropertyComparator.sort(tableList, new MutableSortDefinition("displayValue", true, true));
+		return new ResponseEntity<>(tableList, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/search/changes/environment", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<CommonSelectItem>> getChangesEnvironments(@RequestHeader(value = "sessionToken", required = true) String sessionToken)
 	{
 		RestServiceParam param = buildRestServiceParam(sessionToken);
+
 		List<CommonSelectItem> envList = searchService.getChangesEnvironments(param);
 		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
 		return new ResponseEntity<>(envList, HttpStatus.OK);
@@ -196,8 +189,9 @@ public class SearchApiController
 	public ResponseEntity<ChangesFilterData> getChangesFilterValues(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
 																	@RequestHeader(value = "envId", required = true) String envId)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken);
-		ChangesFilterData filterData = searchService.getChangesFilterValues(param, envId);
+		RestServiceParam param = buildRestServiceParam(sessionToken, envId);
+
+		ChangesFilterData filterData = searchService.getChangesFilterValues(param);
 		Collections.sort(filterData.getProjects());
 		Collections.sort(filterData.getUsers());
 		PropertyComparator.sort(filterData.getBusinessRuleTables(), new MutableSortDefinition("displayValue", true, true));
@@ -208,8 +202,9 @@ public class SearchApiController
 	public ResponseEntity<ApplyFilterData> getApplyFilterValues(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
 																@RequestHeader(value = "envId", required = true) String envId)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken);
-		ApplyFilterData filterData = searchService.getApplyFilterValues(param, envId);
+		RestServiceParam param = buildRestServiceParam(sessionToken, envId);
+
+		ApplyFilterData filterData = searchService.getApplyFilterValues(param);
 		PropertyComparator.sort(filterData.getPackages(), new MutableSortDefinition("displayValue", true, true));
 		Collections.sort(filterData.getProjects());
 		return new ResponseEntity<>(filterData, HttpStatus.OK);
@@ -220,8 +215,9 @@ public class SearchApiController
 																@RequestHeader(value = "filterAspect", required = true) String filterAspect,
 																@RequestHeader(value = "envId", required = true) String envId)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken);
-		AuditFilterData filterData = searchService.getAuditFilterValues(param, filterAspect, envId);
+		RestServiceParam param = buildRestServiceParam(sessionToken, envId);
+
+		AuditFilterData filterData = searchService.getAuditFilterValues(param, filterAspect);
 		PropertyComparator.sort(filterData.getPackages(), new MutableSortDefinition("displayValue", true, true));
 		Collections.sort(filterData.getProjects());
 		PropertyComparator.sort(filterData.getBusinessRuleTables(), new MutableSortDefinition("displayValue", true, true));
@@ -234,8 +230,9 @@ public class SearchApiController
 																	@RequestHeader(value = "sourceEnvId", required = true) String sourceEnvId,
 																	@RequestHeader(value = "targetEnvId", required = true) String targetEnvId)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken);
-		PromoteFilterData filterData = searchService.getPromoteFilterValues(param, sourceEnvId, targetEnvId);
+		RestServiceParam param = buildRestServiceParam(sessionToken, new String[] { sourceEnvId, targetEnvId });
+
+		PromoteFilterData filterData = searchService.getPromoteFilterValues(param);
 		PropertyComparator.sort(filterData.getPackages(), new MutableSortDefinition("displayValue", true, true));
 		Collections.sort(filterData.getProjects());
 		return new ResponseEntity<>(filterData, HttpStatus.OK);
@@ -246,14 +243,13 @@ public class SearchApiController
 																		 @RequestHeader(value = "filterAspect", required = true) String filterAspect,
 																		 @RequestHeader(value = "envId", required = true) String envId)
 	{
+		RestServiceParam param = buildRestServiceParam(sessionToken, envId);
 		SummarySearchInput searchInput = new SummarySearchInput();
 		searchInput.setFilterAspect(filterAspect);
-		searchInput.setEnvId(envId);
 
-		RestServiceParam param = buildRestServiceParam(sessionToken);
-		List<CommonSelectItem> envList = searchService.getSummaryCommonValues(param, searchInput);
-		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
-		return new ResponseEntity<>(envList, HttpStatus.OK);
+		List<CommonSelectItem> companyList = searchService.getSummaryCommonValues(param, searchInput);
+		PropertyComparator.sort(companyList, new MutableSortDefinition("displayValue", true, true));
+		return new ResponseEntity<>(companyList, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/search/summary/product", produces = { "application/json" }, method = RequestMethod.GET)
@@ -262,15 +258,13 @@ public class SearchApiController
 																		 @RequestHeader(value = "envId", required = true) String envId,
 																		 @RequestHeader(value = "companyCode", required = true) String companyCode)
 	{
+		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
 		SummarySearchInput searchInput = new SummarySearchInput();
 		searchInput.setFilterAspect(filterAspect);
-		searchInput.setEnvId(envId);
-		searchInput.setCompanyCode(companyCode);
 
-		RestServiceParam param = buildRestServiceParam(sessionToken);
-		List<CommonSelectItem> envList = searchService.getSummaryCommonValues(param, searchInput);
-		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
-		return new ResponseEntity<>(envList, HttpStatus.OK);
+		List<CommonSelectItem> productList = searchService.getSummaryCommonValues(param, searchInput);
+		PropertyComparator.sort(productList, new MutableSortDefinition("displayValue", true, true));
+		return new ResponseEntity<>(productList, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/search/summary/plan", produces = { "application/json" }, method = RequestMethod.GET)
@@ -280,16 +274,14 @@ public class SearchApiController
 																	  @RequestHeader(value = "companyCode", required = true) String companyCode,
 																	  @RequestHeader(value = "productCode", required = true) String productCode)
 	{
+		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
 		SummarySearchInput searchInput = new SummarySearchInput();
 		searchInput.setFilterAspect(filterAspect);
-		searchInput.setEnvId(envId);
-		searchInput.setCompanyCode(companyCode);
 		searchInput.setProductCode(productCode);
 
-		RestServiceParam param = buildRestServiceParam(sessionToken);
-		List<CommonSelectItem> envList = searchService.getSummaryCommonValues(param, searchInput);
-		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
-		return new ResponseEntity<>(envList, HttpStatus.OK);
+		List<CommonSelectItem> planList = searchService.getSummaryCommonValues(param, searchInput);
+		PropertyComparator.sort(planList, new MutableSortDefinition("displayValue", true, true));
+		return new ResponseEntity<>(planList, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/search/summary/state", produces = { "application/json" }, method = RequestMethod.GET)
@@ -300,17 +292,15 @@ public class SearchApiController
 																		@RequestHeader(value = "productCode", required = true) String productCode,
 																		@RequestHeader(value = "planCode", required = true) String planCode)
 	{
+		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
 		SummarySearchInput searchInput = new SummarySearchInput();
 		searchInput.setFilterAspect(filterAspect);
-		searchInput.setEnvId(envId);
-		searchInput.setCompanyCode(companyCode);
 		searchInput.setProductCode(productCode);
 		searchInput.setPlanCode(planCode);
 
-		RestServiceParam param = buildRestServiceParam(sessionToken);
-		List<CommonSelectItem> envList = searchService.getSummaryCommonValues(param, searchInput);
-		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
-		return new ResponseEntity<>(envList, HttpStatus.OK);
+		List<CommonSelectItem> stateList = searchService.getSummaryCommonValues(param, searchInput);
+		PropertyComparator.sort(stateList, new MutableSortDefinition("displayValue", true, true));
+		return new ResponseEntity<>(stateList, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/search/summary/lob", produces = { "application/json" }, method = RequestMethod.GET)
@@ -322,18 +312,16 @@ public class SearchApiController
 																 @RequestHeader(value = "planCode", required = true) String planCode,
 																 @RequestHeader(value = "issueState", required = true) String issueState)
 	{
+		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
 		SummarySearchInput searchInput = new SummarySearchInput();
 		searchInput.setFilterAspect(filterAspect);
-		searchInput.setEnvId(envId);
-		searchInput.setCompanyCode(companyCode);
 		searchInput.setProductCode(productCode);
 		searchInput.setPlanCode(planCode);
 		searchInput.setIssueState(issueState);
 
-		RestServiceParam param = buildRestServiceParam(sessionToken);
-		List<CommonSelectItem> envList = searchService.getSummaryCommonValues(param, searchInput);
-		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
-		return new ResponseEntity<>(envList, HttpStatus.OK);
+		List<CommonSelectItem> lobList = searchService.getSummaryCommonValues(param, searchInput);
+		PropertyComparator.sort(lobList, new MutableSortDefinition("displayValue", true, true));
+		return new ResponseEntity<>(lobList, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/search/summary/effdate", produces = { "application/json" }, method = RequestMethod.GET)
@@ -346,18 +334,16 @@ public class SearchApiController
 																   @RequestHeader(value = "issueState", required = true) String issueState,
 																   @RequestHeader(value = "lob", required = true) String lob)
 	{
+		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
 		SummarySearchInput searchInput = new SummarySearchInput();
 		searchInput.setFilterAspect(filterAspect);
-		searchInput.setEnvId(envId);
-		searchInput.setCompanyCode(companyCode);
 		searchInput.setProductCode(productCode);
 		searchInput.setPlanCode(planCode);
 		searchInput.setIssueState(issueState);
 		searchInput.setLob(lob);
 
-		RestServiceParam param = buildRestServiceParam(sessionToken);
-		List<DateSelectItem> envList = searchService.getSummaryEffDates(param, searchInput);
-		PropertyComparator.sort(envList, new MutableSortDefinition("displayValue", true, true));
-		return new ResponseEntity<>(envList, HttpStatus.OK);
+		List<DateSelectItem> effDateList = searchService.getSummaryEffDates(param, searchInput);
+		PropertyComparator.sort(effDateList, new MutableSortDefinition("displayValue", true, true));
+		return new ResponseEntity<>(effDateList, HttpStatus.OK);
 	}
 }

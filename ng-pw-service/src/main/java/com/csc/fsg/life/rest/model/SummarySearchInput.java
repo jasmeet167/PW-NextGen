@@ -8,8 +8,6 @@ public class SummarySearchInput
 	static private final long serialVersionUID = 2458170108440451089L;
 
 	private String filterAspect = null;
-	private String envId = null;
-	private String companyCode = null;
 	private String productCode = null;
 	private String planCode = null;
 	private String issueState = null;
@@ -23,26 +21,6 @@ public class SummarySearchInput
 	public void setFilterAspect(String filterAspect)
 	{
 		this.filterAspect = filterAspect;
-	}
-
-	public String getEnvId()
-	{
-		return envId;
-	}
-
-	public void setEnvId(String envId)
-	{
-		this.envId = envId;
-	}
-
-	public String getCompanyCode()
-	{
-		return companyCode;
-	}
-
-	public void setCompanyCode(String companyCode)
-	{
-		this.companyCode = companyCode;
 	}
 
 	public String getProductCode()

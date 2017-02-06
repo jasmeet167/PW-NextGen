@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +30,7 @@ import com.csc.fsg.life.pw.web.io.PlanFilterSpecContext;
 import com.csc.fsg.life.pw.web.io.SummaryFilterSpecContext;
 import com.csc.fsg.life.pw.web.io.WIPRows;
 import com.csc.fsg.life.rest.exception.BadRequestException;
+import com.csc.fsg.life.rest.exception.ForbiddenException;
 import com.csc.fsg.life.rest.exception.NotFoundException;
 import com.csc.fsg.life.rest.exception.RestServiceException;
 import com.csc.fsg.life.rest.exception.UnexpectedException;
@@ -52,7 +52,10 @@ public class SearchServiceImpl
 	implements SearchService
 {
 	@Autowired
-	protected ErrorModelFactory errorModelFactory = null;
+	private ErrorModelFactory errorModelFactory = null;
+
+	@Autowired
+	private SecurityService securityService = null;
 
 	public SearchServiceImpl()
 	{
@@ -62,10 +65,14 @@ public class SearchServiceImpl
 	public List<CommonSelectItem> getCommonEnvironments(RestServiceParam param)
 	{
 		try {
-			// TODO: +++ Security
-
 			CommonApplicationConfigBean pwConfig = getBean(CommonApplicationConfigBean.class);
 			Map<String, MyBatisApplicationEnvironmentBean> environmentMap = pwConfig.getEnvironments();
+
+			if (environmentMap.isEmpty()) {
+				HttpStatus status = NotFoundException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
+				throw new NotFoundException(model);
+			}
 
 			List<CommonSelectItem> envList = new ArrayList<>();
 			for (MyBatisApplicationEnvironmentBean envBean : environmentMap.values()) {
@@ -75,14 +82,12 @@ public class SearchServiceImpl
 				env.setDisplayValue(envBean.getDisplayName());
 			}
 
-			// TODO: +++ Different from "User not Authorized to access any environments"
-			if (envList.isEmpty()) {
-				HttpStatus status = NotFoundException.HTTP_STATUS;
-				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
-				throw new NotFoundException(model);
-			}
+			String sessionToken = param.getSessionToken();
+			List<CommonSelectItem> response = securityService.filterAuthorizedEnvironments(sessionToken, envList);
+			if (response.isEmpty())
+				throw new ForbiddenException();
 
-			return envList;
+			return response;
 		}
 		catch (RestServiceException e) {
 			throw e;
@@ -97,14 +102,13 @@ public class SearchServiceImpl
 	public List<CommonSelectItem> getPlanCommonValues(RestServiceParam param, PlanSearchInput searchInput)
 	{
 		try {
-			// TODO: +++ Security
+			String envId = param.getEnvId();
+			String companyCode = param.getCompanyCode();
 
-			String env = searchInput.getEnvId();
 			boolean isGoodEnvironment = false;
-
-			if (StringUtils.hasText(env)) {
+			if (StringUtils.hasText(envId)) {
 				Map<String, Environment> environments = EnvironmentManager.getInstance().getEnvironments();
-				if (environments.get(env) != null)
+				if (environments.get(envId) != null)
 					isGoodEnvironment = true;
 			}
 			if (!isGoodEnvironment) {
@@ -113,12 +117,15 @@ public class SearchServiceImpl
 				throw new BadRequestException(model);
 			}
 
-			PlanCriteriaTO planCriteria = buildPlanCriteria(searchInput);
-			PlanFilterSpecContext context = new PlanFilterSpecContext(env);
+			PlanCriteriaTO planCriteria = buildPlanCriteria(envId, companyCode, searchInput);
+			PlanFilterSpecContext context = new PlanFilterSpecContext(envId);
 			Map<String, String> commonValuesMap = null;
 
-			if (!StringUtils.hasText(searchInput.getCompanyCode()))
+			boolean isCompanyCodesSearch = false;
+			if (!StringUtils.hasText(param.getCompanyCode())) {
+				isCompanyCodesSearch = true;
 				commonValuesMap = context.getCompanyCodes(planCriteria);
+			}
 			else if (!StringUtils.hasText(searchInput.getProductCode()))
 				commonValuesMap = context.getProductCodes(planCriteria);
 			else if (!StringUtils.hasText(searchInput.getPlanCode()))
@@ -133,6 +140,12 @@ public class SearchServiceImpl
 				throw new BadRequestException(model);
 			}
 
+			if (commonValuesMap.isEmpty()) {
+				HttpStatus status = NotFoundException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
+				throw new NotFoundException(model);
+			}
+
 			List<CommonSelectItem> commonValues = new ArrayList<>();
 			for (Map.Entry<String, String> entry : commonValuesMap.entrySet()) {
 				CommonSelectItem item = new CommonSelectItem();
@@ -141,14 +154,17 @@ public class SearchServiceImpl
 				item.setDisplayValue(entry.getValue());
 			}
 
-			// TODO: +++ Different from "User not Authorized to access a company"
-			if (commonValues.isEmpty()) {
-				HttpStatus status = NotFoundException.HTTP_STATUS;
-				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
-				throw new NotFoundException(model);
-			}
+			if (isCompanyCodesSearch) {
+				String sessionToken = param.getSessionToken();
+				List<CommonSelectItem> response = securityService.filterAuthorizedCompanies(sessionToken, envId, commonValues);
+				if (response.isEmpty())
+					throw new ForbiddenException();
 
-			return commonValues;
+				return response;
+			}
+			else {
+				return commonValues;
+			}
 		}
 		catch (RestServiceException e) {
 			throw e;
@@ -163,14 +179,13 @@ public class SearchServiceImpl
 	public List<DateSelectItem> getPlanEffDates(RestServiceParam param, PlanSearchInput searchInput)
 	{
 		try {
-			// TODO: +++ Security
+			String envId = param.getEnvId();
+			String companyCode = param.getCompanyCode();
 
-			String env = searchInput.getEnvId();
 			boolean isGoodEnvironment = false;
-
-			if (StringUtils.hasText(env)) {
+			if (StringUtils.hasText(envId)) {
 				Map<String, Environment> environments = EnvironmentManager.getInstance().getEnvironments();
-				if (environments.get(env) != null)
+				if (environments.get(envId) != null)
 					isGoodEnvironment = true;
 			}
 			if (!isGoodEnvironment) {
@@ -179,11 +194,11 @@ public class SearchServiceImpl
 				throw new BadRequestException(model);
 			}
 
-			PlanCriteriaTO planCriteria = buildPlanCriteria(searchInput);
-			PlanFilterSpecContext context = new PlanFilterSpecContext(env);
+			PlanCriteriaTO planCriteria = buildPlanCriteria(envId, companyCode, searchInput);
+			PlanFilterSpecContext context = new PlanFilterSpecContext(envId);
 			Map<String, String> dateValuesMap = null;
 
-			if (!StringUtils.hasText(searchInput.getCompanyCode())) {
+			if (!StringUtils.hasText(param.getCompanyCode())) {
 				HttpStatus status = BadRequestException.HTTP_STATUS;
 				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_company"));
 				throw new BadRequestException(model);
@@ -223,7 +238,6 @@ public class SearchServiceImpl
 				item.setDisplayValue(entry.getValue());
 			}
 
-			// TODO: +++ Different from "User not Authorized to access a company"
 			if (dateValues.isEmpty()) {
 				HttpStatus status = NotFoundException.HTTP_STATUS;
 				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
@@ -242,38 +256,10 @@ public class SearchServiceImpl
 		}
 	}
 
-	private PlanCriteriaTO buildPlanCriteria(PlanSearchInput searchInput)
-	{
-		HashMap<String, Object> planKeys = new HashMap<>();
-		if (searchInput.isViewChangesEffective() == null)
-			planKeys.put(PlanCriteriaTO.MERGED_VIEW_KEY, Boolean.FALSE.toString());
-		else
-			planKeys.put(PlanCriteriaTO.MERGED_VIEW_KEY, searchInput.isViewChangesEffective().toString());
-
-		planKeys.put(PlanTOBase.ENVIRONMENT_KEY, searchInput.getEnvId());
-		planKeys.put(PlanTOBase.COMPANY_CODE_KEY, searchInput.getCompanyCode());
-
-		String productCode = searchInput.getProductCode();
-		planKeys.put(PlanTOBase.PRODUCT_CODE_KEY, productCode);
-
-		if (StringUtils.hasText(productCode)) {
-			planKeys.put(PlanTOBase.PRODUCT_PREFIX_KEY, productCode.substring(0, 1));
-			if (productCode.length() > 1)
-				planKeys.put(PlanTOBase.PRODUCT_SUFFIX_KEY, productCode.substring(1, 2));
-		}
-
-		planKeys.put(PlanTOBase.PLAN_CODE_KEY, searchInput.getPlanCode());
-		planKeys.put(PlanTOBase.ISSUE_STATE_KEY, searchInput.getIssueState());
-		planKeys.put(PlanTOBase.LINE_OF_BUSINESS_KEY, searchInput.getLob());
-
-		PlanCriteriaTO planCriteria = new PlanCriteriaTO(planKeys);
-		return planCriteria;
-	}
-
-	public List<String> getPlanProjects(RestServiceParam param, String envId)
+	public List<String> getPlanProjects(RestServiceParam param)
 	{
 		try {
-			// TODO: +++ Security
+			String envId = param.getEnvId();
 
 			WIPProperties wipProps = WIPProperties.getInstance();
 			Environment env = EnvironmentManager.getInstance().getEnvironment(envId);
@@ -308,10 +294,11 @@ public class SearchServiceImpl
 		}
 	}
 
-	public List<CommonSelectItem> getPlanTables(RestServiceParam param, String envId, String companyCode)
+	public List<CommonSelectItem> getPlanTables(RestServiceParam param)
 	{
 		try {
-			// TODO: +++ Security
+			String envId = param.getEnvId();
+			String companyCode = param.getCompanyCode();
 
 			Map<String, Environment> environments = EnvironmentManager.getInstance().getEnvironments();
 			Environment env = environments.get(envId);
@@ -323,26 +310,32 @@ public class SearchServiceImpl
 			}
 
 			EntireTableFilterContext entireTableFilterContext = new EntireTableFilterContext(env, companyCode, null);
-			Map<String, String> tables = new TreeMap<>(entireTableFilterContext.get_tableDDLNames());
-			String key = null;
+			Map<String, String> tables = entireTableFilterContext.get_tableDDLNames();
 
-			List<CommonSelectItem> tableList = new ArrayList<>();
-			Set<Map.Entry<String, String>> entries = tables.entrySet();
-			for (Map.Entry<String, String> entry : entries) {
-				key = entry.getKey();
-				CommonSelectItem rule = new CommonSelectItem();
-				tableList.add(rule);
-				rule.setCoreValue(key);
-				rule.setDisplayValue(key + "-" + entry.getValue());
-			}
-
-			if (tableList.isEmpty()) {
+			if (tables.isEmpty()) {
 				HttpStatus status = NotFoundException.HTTP_STATUS;
 				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
 				throw new NotFoundException(model);
 			}
 
-			return tableList;
+			List<CommonSelectItem> allTables = new ArrayList<>();
+			String key = null;
+
+			Set<Map.Entry<String, String>> entries = tables.entrySet();
+			for (Map.Entry<String, String> entry : entries) {
+				key = entry.getKey();
+				CommonSelectItem rule = new CommonSelectItem();
+				allTables.add(rule);
+				rule.setCoreValue(key);
+				rule.setDisplayValue(key + "-" + entry.getValue());
+			}
+
+			String sessionToken = param.getSessionToken();
+			List<CommonSelectItem> response = securityService.filterAuthorizedTables(sessionToken, envId, companyCode, allTables);
+			if (response.isEmpty())
+				throw new ForbiddenException();
+
+			return response;
 		}
 		catch (RestServiceException e) {
 			throw e;
@@ -388,9 +381,11 @@ public class SearchServiceImpl
 				}
 			}
 
-			// No need to test for empty list of environments; if there were
-			// none, an exception would have been thrown in
-			// getCommonEnvironments().
+			if (envList.isEmpty()) {
+				HttpStatus status = NotFoundException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
+				throw new NotFoundException(model);
+			}
 
 			return envList;
 		}
@@ -404,14 +399,14 @@ public class SearchServiceImpl
 		}
 	}
 
-	public ChangesFilterData getChangesFilterValues(RestServiceParam param, String envId)
+	public ChangesFilterData getChangesFilterValues(RestServiceParam param)
 	{
 		try {
 			// For reference, see method fillLists(String) in class
 			// com.csc.fsg.life.pw.client.mdi.ChangesOnly in the old
 			// Product Wizard.
 
-			// TODO: +++ Security
+			String envId = param.getEnvId();
 
 			Environment env = EnvironmentManager.getInstance().getEnvironment(envId);
 			if (env == null) {
@@ -486,14 +481,14 @@ public class SearchServiceImpl
 		}
 	}
 
-	public ApplyFilterData getApplyFilterValues(RestServiceParam param, String envId)
+	public ApplyFilterData getApplyFilterValues(RestServiceParam param)
 	{
 		try {
 			// For reference, see method populateFilters() in class
 			// com.csc.fsg.life.pw.client.mdi.PackageFilter in the old
 			// Product Wizard.
 
-			// TODO: +++ Security
+			String envId = param.getEnvId();
 
 			Environment env = EnvironmentManager.getInstance().getEnvironment(envId);
 			if (env == null) {
@@ -559,14 +554,14 @@ public class SearchServiceImpl
 		}
 	}
 
-	public AuditFilterData getAuditFilterValues(RestServiceParam param, String filterAspect, String envId)
+	public AuditFilterData getAuditFilterValues(RestServiceParam param, String filterAspect)
 	{
 		try {
 			// For reference, see method populateFilters() in class
 			// com.csc.fsg.life.pw.client.mdi.AuditErrorFilter in the old
 			// Product Wizard.
 
-			// TODO: +++ Security
+			String envId = param.getEnvId();
 
 			if (!"A".equals(filterAspect) && !"E".equals(filterAspect)) {
 				HttpStatus status = BadRequestException.HTTP_STATUS;
@@ -667,14 +662,15 @@ public class SearchServiceImpl
 		}
 	}
 
-	public PromoteFilterData getPromoteFilterValues(RestServiceParam param, String sourceEnvId, String targetEnvId)
+	public PromoteFilterData getPromoteFilterValues(RestServiceParam param)
 	{
 		try {
 			// For reference, see method populateFilters() in class
 			// com.csc.fsg.life.pw.client.mdi.AuditErrorFilter in the old
 			// Product Wizard.
 
-			// TODO: +++ Security
+			String sourceEnvId = param.getSourceEnvId();
+			String targetEnvId = param.getTargetEnvId();
 
 			Environment sourceEnv = EnvironmentManager.getInstance().getEnvironment(sourceEnvId);
 			Environment targetEnv = EnvironmentManager.getInstance().getEnvironment(targetEnvId);
@@ -753,8 +749,6 @@ public class SearchServiceImpl
 			// com.csc.fsg.life.pw.client.mdi.SummaryFilter in the old
 			// Product Wizard.
 
-			// TODO: +++ Security
-
 			String filterAspect = searchInput.getFilterAspect();
 			if (!"C".equals(filterAspect) && !"S".equals(filterAspect)) {
 				HttpStatus status = BadRequestException.HTTP_STATUS;
@@ -762,12 +756,13 @@ public class SearchServiceImpl
 				throw new BadRequestException(model);
 			}
 
-			String env = searchInput.getEnvId();
-			boolean isGoodEnvironment = false;
+			String envId = param.getEnvId();
+			String companyCode = param.getCompanyCode();
 
-			if (StringUtils.hasText(env)) {
+			boolean isGoodEnvironment = false;
+			if (StringUtils.hasText(envId)) {
 				Map<String, Environment> environments = EnvironmentManager.getInstance().getEnvironments();
-				if (environments.get(env) != null)
+				if (environments.get(envId) != null)
 					isGoodEnvironment = true;
 			}
 			if (!isGoodEnvironment) {
@@ -776,13 +771,16 @@ public class SearchServiceImpl
 				throw new BadRequestException(model);
 			}
 
-			PlanCriteriaTO planCriteria = buildSummaryCriteria(searchInput);
+			PlanCriteriaTO planCriteria = buildSummaryCriteria(envId, companyCode, searchInput);
 			boolean isBrccFilter = "C".equals(searchInput.getFilterAspect());
 			SummaryFilterSpecContext context = new SummaryFilterSpecContext(isBrccFilter, planCriteria.getEnvironment());
 			Map<String, String> commonValuesMap = null;
 
-			if (!StringUtils.hasText(searchInput.getCompanyCode()))
+			boolean isCompanyCodesSearch = false;
+			if (!StringUtils.hasText(param.getCompanyCode())) {
+				isCompanyCodesSearch = true;
 				commonValuesMap = context.getCompanyCodes(planCriteria);
+			}
 			else if (!StringUtils.hasText(searchInput.getProductCode()))
 				commonValuesMap = context.getProductCodes(planCriteria);
 			else if (!StringUtils.hasText(searchInput.getPlanCode()))
@@ -797,6 +795,12 @@ public class SearchServiceImpl
 				throw new BadRequestException(model);
 			}
 
+			if (commonValuesMap.isEmpty()) {
+				HttpStatus status = NotFoundException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
+				throw new NotFoundException(model);
+			}
+
 			List<CommonSelectItem> commonValues = new ArrayList<>();
 			for (Map.Entry<String, String> entry : commonValuesMap.entrySet()) {
 				CommonSelectItem item = new CommonSelectItem();
@@ -805,14 +809,17 @@ public class SearchServiceImpl
 				item.setDisplayValue(entry.getValue());
 			}
 
-			// TODO: +++ Different from "User not Authorized to access a company"
-			if (commonValues.isEmpty()) {
-				HttpStatus status = NotFoundException.HTTP_STATUS;
-				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
-				throw new NotFoundException(model);
-			}
+			if (isCompanyCodesSearch) {
+				String sessionToken = param.getSessionToken();
+				List<CommonSelectItem> response = securityService.filterAuthorizedCompanies(sessionToken, envId, commonValues);
+				if (response.isEmpty())
+					throw new ForbiddenException();
 
-			return commonValues;
+				return response;
+			}
+			else {
+				return commonValues;
+			}
 		}
 		catch (RestServiceException e) {
 			throw e;
@@ -831,8 +838,6 @@ public class SearchServiceImpl
 			// com.csc.fsg.life.pw.client.mdi.SummaryFilter in the old
 			// Product Wizard.
 
-			// TODO: +++ Security
-
 			String filterAspect = searchInput.getFilterAspect();
 			if (!"C".equals(filterAspect) && !"S".equals(filterAspect)) {
 				HttpStatus status = BadRequestException.HTTP_STATUS;
@@ -840,12 +845,13 @@ public class SearchServiceImpl
 				throw new BadRequestException(model);
 			}
 
-			String env = searchInput.getEnvId();
-			boolean isGoodEnvironment = false;
+			String envId = param.getEnvId();
+			String companyCode = param.getCompanyCode();
 
-			if (StringUtils.hasText(env)) {
+			boolean isGoodEnvironment = false;
+			if (StringUtils.hasText(envId)) {
 				Map<String, Environment> environments = EnvironmentManager.getInstance().getEnvironments();
-				if (environments.get(env) != null)
+				if (environments.get(envId) != null)
 					isGoodEnvironment = true;
 			}
 			if (!isGoodEnvironment) {
@@ -854,12 +860,12 @@ public class SearchServiceImpl
 				throw new BadRequestException(model);
 			}
 
-			PlanCriteriaTO planCriteria = buildSummaryCriteria(searchInput);
+			PlanCriteriaTO planCriteria = buildSummaryCriteria(envId, companyCode, searchInput);
 			boolean isBrccFilter = "C".equals(searchInput.getFilterAspect());
 			SummaryFilterSpecContext context = new SummaryFilterSpecContext(isBrccFilter, planCriteria.getEnvironment());
 			Map<String, String> dateValuesMap = null;
 
-			if (!StringUtils.hasText(searchInput.getCompanyCode())) {
+			if (!StringUtils.hasText(param.getCompanyCode())) {
 				HttpStatus status = BadRequestException.HTTP_STATUS;
 				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_company"));
 				throw new BadRequestException(model);
@@ -899,7 +905,6 @@ public class SearchServiceImpl
 				item.setDisplayValue(entry.getValue());
 			}
 
-			// TODO: +++ Different from "User not Authorized to access a company"
 			if (dateValues.isEmpty()) {
 				HttpStatus status = NotFoundException.HTTP_STATUS;
 				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("no_matching_data"));
@@ -918,12 +923,40 @@ public class SearchServiceImpl
 		}
 	}
 
-	private PlanCriteriaTO buildSummaryCriteria(SummarySearchInput searchInput)
+	private PlanCriteriaTO buildPlanCriteria(String envId, String companyCode, PlanSearchInput searchInput)
+	{
+		HashMap<String, Object> planKeys = new HashMap<>();
+		if (searchInput.isViewChangesEffective() == null)
+			planKeys.put(PlanCriteriaTO.MERGED_VIEW_KEY, Boolean.FALSE.toString());
+		else
+			planKeys.put(PlanCriteriaTO.MERGED_VIEW_KEY, searchInput.isViewChangesEffective().toString());
+
+		planKeys.put(PlanTOBase.ENVIRONMENT_KEY, envId);
+		planKeys.put(PlanTOBase.COMPANY_CODE_KEY, companyCode);
+
+		String productCode = searchInput.getProductCode();
+		planKeys.put(PlanTOBase.PRODUCT_CODE_KEY, productCode);
+
+		if (StringUtils.hasText(productCode)) {
+			planKeys.put(PlanTOBase.PRODUCT_PREFIX_KEY, productCode.substring(0, 1));
+			if (productCode.length() > 1)
+				planKeys.put(PlanTOBase.PRODUCT_SUFFIX_KEY, productCode.substring(1, 2));
+		}
+
+		planKeys.put(PlanTOBase.PLAN_CODE_KEY, searchInput.getPlanCode());
+		planKeys.put(PlanTOBase.ISSUE_STATE_KEY, searchInput.getIssueState());
+		planKeys.put(PlanTOBase.LINE_OF_BUSINESS_KEY, searchInput.getLob());
+
+		PlanCriteriaTO planCriteria = new PlanCriteriaTO(planKeys);
+		return planCriteria;
+	}
+
+	private PlanCriteriaTO buildSummaryCriteria(String envId, String companyCode, SummarySearchInput searchInput)
 	{
 		HashMap<String, Object> planKeys = new HashMap<>();
 
-		planKeys.put(PlanTOBase.ENVIRONMENT_KEY, searchInput.getEnvId());
-		planKeys.put(PlanTOBase.COMPANY_CODE_KEY, searchInput.getCompanyCode());
+		planKeys.put(PlanTOBase.ENVIRONMENT_KEY, envId);
+		planKeys.put(PlanTOBase.COMPANY_CODE_KEY, companyCode);
 
 		String productCode = searchInput.getProductCode();
 		planKeys.put(PlanTOBase.PRODUCT_CODE_KEY, productCode);
