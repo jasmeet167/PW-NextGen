@@ -3,7 +3,7 @@
 	<name>ng-pw-ear</name>
 	<comment></comment>
 	<projects>
-		<project>pw-web</project>
+		<project>ng-pw-rest</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="pw-ear" default="build" basedir=".">
+<project name="ng-pw-ear" default="build" basedir=".">
 	<import file="build-path.xml" />
-	<import file="../pw-web/build-path.xml" />
+	<import file="../ng-pw-rest/build-path.xml" />
 
 	<target name="build" depends="ant.init">
-		<echo message="${pw-ear.indent}Building ${ant.project.name}..." />
-		<pw-ear.externalToolBuilder file="JDBC Config Builder.xml" />
+		<echo message="${ng-pw-ear.indent}Building ${ant.project.name}..." />
+		<ng-pw-ear.externalToolBuilder file="JDBC Config Builder.xml" />
 	</target>
 
 	<target name="clean" depends="ant.init">
-		<echo message="${pw-ear.indent}Cleaning ${ant.project.name}..." />
-		<pw-ear.externalToolBuilder file="JDBC Config Builder.xml" target="clean" />
-		<echo message="${pw-ear.indent}  Cleaning build output..." />
-		<delete dir="${pw-ear.root}/build" />
+		<echo message="${ng-pw-ear.indent}Cleaning ${ant.project.name}..." />
+		<ng-pw-ear.externalToolBuilder file="JDBC Config Builder.xml" target="clean" />
+		<echo message="${ng-pw-ear.indent}  Cleaning build output..." />
+		<delete dir="${ng-pw-ear.root}/build" />
         <antcall target="eclipse.refresh.build.dir"/>
 	</target>
 	
 	<target name="refresh" depends="ant.init">
-		<echo message="${pw-ear.indent}Refreshing ${ant.project.name}..." />
-		<pw-ear.externalToolBuilder file="JDBC Config Builder.xml" target="refresh" />
-		<echo message="${pw-ear.indent}  Refreshing build output..." />
+		<echo message="${ng-pw-ear.indent}Refreshing ${ant.project.name}..." />
+		<ng-pw-ear.externalToolBuilder file="JDBC Config Builder.xml" target="refresh" />
+		<echo message="${ng-pw-ear.indent}  Refreshing build output..." />
         <antcall target="eclipse.refresh.build.dir"/>
 	</target>
 	<target name="eclipse.refresh.build.dir" depends="ant.init" if="eclipse.running">
-		<eclipse.convertPath filesystempath="${pw-ear.root}/build" property="build.resource.path" />
+		<eclipse.convertPath filesystempath="${ng-pw-ear.root}/build" property="build.resource.path" />
 		<eclipse.refreshLocal resource="${build.resource.path}" depth="infinite" />
 	</target>
 
 	<target name="expapp" depends="ant.init">
-		<echo message="${pw-ear.indent}Exporting application ${ant.project.name}..." />
+		<echo message="${ng-pw-ear.indent}Exporting application ${ant.project.name}..." />
 		<property name="build.version.suffix" value=""/>    
-		<property name="export.dir" location="${pw-ear.root}/build"/>    
+		<property name="export.dir" location="${ng-pw-ear.root}/build"/>    
 		<mkdir dir="${export.dir}" />
-		<ear earfile="${export.dir}/pw${build.version.suffix}.ear" appxml="${pw-ear.ear.content}/META-INF/application.xml">
-			<fileset dir="${pw-ear.ear.content}" includes="**/deployment.xml" />
-			<fileset file="${pw-web.war}" />
+		<ear earfile="${export.dir}/pw${build.version.suffix}.ear" appxml="${ng-pw-ear.ear.content}/META-INF/application.xml">
+			<fileset dir="${ng-pw-ear.ear.content}" includes="**/deployment.xml" />
+			<fileset file="${ng-pw-rest.war}" />
 		</ear>
         <antcall target="eclipse.refresh.build.dir"/>
 	</target>
 
 	<target name="expproj" depends="ant.init">
-		<echo message="${pw-ear.indent}Exporting project ${ant.project.name}..." />
-		<property name="export.project.dir" location="${export.target.dir}/pw-ear" />
+		<echo message="${ng-pw-ear.indent}Exporting project ${ant.project.name}..." />
+		<property name="export.project.dir" location="${export.target.dir}/ng-pw-ear" />
 		<delete dir="${export.project.dir}" failonerror="false" />
 		<mkdir dir="${export.project.dir}" />
 		<defaultexcludes remove="**/.cvsignore" />
 		<copy todir="${export.project.dir}" preservelastmodified="true">
-			<fileset dir="${pw-ear.root}">
+			<fileset dir="${ng-pw-ear.root}">
 				<exclude name="build/" />
 			</fileset>
 		</copy>
@@ -55,13 +55,13 @@
 	
 	<target name="publish" />
 
-	<macrodef name="pw-ear.externalToolBuilder">
-		<attribute name="project.root" default="${pw-ear.root}" />
+	<macrodef name="ng-pw-ear.externalToolBuilder">
+		<attribute name="project.root" default="${ng-pw-ear.root}" />
 		<attribute name="file" />
 		<attribute name="target" default="build" />
 		<sequential>
 			<ant antfile="@{project.root}/.externalToolBuilders/@{file}" target="@{target}" inheritrefs="true">
-				<property name="parent.indent" value="${pw-ear.indent}" />
+				<property name="parent.indent" value="${ng-pw-ear.indent}" />
 			</ant>
 		</sequential>
 	</macrodef>
@@ -72,6 +72,6 @@
 				<isset property="parent.indent" />
 			</not>
 		</condition>
-		<property name="pw-ear.indent" value="${parent.indent}  " />
+		<property name="ng-pw-ear.indent" value="${parent.indent}  " />
 	</target>
 </project>
