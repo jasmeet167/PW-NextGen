@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<antlib>
+  <!-- Tasks -->
+  <taskdef name="sbejdbcconfig" classname="com.csc.fsg.life.sbe.taskdefs.JDBCConfigTask"/>
+</antlib>

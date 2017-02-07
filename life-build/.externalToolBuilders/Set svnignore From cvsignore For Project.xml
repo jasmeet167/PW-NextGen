@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<project name="svnignore.cvsignore.for.file" default="main" basedir="..">
+	<property name="project.root.dir" location="${project.loc}" />
+
+	<target name="main" >
+		<defaultexcludes remove="**/.cvsignore" />
+		<echo message="Processing ${project.name} .cvsignore files..."/>
+		<apply executable="cmd">
+			<arg line="/c" />
+			<arg line="call" />
+			<arg value="${basedir}\.externalToolBuilders\Process cvsignore File.bat" />
+			<srcfile />
+			<fileset dir="${project.root.dir}">
+				<patternset>
+					<include name="**/.cvsignore" />
+					<exclude name="target/"/>
+				</patternset>
+			</fileset>
+		</apply>
+		<defaultexcludes default="true" />
+		<eclipse.convertPath filesystempath="${project.root.dir}" property="resource.path" />
+		<eclipse.refreshLocal resource="${resource.path}" depth="infinite" />
+	</target>
+</project>

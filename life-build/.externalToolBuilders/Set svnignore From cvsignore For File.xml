@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<project name="svnignore.cvsignore.for.project" default="main" basedir="..">
+	<property name="cvsignore.file" location="${container.loc}/.cvsignore" />
+
+	<target name="main">
+		<echo message="Processing ${cvsignore.file}..." />
+		<exec executable="cmd">
+			<arg line="/c" />
+			<arg line="call" />
+			<arg value="${basedir}\.externalToolBuilders\Process cvsignore File.bat" />
+			<arg value="${cvsignore.file}" />
+		</exec>
+	</target>
+</project>

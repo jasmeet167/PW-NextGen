@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." name="life-build.path">
+	<dirname property="life-build.root" file="${ant.file.life-build.path}" />
+	<property name="workspace.root.dir" location="${life-build.root}/.." />
+</project>
