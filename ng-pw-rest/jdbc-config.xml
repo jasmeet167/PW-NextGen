@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<project name="ng-pw-rest.jdbc-config">
+	<sbejdbcconfig dir="${project.root}">
+		<datasource name="avmDataSource" jndiname="jdbc/avmDataSource" databasename="AVMPRDA" servername="cscehdbbnor005" portnumber="50001" userid="db2admin" password="DB2@min5"/>
+		<datasource name="pwApplDataSource" jndiname="jdbc/pwApplDataSource" databasename="PWPRDA" servername="cscehdbbnor005" portnumber="50002" userid="db2admin" password="DB2@min5"/>
+		<datasource name="pwBusinessRules" jndiname="jdbc/pwBusinessRules" databasename="DB2G" servername="20.17.189.71" portnumber="5000" userid="db2xusr" password="anchor" />
+	</sbejdbcconfig>
+</project>
