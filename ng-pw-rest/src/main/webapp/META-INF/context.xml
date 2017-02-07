@@ -1,5 +1,0 @@
-<Context>
-	<Resource validationQuery="SELECT * FROM SYSIBM.SYSDUMMY1" username="db2admin" url="jdbc:db2://cscehdbbnor005:50001/AVMPRDA" type="javax.sql.DataSource" password="DB2@min5" name="jdbc/avmDataSource" maxWaitMillis="10000" maxTotal="100" maxIdle="30" driverClassName="com.ibm.db2.jcc.DB2Driver" auth="Container"/>
-	<Resource validationQuery="SELECT * FROM SYSIBM.SYSDUMMY1" username="db2admin" url="jdbc:db2://cscehdbbnor005:50002/PWPRDA" type="javax.sql.DataSource" password="DB2@min5" name="jdbc/pwApplDataSource" maxWaitMillis="10000" maxTotal="100" maxIdle="30" driverClassName="com.ibm.db2.jcc.DB2Driver" auth="Container"/>
-	<Resource validationQuery="SELECT * FROM SYSIBM.SYSDUMMY1" username="db2xusr" url="jdbc:db2://20.17.189.71:5000/DB2G" type="javax.sql.DataSource" password="anchor" name="jdbc/pwBusinessRules" maxWaitMillis="10000" maxTotal="100" maxIdle="30" driverClassName="com.ibm.db2.jcc.DB2Driver" auth="Container"/>
-</Context>

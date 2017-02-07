@@ -25,6 +25,8 @@
 
 # /ng-pw-rest/
 /ng-pw-rest/.apt_generated
+/ng-pw-rest/src/main/webapp/META-INF/context.xml
+/ng-pw-rest/src/main/webapp/WEB-INF/sun-resources.xml
 /ng-pw-rest/target
 
 # /ng-pw-service/
@@ -32,5 +34,5 @@
 /ng-pw-service/target
 
 # /ng-pw-ui/
-/ng-pw-ui/target
 /ng-pw-ui/src/main/resources/static/bower_components
+/ng-pw-ui/target
