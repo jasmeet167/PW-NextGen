@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." name="ng-pw-rest.path">
+	<taskdef resource="net/sf/antcontrib/antlib.xml"/>
+	<dirname property="ng-pw-rest.root" file="${ant.file.ng-pw-rest.path}" />
+	<property name="workspace.root.dir" location="${ng-pw-rest.root}/.." />
+	<property name="ng-pw-rest.target.workspace" location="${ng-pw-rest.root}/target/workspace" />
+	<property name="ng-pw-rest.webapp" location="${ng-pw-rest.root}/src/main/webapp" />
+</project>
