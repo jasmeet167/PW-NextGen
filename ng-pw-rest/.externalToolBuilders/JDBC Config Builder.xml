@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+
+<project name="JDBC Config Builder" default="build" basedir=".." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+	<import file="${basedir}/build-path.xml" optional="true" />
+
+	<property name="maven.class.path.file" location="${basedir}/target/maven-class-path.txt" />
+
+	<target name="build" depends="get.maven.class.path">
+		<echo message="[ng-pw-rest] Building JDBC Configurations..." />
+		<taskdef name="sbejdbcconfig" classname="com.csc.fsg.life.sbe.taskdefs.JDBCConfigTask" classpath="${maven.class.path}" />
+		<ant antfile="${ng-pw-rest.root}/jdbc-config.xml">
+			<property name="project.root" location="${ng-pw-rest.root}" />
+		</ant>
+		<runtarget target="eclipse.refresh" />
+	</target>
+
+	<target name="clean">
+		<echo message="[ng-pw-rest] Cleaning JDBC Configurations..." />
+		<delete file="${maven.class.path.file}" failonerror="false" />
+		<delete file="${ng-pw-rest.webapp}/META-INF/context.xml" failonerror="false" />
+		<delete file="${ng-pw-rest.webapp}/WEB-INF/sun-resources.xml" failonerror="false" />
+		<runtarget target="eclipse.refresh" />
+	</target>
+
+	<target name="eclipse.refresh" if="eclipse.running">
+		<eclipse.refreshLocal resource="ng-pw-rest/target" depth="infinite" />
+		<eclipse.refreshLocal resource="ng-pw-rest/src/main/webapp" depth="infinite" />
+	</target>
+
+	<target name="get.maven.class.path" unless="maven.class.path">
+		<if>
+			<available file="${workspace.root.dir}/life-build" type="dir" />
+			<then>
+				<property name="maven.class.path" location="${workspace.root.dir}/life-build/target/classes" />
+				<delete file="${maven.class.path.file}" failonerror="false" />
+			</then>
+			<else>
+				<if>
+					<available file="${maven.class.path.file}" type="file" />
+					<then>
+						<loadfile srcfile="${maven.class.path.file}" property="maven.class.path" />
+					</then>
+					<else>
+						<echo message="[ng-pw-rest] Getting life-build dependency..." />
+						<artifact:dependencies pathid="maven.class.path.ref" settingsfile="${eclipse.m2.userSettingsFile}">
+							<pom file="pom.xml" settingsfile="${eclipse.m2.userSettingsFile}">
+								<profile id="eclipse" />
+							</pom>
+						</artifact:dependencies>
+						<property name="maven.class.path" refid="maven.class.path.ref" />
+						<mkdir dir="${basedir}/target" />
+						<echo message="${maven.class.path}" file="${maven.class.path.file}" />
+					</else>
+				</if>
+			</else>
+		</if>
+	</target>
+</project>
