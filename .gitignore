@@ -4,6 +4,9 @@
 # /life/
 /life/target
 
+# /life-build/
+/life-build/target
+
 # /life-common/
 /life-common/target
 
