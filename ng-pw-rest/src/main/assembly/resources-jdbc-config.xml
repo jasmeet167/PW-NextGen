@@ -1,0 +1,15 @@
+<assembly>
+	<id>jdbc-config</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<fileSets>
+		<fileSet>
+			<directory></directory>
+			<includes>
+				<include>jdbc-config.xml</include>
+			</includes>
+		</fileSet>
+	</fileSets>
+</assembly>
