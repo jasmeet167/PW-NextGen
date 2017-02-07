@@ -17,6 +17,13 @@
 					<followSymLinks>false</followSymLinks>
 					<filesets>
 						<fileset>
+							<directory>.</directory>
+								<followSymlinks>false</followSymlinks>
+								<includes>
+									<include>LICENSE</include>
+								</includes>
+						</fileset>
+						<fileset>
 							<directory>${basedir}/src/main/java</directory>
 						</fileset>
 					</filesets>
