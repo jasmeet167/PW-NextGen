@@ -37,5 +37,8 @@
 /ng-pw-service/target
 
 # /ng-pw-ui/
-/ng-pw-ui/src/main/resources/static/bower_components
+/ng-pw-ui/.apt_generated
+/ng-pw-ui/node
+/ng-pw-ui/node_modules
+/ng-pw-ui/src/main/webapp/static/bower_components
 /ng-pw-ui/target

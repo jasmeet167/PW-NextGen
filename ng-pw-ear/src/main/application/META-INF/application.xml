@@ -10,4 +10,10 @@
       <context-root>ng-pw-rest</context-root>
     </web>
   </module>
+  <module id="Module_1486561052459">
+  	<web>
+  		<web-uri>ng-pw-ui.war</web-uri>
+  		<context-root>ng-pw-ui</context-root>
+  	</web>
+  </module>
 </application>
