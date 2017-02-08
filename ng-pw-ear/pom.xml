@@ -33,6 +33,11 @@
 									<artifactId>ng-pw-rest</artifactId>
 									<bundleFileName>ng-pw-rest.war</bundleFileName>
 								</webModule>
+								<webModule>
+									<groupId>${csc.groupId}</groupId>
+									<artifactId>ng-pw-ui</artifactId>
+									<bundleFileName>ng-pw-ui.war</bundleFileName>
+								</webModule>
 							</modules>
 							<archive>
 								<manifestEntries>
@@ -59,6 +64,11 @@
 		<dependency>
 			<groupId>${csc.groupId}</groupId>
 			<artifactId>ng-pw-rest</artifactId>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>${csc.groupId}</groupId>
+			<artifactId>ng-pw-ui</artifactId>
 			<type>war</type>
 		</dependency>
 	</dependencies>

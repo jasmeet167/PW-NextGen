@@ -56,6 +56,17 @@
 			</modules>
 		</profile>
 		<profile>
+			<id>ng-pw-ui</id>
+			<activation>
+				<file>
+					<exists>../ng-pw-ui/pom.xml</exists>
+				</file>
+			</activation>
+			<modules>
+				<module>../ng-pw-ui</module>
+			</modules>
+		</profile>
+		<profile>
 			<id>ng-pw-ear</id>
 			<activation>
 				<file>
@@ -97,6 +108,12 @@
 			<dependency>
 				<groupId>${csc.groupId}</groupId>
 				<artifactId>ng-pw-rest</artifactId>
+				<type>war</type>
+				<version>${ng-pw-development.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${csc.groupId}</groupId>
+				<artifactId>ng-pw-ui</artifactId>
 				<type>war</type>
 				<version>${ng-pw-development.version}</version>
 			</dependency>
