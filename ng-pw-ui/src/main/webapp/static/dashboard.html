@@ -1,0 +1,515 @@
+<html>
+<head>
+<!-- commented for time being nikhil-->
+
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script> 
+<!--	<script src="bower_components/angular-translate/angular-translate.js"></script>  -->
+	 <script src="bower_components/angular-translate/angular-translate.min.js"></script>
+	 <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
+	
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="css/optionA_theme/bootstrap-optionA.css">
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/custom/ux-jquery-ui-theme.css">
+    <link rel="stylesheet" href="css/custom/jquery-ui-component-theme.css">
+    <link rel="stylesheet" href="css/custom/billing.css">
+    <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.css">
+    <link rel="stylesheet" href="css/dashboard_new.css">
+    <!-- nikhil comments ends -->
+    
+
+ <!--    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
+    <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"> -->
+  
+   <!--  <link rel="stylesheet" href="css/multiLevelDropdown.css"> -->
+   <!--  <link rel="stylesheet" href="css/jquery.loadmask.css"> -->
+   <!--  <link rel="stylesheet" href="css/treeView.css">
+    <link rel="stylesheet" href="css/tree-control.css">
+    <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.css"> -->
+<!--     <link rel="stylesheet" href="swt_tree_directive/dist/swt_tree.css">
+    <link rel="stylesheet" href="tree_mover_directive/dist/tree_mover_directive.css"> -->
+    <!--  <link href="http://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">-->
+    <!--  <link href="http://netdna.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet"> -->
+    <!-- <link rel="stylesheet" href="plan\css\plan.css">
+    <link rel="stylesheet" href="allowedValue\css\allowedValue.css">
+    <link href="bower_components/angular-resizable/angular-resizable.min.css" rel="stylesheet"> -->
+    
+    
+	  <link href="bower_components/font-awesome/css/font-awesome.css" rel="stylesheet"> 
+       <link rel="stylesheet" href="bower_components/angular-ui-layout/src/ui-layout.css">
+ <!-- Tree Control Start -->
+ <link rel="stylesheet" href="bower_components/angular-tree-control/css/tree-control-attribute.css"> 
+  <link rel="stylesheet" href="bower_components/angular-tree-control/css/tree-control.css"> 
+  <script src="bower_components/angular-tree-control/angular-tree-control.js"></script>
+ <!-- Tree Control End -->
+   
+   <!-- <link rel="stylesheet" href="bower_components/angular-tree-control/css/tree-control-attribute.css"> -->
+    <link rel="stylesheet" href="css/custom/common.css">
+   
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <!--<script src="bower_components/angular/angular.min.js"></script> -->
+    <!-- CCGBASE-1824 -->
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-ui-layout/src/ui-layout.js"></script>
+ 
+    
+<!--     <script src="bower_components/angular-file-upload/dist/angular-file-upload.js"></script>  -->
+
+   <!-- CCGBASE-1824 -->
+    <script src="bower_components/angular-tree-control/angular-tree-control.js"></script>
+    <script src="bower_components/angular-localize/angular-localize.js"></script>
+    <script src="bower_components/localize/lib/localize.js"></script>
+    <script src="js/localize/localize.js"></script>
+    <script src="bower_components/angular-cache/dist/angular-cache.min.js"></script>
+    <script src="bower_components/angular-resizable/angular-resizable.min.js"></script>
+    <script src="jquery.layout/dist/jquery.layout-latest.js"></script>
+    <script src="bower_components/angular.treeview/angular.treeview.js"></script>
+    <script src="swt_tree_directive/dist/swt_tree_directive.js"></script>
+    <script src="tree_mover_directive/dist/tree_mover_directive.js"></script>
+    <script src="tree_mover_directive/dist/tree_mover_template_directive.js"></script>
+    <script src="required_directive/dist/required_directive.js"></script>
+    <script src="bower_components/spin.js/spin.js"></script>
+    <script src="bower_components/angular-spinner/angular-spinner.js"></script>
+    <script src="js/jquery.loadmask.js"></script>
+    <script src="bower_components/lodash/dist/lodash.js"></script>
+    <script src="bower_components/angularjs-dropdown-multiselect/src/angularjs-dropdown-multiselect.js"></script>
+    <script src="bower_components/angular-ui-grid/ui-grid.js"></script>
+    <script src="bower_components/angular-modal-service/dst/angular-modal-service.min.js"></script>
+    <script src="bower_components/ng-idle/angular-idle.min.js"></script>
+     <!-- ccgbase 2251 for context menu -->
+   <!-- <script src="bower_components/angular-bootstrap-contextmenu/contextMenu.js"></script> --> 
+   <!--  <script src="angular-ui-sortable/sortable.js"></script> -->
+    <!-- <script src="bower_components/jquery-ui/jquery-ui.js"></script>  -->
+    <!-- <script src="bower_components/angular-animate/angular-animate.js"></script>-->
+<!-- <script src="bower_components/angular-sanitize/angular-sanitize.js"></script> 
+<link rel='stylesheet' href='css/ngPopup.css'>
+<script type='text/javascript' src='css/ngPopup.js'></script>
+ 
+    <script src="js/configuratorApp.js"></script> -->
+ 
+ 
+ 
+
+
+<script src="js/require.js"></script>
+<script src="js/lazyload.js"></script>
+
+<!-- <script src="bower_components/jquery/dist/jquery.js"></script> -->
+<!-- <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script> -->
+	
+	
+<!-- 	<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+	<script src="bower_components/angular-bootstrap/ui-bootstrap.js"></script> -->
+	
+	<script src="bower_components/ocLazyLoad/dist/ocLazyLoad.js"></script>
+	<script src="bower_components/angular-ui-grid/ui-grid.js"></script>
+	<script src="bower_components/angular-spinner/angular-spinner.js"></script>
+	<script src="bower_components/spin.js/spin.js"></script>
+	
+	
+	<script src="js/config.js"></script>
+	<script src="js/controller.js"></script>
+	<script src="js/service.js"></script>
+	<script src="js/require.js"></script>
+	<script src="js/lazyload.js"></script>
+	<link rel="stylesheet" href="css/custom/ux-theme.css">
+    <!-- <script src="js\loginController.js"></script> -->
+   <!--  <script src="bower_components\angular-route\angular-route.js"></script> -->
+   <!--  <script src="bower_components\angular-ui-router\release\angular-ui-router.js"></script>
+    <script src="js\colResizable-1.5.source.js"></script> -->
+    <script>
+  
+ 
+    </script>
+    <title>Product Wizard</title>
+</head>
+<!-- class="ui-layout ui-layout-container" -->
+<body id="progressdiv1" ng-app="mainuxApp" ng-controller="mainUXController" class="ui-layout ui-layout-container">
+<script type="text/ng-template" id="warning-dialog.html">
+  <div class="modal-header">
+   <h3>Your session is about to expire.</h3>
+  </div>
+  <div idle-countdown="countdown" ng-init="countdown=5" class="modal-body">
+   <progressbar max="5" value="5" animate="false" class="progress-striped active">You'll be logged out in {{countdown}} second(s).</progressbar>
+  </div>
+</script>
+<script type="text/ng-template" id="timedout-dialog.html">
+  <div class="modal-header">
+   <h3>You've Timed Out!</h3>
+  </div>
+  <div class="modal-body">
+   <p>
+      You were idle too long. Normally you'd be logged out, but in this demo just do anything and you'll be reset.
+   </p>
+ </div>
+</script>
+
+
+
+ <!-- Layout starts-->
+<div class="container-fluid appContainer" >
+
+<!-- <div ng-include src="'partials/viewVersionsModal.html'"></div> -->
+
+<div class="ux_relative-header" style=" height: 9%;">
+        <div>
+			<img id="syslogo1" class="ux_systemlogo cscLogo" src="img/CSCLogo_125X82.png">
+			<div class="ux_relative-banner-title-menu pa-title">
+				<label class="ux_relative-banner-title-menu-normal" style="font-weight: bold; margin-top: 10%;
+font-size: smaller !important;">Product Wizard</label></div>
+
+
+ <ul class="nav navbar-nav navbar-right">
+            <li class="language hidden-xs">
+             <!--  <span><a placement="bottom" content="Click here to change the language and view all the pages in the selected language." backdrop="true" title="Language" order="0" tour-step="" href="" class="ng-scope">SP</a></span> -->
+<!--               <span><a class="active" href=""  ng-click="changeLanguage('en');" class="active">&nbsp;EN</a></span>
+              <span><a class="active" href=""  ng-click="changeLanguage('fr');" class="active">&nbsp;FR</a></span></li> -->
+            </ul>
+
+
+				<span class="floatRight">
+					<span class="ux_banner_link_row_text_color">Welcome&nbsp;{{getUserID()}}</span>
+					<span ng-show="hasProject" >
+					<span  class="ux_banner_link_row_text"> | </span>
+					<span  class="ux_banner_link_row_text_color">Project:</span>
+					<span><a ui-sref="project" ng-click="selectProject()" title="PROJECT"  href="/project">{{currentProject.projectId}}</a></span>
+					</span>
+					<span  class="ux_banner_link_row_text"> | </span>
+					<!-- <span ng-controller="aboutController"><a ng-click="showAbout()" class="ux_banner_link_row_text">About</a></span> -->
+					<span  class="ux_banner_link_row_text"> | </span>
+					<a onclick="checkLogOut()"  class="ux_banner_link_row_text">Logout</a>
+				</span>
+			</div>  
+		</div>
+	<!-- <div class="container-fluid mainContainer">
+		Side bar starts
+      ===================================
+		<div class="sidebar pa-sidebar" id="sidebar"  >
+			<ul class="nav menuLabelr navColor" >
+				<li class="leftMenuItem" ng-repeat="item in menus" > 
+					<a id="{{item.heading +'_menu'}}" ui-sref="{{item.heading}}" ng-click="selectMenu(item)" title="{{item.heading}}" ng-if="item.menus === undefined" class="textColor menuLabelLeft"> 
+					<span class="{{item.icon}}"></span> 
+					<span class="fa fa-cubes fa-lg menuIconLabelLeft" ng-class="getClassFor('allowedValues')" ></span>
+					<span class="menuLabelLeft2" ng-cloak>{{item.heading}}</span></a>
+							
+					<a id="{{item.heading +'_menu'}}" ui-sref="{{item.heading}}" ng-click="selectMenu(item);toggleChildMenu(item.heading.split(' ').join('')+'_child', item.heading.split(' ').join('')+'_anchor')" title="{{item.heading}}"  ng-if="item.menus !== undefined" class="textColor menuLabelLeft"> 
+					<span class="{{item.icon}}" ></span>
+					<span class="fa fa-cubes fa-lg menuIconLabelLeft" ng-class="getClassFor('allowedValues')" ></span>
+					<span class="menuLabelLeft2" ng-cloak>{{item.heading}}</span>
+					<span  id="{{item.heading.split(' ').join('')+'_anchor'}}" class="fa fa-caret-left submenuAnchor pa-submenu"></span>
+					</a>
+					
+					<ul id="{{item.heading.split(' ').join('')+'_child'}}" class="nav" style="display: none" ng-if="item.menus !== undefined">
+						<li ng-repeat="submenu in item.menus">
+							<a id = "{{submenu+'_menu'}}" ui-sref="{{submenu.sref}}" ng-class="getClassForSubMenu(submenu)" title="{{submenu}}" ng-click="selectSubMenu(item,submenu)">
+							<span class="{{submenu.icon}}"></span>
+							<span class="menuLabelLeft2">{{submenu}}</span></a>
+						</li>
+						
+					</ul>
+				</li>				
+			</ul>
+		</div>Side bar Ends      ===================================
+		<div class="container-fluid" ><div class="text-left container-fluid container-2"  id="contentDiv">	      		
+				<div  ui-view style="margin-left: .5%;"/></div>
+				 <ng-view></ng-view> 
+		</div>
+		</div>
+		</div>
+		 -->
+	<!-- Here UI Begins for product wizard -->	 
+		    <div class="btn-group" uib-dropdown>
+                <button type="button" class="btn btn-primary   dropdown-toggle" data-toggle="dropdown"
+                uib-dropdown-toggle>
+                    File
+                    <span class="caret">
+                    </span>
+                </button>
+                <ul class="dropdown-menu" role="menu" uib-dropdown-menu>
+                   <li role="menuitem"><a href="#">Import</a></li>
+        <li role="menuitem"><a href="#">Export Rule</a></li>
+        <li role="menuitem"><a href="#">Save</a></li>
+        <li class="divider"></li>
+                </ul>
+                
+            </div>
+           <div class="btn-group" uib-dropdown>
+                <button type="button" class="btn btn-primary   dropdown-toggle" data-toggle="dropdown"
+                uib-dropdown-toggle>
+                    Edit
+                    <span class="caret">
+                    </span>
+                </button>
+                 <ul class="dropdown-menu" role="menu" uib-dropdown-menu>
+                   <li role="menuitem"><a href="#">Tree</a></li>
+                <li class="divider"></li>
+                  <li role="menuitem"><a href="#">Table</a></li>
+                </ul>
+            </div>  
+      
+       <div class="btn-group" uib-dropdown>
+                <button type="button" class="btn btn-primary   dropdown-toggle" data-toggle="dropdown"
+                uib-dropdown-toggle>
+                    Wizard
+                    <span class="caret">
+                    </span>
+                </button>
+                 <ul class="dropdown-menu" role="menu" uib-dropdown-menu>
+                   <li role="menuitem"><a href="#" data-toggle="dropdown">Company Rules
+                   <b class="caret caret-right"></b>
+                   </a>
+					<ul class="dropdown-menu">
+
+						<li><a href="#">Add new lines of business...</a></li>
+						<li><a href="#">Add new fund...</a></li>
+						<li><a href="#">Manage unregistered orphan subsets..</a></li>
+						
+					</ul>
+					
+					</li>
+                  <li role="menuitem"><a href="#" data-toggle="dropdown">Plan Rules
+                  <b class="caret caret-right"></b>
+                  </a>
+                  				<ul class="dropdown-menu">
+
+						<li><a href="#">Accumulation Plans</a></li>
+						<li><a href="#">Payout Plans</a></li>
+						
+					</ul>
+                  </li>
+                  
+                  
+                       <li role="menuitem"><a href="#">Rider/Benefit Rules
+                       <b class="caret caret-right"></b>
+                       </a>
+                       <ul class="dropdown-menu">
+                       <li><a href="#">Book Rider</a></li>
+                       </ul>
+                       </li>
+                </ul>
+            </div>  
+            
+                 <div class="btn-group" uib-dropdown>
+                <button type="button" class="btn btn-primary   dropdown-toggle" data-toggle="dropdown"
+                uib-dropdown-toggle>
+                    Administration
+                    <span class="caret">
+                    </span>
+                </button>
+                 <ul class="dropdown-menu" role="menu" uib-dropdown-menu>
+                   <li role="menuitem"><a href="#">Create Company</a></li>
+                  <li role="menuitem"><a href="#">Allowable values</a></li>
+                       <li role="menuitem"><a href="#">Client Logging</a></li>
+                </ul>
+            </div>
+            
+ 
+            
+              <div class="btn-group" uib-dropdown>
+                <button type="button" class="btn btn-primary   dropdown-toggle" data-toggle="dropdown"
+                uib-dropdown-toggle>
+                    Help
+                    <span class="caret">
+                    </span>
+                </button>
+                 <ul class="dropdown-menu" role="menu" uib-dropdown-menu>
+                   <li role="menuitem"><a href="#">Index</a></li>
+                  <li role="menuitem"><a href="#">About</a></li>
+                </ul>
+            </div>
+       
+       
+ 
+ 
+ <ul class="tab">
+  <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Business Rules Search')" id="defaultOpen">Business Rules Search</a></li>
+  <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Entire Table')">Entire Table</a></li>
+  <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Changes only')">Changes only</a></li>
+   <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Apply Changes')">Apply Changes</a></li>
+    <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Audit\Error')">Audit\Error</a></li>
+     <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Promote')">Promote</a></li>
+      <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Summary')">Summary</a></li>
+       <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Continuity check')">Continuity check</a></li>
+</ul>
+ 
+         <div id="Business Rules Search" class="tabcontent" >
+           <table>
+           <tr> <td>
+            <select id="rulesSelector" ng-model="rulesSelector" style="width: 120px;margin: 10px;">
+      <option value="rules with changes" >Rules with changes</option>
+     <option value="rules" selected="selected">Rules</option>
+      </select>
+      </td></tr>
+           </table>
+           
+           
+             <table>
+           <tr> <td>
+            <select id="environmentSelector" ng-model="environmentSelector" style="width: 120px;margin: 10px;">
+       <!-- option  value="Environment" selected="selected">Environment</option>  -->
+     <option ng-repeat="environment in environments" value="{{environment.coreValue}}" >{{environment.displayValue }}</option>
+      </select>
+        </td></tr>
+           </table>
+      
+          <table>
+           <tr> <td>
+          <select id="companySelector" ng-model="companySelector" style="width: 120px;margin: 10px;">
+      <option name="Company" value="Company" selected="selected">Company</option>
+     <option ng-repeat="company in companys" ng-value="{{company.coreValue}}" >{{company.displayValue }}</option>
+      </select>
+       </td></tr>
+           </table>
+           
+             <table>
+           <tr> <td>
+          <select id="productSelector" ng-model="productSelector" style="width: 120px;margin: 10px;">
+      <option name="Product" value="Product" selected="selected">Product</option>
+     <option ng-repeat="product in products" ng-value="{{product.coreValue}}" >{{product.displayValue }}</option>
+      </select>
+       </td></tr>
+           </table>
+           
+             <table>
+           <tr> <td>
+          <select id="issueCodeSelector" ng-model="issueCodeSelector" style="width: 120px;margin: 10px;">
+      <option name="IssueCode" value="IssueCode" selected="selected">IssueCode</option>
+     <option ng-repeat="issueCode in issueCodes" ng-value="{{issueCode.coreValue}}" >{{issueCode.displayValue }}</option>
+      </select>
+      </td></tr>
+           </table>
+      
+             <table>
+           <tr> <td>
+             <select id="lineOfBusinessSelector" ng-model="lineOfBusinessSelector" style="width: 120px;margin: 10px;">
+      <option name="LineOfBusiness" value="LineOfBusiness" selected="selected">LineOfBusiness</option>
+     <option ng-repeat="lob in lobs" value="{{lob.coreValue}}" >{{lob.displayValue }}</option>
+      </select>
+         </td></tr>
+           </table>
+           
+                 <table>
+           <tr> <td>
+         <select id="planeffectivedateSelector" ng-model="planeffectivedateSelector" style="width: 120px;margin: 10px;">
+      <option name="PlanEffectiveDate" value="PlanEffectiveDate" selected="selected">PlanEffectiveDate</option>
+     <option ng-repeat="ped in peds" value="{{ped.coreValue}}" >{{ped.displayValue }}</option>
+      </select>
+       </td></tr>
+           </table>
+           
+                       <table>
+           <tr> <td>
+         <select id="projectSelector" ng-model="projectSelector" style="width: 120px;margin: 10px;">
+      <option name="project" value="project" selected="selected">Project(s)</option>
+     <option ng-repeat="Project in Projects" value="{{Project}}" >{{Project }}</option>
+      </select>
+       </td></tr>
+           </table>
+           
+                        <table>
+           <tr> <td>
+            <div class="col-sm-10">
+            <table>
+                            <tr > <td>    <input ng-model="rememberMe" type="checkbox" id="rememberMe" name="rememberMe" /> </td>
+                               <td style="display: inline;"> <label class="pStyle" style="margin-left: 5px" for="remember_me">Remember my selection</label> </td> </tr>
+                               <tr >  <td></td> <td> <button type="submit" class="btn btn-primary" style="margin-left: 50px;padding: 2px;" > Go </button> </td></tr>
+                           </table>
+                            </div>
+            </td></tr>
+           </table>
+           
+        </div>
+          
+  
+      
+   <div id="Entire Table" class="tabcontent" >
+       <h1>"Entire Table" content not available !! </h1>
+    </div>
+      <div id="Changes only" class="tabcontent" >
+      <h1> "Changes only" content not available !!</h1>
+      </div>
+         <div id="Apply Changes" class="tabcontent" >
+       <h1> "Apply Changes" content not available !!</h1>
+      </div>
+         <div id="Audit\Error" class="tabcontent" >
+       <h1> "Audit\Error" content not available !! </h1>
+      </div>
+        <div id="Promote" class="tabcontent" >
+       <h1> "Promote" content not available !! </h1>
+      </div>
+         <div id="Summary" class="tabcontent" >
+       <h1>"Summary" content not available !! </h1>
+        </div>
+        <div id="Continuity check" class="tabcontent" >
+      <h1>  "Continuity Check" content not available !! </h1>
+      </div>
+      
+      
+    
+</div>           
+           
+      
+            
+<span class="ux_copyright"><i class="fa fa-copyright"></i>2017 Computer Sciences Corporation. All rights reserved.</span>
+
+
+
+<script>
+
+
+  $(document).ready(function() {
+        $('.navbar-nav li').click(function() {
+            $(this).parent().find('.active').removeClass('active');
+            $(this).addClass('active');
+        })
+    })
+    // added for tabs nikhil
+    function openCity(evt, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+function checkLogOut()
+{
+var url = "http://localhost:8080/login.html";
+window.location.replace(url);
+}
+
+
+window.onbeforeunload = check;
+	function check()
+	{
+		if(window.sessionStorage['rememberMe']=="false"){
+			 $.get('/cxf/authenticate/logout', function( data ) {	
+				});		
+		}
+		 
+	}	
+</script>
+<script src="js/require.js"></script>
+<script src="js/lazyload.js"></script>
+<script>
+  $(document).ready(function(){
+      $('.navbar-nav li').click(function(){
+    	  $(this).parent().find('.active').removeClass('active');
+    	  $(this).addClass('active');
+      })
+  })
+   // Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
+</script>
+</body>
+</html>
