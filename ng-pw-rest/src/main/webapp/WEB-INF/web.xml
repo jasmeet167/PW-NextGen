@@ -6,7 +6,7 @@
          id="WebApp_ID"
          metadata-complete="true">
 
-	<display-name>Product Wizard REST Services</display-name>
+	<display-name>NG Product Wizard REST Services</display-name>
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
@@ -20,7 +20,7 @@
 	</listener>
 
 	<servlet>
-		<servlet-name>ng-pw</servlet-name>
+		<servlet-name>ng-pw-rest</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
@@ -30,7 +30,7 @@
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>ng-pw</servlet-name>
+		<servlet-name>ng-pw-rest</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 

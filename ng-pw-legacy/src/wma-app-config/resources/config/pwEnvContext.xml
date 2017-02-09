@@ -13,18 +13,18 @@
 			<map>
 				<entry key="MFE_DEV1_93" value-ref="MFE_DEV1_93" />
 				<entry key="MFE_DEV2_94" value-ref="MFE_DEV2_94" />
-				<entry key="MF_DEV1_94" value-ref="MF_DEV1_94" />
-				<entry key="WEBSERVICES" value-ref="WEBSERVICES" />
-				<entry key="VCSQ" value-ref="VCSQ" />
-				<entry key="NETEXPRESS_A" value-ref="NETEXPRESS_A" />
-				<entry key="PA_Integration" value-ref="PA_Integration" />
+<!-- 				<entry key="MF_DEV1_94" value-ref="MF_DEV1_94" /> -->
+<!-- 				<entry key="WEBSERVICES" value-ref="WEBSERVICES" /> -->
+<!-- 				<entry key="VCSQ" value-ref="VCSQ" /> -->
+<!-- 				<entry key="NETEXPRESS_A" value-ref="NETEXPRESS_A" /> -->
+<!-- 				<entry key="PA_Integration" value-ref="PA_Integration" /> -->
 <!-- 			<entry key="VCS7" value-ref="VCS7" /> -->
 				<entry key="MFEDEV_93" value-ref="MFEDEV_93" />
 				<entry key="MFEDEV_94" value-ref="MFEDEV_94" />
- 				<entry key="REGRESSION" value-ref="REGRESSION" />
-				<entry key="TRADIMPROV" value-ref="TRADIMPROV" />
-				<entry key="TMURRAY2" value-ref="TMURRAY2" />
-				<entry key="MFEVPMS" value-ref="MFEVPMS" />
+<!--  				<entry key="REGRESSION" value-ref="REGRESSION" /> -->
+<!-- 				<entry key="TRADIMPROV" value-ref="TRADIMPROV" /> -->
+<!-- 				<entry key="TMURRAY2" value-ref="TMURRAY2" /> -->
+<!-- 				<entry key="MFEVPMS" value-ref="MFEVPMS" /> -->
 			</map>
 		</property>
 	</bean>
