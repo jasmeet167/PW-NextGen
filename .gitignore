@@ -28,7 +28,7 @@
 
 # /ng-pw-rest/
 /ng-pw-rest/.apt_generated
-/ng-pw-rest/src/main/resources-generated
+/ng-pw-rest/src/main/resources-generated/com
 /ng-pw-rest/src/main/webapp/META-INF/context.xml
 /ng-pw-rest/src/main/webapp/WEB-INF/sun-resources.xml
 /ng-pw-rest/target
