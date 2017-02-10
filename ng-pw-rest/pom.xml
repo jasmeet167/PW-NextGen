@@ -15,6 +15,9 @@
 				<directory>src/main/resources</directory>
 			</resource>
 			<resource>
+				<directory>src/main/resources-generated</directory>
+			</resource>
+			<resource>
 				<directory>src/main/webapp</directory>
 			</resource>
 		</resources>
@@ -48,10 +51,10 @@
 									<goal>run</goal>
 								</goals>
 								<configuration>
-									<tasks>
+									<target>
 										<property name="maven.class.path" refid="maven.compile.classpath"/>
 										<ant antfile="${basedir}/.externalToolBuilders/JDBC Config Builder.xml" target="build"/>
-									</tasks>
+									</target>
 								</configuration>
 							</execution>
 							<execution>
@@ -61,10 +64,38 @@
 									<goal>run</goal>
 								</goals>
 								<configuration>
-									<tasks>
+									<target>
 										<property name="maven.class.path" refid="maven.compile.classpath"/>
 										<ant antfile="${basedir}/.externalToolBuilders/JDBC Config Builder.xml" target="clean"/>
-									</tasks>
+									</target>
+								</configuration>
+							</execution>
+							<execution>
+								<id>build-properties-build</id>
+								<phase>initialize</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target>
+										<property name="project.properties.maven.build.timestamp.format" value="${maven.build.timestamp.format}"/>
+										<property name="project.properties.build.timestamp" value="${build.timestamp}"/>
+										<property name="project.properties.ng-pw.designator" value="${ng-pw.designator}"/>
+										<property name="project.properties.ng-pw.version" value="${ng-pw.version}"/>
+										<ant antfile="${basedir}/.externalToolBuilders/Build Properties Builder.xml" target="build"/>
+									</target>
+								</configuration>
+							</execution>
+							<execution>
+								<id>build-properties-clean</id>
+								<phase>pre-clean</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target>
+										<ant antfile="${basedir}/.externalToolBuilders/Build Properties Builder.xml" target="clean"/>
+									</target>
 								</configuration>
 							</execution>
 						</executions>

@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<project name="Build Properties Builder" default="build" basedir=".." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+	<import file="${basedir}/build-path.xml" optional="true" />
+
+	<target name="build" depends="get.pom">
+		<echo message="[ng-pw-rest] Building build-properties..." />
+		<if>
+			<equals arg1="${project.properties.build.timestamp}" arg2="${maven.build.timestamp}" />
+			<then>
+				<tstamp>
+					<format property="build.timestamp" pattern="${project.properties.maven.build.timestamp.format}" />
+				</tstamp>
+			</then>
+			<else>
+				<property name="build.timestamp" value="${project.properties.build.timestamp}" />
+			</else>
+		</if>
+		<mkdir dir="${ng-pw-rest.root}/src/main/resources-generated/com/csc/fsg/life/build" />
+		<propertyfile file="${ng-pw-rest.root}/src/main/resources-generated/com/csc/fsg/life/build/build.properties">
+			<entry key="app.designator" value="${project.properties.ng-pw.designator}" />
+			<entry key="app.version" value="${project.properties.ng-pw.version}" />
+			<entry key="build.timestamp" value="${build.timestamp}" />
+		</propertyfile>
+		<runtarget target="eclipse.refresh" />
+	</target>
+
+	<target name="clean">
+		<echo message="[ng-pw-rest] Cleaning build-properties..." />
+		<delete dir="${ng-pw-rest.root}/src/main/resources-generated/com/csc/fsg/life/build" failonerror="false" />
+		<runtarget target="eclipse.refresh" />
+	</target>
+
+	<target name="autobuild.stub">
+		<!-- Must run "Auto Build" target for "After a Clean" target to run -->
+		<echo message="" />
+	</target>
+
+	<target name="get.pom" unless="project.properties.ng-pw.version">
+		<artifact:pom id="project" file="pom.xml" settingsfile="${eclipse.m2.userSettingsFile}">
+			<profile id="eclipse" />
+		</artifact:pom>
+	</target>
+
+	<target name="eclipse.refresh" if="eclipse.running">
+		<eclipse.refreshLocal resource="ng-pw-rest/src/main/resources-generated" depth="infinite" />
+	</target>
+</project>
