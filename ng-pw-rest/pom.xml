@@ -78,7 +78,6 @@
 								</goals>
 								<configuration>
 									<target>
-										<property name="project.properties.maven.build.timestamp.format" value="${maven.build.timestamp.format}"/>
 										<property name="project.properties.build.timestamp" value="${build.timestamp}"/>
 										<property name="project.properties.ng-pw.designator" value="${ng-pw.designator}"/>
 										<property name="project.properties.ng-pw.version" value="${ng-pw.version}"/>

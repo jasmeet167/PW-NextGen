@@ -84,6 +84,38 @@ paths:
           schema: 
             $ref: '#/definitions/errorModel'
 
+  /application/about:
+    get:
+      summary: Retrieve general information about the application.
+      description: |
+        This endpoint returns general information about the application. 
+      produces:
+        - application/json
+      operationId: getInfoAboutApplication
+      parameters:
+        - name: sessionToken
+          in: header
+          description: | 
+            Session Token.
+          required: true
+          type: string
+      tags:
+        - About
+      responses:
+        200:
+          description: |
+            OK.  The information about the application.
+          schema:
+            $ref: '#/definitions/aboutApplication'
+        401:
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Session token is either missing or invalid. 
+        default:
+          description: Unexpected Error.
+          schema: 
+            $ref: '#/definitions/errorModel'
+
   /search/common/environment:
     get:
       summary: Retrieve a list of Environments.
@@ -1502,6 +1534,18 @@ definitions:
       tokenId:
         type: string
         description: A token used to link service requests to the corresponding security session. 
+
+  aboutApplication:
+    type: object
+    properties:
+      appDesignator:
+        type: string
+      appVersion:
+        type: string
+      buildTimestamp:
+        type: string
+        format: date-time
+        description: Timestamp indicating when this application was built.
 
   commonSelectItem:
     type: object

@@ -1295,7 +1295,9 @@
 
 		<!-- identifiers -->
 		<copyright.notice>Copyright 2016, CSC</copyright.notice>
-		<maven.build.timestamp.format>MMMM dd yyyy @ HHmm</maven.build.timestamp.format>
+		<!-- This timestamp format is not appropriate for ng-pw.             -->
+		<!-- It must be moved to root pom of each application, which uses it -->
+		<!-- <maven.build.timestamp.format>MMMM dd yyyy @ HHmm</maven.build.timestamp.format> -->
 		<build.timestamp>${maven.build.timestamp}</build.timestamp>
 
 		<!-- Javadoc -->
