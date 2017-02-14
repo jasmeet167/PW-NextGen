@@ -50,7 +50,7 @@ public class SearchApiController
 	{
 		RestServiceParam param = buildRestServiceParam(sessionToken, envId);
 		PlanSearchInput searchInput = new PlanSearchInput();
-		searchInput.setViewChangesEffective(viewChanges);
+		searchInput.setChangesIncluded(viewChanges);
 
 		List<CommonSelectItem> companyList = searchService.getPlanCommonValues(param, searchInput);
 		PropertyComparator.sort(companyList, new MutableSortDefinition("displayValue", true, true));
@@ -65,7 +65,7 @@ public class SearchApiController
 	{
 		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
 		PlanSearchInput searchInput = new PlanSearchInput();
-		searchInput.setViewChangesEffective(viewChanges);
+		searchInput.setChangesIncluded(viewChanges);
 
 		List<CommonSelectItem> productList = searchService.getPlanCommonValues(param, searchInput);
 		PropertyComparator.sort(productList, new MutableSortDefinition("displayValue", true, true));
@@ -81,7 +81,7 @@ public class SearchApiController
 	{
 		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
 		PlanSearchInput searchInput = new PlanSearchInput();
-		searchInput.setViewChangesEffective(viewChanges);
+		searchInput.setChangesIncluded(viewChanges);
 		searchInput.setProductCode(productCode);
 
 		List<CommonSelectItem> planList = searchService.getPlanCommonValues(param, searchInput);
@@ -99,7 +99,7 @@ public class SearchApiController
 	{
 		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
 		PlanSearchInput searchInput = new PlanSearchInput();
-		searchInput.setViewChangesEffective(viewChanges);
+		searchInput.setChangesIncluded(viewChanges);
 		searchInput.setProductCode(productCode);
 		searchInput.setPlanCode(planCode);
 
@@ -119,7 +119,7 @@ public class SearchApiController
 	{
 		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
 		PlanSearchInput searchInput = new PlanSearchInput();
-		searchInput.setViewChangesEffective(viewChanges);
+		searchInput.setChangesIncluded(viewChanges);
 		searchInput.setProductCode(productCode);
 		searchInput.setPlanCode(planCode);
 		searchInput.setIssueState(issueState);
@@ -141,7 +141,7 @@ public class SearchApiController
 	{
 		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
 		PlanSearchInput searchInput = new PlanSearchInput();
-		searchInput.setViewChangesEffective(viewChanges);
+		searchInput.setChangesIncluded(viewChanges);
 		searchInput.setProductCode(productCode);
 		searchInput.setPlanCode(planCode);
 		searchInput.setIssueState(issueState);

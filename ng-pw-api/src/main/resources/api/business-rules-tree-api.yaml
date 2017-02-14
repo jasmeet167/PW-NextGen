@@ -1,0 +1,132 @@
+# NG Product Wizard REST API
+swagger: '2.0'
+
+info:
+  title: NG Product Wizard Business Rules Tree API
+  description: Business Rules Tree REST API for NG Product Wizard
+  version: "0.0.1"
+
+host: localhost:8443
+
+schemes:
+  - https
+
+basePath: /ng-pw-rest
+
+paths:
+  /tree/search:
+    get:
+      summary: |
+        Retrieve information comprising the Business Rules tree
+        with contents matching the provided key values.
+      description: |
+        This endpoint returns information, which can be used to
+        construct display of the Business Rules tree, with contents
+        matching the provided key values.
+      produces:
+        - application/json
+      operationId: getBusinessRulesTree
+      parameters:
+        - name: sessionToken
+          in: header
+          description: | 
+            Session Token.
+          required: true
+          type: string
+        - name: viewChanges
+          in: header
+          description: |
+            Indicator used to request Rules or Rules with changes.  
+          required: true
+          type: boolean
+        - name: envId
+          in: header
+          description: |
+            Environment Id. 
+          required: true
+          type: string
+        - name: companyCode
+          in: header
+          description: |
+            Company Code.
+          required: false
+          type: string
+        - name: productCode
+          in: header
+          description: |
+            Product Code.
+          required: false
+          type: string
+        - name: planCode
+          in: header
+          description: |
+            Plan Code.
+          required: false
+          type: string
+        - name: issueState
+          in: header
+          description: |
+            Issue State.
+          required: false
+          type: string
+        - name: lob
+          in: header
+          description: |
+            Line of Business.
+          required: false
+          type: string
+        - name: effDate
+          in: header
+          description: |
+            Effective Date.
+          required: false
+          type: string
+          format: date
+        - name: includeOrphans
+          in: header
+          description: |
+            Indicator used to request inclusion
+            of orphan subsets in the returned data.  
+          required: false
+          type: boolean
+      tags:
+        - Business Rules Tree
+      responses:
+        200:
+          description: |
+            OK.  The Business Rules tree data model is returned.
+          schema:
+            type: array
+            items:
+              type: object
+        400:
+          description: |
+            Bad Request.  Invalid or malformed request detected.
+          schema: 
+            $ref: '#/definitions/errorModel'
+        401:
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Session token is either missing or invalid. 
+        403:
+          description: |
+            Forbidden.  The user is not authorized to access
+            the required resources.
+        default:
+          description: Unexpected Error.
+          schema: 
+            $ref: '#/definitions/errorModel'
+
+definitions:
+  errorModel:
+    type: object
+    properties:
+      severity:
+        type: string
+        enum:
+          - ERROR
+          - WARNING
+      errorCode:
+        type: string
+      message:
+        type: string

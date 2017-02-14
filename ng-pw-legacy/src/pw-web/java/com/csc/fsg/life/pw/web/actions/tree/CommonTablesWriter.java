@@ -47,16 +47,16 @@ public class CommonTablesWriter {
 
 	private HashMap rowCounter = null;
 	
-	private User user = null;
+//	private User user = null;
 	
 	private Map<String, Integer> wipCounts = null;
 	
 	public CommonTablesWriter(String env, String company, boolean withChanges,
-	        Connection mfConn, Connection wipConn, /*PWTask task,*/ User user) throws Exception {
+	        Connection mfConn, Connection wipConn /*, PWTask task, User user*/) throws Exception {
 		this.company = company;
 		this.env = env;
 		this.isWithChanges = withChanges;
-		this.user = user;
+//		this.user = user;
 		rowCounter = new HashMap();
 
 		Environment environment = EnvironmentManager.getInstance().getEnvironment(env);

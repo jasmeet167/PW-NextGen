@@ -926,10 +926,10 @@ public class SearchServiceImpl
 	private PlanCriteriaTO buildPlanCriteria(String envId, String companyCode, PlanSearchInput searchInput)
 	{
 		HashMap<String, Object> planKeys = new HashMap<>();
-		if (searchInput.isViewChangesEffective() == null)
+		if (searchInput.areChangesIncluded() == null)
 			planKeys.put(PlanCriteriaTO.MERGED_VIEW_KEY, Boolean.FALSE.toString());
 		else
-			planKeys.put(PlanCriteriaTO.MERGED_VIEW_KEY, searchInput.isViewChangesEffective().toString());
+			planKeys.put(PlanCriteriaTO.MERGED_VIEW_KEY, searchInput.areChangesIncluded().toString());
 
 		planKeys.put(PlanTOBase.ENVIRONMENT_KEY, envId);
 		planKeys.put(PlanTOBase.COMPANY_CODE_KEY, companyCode);

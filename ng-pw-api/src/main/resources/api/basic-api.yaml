@@ -2,8 +2,8 @@
 swagger: '2.0'
 
 info:
-  title: NG Product Wizard API
-  description: REST API for NG Product Wizard
+  title: NG Product Wizard Basic API
+  description: Basic REST API for NG Product Wizard
   version: "0.0.1"
 
 host: localhost:8443

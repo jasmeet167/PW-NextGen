@@ -7,20 +7,20 @@ public class PlanSearchInput
 {
 	static private final long serialVersionUID = 1503370388134913074L;
 
-	private Boolean isViewChangesEffective = null;
+	private Boolean areChangesIncluded = null;
 	private String productCode = null;
 	private String planCode = null;
 	private String issueState = null;
 	private String lob = null;
 
-	public Boolean isViewChangesEffective()
+	public Boolean areChangesIncluded()
 	{
-		return isViewChangesEffective;
+		return areChangesIncluded;
 	}
 
-	public void setViewChangesEffective(Boolean isViewChangesEffective)
+	public void setChangesIncluded(Boolean areChangesIncluded)
 	{
-		this.isViewChangesEffective = isViewChangesEffective;
+		this.areChangesIncluded = areChangesIncluded;
 	}
 
 	public String getProductCode()
