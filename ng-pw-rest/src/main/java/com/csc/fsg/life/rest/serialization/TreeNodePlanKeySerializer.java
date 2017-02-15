@@ -5,29 +5,29 @@ import java.io.IOException;
 import org.joda.time.LocalDate;
 import org.springframework.util.StringUtils;
 
-import com.csc.fsg.life.rest.model.tree.PlanKey;
+import com.csc.fsg.life.rest.model.TreeNodePlanKey;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
-public class PlanKeySerializer
-	extends StdSerializer<PlanKey>
+public class TreeNodePlanKeySerializer
+	extends StdSerializer<TreeNodePlanKey>
 {
 	static private final long serialVersionUID = -4102826862275668709L;
 
-	public PlanKeySerializer()
+	public TreeNodePlanKeySerializer()
 	{
 		this(null);
 	}
 
-	public PlanKeySerializer(Class<PlanKey> clz)
+	public TreeNodePlanKeySerializer(Class<TreeNodePlanKey> clz)
 	{
 		super(clz);
 	}
 
 	@Override
-	public void serialize(PlanKey value, JsonGenerator gen, SerializerProvider provider)
+	public void serialize(TreeNodePlanKey value, JsonGenerator gen, SerializerProvider provider)
 		throws IOException, JsonProcessingException
 	{
 		gen.writeStartObject();
@@ -56,13 +56,13 @@ public class PlanKeySerializer
 		if (StringUtils.hasText(issueState))
 			gen.writeStringField("issueState", issueState);
 
-		String lineOfBusiness = value.getLineOfBusiness();
-		if (StringUtils.hasText(lineOfBusiness))
-			gen.writeStringField("lineOfBusiness", lineOfBusiness);
+		String lob = value.getLob();
+		if (StringUtils.hasText(lob))
+			gen.writeStringField("lob", lob);
 
-		LocalDate effectiveDate = value.getEffectiveDate();
-		if (effectiveDate != null)
-			gen.writeObjectField("effectiveDate", effectiveDate);
+		LocalDate effDate = value.getEffDate();
+		if (effDate != null)
+			gen.writeObjectField("effDate", effDate);
 
 		String planType = value.getPlanType();
 		if (StringUtils.hasText(planType))

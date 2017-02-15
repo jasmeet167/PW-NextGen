@@ -7,21 +7,20 @@ import java.util.List;
 
 import com.csc.fsg.life.pw.client.tree.CscTreeNode;
 import com.csc.fsg.life.pw.common.util.Constants;
+import com.csc.fsg.life.rest.model.TreeNode.TypeEnum;
+import com.csc.fsg.life.rest.model.TreeNodeAttributes;
+import com.csc.fsg.life.rest.model.TreeNodePlanKey;
 
-public class TreeNode
+public class Node
 	implements Serializable
 {
 	static private final long serialVersionUID = 3104285458626875161L;
 
-	public enum NodeType {
-		DISPLAY, PACKAGE, PROJECT, COMPANY, ANNUITIY_FOLDER, UNIV_LIFE_FOLDER, TRADITIONAL_FOLDER, COMMON_TABLE_FOLDER, PLAN_FOLDER, RIDER_FOLDER, PLAN, RIDER, TABLE, COMMON_TABLE, TABLE_SUBSET, PDFPLAN_FOLDER, ORPHAN_FOLDER, COMMON_FOLDER, ORPHAN_TABLE_SUBSET, PAYOUT_PLAN, PAYOUTPLAN_FOLDER, ORPHAN_GROUP
-	}
-
 	private String envId = null;
 	private int nodeId = 0;
 	private short level = 0;
-	private NodeType type = null;
-	private TreeNodeAttributes attributes = TreeNodeAttributes.defaultInstance();
+	private TypeEnum type = null;
+	private TreeNodeAttributes attributes = new TreeNodeAttributes();
 	private String display = null;
 	private String companyCode = null;
 
@@ -29,17 +28,15 @@ public class TreeNode
 	private String packageId = null;
 	private String projectName = null;
 	private String name = null;
-	
-	
-	private PlanKey planKey = new PlanKey();
-	private List<TreeNode> children = new ArrayList<>();
+	private TreeNodePlanKey planKey = new TreeNodePlanKey();
+	private List<Node> children = new ArrayList<>();
 
-	public TreeNode()
+	public Node()
 	{
 		level = -1;
 	}
 
-	public TreeNode(String envId, String payload)
+	public Node(String envId, String payload)
 	{
 		this.envId = envId;
 
@@ -111,7 +108,7 @@ public class TreeNode
 			case PLAN:
 			case RIDER:
 			case PAYOUT_PLAN: {
-				planKey.setValues(Arrays.copyOfRange(payloadComponents, i++, payloadComponents.length));
+				PlanKeyPropertiesBuilder.buildValues(planKey, Arrays.copyOfRange(payloadComponents, i++, payloadComponents.length));
 				planKey.setEnvId(envId);
 				setTableId(Constants.TABLE_ZERO_ID);
 				name = Constants.TABLE_ZERO_NAME;
@@ -134,7 +131,7 @@ public class TreeNode
 				setTableSubset(payloadComponents[i++]);
 
 				i++;
-				planKey.setValues(payloadComponents[i++].split("\\|"));
+				PlanKeyPropertiesBuilder.buildValues(planKey, payloadComponents[i++].split("\\|"));
 				break;
 			}
 
@@ -159,53 +156,53 @@ public class TreeNode
 		}
 	}
 
-	private NodeType getNodeType(short type)
+	private TypeEnum getNodeType(short type)
 	{
 		switch (type) {
 			case CscTreeNode.NODE_DISPLAY:
-				return NodeType.DISPLAY;
+				return TypeEnum.DISPLAY;
 			case CscTreeNode.NODE_PACKAGE:
-				return NodeType.PACKAGE;
+				return TypeEnum.PACKAGE;
 			case CscTreeNode.NODE_PROJECT:
-				return NodeType.PROJECT;
+				return TypeEnum.PROJECT;
 			case CscTreeNode.NODE_COMPANY:
-				return NodeType.COMPANY;
+				return TypeEnum.COMPANY;
 			case CscTreeNode.NODE_ANNUITIY_FOLDER:
-				return NodeType.ANNUITIY_FOLDER;
+				return TypeEnum.ANNUITIY_FOLDER;
 			case CscTreeNode.NODE_UNIV_LIFE_FOLDER:
-				return NodeType.UNIV_LIFE_FOLDER;
+				return TypeEnum.UNIV_LIFE_FOLDER;
 			case CscTreeNode.NODE_TRADITIONAL_FOLDER:
-				return NodeType.TRADITIONAL_FOLDER;
+				return TypeEnum.TRADITIONAL_FOLDER;
 			case CscTreeNode.NODE_COMMON_TABLE_FOLDER:
-				return NodeType.COMMON_TABLE_FOLDER;
+				return TypeEnum.COMMON_TABLE_FOLDER;
 			case CscTreeNode.NODE_PLAN_FOLDER:
-				return NodeType.PLAN_FOLDER;
+				return TypeEnum.PLAN_FOLDER;
 			case CscTreeNode.NODE_RIDER_FOLDER:
-				return NodeType.RIDER_FOLDER;
+				return TypeEnum.RIDER_FOLDER;
 			case CscTreeNode.NODE_PLAN:
-				return NodeType.PLAN;
+				return TypeEnum.PLAN;
 			case CscTreeNode.NODE_RIDER:
-				return NodeType.RIDER;
+				return TypeEnum.RIDER;
 			case CscTreeNode.NODE_TABLE:
-				return NodeType.TABLE;
+				return TypeEnum.TABLE;
 			case CscTreeNode.NODE_COMMON_TABLE:
-				return NodeType.COMMON_TABLE;
+				return TypeEnum.COMMON_TABLE;
 			case CscTreeNode.NODE_TABLE_SUBSET:
-				return NodeType.TABLE_SUBSET;
+				return TypeEnum.TABLE_SUBSET;
 			case CscTreeNode.NODE_PDFPLAN_FOLDER:
-				return NodeType.PDFPLAN_FOLDER;
+				return TypeEnum.PDFPLAN_FOLDER;
 			case CscTreeNode.NODE_ORPHAN_FOLDER:
-				return NodeType.ORPHAN_FOLDER;
+				return TypeEnum.ORPHAN_FOLDER;
 			case CscTreeNode.NODE_COMMON_FOLDER:
-				return NodeType.COMMON_FOLDER;
+				return TypeEnum.COMMON_FOLDER;
 			case CscTreeNode.NODE_ORPHAN_TABLE_SUBSET:
-				return NodeType.ORPHAN_TABLE_SUBSET;
+				return TypeEnum.ORPHAN_TABLE_SUBSET;
 			case CscTreeNode.NODE_PAYOUT_PLAN:
-				return NodeType.PAYOUT_PLAN;
+				return TypeEnum.PAYOUT_PLAN;
 			case CscTreeNode.NODE_PAYOUTPLAN_FOLDER:
-				return NodeType.PAYOUTPLAN_FOLDER;
+				return TypeEnum.PAYOUTPLAN_FOLDER;
 			case CscTreeNode.NODE_ORPHAN_GROUP:
-				return NodeType.ORPHAN_GROUP;
+				return TypeEnum.ORPHAN_GROUP;
 			default:
 				throw new IllegalArgumentException("Invalid Node Type detected: " + type);
 		}
@@ -217,7 +214,12 @@ public class TreeNode
 		boolean isInquiryAllowed = (flags & CscTreeNode.ATTR_INQUIRY) != 0;
 		boolean isUpdateAllowed = (flags & CscTreeNode.ATTR_UPDATE) != 0;
 
-		return new TreeNodeAttributes(isDisabled, isInquiryAllowed, isUpdateAllowed);
+		TreeNodeAttributes attributes = new TreeNodeAttributes();
+		attributes.setDisabled(Boolean.valueOf(isDisabled));
+		attributes.setInquiryAllowed(Boolean.valueOf(isInquiryAllowed));
+		attributes.setUpdateAllowed(Boolean.valueOf(isUpdateAllowed));
+
+		return attributes;
 	}
 
 	public void setTableId(String tableId)
@@ -253,14 +255,14 @@ public class TreeNode
 		planKey.setProductSuffix(s);
 	}
 
-	public void addChild(TreeNode child)
+	public void addChild(Node child)
 	{
 		children.add(child);
 	}
 
 	public String getEnvId()
 	{
-		if (type == NodeType.COMPANY) 
+		if (type == TypeEnum.COMPANY)
 			return envId;
 		else
 			return null;
@@ -276,7 +278,7 @@ public class TreeNode
 		return level;
 	}
 
-	public NodeType getType()
+	public TypeEnum getType()
 	{
 		return type;
 	}
@@ -316,12 +318,12 @@ public class TreeNode
 		return name;
 	}
 
-	public PlanKey getPlanKey()
+	public TreeNodePlanKey getPlanKey()
 	{
 		return planKey;
 	}
 
-	public List<TreeNode> getChildren()
+	public List<Node> getChildren()
 	{
 		return children;
 	}

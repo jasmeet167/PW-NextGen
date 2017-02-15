@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +29,8 @@ import com.csc.fsg.life.rest.model.BusinessRuleTreeSearchInput;
 import com.csc.fsg.life.rest.model.CommonSelectItem;
 import com.csc.fsg.life.rest.model.ErrorModel;
 import com.csc.fsg.life.rest.model.PlanSearchInput;
-import com.csc.fsg.life.rest.model.tree.TreeNode;
+import com.csc.fsg.life.rest.model.TreeNode;
+import com.csc.fsg.life.rest.model.tree.Node;
 import com.csc.fsg.life.rest.param.RestServiceParam;
 
 @Service
@@ -82,11 +84,12 @@ public class TreeServiceImpl
 			List<PlanCriteriaTO> list = Arrays.asList(planCriteria);
 			boolean includeOrphans = input.areOrphansIncluded();
 			String payload = TreeWriter.getStream(list, compCodesVector, includeOrphans);
-
 			BufferedReader reader = new BufferedReader(new StringReader(payload));
-			TreeNode root = new TreeNode();
+			Node root = new Node();
 			processTreeNode(reader, root, new TreeNodeContainer(), param.getEnvId());
-			return root.getChildren().get(0).getChildren();
+
+			List<Node> treeNodes = root.getChildren().get(0).getChildren();
+			return transformToDeclaredType(treeNodes);
 		}
 		catch (RestServiceException e) {
 			throw e;
@@ -148,13 +151,13 @@ public class TreeServiceImpl
 		return compCodesVector;
 	}
 
-	private void processTreeNode(BufferedReader reader, TreeNode parentNode, TreeNodeContainer pushBack, String envId)
+	private void processTreeNode(BufferedReader reader, Node parentNode, TreeNodeContainer pushBack, String envId)
 		throws IOException
 	{
 		// For reference, see method private void processTreeNode(CscTreeNode parentNode) in class CscTree
 		int parentLevel = parentNode.getLevel();
-		TreeNode node = null;
-		TreeNode prevNode = null;
+		Node node = null;
+		Node prevNode = null;
 
 		while ((node = getNextTreeNode(reader, pushBack, envId)) != null) {
 			if (node.getLevel() == (parentLevel + 1)) {
@@ -171,10 +174,10 @@ public class TreeServiceImpl
 		}
 	}
 
-	private TreeNode getNextTreeNode(BufferedReader reader, TreeNodeContainer pushBack, String envId)
+	private Node getNextTreeNode(BufferedReader reader, TreeNodeContainer pushBack, String envId)
 		throws IOException
 	{
-		TreeNode node = null;
+		Node node = null;
 		String s;
 
 		if (!pushBack.isEmpty()) {
@@ -188,7 +191,7 @@ public class TreeServiceImpl
 				continue;
 			}
 			else {
-				node = new TreeNode(envId, s);
+				node = new Node(envId, s);
 				break;
 			}
 		}
@@ -198,14 +201,14 @@ public class TreeServiceImpl
 
 	static private class TreeNodeContainer
 	{
-		private TreeNode node = null;
+		private Node node = null;
 
-		private TreeNode getNode()
+		private Node getNode()
 		{
 			return node;
 		}
 
-		private void setNode(TreeNode node)
+		private void setNode(Node node)
 		{
 			this.node = node;
 		}
@@ -219,5 +222,31 @@ public class TreeServiceImpl
 		{
 			node = null;
 		}
+	}
+
+	private List<TreeNode> transformToDeclaredType(List<Node> existingNodes)
+	{
+		List<TreeNode> transformedNodes = new ArrayList<>();
+
+		for (Node existingNode : existingNodes) {
+			TreeNode transformedNode = new TreeNode();
+			transformedNodes.add(transformedNode);
+
+			transformedNode.setType(existingNode.getType());
+			transformedNode.setDisplay(existingNode.getDisplay());
+			transformedNode.setEnvId(existingNode.getEnvId());
+			transformedNode.setCompanyCode(existingNode.getCompanyCode());
+			transformedNode.setName(existingNode.getName());
+			transformedNode.setTableId(existingNode.getTableId());
+			transformedNode.setProjectName(existingNode.getProjectName());
+			transformedNode.setPackageId(existingNode.getPackageId());
+			transformedNode.setAttributes(existingNode.getAttributes());
+			transformedNode.setPlanKey(existingNode.getPlanKey());
+
+			List<TreeNode> transformedChildren = transformToDeclaredType(existingNode.getChildren());
+			transformedNode.getChildren().addAll(transformedChildren);
+		}
+
+		return transformedNodes;
 	}
 }

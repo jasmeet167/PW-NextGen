@@ -98,7 +98,7 @@ paths:
           schema:
             type: array
             items:
-              type: object
+              $ref: '#/definitions/treeNode'
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
@@ -118,6 +118,100 @@ paths:
             $ref: '#/definitions/errorModel'
 
 definitions:
+  treeNode:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - DISPLAY
+          - PACKAGE
+          - PROJECT
+          - COMPANY
+          - ANNUITIY_FOLDER
+          - UNIV_LIFE_FOLDER
+          - TRADITIONAL_FOLDER
+          - COMMON_TABLE_FOLDER
+          - PLAN_FOLDER
+          - RIDER_FOLDER
+          - PLAN
+          - RIDER
+          - TABLE
+          - COMMON_TABLE
+          - TABLE_SUBSET
+          - PDFPLAN_FOLDER
+          - ORPHAN_FOLDER
+          - COMMON_FOLDER
+          - ORPHAN_TABLE_SUBSET
+          - PAYOUT_PLAN
+          - PAYOUTPLAN_FOLDER
+          - ORPHAN_GROUP
+      display:
+        type: string
+      envId:
+        type: string
+      companyCode:
+        type: string
+      name:
+        type: string
+      tableId:
+        type: string
+      projectName:
+        type: string
+      packageId:
+        type: string
+      attributes:
+        $ref: '#/definitions/treeNodeAttributes'
+      planKey:
+        $ref: '#/definitions/treeNodePlanKey'
+      children:
+        type: array
+        items:
+          $ref: '#/definitions/treeNode'
+
+  treeNodeAttributes:
+    type: object
+    properties:
+      disabled:
+        type: boolean
+      inquiryAllowed:
+        type: boolean
+      updateAllowed:
+        type: boolean
+
+  treeNodePlanKey:
+    type: object
+    properties:
+      envId:
+        type: string
+      companyCode:
+        type: string
+      productPrefix:
+        type: string
+      productSuffix:
+        type: string
+      planCode:
+        type: string
+      issueState:
+        type: string
+      lob:
+        type: string
+      effDate:
+        type: string
+        format: date
+      planType:
+        type: string
+      tablePtrId:
+        type: string
+      tablePtrVar:
+        type: string
+      tablePtrSubset:
+        type: string
+
+# ========================================================
+# Common definitions, which begin at this point,
+# must exactly match those in the basic API specification.
+# ========================================================
   errorModel:
     type: object
     properties:

@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.util.StringUtils;
 
-import com.csc.fsg.life.rest.model.tree.PlanKey;
-import com.csc.fsg.life.rest.model.tree.TreeNode;
+import com.csc.fsg.life.rest.model.TreeNode;
+import com.csc.fsg.life.rest.model.TreeNodePlanKey;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -62,8 +62,8 @@ public class TreeNodeSerializer
 		if (StringUtils.hasText(packageId))
 			gen.writeStringField("packageId", packageId);
 
-		PlanKey planKey = value.getPlanKey();
-		if (planKey != null && !planKey.isEmpty())
+		TreeNodePlanKey planKey = value.getPlanKey();
+		if (planKey != null && !isEmpty(planKey))
 			gen.writeObjectField("planKey", planKey);
 
 		gen.writeObjectField("attributes", value.getAttributes());
@@ -73,5 +73,35 @@ public class TreeNodeSerializer
 			gen.writeObjectField("children", children);
 
 		gen.writeEndObject();
+	}
+
+	private boolean isEmpty(TreeNodePlanKey planKey)
+	{
+		if (StringUtils.hasText(planKey.getEnvId()))
+			return false;
+		if (StringUtils.hasText(planKey.getCompanyCode()))
+			return false;
+		if (StringUtils.hasText(planKey.getProductPrefix()))
+			return false;
+		if (StringUtils.hasText(planKey.getProductSuffix()))
+			return false;
+		if (StringUtils.hasText(planKey.getPlanCode()))
+			return false;
+		if (StringUtils.hasText(planKey.getIssueState()))
+			return false;
+		if (StringUtils.hasText(planKey.getLob()))
+			return false;
+		if (planKey.getEffDate() != null)
+			return false;
+		if (StringUtils.hasText(planKey.getPlanType()))
+			return false;
+		if (StringUtils.hasText(planKey.getTablePtrId()))
+			return false;
+		if (StringUtils.hasText(planKey.getTablePtrVar()))
+			return false;
+		if (StringUtils.hasText(planKey.getTablePtrSubset()))
+			return false;
+
+		return true;
 	}
 }
