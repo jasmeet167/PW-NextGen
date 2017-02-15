@@ -25,7 +25,7 @@ public class TreeApiController
 	implements TreeApi
 {
 	@Autowired
-	BusinessRulesTreeSearchService searchService = null;
+	private BusinessRulesTreeSearchService searchService = null;
 
 	@RequestMapping(value = "/tree/search", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<Object>> getBusinessRulesTree(@RequestHeader(value = "sessionToken", required = true) String sessionToken,

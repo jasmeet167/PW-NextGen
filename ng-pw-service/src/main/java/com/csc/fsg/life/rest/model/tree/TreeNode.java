@@ -17,7 +17,7 @@ public class TreeNode
 		DISPLAY, PACKAGE, PROJECT, COMPANY, ANNUITIY_FOLDER, UNIV_LIFE_FOLDER, TRADITIONAL_FOLDER, COMMON_TABLE_FOLDER, PLAN_FOLDER, RIDER_FOLDER, PLAN, RIDER, TABLE, COMMON_TABLE, TABLE_SUBSET, PDFPLAN_FOLDER, ORPHAN_FOLDER, COMMON_FOLDER, ORPHAN_TABLE_SUBSET, PAYOUT_PLAN, PAYOUTPLAN_FOLDER, ORPHAN_GROUP
 	}
 
-	private String environmentId = null;
+	private String envId = null;
 	private int nodeId = 0;
 	private short level = 0;
 	private NodeType type = null;
@@ -39,9 +39,9 @@ public class TreeNode
 		level = -1;
 	}
 
-	public TreeNode(String environmentId, String payload)
+	public TreeNode(String envId, String payload)
 	{
-		this.environmentId = environmentId;
+		this.envId = envId;
 
 		String[] payloadComponents = payload.split("\\t");
 		int i = 0;
@@ -112,7 +112,7 @@ public class TreeNode
 			case RIDER:
 			case PAYOUT_PLAN: {
 				planKey.setValues(Arrays.copyOfRange(payloadComponents, i++, payloadComponents.length));
-				planKey.setEnvironmentId(environmentId);
+				planKey.setEnvId(envId);
 				setTableId(Constants.TABLE_ZERO_ID);
 				name = Constants.TABLE_ZERO_NAME;
 				tableId = Constants.TABLE_ZERO_ID;
@@ -258,10 +258,10 @@ public class TreeNode
 		children.add(child);
 	}
 
-	public String getEnvironmentId()
+	public String getEnvId()
 	{
 		if (type == NodeType.COMPANY) 
-			return environmentId;
+			return envId;
 		else
 			return null;
 	}

@@ -19,7 +19,7 @@ public class ApplicationApiController
 	implements ApplicationApi
 {
 	@Autowired
-	ApplicationService applicationService = null;
+	private ApplicationService applicationService = null;
 
 	@RequestMapping(value = "/application/about", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<AboutApplication> getInfoAboutApplication(@RequestHeader(value = "sessionToken", required = true) String sessionToken)

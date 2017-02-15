@@ -32,9 +32,9 @@ public class PlanKeySerializer
 	{
 		gen.writeStartObject();
 
-		String environmentId = value.getEnvironmentId();
-		if (StringUtils.hasText(environmentId))
-			gen.writeStringField("environmentId", environmentId);
+		String envId = value.getEnvId();
+		if (StringUtils.hasText(envId))
+			gen.writeStringField("envId", envId);
 
 		String companyCode = value.getCompanyCode();
 		if (StringUtils.hasText(companyCode))

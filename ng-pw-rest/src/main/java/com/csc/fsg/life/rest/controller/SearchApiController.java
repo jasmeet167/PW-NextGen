@@ -31,7 +31,7 @@ public class SearchApiController
 	implements SearchApi
 {
 	@Autowired
-	SearchService searchService = null;
+	private SearchService searchService = null;
 
 	@RequestMapping(value = "/search/common/environment", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<CommonSelectItem>> getCommonEnvironments(@RequestHeader(value = "sessionToken", required = true) String sessionToken)

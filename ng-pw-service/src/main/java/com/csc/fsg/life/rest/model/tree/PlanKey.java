@@ -11,7 +11,7 @@ public class PlanKey
 {
 	static private final long serialVersionUID = 364937485377082868L;
 
-	private String environmentId = null;
+	private String envId = null;
 	private String companyCode = null;
 	private String productPrefix = null;
 	private String productSuffix = null;
@@ -57,14 +57,14 @@ public class PlanKey
 			tablePtrSubset = streamComponents[i++];
 	}
 
-	public String getEnvironmentId()
+	public String getEnvId()
 	{
-		return environmentId;
+		return envId;
 	}
 
-	public void setEnvironmentId(String environmentId)
+	public void setEnvId(String envId)
 	{
-		this.environmentId = environmentId;
+		this.envId = envId;
 	}
 
 	public String getCompanyCode()
@@ -179,7 +179,7 @@ public class PlanKey
 
 	public boolean isEmpty()
 	{
-		if (StringUtils.hasText(environmentId))
+		if (StringUtils.hasText(envId))
 			return false;
 		if (StringUtils.hasText(companyCode))
 			return false;
