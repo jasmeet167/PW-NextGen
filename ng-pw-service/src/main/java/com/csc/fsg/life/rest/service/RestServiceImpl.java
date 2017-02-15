@@ -3,13 +3,18 @@ package com.csc.fsg.life.rest.service;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 import com.csc.fsg.life.common.util.ApplicationContextUtils;
+import com.csc.fsg.life.rest.model.ErrorModelFactory;
 
 abstract public class RestServiceImpl
 	implements RestService
 {
+	@Autowired
+	protected ErrorModelFactory errorModelFactory = null;
+
 	private ResourceBundle messages = null;
 
 	protected RestServiceImpl()

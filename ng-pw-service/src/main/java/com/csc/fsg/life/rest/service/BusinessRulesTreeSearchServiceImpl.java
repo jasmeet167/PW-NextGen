@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -20,7 +19,6 @@ import com.csc.fsg.life.rest.exception.RestServiceException;
 import com.csc.fsg.life.rest.exception.UnexpectedException;
 import com.csc.fsg.life.rest.model.BusinessRuleTreeSearchInput;
 import com.csc.fsg.life.rest.model.ErrorModel;
-import com.csc.fsg.life.rest.model.ErrorModelFactory;
 import com.csc.fsg.life.rest.model.tree.TreeNode;
 import com.csc.fsg.life.rest.param.RestServiceParam;
 
@@ -29,9 +27,6 @@ public class BusinessRulesTreeSearchServiceImpl
 	extends RestServiceImpl
 	implements BusinessRulesTreeSearchService
 {
-	@Autowired
-	private ErrorModelFactory errorModelFactory = null;
-
 	public List<TreeNode> getBusinessRulesTree(RestServiceParam param, BusinessRuleTreeSearchInput input)
 	{
 		try {

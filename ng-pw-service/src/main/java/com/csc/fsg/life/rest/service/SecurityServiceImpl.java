@@ -31,7 +31,6 @@ import com.csc.fsg.life.rest.exception.UnexpectedException;
 import com.csc.fsg.life.rest.model.CommonSelectItem;
 import com.csc.fsg.life.rest.model.Credentials;
 import com.csc.fsg.life.rest.model.ErrorModel;
-import com.csc.fsg.life.rest.model.ErrorModelFactory;
 import com.csc.fsg.life.rest.model.SessionToken;
 import com.csc.fsg.life.rest.param.AuthorizationAction;
 import com.csc.fsg.life.rest.param.RestServiceParam;
@@ -60,9 +59,6 @@ public class SecurityServiceImpl
 
 	@Autowired
 	protected PolicyDecisionPointConfig pdpConfig = null;
-
-	@Autowired
-	protected ErrorModelFactory errorModelFactory = null;
 
 	public SessionToken authenticate(Credentials credentials)
 	{

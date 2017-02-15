@@ -1,7 +1,6 @@
 package com.csc.fsg.life.rest.service;
 
 import org.joda.time.DateTime;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.csc.fsg.life.common.util.BuildProperties;
@@ -9,7 +8,6 @@ import com.csc.fsg.life.rest.exception.RestServiceException;
 import com.csc.fsg.life.rest.exception.UnexpectedException;
 import com.csc.fsg.life.rest.model.AboutApplication;
 import com.csc.fsg.life.rest.model.ErrorModel;
-import com.csc.fsg.life.rest.model.ErrorModelFactory;
 import com.csc.fsg.life.rest.param.RestServiceParam;
 
 @Service
@@ -17,9 +15,6 @@ public class ApplicationServiceImpl
 	extends RestServiceImpl
 	implements ApplicationService
 {
-	@Autowired
-	private ErrorModelFactory errorModelFactory = null;
-
 	public AboutApplication getInfoAboutApplication(RestServiceParam param)
 	{
 		try {
