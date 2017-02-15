@@ -17,7 +17,7 @@ import com.csc.fsg.life.rest.api.TreeApi;
 import com.csc.fsg.life.rest.model.BusinessRuleTreeSearchInput;
 import com.csc.fsg.life.rest.model.tree.TreeNode;
 import com.csc.fsg.life.rest.param.RestServiceParam;
-import com.csc.fsg.life.rest.service.TreeSearchService;
+import com.csc.fsg.life.rest.service.TreeService;
 
 @Controller
 public class TreeApiController
@@ -25,7 +25,7 @@ public class TreeApiController
 	implements TreeApi
 {
 	@Autowired
-	private TreeSearchService searchService = null;
+	private TreeService treeService = null;
 
 	@RequestMapping(value = "/tree/search", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<Object>> getBusinessRulesTree(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
@@ -52,7 +52,7 @@ public class TreeApiController
 
 		input.setOrphansIncluded(Boolean.TRUE.equals(includeOrphans));
 
-		List<TreeNode> branches = searchService.getBusinessRulesTree(param, input);
+		List<TreeNode> branches = treeService.getBusinessRulesTree(param, input);
 		// TODO: +++ Remove conversion to List<Object>, when list of specific type is returned
 		List<Object> objectBranches = new ArrayList<>();
 		for (TreeNode branch : branches)

@@ -7,15 +7,21 @@ import java.sql.Date;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.csc.fsg.life.pw.common.transferobjects.PlanCriteriaTO;
 import com.csc.fsg.life.pw.common.transferobjects.PlanTOBase;
 import com.csc.fsg.life.pw.web.actions.tree.TreeWriter;
+import com.csc.fsg.life.pw.web.environment.Environment;
+import com.csc.fsg.life.pw.web.environment.EnvironmentManager;
+import com.csc.fsg.life.rest.exception.BadRequestException;
+import com.csc.fsg.life.rest.exception.ForbiddenException;
 import com.csc.fsg.life.rest.exception.RestServiceException;
 import com.csc.fsg.life.rest.exception.UnexpectedException;
 import com.csc.fsg.life.rest.model.BusinessRuleTreeSearchInput;
@@ -26,25 +32,52 @@ import com.csc.fsg.life.rest.model.tree.TreeNode;
 import com.csc.fsg.life.rest.param.RestServiceParam;
 
 @Service
-public class TreeSearchServiceImpl
+public class TreeServiceImpl
 	extends RestServiceImpl
-	implements TreeSearchService
+	implements TreeService
 {
 	@Autowired
 	private SearchService searchService = null;
 
+	public TreeServiceImpl()
+	{
+		super("com.csc.fsg.life.rest.service.TreeService");
+	}
+
 	public List<TreeNode> getBusinessRulesTree(RestServiceParam param, BusinessRuleTreeSearchInput input)
 	{
 		try {
+			String envId = param.getEnvId();
+
+			boolean isGoodEnvironment = false;
+			if (StringUtils.hasText(envId)) {
+				Map<String, Environment> environments = EnvironmentManager.getInstance().getEnvironments();
+				if (environments.get(envId) != null)
+					isGoodEnvironment = true;
+			}
+			if (!isGoodEnvironment) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_environment"));
+				throw new BadRequestException(model);
+			}
+
 			HashMap<String, String> keyValues = buildKeyValues(param, input);
 			PlanCriteriaTO planCriteria = new PlanCriteriaTO(keyValues);
 			planCriteria.setLoadNP(true);
 
 			Vector<String> compCodesVector = new Vector<>();
-			if (StringUtils.hasText(planCriteria.getCompanyCode()))
+			if (StringUtils.hasText(planCriteria.getCompanyCode())) {
 				compCodesVector.add(planCriteria.getCompanyCode());
-			else
-				compCodesVector.addAll(getCompanyCodes(param));
+			}
+			else {
+				Vector<String> companyCodes = getCompanyCodes(param);
+				// Empty contents of companyCodes indicates that the user is not
+				// authorized to view information associated with any company:
+				if (companyCodes.isEmpty())
+					throw new ForbiddenException();
+
+				compCodesVector.addAll(companyCodes);
+			}
 
 			List<PlanCriteriaTO> list = Arrays.asList(planCriteria);
 			boolean includeOrphans = input.areOrphansIncluded();
