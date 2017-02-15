@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -18,15 +19,20 @@ import com.csc.fsg.life.pw.web.actions.tree.TreeWriter;
 import com.csc.fsg.life.rest.exception.RestServiceException;
 import com.csc.fsg.life.rest.exception.UnexpectedException;
 import com.csc.fsg.life.rest.model.BusinessRuleTreeSearchInput;
+import com.csc.fsg.life.rest.model.CommonSelectItem;
 import com.csc.fsg.life.rest.model.ErrorModel;
+import com.csc.fsg.life.rest.model.PlanSearchInput;
 import com.csc.fsg.life.rest.model.tree.TreeNode;
 import com.csc.fsg.life.rest.param.RestServiceParam;
 
 @Service
-public class BusinessRulesTreeSearchServiceImpl
+public class TreeSearchServiceImpl
 	extends RestServiceImpl
-	implements BusinessRulesTreeSearchService
+	implements TreeSearchService
 {
+	@Autowired
+	private SearchService searchService = null;
+
 	public List<TreeNode> getBusinessRulesTree(RestServiceParam param, BusinessRuleTreeSearchInput input)
 	{
 		try {
@@ -38,7 +44,7 @@ public class BusinessRulesTreeSearchServiceImpl
 			if (StringUtils.hasText(planCriteria.getCompanyCode()))
 				compCodesVector.add(planCriteria.getCompanyCode());
 			else
-				; // TODO: +++ get list of all companies
+				compCodesVector.addAll(getCompanyCodes(param));
 
 			List<PlanCriteriaTO> list = Arrays.asList(planCriteria);
 			boolean includeOrphans = input.areOrphansIncluded();
@@ -95,6 +101,18 @@ public class BusinessRulesTreeSearchServiceImpl
 			keyValues.put(PlanTOBase.EFFECTIVE_DATE_KEY, effDate.toString());
 
 		return keyValues;
+	}
+
+	private Vector<String> getCompanyCodes(RestServiceParam param)
+	{
+		PlanSearchInput searchInput = new PlanSearchInput();
+		List<CommonSelectItem> companyList = searchService.getPlanCommonValues(param, searchInput);
+
+		Vector<String> compCodesVector = new Vector<>();
+		for (CommonSelectItem company : companyList)
+			compCodesVector.add(company.getCoreValue());
+
+		return compCodesVector;
 	}
 
 	private void processTreeNode(BufferedReader reader, TreeNode parentNode, TreeNodeContainer pushBack, String envId)
