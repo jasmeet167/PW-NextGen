@@ -40,7 +40,6 @@ import com.csc.fsg.life.rest.model.ChangesFilterData;
 import com.csc.fsg.life.rest.model.CommonSelectItem;
 import com.csc.fsg.life.rest.model.DateSelectItem;
 import com.csc.fsg.life.rest.model.ErrorModel;
-import com.csc.fsg.life.rest.model.ErrorModelFactory;
 import com.csc.fsg.life.rest.model.PlanSearchInput;
 import com.csc.fsg.life.rest.model.PromoteFilterData;
 import com.csc.fsg.life.rest.model.SummarySearchInput;
@@ -51,9 +50,6 @@ public class SearchServiceImpl
 	extends RestServiceImpl
 	implements SearchService
 {
-	@Autowired
-	private ErrorModelFactory errorModelFactory = null;
-
 	@Autowired
 	private SecurityService securityService = null;
 
@@ -121,19 +117,25 @@ public class SearchServiceImpl
 			PlanFilterSpecContext context = new PlanFilterSpecContext(envId);
 			Map<String, String> commonValuesMap = null;
 
+			boolean isCoreValueShown = true;
 			boolean isCompanyCodesSearch = false;
 			if (!StringUtils.hasText(param.getCompanyCode())) {
 				isCompanyCodesSearch = true;
 				commonValuesMap = context.getCompanyCodes(planCriteria);
 			}
-			else if (!StringUtils.hasText(searchInput.getProductCode()))
+			else if (!StringUtils.hasText(searchInput.getProductCode())) {
 				commonValuesMap = context.getProductCodes(planCriteria);
-			else if (!StringUtils.hasText(searchInput.getPlanCode()))
+			}
+			else if (!StringUtils.hasText(searchInput.getPlanCode())) {
+				isCoreValueShown = false;
 				commonValuesMap = context.getPlanCodes(planCriteria);
-			else if (!StringUtils.hasText(searchInput.getIssueState()))
+			}
+			else if (!StringUtils.hasText(searchInput.getIssueState())) {
 				commonValuesMap = context.getIssueStates(planCriteria);
-			else if (!StringUtils.hasText(searchInput.getLob()))
+			}
+			else if (!StringUtils.hasText(searchInput.getLob())) {
 				commonValuesMap = context.getLinesOfBusiness(planCriteria);
+			}
 			else {
 				HttpStatus status = BadRequestException.HTTP_STATUS;
 				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("unknown_search_type"));
@@ -151,7 +153,11 @@ public class SearchServiceImpl
 				CommonSelectItem item = new CommonSelectItem();
 				commonValues.add(item);
 				item.setCoreValue(entry.getKey());
-				item.setDisplayValue(entry.getValue());
+
+				if (isCoreValueShown)
+					item.setDisplayValue(entry.getKey() + '-' + entry.getValue());
+				else
+					item.setDisplayValue(entry.getValue());
 			}
 
 			if (isCompanyCodesSearch) {
@@ -776,19 +782,25 @@ public class SearchServiceImpl
 			SummaryFilterSpecContext context = new SummaryFilterSpecContext(isBrccFilter, planCriteria.getEnvironment());
 			Map<String, String> commonValuesMap = null;
 
+			boolean isCoreValueShown = true;
 			boolean isCompanyCodesSearch = false;
 			if (!StringUtils.hasText(param.getCompanyCode())) {
 				isCompanyCodesSearch = true;
 				commonValuesMap = context.getCompanyCodes(planCriteria);
 			}
-			else if (!StringUtils.hasText(searchInput.getProductCode()))
+			else if (!StringUtils.hasText(searchInput.getProductCode())) {
 				commonValuesMap = context.getProductCodes(planCriteria);
-			else if (!StringUtils.hasText(searchInput.getPlanCode()))
+			}
+			else if (!StringUtils.hasText(searchInput.getPlanCode())) {
+				isCoreValueShown = false;
 				commonValuesMap = context.getPlanCodes(planCriteria);
-			else if (!StringUtils.hasText(searchInput.getIssueState()))
+			}
+			else if (!StringUtils.hasText(searchInput.getIssueState())) {
 				commonValuesMap = context.getIssueStates(planCriteria);
-			else if (!StringUtils.hasText(searchInput.getLob()))
+			}
+			else if (!StringUtils.hasText(searchInput.getLob())) {
 				commonValuesMap = context.getLinesOfBusiness(planCriteria);
+			}
 			else {
 				HttpStatus status = BadRequestException.HTTP_STATUS;
 				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("unknown_search_type"));
@@ -806,7 +818,11 @@ public class SearchServiceImpl
 				CommonSelectItem item = new CommonSelectItem();
 				commonValues.add(item);
 				item.setCoreValue(entry.getKey());
-				item.setDisplayValue(entry.getValue());
+
+				if (isCoreValueShown)
+					item.setDisplayValue(entry.getKey() + '-' + entry.getValue());
+				else
+					item.setDisplayValue(entry.getValue());
 			}
 
 			if (isCompanyCodesSearch) {
