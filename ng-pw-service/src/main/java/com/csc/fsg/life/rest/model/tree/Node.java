@@ -86,8 +86,10 @@ public class Node
 
 			case ORPHAN_FOLDER: {
 				String s = payloadComponents[i++];
-				planKey.setProductPrefix(s.substring(0, 1));
-				planKey.setProductSuffix(s.substring(1, 2));
+				if (s.length() > 0)
+					planKey.setProductPrefix(s.substring(0, 1));
+				if (s.length() > 1)
+					planKey.setProductSuffix(s.substring(1, 2));
 				break;
 			}
 
