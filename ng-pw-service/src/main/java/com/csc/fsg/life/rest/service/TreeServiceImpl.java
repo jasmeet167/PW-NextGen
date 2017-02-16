@@ -89,7 +89,7 @@ public class TreeServiceImpl
 			processTreeNode(reader, root, new TreeNodeContainer(), param.getEnvId());
 
 			List<Node> treeNodes = root.getChildren().get(0).getChildren();
-			return transformToDeclaredType(treeNodes);
+			return transformToDeclaredTypes(treeNodes);
 		}
 		catch (RestServiceException e) {
 			throw e;
@@ -224,7 +224,7 @@ public class TreeServiceImpl
 		}
 	}
 
-	private List<TreeNode> transformToDeclaredType(List<Node> existingNodes)
+	private List<TreeNode> transformToDeclaredTypes(List<Node> existingNodes)
 	{
 		List<TreeNode> transformedNodes = new ArrayList<>();
 
@@ -243,7 +243,7 @@ public class TreeServiceImpl
 			transformedNode.setAttributes(existingNode.getAttributes());
 			transformedNode.setPlanKey(existingNode.getPlanKey());
 
-			List<TreeNode> transformedChildren = transformToDeclaredType(existingNode.getChildren());
+			List<TreeNode> transformedChildren = transformToDeclaredTypes(existingNode.getChildren());
 			transformedNode.getChildren().addAll(transformedChildren);
 		}
 
