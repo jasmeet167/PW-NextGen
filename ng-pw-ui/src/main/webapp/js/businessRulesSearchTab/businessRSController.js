@@ -11,12 +11,28 @@ App.controller('bussinessRSController', ['$scope', 'MainUXService','$location','
 	//$scope.showconsole.log = false;
 
 	$scope.username;
+	
+	  $scope.rules=
+  		[
+  			  {
+  			    "coreValue": false,
+  			    "displayValue": "Rules"
+  			  },
+  			  {
+  			    "coreValue": true,
+  			    "displayValue": "Rules with Changes"
+  			  }
+  			  
+  			  ];
+	  $scope.rulesSelector =  $scope.rules[0].coreValue ;
+	  
+	  
 
 
 
 	
 	
-	$scope.init= function (evt, tabName)
+	$scope.init= function (event, tabName)
 	{
 	  	 console.log("Tab triggered"+tabName);
 	     var i, tabcontent, tablinks;
@@ -29,8 +45,11 @@ App.controller('bussinessRSController', ['$scope', 'MainUXService','$location','
 	         tablinks[i].className = tablinks[i].className.replace(" active", "");
 	     }
 	     document.getElementById(tabName).style.display = "block";
-	    // evt.currentTarget.className += " active";
+	    // event.currentTarget.className += " active";
+	    
+	   
 	     
+	   
 	
 	     	  // Default selectors set true
 	  	$scope.enablecompanySelector=true;
@@ -39,6 +58,10 @@ App.controller('bussinessRSController', ['$scope', 'MainUXService','$location','
 	 	$scope.enableissueStateSelector=true;
 	 	$scope.enablelineOfBusinessSelector=true;
 	 	$scope.enableplaneffectivedateSelector=true;
+	 	
+	 	// For alerts of api
+	 	$scope.showAlert = false;
+	 	$scope.apiCall="";
 		
 	     if(businessRulesTabData.getenvironments()==null || businessRulesTabData.getenvironments()=='' )
 	    	 {
@@ -57,20 +80,23 @@ App.controller('bussinessRSController', ['$scope', 'MainUXService','$location','
      		        	  $scope.environments=newResult.data;
      		        	   $scope.errorMessage = "";
      		        	  businessRulesTabData.setenvironments(newResult.data);
-     		        	   
+     		        	 $scope.showAlert = false;
      		           }
-     		           else if(newResult.status == '401')
-     		        	   {
-     		        	   alert("Status recieved 401 :Incorrect username/pwd ");
- 
-     		        	   }
-     		           else{
-     		        	   console.log("error recieved ");
-
-     		           }
-     		       }, function(error) {
+     		        
+     		       }, function(error) {   		    	   
      		    	   console.log(error);
-     		    	   console.log(errror);
+     		    	  if(error.status == '401')
+ 		        	   {
+ 		        	   console.log("Status recieved 401 :Incorrect username/pwd ");
+
+ 		        	   }
+ 		              else{
+ 		        	   console.log("error recieved ");
+
+ 		                }
+     		    	   
+     		    	 	$scope.showAlert = true;
+     		   	 	    $scope.apiCall=" environments ";
      		    	   $scope.errorMessage = "Server Error";
      	        	   $scope.error = true;
      		       });
@@ -159,34 +185,99 @@ App.controller('bussinessRSController', ['$scope', 'MainUXService','$location','
 		 }
 	}
 	
-
+    /*
+     * Method for disabling
+     * corresponding drop downs
+     * 
+     */
+	$scope.triggerdisableDropDowns=function(dropDownNo)
+	{
+	     
+		
+		 if(dropDownNo=="1"|| dropDownNo=="0") //for env
+			{
+			$scope.enablecompanySelector=true;
+		 	$scope.enableproductSelector=true;
+		 	$scope.enableplanCodeSelector=true;
+		 	$scope.enableissueStateSelector=true;
+		 	$scope.enablelineOfBusinessSelector=true;
+		 	$scope.enableplaneffectivedateSelector=true;
+		 	// environmentSelector companySelector productSelector
+		 	// planCodeSelector issueStateSelector lineOfBusinessSelector planeffectivedateSelector
+		 	$scope.companySelector="Company";
+		 	$scope.productSelector="Product";
+		 	$scope.planCodeSelector="PlanCode";
+		 	$scope.issueStateSelector="IssueState";
+		 	$scope.lineOfBusinessSelector="LineOfBusiness";
+		 	$scope.planeffectivedateSelector="PlanEffectiveDate";
+		 	
+			}
+		else if(dropDownNo=="2") //for comp
+			{
+		 	$scope.enableproductSelector=true;
+		 	$scope.enableplanCodeSelector=true;
+		 	$scope.enableissueStateSelector=true;
+		 	$scope.enablelineOfBusinessSelector=true;
+		 	$scope.enableplaneffectivedateSelector=true;
+		 	$scope.productSelector="Product";
+		 	$scope.planCodeSelector="PlanCode";
+		 	$scope.issueStateSelector="IssueState";
+		 	$scope.lineOfBusinessSelector="LineOfBusiness";
+		 	$scope.planeffectivedateSelector="PlanEffectiveDate";
+			}
+		else if(dropDownNo=="3") //for product codes
+		{
+		 $scope.enableplanCodeSelector=true;
+	 	$scope.enableissueStateSelector=true;
+	 	$scope.enablelineOfBusinessSelector=true;
+	 	$scope.enableplaneffectivedateSelector=true;
+	 	$scope.planCodeSelector="PlanCode";
+	 	$scope.issueStateSelector="IssueState";
+	 	$scope.lineOfBusinessSelector="LineOfBusiness";
+	 	$scope.planeffectivedateSelector="PlanEffectiveDate";
+		}
+		else if(dropDownNo=="4") //for plan code
+			{
+			$scope.enableissueStateSelector=true;
+		 	$scope.enablelineOfBusinessSelector=true;
+		 	$scope.enableplaneffectivedateSelector=true;
+		 	$scope.issueStateSelector="IssueState";
+		 	$scope.lineOfBusinessSelector="LineOfBusiness";
+		 	$scope.planeffectivedateSelector="PlanEffectiveDate";
+			}
+		else if(dropDownNo=="5") //for issue statecode
+		{
+		$scope.enablelineOfBusinessSelector=true;
+	 	$scope.enableplaneffectivedateSelector=true;
+		$scope.lineOfBusinessSelector="LineOfBusiness";
+		$scope.planeffectivedateSelector="PlanEffectiveDate";
+		}
+		
+		else if(dropDownNo=="6") //for lob
+		{
+			$scope.planeffectivedateSelector="PlanEffectiveDate";
+	 	$scope.enableplaneffectivedateSelector=true;
+		}
+	}
 	
 	
-	$scope.rules=
-	[
-		  {
-		    "coreValue": false,
-		    "displayValue": "Rules"
-		  },
-		  {
-		    "coreValue": true,
-		    "displayValue": "Rules with Changes"
-		  }
-		  
-		  ];
 	//$scope.rulesSelector=rules[0];
 	
 	$scope.triggerRulesNext=function(rulesSelector){
 		console.log("rule selected is "+rulesSelector);
 		$scope.rulesSelector=rulesSelector;
+		$scope.triggerdisableDropDowns("0");
 		businessRulesTabData.setruleSelector(rulesSelector);
 	}
 	
 	$scope.triggerEnvNext=function(environmentSelector){
 		console.log("value of environment selected is "+environmentSelector);
+		$scope.triggerdisableDropDowns("1");
 		$scope.environmentSelector=environmentSelector;
 		businessRulesTabData.setenvironmentSelector(environmentSelector);
-		   $http({
+		  if(environmentSelector!=null )
+			  {
+		$http({
     		    method: 'GET',
     		    url: '/ng-pw-rest/search/plan/company',
     		    headers: {
@@ -204,31 +295,40 @@ App.controller('bussinessRSController', ['$scope', 'MainUXService','$location','
     		        	   $scope.enablecompanySelector=false;
     		        	  $scope.companys=newResult.data;
     		        	  businessRulesTabData.setcompanys(newResult.data);
+    		        	  $scope.showAlert = false;
     		        	  
     		           }
-    		           else if(newResult.status == '401')
-    		        	   {
-    		        	   alert("Status recieved 401 :Incorrect username/pwd");
-
-    		        	   }
-    		           else if(newResult.status == '400')
-    		        	   {
-    		        		   alert("Bad Request. Invalid or malformed request detected.");
-    		        	   }
-    		           else if(newResult.status == '404')
-    		        	   {
-    		        	   alert("Not Found. No values found matching the provided key values.");
-    		        	   }
-    		           else{
-    		        	   console.log("error recieved ");
-
-    		           }
+    		        
     		       }, function(error) {
     		    	   console.log(error);
-    		    	   console.log(errror);
+    		    	   
+    		    	   if(error.status == '401')
+    		    	   {
+    		    		   alert("Status recieved 401 :Unauthorized access");
+    	     		  		window.location.replace("/ng-pw-ui/login.html");
+    	     		  		sessionStorage.removeItem("tokenId");
+
+    		    	   }
+    		    	   else if(error.status == '400')
+    		    	   {
+    		    		   console.log("Bad Request. Invalid or malformed request detected.");
+    		    	   }
+    		    	   else if(error.status == '404')
+    		    	   {
+    		    		   console.log("Not Found. No values found matching the provided key values.");
+    		    	   }
+    		    	   else{
+    		    		   console.log("error recieved ");
+
+    		    	   }
+    		    	   
+    		    		$scope.showAlert = true;
+    		    	 	$scope.apiCall=" company ";
     		    	   $scope.errorMessage = "Server Error";
     	        	   $scope.error = true;  
     		       });
+		   
+		   
 		   
 		   $http({
 	   		    method: 'GET',
@@ -247,41 +347,52 @@ App.controller('bussinessRSController', ['$scope', 'MainUXService','$location','
 	   		        	
 	   		        	  $scope.projects=newResult.data;
 	   		        	  businessRulesTabData.setprojects(newResult.data);
-	   		        	  
+	   		        	$scope.showAlert = false;
 	   		           }
-	   		           else if(newResult.status == '401')
-	   		        	   {
-	   		        	   console.log("Status recieved 401 :Unauthorized");
-
-	   		        	   }
-	   		        else if(newResult.status == '400')
-		        	   {
-		        		   alert("Bad Request. Invalid or malformed request detected.");
-		        	   }
-		           else if(newResult.status == '404')
-		        	   {
-		        	   alert("Not Found. No values found matching the provided key values.");
-		        	   }
-	   		           else{
-	   		        	   console.log("error recieved ");
-
-	   		           }
+	   		         
 	   		       }, function(error) {
 	   		    	   console.log(error);
-	   		    	   console.log(errror);
+	   		    	    if(error.status == '401')
+	   		    	   {
+	   		    		   console.log("Status recieved 401 :Unauthorized");
+
+	   		    	   }
+	   		    	   else if(error.status == '400')
+	   		    	   {
+	   		    		   console.log("Bad Request. Invalid or malformed request detected.");
+	   		    	   }
+	   		    	   else if(error.status == '404')
+	   		    	   {
+	   		    		   console.log("Not Found. No values found matching the provided key values.");
+	   		    		   $scope.projects="";
+	   		    	   }
+	   		    	   else{
+	   		    		   console.log("error recieved ");
+
+	   		    	   }
+	   		    	   $scope.showAlert = true;
+		    	 	   $scope.apiCall=" project ";   
 	   		    	   $scope.errorMessage = "Server Error";
 	   	        	   $scope.error = true;
 	   		       });
 		   
-		
+			  }
+		  else
+			  {
+			  $scope.projects="";
+			  }
+		 
 	}
 	
 	$scope.triggerCompNext= function(companySelector)
 	{
 		console.log("value of product selected is "+companySelector);
 		 $scope.companySelector= companySelector;
+		 $scope.triggerdisableDropDowns("2");
 		 businessRulesTabData.setcompanySelector(companySelector);
-		   $http({
+		 if( companySelector!=null)
+		   {
+			 $http({
    		    method: 'GET',
    		    url: '/ng-pw-rest/search/plan/product',
    		    headers: {
@@ -299,32 +410,36 @@ App.controller('bussinessRSController', ['$scope', 'MainUXService','$location','
    		        	 $scope.enableproductSelector=false;
    		        	  $scope.products=newResult.data;
    		        	businessRulesTabData.setproducts(newResult.data);
+   		        	$scope.showAlert = false;
    		        	  
    		           }
-   		           else if(newResult.status == '401')
-   		        	   {
-   		        	   console.log("Status recieved 401 :Unauthorized Access");
 
-   		        	   }
-   		        else if(newResult.status == '400')
-	        	   {
-	        		   alert("Bad Request. Invalid or malformed request detected.");
-	        	   }
-	           else if(newResult.status == '404')
-	        	   {
-	        	   alert("Not Found. No values found matching the provided key values.");
-	        	   }
-   		           else{
-   		        	   console.log("error recieved ");
-
-   		           }
    		       }, function(error) {
    		    	   console.log(error);
-   		    	   console.log(errror);
+   		    	   if(error.status == '401')
+   		    	   {
+   		    		   console.log("Status recieved 401 :Unauthorized Access");
+
+   		    	   }
+   		    	   else if(error.status == '400')
+   		    	   {
+   		    		   console.log("Bad Request. Invalid or malformed request detected.");
+   		    	   }
+   		    	   else if(error.status == '404')
+   		    	   {
+   		    		   console.log("Not Found. No values found matching the provided key values.");
+   		    	   }
+   		    	   else{
+   		    		   console.log("error recieved ");
+
+   		    	   }
+   		    	   
+   		    	   $scope.showAlert = true;
+	    	 	   $scope.apiCall=" product ";  
    		    	   $scope.errorMessage = "Server Error";
    	        	   $scope.error = true;
    		       });
-		
+	}
 	}
 	
 	
@@ -332,8 +447,11 @@ App.controller('bussinessRSController', ['$scope', 'MainUXService','$location','
 	{
 		console.log("value of product selected is "+productSelector);
 		 $scope.productSelector= productSelector;
+		 $scope.triggerdisableDropDowns("3");
 		 businessRulesTabData.setproductSelector(productSelector);
-		   $http({
+		 if( productSelector!=null)
+			 {
+		 $http({
    		    method: 'GET',
    		    url: '/ng-pw-rest/search/plan/plan',
    		    headers: {
@@ -353,31 +471,35 @@ App.controller('bussinessRSController', ['$scope', 'MainUXService','$location','
    		        	 $scope.enableplanCodeSelector=false;
    		        	  $scope.planCodes=newResult.data;
    		        	businessRulesTabData.setplanCodes(newResult.data);
-   		        	  
+   		        	$scope.showAlert = false;
    		           }
-   		           else if(newResult.status == '401')
-   		        	   {
-   		        	   console.log("Status recieved 401 :Unauthorized Access");
-
-   		        	   }
-   		        else if(newResult.status == '400')
-	        	   {
-	        		   alert("Bad Request. Invalid or malformed request detected.");
-	        	   }
-	           else if(newResult.status == '404')
-	        	   {
-	        	   alert("Not Found. No values found matching the provided key values.");
-	        	   }
-   		           else{
-   		        	   console.log("error recieved ");
-
-   		           }
+   		     
    		       }, function(error) {
    		    	   console.log(error);
-   		    	   console.log(errror);
+   		    	   if(error.status == '401')
+   		    	   {
+   		    		   console.log("Status recieved 401 :Unauthorized Access");
+
+   		    	   }
+   		    	   else if(error.status == '400')
+   		    	   {
+   		    		   console.log("Bad Request. Invalid or malformed request detected.");
+   		    	   }
+   		    	   else if(error.status == '404')
+   		    	   {
+   		    		   console.log("Not Found. No values found matching the provided key values.");
+   		    	   }
+   		    	   else{
+   		    		   console.log("error recieved ");
+
+   		    	   }
+   		    	   
+   		    	   $scope.showAlert = true;
+	    	 	   $scope.apiCall=" plan "; 
    		    	   $scope.errorMessage = "Server Error";
    	        	   $scope.error = true;
    		       });
+			 }
 		
 	}
 
@@ -385,8 +507,11 @@ App.controller('bussinessRSController', ['$scope', 'MainUXService','$location','
 	{
 		console.log("value of plan code selected is "+planCodeSelector);
 		 $scope.planCodeSelector= planCodeSelector;
+		 $scope.triggerdisableDropDowns("4");
 		 businessRulesTabData.setplanCodeSelector(planCodeSelector);
-		   $http({
+		  if(planCodeSelector!=null )
+			  {		  
+		 $http({
    		    method: 'GET',
    		    url: '/ng-pw-rest/search/plan/state',
    		    headers: {
@@ -407,32 +532,34 @@ App.controller('bussinessRSController', ['$scope', 'MainUXService','$location','
    		        	   $scope.enableissueStateSelector=false;
    		        	  $scope.issueStates=newResult.data;
    		        	 businessRulesTabData.setissueStates(newResult.data);
-   		        	  
+   		        	$scope.showAlert = false;
    		           }
-   		           else if(newResult.status == '401')
-   		        	   {
-   		        	   console.log("Status recieved 401 :Unauthorized Access");
-
-   		        	   }
-   		        else if(newResult.status == '400')
-	        	   {
-	        		   alert("Bad Request. Invalid or malformed request detected.");
-	        	   }
-	           else if(newResult.status == '404')
-	        	   {
-	        	   alert("Not Found. No values found matching the provided key values.");
-	        	   }
-   		           else{
-   		        	   console.log("error recieved ");
-
-   		           }
+   		        
    		       }, function(error) {
    		    	   console.log(error);
-   		    	   console.log(errror);
+   		    	   if(error.status == '401')
+   		    	   {
+   		    		   console.log("Status recieved 401 :Unauthorized Access");
+
+   		    	   }
+   		    	   else if(error.status == '400')
+   		    	   {
+   		    		   console.log("Bad Request. Invalid or malformed request detected.");
+   		    	   }
+   		    	   else if(error.status == '404')
+   		    	   {
+   		    		   console.log("Not Found. No values found matching the provided key values.");
+   		    	   }
+   		    	   else{
+   		    		   console.log("error recieved ");
+
+   		    	   }
+   		    	  $scope.showAlert = true;
+	    	 	   $scope.apiCall=" state ";
    		    	   $scope.errorMessage = "Server Error";
    	        	   $scope.error = true;
    		       });
-		
+			  }
 	}
 
 		
@@ -440,8 +567,11 @@ App.controller('bussinessRSController', ['$scope', 'MainUXService','$location','
 		{
 			console.log("value of plan code selected is "+issueStateSelector);
 			 $scope.issueStateSelector= issueStateSelector;
+			 $scope.triggerdisableDropDowns("5");
 			 businessRulesTabData.setissueStateSelector(issueStateSelector);
-			   $http({
+			  if(issueStateSelector!=null  )
+				  {
+			 $http({
 	   		    method: 'GET',
 	   		    url: '/ng-pw-rest/search/plan/lob',
 	   		    headers: {
@@ -462,41 +592,46 @@ App.controller('bussinessRSController', ['$scope', 'MainUXService','$location','
 	   		        	$scope.enablelineOfBusinessSelector=false;
 	   		        	  $scope.lobs=newResult.data;
 	   		        	businessRulesTabData.setlobs(newResult.data);
-	   		        	  
+	   		        	$scope.showAlert = false;
 	   		           }
-	   		           else if(newResult.status == '401')
-	   		        	   {
-	   		        	   console.log("Status recieved 401 :Unauthorized Access");
-
-	   		        	   }
-	   		        else if(newResult.status == '400')
-		        	   {
-		        		   alert("Bad Request. Invalid or malformed request detected.");
-		        	   }
-		           else if(newResult.status == '404')
-		        	   {
-		        	   alert("Not Found. No values found matching the provided key values.");
-		        	   }
-	   		           else{
-	   		        	   console.log("error recieved ");
-
-	   		           }
+	   		       
 	   		       }, function(error) {
 	   		    	   console.log(error);
-	   		    	   console.log(errror);
-	   		    	console.log("error recieved ");
+	   		    	   if(error.status == '401')
+	   		    	   {
+	   		    		   console.log("Status recieved 401 :Unauthorized Access");
+
+	   		    	   }
+	   		    	   else if(error.status == '400')
+	   		    	   {
+	   		    		   console.log("Bad Request. Invalid or malformed request detected.");
+	   		    	   }
+	   		    	   else if(error.status == '404')
+	   		    	   {
+	   		    		   console.log("Not Found. No values found matching the provided key values.");
+	   		    	   }
+	   		    	   else{
+	   		    		   console.log("error recieved ");
+
+	   		    	   }
+	   		    	  $scope.showAlert = true;
+		    	 	   $scope.apiCall=" lob ";
+	   		    	 console.log("error recieved ");
 	   		    	   $scope.errorMessage = "Server Error";
 	   	        	   $scope.error = true;
 	   		       });
-			
+				  }
 		}
 		
 		$scope.triggerlobNext= function(lineOfBusinessSelector)
 		{
 			console.log("value of plan code selected is "+lineOfBusinessSelector);
 			 $scope.lineOfBusinessSelector= lineOfBusinessSelector;
+			 $scope.triggerdisableDropDowns("6");
 			 businessRulesTabData.setlineOfBusinessSelector(lineOfBusinessSelector);
-			   $http({
+			  if(lineOfBusinessSelector!=null )
+				  {
+			 $http({
 	   		    method: 'GET',
 	   		    url: '/ng-pw-rest/search/plan/effdate',
 	   		    headers: {
@@ -519,32 +654,36 @@ App.controller('bussinessRSController', ['$scope', 'MainUXService','$location','
 	   		        	$scope.enableplaneffectivedateSelector=false;
 	   		        	  $scope.peds=newResult.data;
 	   		        	businessRulesTabData.setpeds(newResult.data);
-	   		        	  
+	   		        	$scope.showAlert = false;
 	   		           }
-	   		           else if(newResult.status == '401')
-	   		        	   {
-	   		        	   console.log("Status recieved 401 :Unauthorized Access");
-
-	   		        	   }
-	   		        else if(newResult.status == '400')
-		        	   {
-		        		   alert("Bad Request. Invalid or malformed request detected.");
-		        	   }
-		           else if(newResult.status == '404')
-		        	   {
-		        	   alert("Not Found. No values found matching the provided key values.");
-		        	   }
-	   		           else{
-	   		        	   console.log("error recieved ");
-
-	   		           }
+	   		        
 	   		       }, function(error) {
+	   		    	   
+	   		    	   if(error.status == '401')
+	   		    	   {
+	   		    		   console.log("Status recieved 401 :Unauthorized Access");
+
+	   		    	   }
+	   		    	   else if(error.status == '400')
+	   		    	   {
+	   		    		   console.log("Bad Request. Invalid or malformed request detected.");
+	   		    	   }
+	   		    	   else if(error.status == '404')
+	   		    	   {
+	   		    		   console.log("Not Found. No values found matching the provided key values.");
+	   		    	   }
+	   		    	   else{
+	   		    		   console.log("error recieved ");
+
+	   		    	   }
 	   		    	   console.log(error);
-	   		    	   console.log(errror);
+	   		    	   $scope.showAlert = true;
+		    	 	   $scope.apiCall=" effective date ";
 	   		    	   $scope.errorMessage = "Server Error";
 	   	        	   $scope.error = true;
 	   		       });
-			
+			  
+				  }
 		}
 		
 		$scope.triggerPlanEffDatNext= function(planeffectivedateSelector)

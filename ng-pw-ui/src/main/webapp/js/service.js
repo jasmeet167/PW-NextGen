@@ -282,3 +282,112 @@ App.service('businessRulesTabData',function()
        
 		}
 );
+
+/**
+ * Service for storing entire table 
+ * tab data
+ */
+
+App.service('entireTableTabData',function()
+		{
+	 var ruleSelector=null;
+	 var environmentSelector=null;
+	 var environments=null;
+	 var companySelector=null;
+	 var companys=null;
+	 var businessRulesSelector=null;
+	 var businessRules=null;
+	 
+	   return {
+           
+		   getruleSelector:getruleSelector,
+		   setruleSelector:setruleSelector,
+		   
+		   getenvironmentSelector: getenvironmentSelector,
+           setenvironmentSelector: setenvironmentSelector,
+           
+      	 getenvironments: getenvironments,
+		 setenvironments: setenvironments,
+
+		 getcompanySelector: getcompanySelector,
+		 setcompanySelector: setcompanySelector,
+
+		 getcompanys: getcompanys,
+		 setcompanys: setcompanys,
+
+		 getbusinessRuleSelector:getbusinessRuleSelector,
+		 setbusinessRuleSelector:setbusinessRuleSelector,
+
+		 getbusinessRules:getbusinessRules,
+		 setbusinessRules:setbusinessRules
+           
+           
+           
+       };
+
+       function getruleSelector() {
+           return ruleSelector;
+       }
+
+       function setruleSelector(value) {
+    	   ruleSelector = value;
+       }
+       
+       
+       function getenvironmentSelector() {
+           return environmentSelector;
+       }
+
+       function setenvironmentSelector(value) {
+    	   environmentSelector = value;
+       }
+       
+       function getenvironments() {
+           return environments;
+       }
+
+       function setenvironments(value) {
+    	   environments = value;
+       }
+       
+       function getcompanys() {
+           return companys;
+       }
+
+       function setcompanys(value) {
+    	   companys = value;
+       }
+       
+       function getcompanySelector() {
+           return companySelector;
+       }
+
+       function setcompanySelector(value) {
+    	   companySelector = value;
+       } 
+       
+       function getbusinessRules() {
+           return businessRules;
+       }
+
+       function setbusinessRules(value) {
+    	   businessRules = value;
+       }
+       
+       function getbusinessRuleSelector() {
+           return businessRulesSelector;
+       }
+
+       function setbusinessRuleSelector(value) {
+    	   businessRulesSelector = value;
+       } 
+       
+		}
+);
+
+
+// new
+
+
+
+

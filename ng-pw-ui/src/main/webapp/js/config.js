@@ -16,10 +16,10 @@ App.config(function($routeProvider) {
          templateUrl: 'dashboard.html',
          controller: 'mainUXController'
      }) .when('/businessRules', {
-         templateUrl: 'businessRulesSearch.html',
+         templateUrl: 'businessRulesSearchUI/businessRulesSearch.html',
          controller: 'bussinessRSController'
      }).when('/entireTable', {
-         templateUrl: 'entireTableTab.html',
+         templateUrl: 'entireTableTabUI/entireTableTab.html',
          controller: 'entireTableController'
      })
 

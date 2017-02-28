@@ -2,7 +2,23 @@
  
 var App = angular.module('mainuxApp');
 var environmentdata=[];
-App.controller('entireTableController', ['$scope', 'MainUXService','$location','$http','$rootScope','$route','$window', function($scope, MainUXService,$location,$http,$rootScope,$route,$window) {
+App.controller('entireTableController', ['$scope', 'MainUXService','$location','$http','$rootScope','$route','$window','entireTableTabData', function($scope, MainUXService,$location,$http,$rootScope,$route,$window,entireTableTabData) {
+	
+	$scope.rules=
+		[
+			  {
+			    "coreValue": false,
+			    "displayValue": "Rules"
+			  },
+			  {
+			    "coreValue": true,
+			    "displayValue": "Rules with Changes"
+			  }
+			  
+			  ];
+	
+	
+	  $scope.rulesSelector = $scope.rules[0].coreValue ;
 	
 	$scope.init= function (evt, tabName)
 	{
@@ -18,6 +34,8 @@ App.controller('entireTableController', ['$scope', 'MainUXService','$location','
 	     }
 	     document.getElementById(tabName).style.display = "block";	
 	     
+	     if(entireTableTabData.getenvironments()==null || entireTableTabData.getenvironments()=='')
+	     {
 	     //environment api trigger
 		   $http({
     		    method: 'GET',
@@ -33,59 +51,86 @@ App.controller('entireTableController', ['$scope', 'MainUXService','$location','
     		        	
     		        	  $scope.environments=newResult.data;
     		        	   $scope.errorMessage = "";
+    		        	   entireTableTabData.setenvironments(newResult.data);
     		           }
-    		           else if(newResult.status == '401')
-    		        	   {
-    		        	   console.log("Status recieved 401 :Incorrect Username/password");
-
-    		        	   }
-    		           else if(newResult.status == '400')
-		        	   {
-		        		   alert("Bad Request. Invalid or malformed request detected.");
-		        	   }
-		           else if(newResult.status == '404')
-		        	   {
-		        	   alert("Not Found. No values found matching the provided key values.");
-		        	   }
-    		           else{
-    		        	   console.log("error recieved ");
-
-    		           }
+    		   
     		       }, function(error) {
     		    	   console.log(error);
+    		    	   
+    		    	   if(error.status == '401')
+    		    	   {
+    		    		   console.log("Status recieved 401 :Incorrect Username/password");
+
+    		    	   }
+    		    	   else if(error.status == '400')
+    		    	   {
+    		    		   console.log("Bad Request. Invalid or malformed request detected.");
+    		    	   }
+    		    	   else if(error.status == '404')
+    		    	   {
+    		    		   console.log("Not Found. No values found matching the provided key values.");
+    		    	   }
+    		    	   else{
+    		    		   console.log("error recieved ");
+
+    		    	   }
+    		    	   
+    		    	   
     		    	   console.log(errror);
     		    	   $scope.errorMessage = "Server Error";
     	        	   $scope.error = true;
     		       });
 		
-	
+	     }
+	     else
+    	 {
+    	 $scope.environmentSelector=entireTableTabData.getenvironmentSelector();
+    	 $scope.environments=entireTableTabData.getenvironments();
+    	
+    	 }
+	     if(entireTableTabData.getruleSelector()!=null)
+	     {
+	    	 $scope.rulesSelector=entireTableTabData.getruleSelector();
+	     }
+	     if(entireTableTabData.getcompanys()!=null  )//|| businessRulesTabData.getcompanys()!=''
+    	 {
+    	 $scope.enablecompanySelector=false;
+    	 $scope.companys=entireTableTabData.getcompanys();
+    	 }
+	     if(entireTableTabData.getcompanySelector()!=null  ) //|| businessRulesTabData.getcompanySelector()!=''
+			{
+		    	 $scope.companySelector=entireTableTabData.getcompanySelector();
+			}
+	     if(entireTableTabData.getbusinessRules()!=null)
+	    	 {
+	    	
+	    	 $scope.businesRules=entireTableTabData.getbusinessRules();
+	    	 }
+	     if(entireTableTabData.getbusinessRuleSelector()!=null)
+	    	 {
+	    	 $scope.businessRulesSelector=entireTableTabData.getbusinessRuleSelector();
+	    	 }
 	}
 	
   // Default value set to true	
 	$scope.enablecompanySelector=true;
 	
-	$scope.rules=
-		[
-			  {
-			    "coreValue": false,
-			    "displayValue": "Rules"
-			  },
-			  {
-			    "coreValue": true,
-			    "displayValue": "Rules with Changes"
-			  }
-			  
-			  ];
+
 	
 		$scope.triggerRulesNext=function(rulesSelector){
 			console.log("rule selected is "+rulesSelector);
 			$scope.rulesSelector=rulesSelector;
+			entireTableTabData.setruleSelector(rulesSelector);
 		}
 	
 		$scope.triggerEnvNext=function(environmentSelector){
 		console.log("value of environment selected is "+environmentSelector);
 		$scope.environmentSelector=environmentSelector;
-		   $http({
+		entireTableTabData.setenvironmentSelector(environmentSelector);
+		$scope.enablecompanySelector=true;
+		  if(environmentSelector!=null)
+			  {
+		$http({
     		    method: 'GET',
     		    url: '/ng-pw-rest/search/plan/company',
     		    headers: {
@@ -101,39 +146,51 @@ App.controller('entireTableController', ['$scope', 'MainUXService','$location','
     		           if (newResult.status == '200' ){
     		        	   $scope.enablecompanySelector=false;
     		        	  $scope.companys=newResult.data;
+    		        	  entireTableTabData.setcompanys(newResult.data);
     		        	  
     		           }
-    		           else if(newResult.status == '401')
-    		        	   {
-    		        	   console.log("Status recieved 401 :Unauthorized Access");
-
-    		        	   }
-    		           else if(newResult.status == '400')
-		        	   {
-		        		   alert("Bad Request. Invalid or malformed request detected.");
-		        	   }
-		           else if(newResult.status == '404')
-		        	   {
-		        	   alert("Not Found. No values found matching the provided key values.");
-		        	   }
-    		           else{
-    		        	   console.log("error recieved ");
-
-    		           }
+    		       
     		       }, function(error) {
     		    	   console.log(error);
-    		    	   console.log(errror);
+    		    	   if(error.status == '401')
+    		    	   {
+    		    		   console.log("Status recieved 401 :Unauthorized Access");
+
+    		    	   }
+    		    	   else if(error.status == '400')
+    		    	   {
+    		    		   console.log("Bad Request. Invalid or malformed request detected.");
+    		    	   }
+    		    	   else if(error.status == '404')
+    		    	   {
+    		    		   console.log("Not Found. No values found matching the provided key values.");
+    		    	   }
+    		    	   else{
+    		    		   console.log("error recieved ");
+
+    		    	   }
     		    	   $scope.errorMessage = "Server Error";
     	        	   $scope.error = true;  
     		       });
 		   
+			  }
+		  else
+			  {
+			  $scope.companySelector="Company";
+			  $scope.businessRulesSelector="";
+			  $scope.businesRules="";
+			  $scope.enablecompanySelector=true;
+			  }
 		}
 		
 		$scope.triggerCompNext= function(companySelector){
 			
 			console.log("value of company selected is "+companySelector);
 			 $scope.companySelector= companySelector;
-			   $http({
+			 entireTableTabData.setcompanySelector(companySelector);
+			 if(companySelector!=null ) 
+				 {
+			 $http({
 	   		    method: 'GET',
 	   		    url: '/ng-pw-rest/search/plan/table',
 	   		    headers: {
@@ -149,25 +206,36 @@ App.controller('entireTableController', ['$scope', 'MainUXService','$location','
 	   		           if (newResult.status == '200' ){
 	   		        	
 	   		        	  $scope.businesRules=newResult.data;
-	   		        	  
+	   		        	entireTableTabData.setbusinessRules(newResult.data);
 	   		           }
-	   		           else if(newResult.status == '401')
-	   		        	   {
-	   		        	   console.log("Status recieved 401 :Unauthorized Access");
-
-	   		        	   }
-	   		           else{
-	   		        	   console.log("error recieved ");
-
-	   		           }
+	   		         
 	   		       }, function(error) {
 	   		    	   console.log(error);
-	   		    	   console.log(errror);
+	   		    	   if(error.status == '401')
+	   		    	   {
+	   		    		   console.log("Status recieved 401 :Unauthorized Access");
+
+	   		    	   }
+	   		    	   
+	   		    	   if(error.status == '404')
+	   		    		   {
+	   		    		$scope.businesRules="";
+	   		    		   }
+	   		    	   else{
+	   		    		   console.log("error recieved ");
+
+	   		    	   }
 	   		    	   $scope.errorMessage = "Server Error";
 	   	        	   $scope.error = true;
 	   		       });
 			
-			
+				 }
+			 else
+				 {
+				 $scope.businessRulesSelector="";
+				 $scope.businesRules="";
+				 entireTableTabData.setbusinessRules("");
+				 }
 		}
 		
 		$scope.businessRulesSelector = [];

@@ -70,8 +70,8 @@
 	<script src="js/service.js"></script>
 
 	<script src="js/lazyload.js"></script>
-	<script src="js/businessRSController.js"></script>
-	<script src="js/entireTableController.js"></script>
+	<script src="js/businessRulesSearchTab/businessRSController.js"></script>
+	<script src="js/entireTableTab/entireTableController.js"></script>
 	
 	<link rel="stylesheet" href="css/custom/ux-theme.css">
 
@@ -258,9 +258,9 @@ onclick="openCity(event, 'Continuity check')"
 href="javascript:void(0)"
 
 -->
-  <li><a  class="tablinks" href="#businessRules" >Business Rules Search</a></li>
+  <li><a  class="tablinks" href="#businessRules" id="brsID" ng-focus="tabfocus($event)">Business Rules Search</a></li>
   
-  <li><a  class="tablinks"  href="#entireTable" >Entire Table</a></li>
+  <li><a  class="tablinks"  href="#entireTable" ng-focus="tabfocus($event)"> Entire Table</a></li>
   <li><a  class="tablinks" >Changes only</a></li>
    <li><a  class="tablinks" >Apply Changes</a></li>
     <li><a  class="tablinks" >Audit\Error</a></li>
@@ -304,7 +304,7 @@ href="javascript:void(0)"
            
       
             
-<span class="ux_copyright"><i class="fa fa-copyright"></i>2017 Computer Sciences Corporation. All rights reserved.</span>
+<span class="ux_copyright" style="margin-left: 20px"><i class="fa fa-copyright"></i>2017 Computer Sciences Corporation. All rights reserved.</span>
 
 
 
