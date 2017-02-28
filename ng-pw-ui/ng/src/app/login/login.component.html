@@ -1,0 +1,33 @@
+<p-messages [value]="msgs"></p-messages>
+
+<p-panel header="Logon to Product Wizard">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm.value)">
+    <div style="margin-left: 40px; margin-top: 30px; margin-bottom: 30px;">
+      <table>
+        <tr>
+          <td style="text-align: right">
+            <span>User Name*:&#xa0;</span>
+          </td>
+          <td>
+            <input pInputText type="text" formControlName="userName" placeholder="Required"/>
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align: right">
+            <span>Password*:&#xa0;</span>
+          </td>
+          <td>
+             <input pInputText type="password" formControlName="password" placeholder="Required"/>
+          </td>
+        </tr>
+        <tr>
+          <td>
+          </td>
+          <td style="padding-top: 20px">
+            <button pButton type="submit" label="Log in" [disabled]="!loginForm.valid"></button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </form>
+</p-panel>

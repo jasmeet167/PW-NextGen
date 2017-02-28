@@ -1,0 +1,106 @@
+<p-messages [value]="msgs"></p-messages>
+<p-menubar [model]="menuModel"></p-menubar>
+
+<p-tabView [style]="{'margin-top':'5px'}">
+    <p-tabPanel header="Business Rule Search" lazy="false">
+      <ul>
+        <li>
+          <p-dropdown [options]="filterChangesOptions" [(ngModel)]="filterChanges" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="filterEnvOptions" [(ngModel)]="filterEnv" (onChange)="onEnvChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="filterCompanyOptions" [(ngModel)]="filterCompany" [disabled]="filterCompanyDisabled" (onChange)="onCompanyChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="filterProductOptions" [(ngModel)]="filterProduct" [disabled]="filterProductDisabled" (onChange)="onProductChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="filterPlanCodeOptions" [(ngModel)]="filterPlanCode" [disabled]="filterPlanCodeDisabled" (onChange)="onPlanCodeChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="filterIssueStatOptions" [(ngModel)]="filterIssueState" [disabled]="filterIssueStateDisabled" (onChange)="onIssueStateChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="filterLobOptions" [(ngModel)]="filterLob" [disabled]="filterLobDisabled" (onChange)="onLobChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="filterPlanEffDateOptions" [(ngModel)]="filterPlanEffDate" [disabled]="filterPlanEffDateDisabled" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li class="li-extra-space">
+          <span>Project(s)</span>
+        </li>
+        <li>
+          <p-listbox [options]="filterProjectRows" [(ngModel)]="filterProjects" [multiple]="true" [style]="{'width':'350px','height':'150px','margin-bottom':'15px'}"></p-listbox>
+        </li>
+        <li>
+          <p-checkbox [(ngModel)]="filterInclOrphans" binary="true" [disabled]="filterInclOrphansDisabled"></p-checkbox>
+          <span>Show orphan subsets</span>
+        </li>
+        <li>
+          <p-checkbox [(ngModel)]="filterRememberSelections" binary="true"></p-checkbox>
+          <span>Remember my selections</span>
+        </li>
+        <li class="li-extra-space">
+          <button pButton type="button" (click)="onGoClick()" label="Go"></button>
+        </li>
+      </ul>
+    </p-tabPanel>
+    <p-tabPanel header="Entire Table" lazy="true">
+        <div style="color:red; margin: auto; width: 50%;">
+            <p>
+            <h1>
+              Pending Implementation
+            </h1>
+        </div>
+    </p-tabPanel>
+    <p-tabPanel header="Changes Only" lazy="true">
+        <div style="color:red; margin: auto; width: 50%;">
+            <p>
+            <h1>
+              Pending Implementation
+            </h1>
+        </div>
+    </p-tabPanel>
+    <p-tabPanel header="Apply Changes" lazy="true">
+        <div style="color:red; margin: auto; width: 50%;">
+            <p>
+            <h1>
+              Pending Implementation
+            </h1>
+        </div>
+    </p-tabPanel>
+    <p-tabPanel header="Audit/Error" lazy="true">
+        <div style="color:red; margin: auto; width: 50%;">
+            <p>
+            <h1>
+              Pending Implementation
+            </h1>
+        </div>
+    </p-tabPanel>
+    <p-tabPanel header="Promote" lazy="true">
+        <div style="color:red; margin: auto; width: 50%;">
+            <p>
+            <h1>
+              Pending Implementation
+            </h1>
+        </div>
+    </p-tabPanel>
+    <p-tabPanel header="Summary" lazy="true">
+        <div style="color:red; margin: auto; width: 50%;">
+            <p>
+            <h1>
+              Pending Implementation
+            </h1>
+        </div>
+    </p-tabPanel>
+    <p-tabPanel header="Continuity Check" lazy="true">
+        <div style="color:red; margin: auto; width: 50%;">
+            <p>
+            <h1>
+              Pending Implementation
+            </h1>
+        </div>
+    </p-tabPanel>
+</p-tabView>

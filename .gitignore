@@ -40,7 +40,10 @@
 
 # /ng-pw-ui/
 /ng-pw-ui/.apt_generated
-/ng-pw-ui/node
-/ng-pw-ui/node_modules
-/ng-pw-ui/src/main/webapp/static/bower_components
+/ng-pw-ui/ng/node
+/ng-pw-ui/ng/node_modules
+/ng-pw-ui/src/main/webapp/*
+!/ng-pw-ui/src/main/webapp/META-INF/
+/ng-pw-ui/src/main/webapp/*
+!/ng-pw-ui/src/main/webapp/WEB-INF
 /ng-pw-ui/target
