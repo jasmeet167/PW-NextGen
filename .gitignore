@@ -43,6 +43,7 @@
 /ng-pw-ui/ng/dist
 /ng-pw-ui/ng/node
 /ng-pw-ui/ng/node_modules
+/ng-pw-ui/ng/src/assets/data/configuration.json
 /ng-pw-ui/src/main/webapp/*
 !/ng-pw-ui/src/main/webapp/META-INF/
 /ng-pw-ui/src/main/webapp/*
