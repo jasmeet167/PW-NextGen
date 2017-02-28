@@ -34,15 +34,23 @@
 						<configuration>
 							<filesets>
 								<fileset>
-									<directory>ng/node</directory>
+									<directory>${basedir}/ng/node</directory>
 									<followSymlinks>false</followSymlinks>
 								</fileset>
 								<fileset>
-									<directory>ng/node_modules</directory>
+									<directory>${basedir}/ng/node_modules</directory>
 									<followSymlinks>false</followSymlinks>
 								</fileset>
 								<fileset>
-									<directory>ng/dist</directory>
+									<directory>${basedir}/ng/dist</directory>
+									<followSymlinks>false</followSymlinks>
+								</fileset>
+								<fileset>
+									<directory>${basedir}/src/main/webapp</directory>
+									<excludes>
+										<exclude>META-INF/*</exclude>
+										<exclude>WEB-INF/*</exclude>
+									</excludes>
 									<followSymlinks>false</followSymlinks>
 								</fileset>
 							</filesets>
@@ -59,12 +67,10 @@
 									<goal>copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>${basedir}/target/classes/static</outputDirectory>
+									<outputDirectory>${basedir}/src/main/webapp</outputDirectory>
 									<resources>
-										<!-- We don't have directory named app - what should be there? -->
 										<resource>
-											<directory>app</directory>
-											<filtering>true</filtering>
+											<directory>${basedir}/ng/dist/</directory>
 										</resource>
 									</resources>
 								</configuration>
@@ -94,7 +100,7 @@
 								<configuration>
 									<workingDirectory>${basedir}/ng</workingDirectory>
 									<arguments>install</arguments>
-									<!--  Use different profile for this -->
+									<!--  Use a different profile for production installation -->
 									<!-- <arguments>install \-\-production</arguments> -->
 								</configuration>
 							</execution>
