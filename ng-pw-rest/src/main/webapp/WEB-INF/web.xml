@@ -6,7 +6,7 @@
          id="WebApp_ID"
          metadata-complete="true">
 
-	<display-name>NG Product Wizard REST Services</display-name>
+	<display-name>NextGen Product Wizard REST Services</display-name>
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>

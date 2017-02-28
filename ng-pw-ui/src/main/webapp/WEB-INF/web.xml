@@ -5,4 +5,6 @@
          version="3.1"
          id="WebApp_ID"
          metadata-complete="true">
+
+	<display-name>NextGen Product Wizard User Interface</display-name>
 </web-app>
