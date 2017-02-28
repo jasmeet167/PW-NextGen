@@ -34,15 +34,15 @@
 						<configuration>
 							<filesets>
 								<fileset>
-									<directory>node</directory>
+									<directory>ng/node</directory>
 									<followSymlinks>false</followSymlinks>
 								</fileset>
 								<fileset>
-									<directory>node_modules</directory>
+									<directory>ng/node_modules</directory>
 									<followSymlinks>false</followSymlinks>
 								</fileset>
 								<fileset>
-									<directory>src/main/webapp/static/bower_components</directory>
+									<directory>ng/dist</directory>
 									<followSymlinks>false</followSymlinks>
 								</fileset>
 							</filesets>
@@ -76,23 +76,47 @@
 						<artifactId>frontend-maven-plugin</artifactId>
 						<executions>
 							<execution>
-								<id>install node and npm</id>
+								<id>install-node-and-npm</id>
 								<goals>
 									<goal>install-node-and-npm</goal>
 								</goals>
 								<configuration>
+									<workingDirectory>${basedir}/ng</workingDirectory>
 									<nodeVersion>${nodeVersion}</nodeVersion>
 									<npmVersion>${npmVersion}</npmVersion>
 								</configuration>
 							</execution>
 							<execution>
-								<id>npm install</id>
+								<id>npm-install</id>
 								<goals>
 									<goal>npm</goal>
 								</goals>
-								<!-- Optional configuration which provides for running any npm command -->
 								<configuration>
+									<workingDirectory>${basedir}/ng</workingDirectory>
 									<arguments>install</arguments>
+									<!--  Use different profile for this -->
+									<!-- <arguments>install \-\-production</arguments> -->
+								</configuration>
+							</execution>
+							<execution>
+								<id>cli-install</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<configuration>
+									<workingDirectory>${basedir}/ng</workingDirectory>
+									<arguments>install --no-optional @angular/cli@1.0.0-beta.32.3</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>ng-build</id>
+								<phase>prepare-package</phase>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<configuration>
+									<workingDirectory>${basedir}/ng</workingDirectory>
+									<arguments>run-script build</arguments>
 								</configuration>
 							</execution>
 						</executions>
@@ -101,10 +125,4 @@
 			</build>
 		</profile>
 	</profiles>
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-		</dependency>
-	</dependencies>
 </project>
