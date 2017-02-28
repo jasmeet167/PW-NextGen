@@ -1,9 +1,9 @@
-# NG Product Wizard REST API
+# NextGen Product Wizard REST API
 swagger: '2.0'
 
 info:
-  title: NG Product Wizard Business Rules Tree API
-  description: Business Rules Tree REST API for NG Product Wizard
+  title: NextGen Product Wizard Business Rules Tree API
+  description: Business Rules Tree REST API for NextGen Product Wizard
   version: "0.0.1"
 
 host: localhost:8443

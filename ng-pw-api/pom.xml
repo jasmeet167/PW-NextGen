@@ -18,13 +18,18 @@
 					<filesets>
 						<fileset>
 							<directory>.</directory>
-								<followSymlinks>false</followSymlinks>
-								<includes>
-									<include>LICENSE</include>
-								</includes>
+							<followSymlinks>false</followSymlinks>
+							<includes>
+								<include>LICENSE</include>
+							</includes>
 						</fileset>
 						<fileset>
 							<directory>${basedir}/src/main/java</directory>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
+						<fileset>
+							<directory>${basedir}/src/main/ts</directory>
+							<followSymlinks>false</followSymlinks>
 						</fileset>
 					</filesets>
 				</configuration>
@@ -60,6 +65,20 @@
 							<modelPackage>com.csc.fsg.life.rest.model</modelPackage>
 							<language>spring</language>
 							<output>${basedir}</output>
+						</configuration>
+					</execution>
+					<execution>
+						<id>generate-basic-scripts</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${basedir}/src/main/resources/api/basic-api.yaml</inputSpec>
+							<apiPackage>api</apiPackage>
+							<modelPackage>model</modelPackage>
+							<language>typescript-angular</language>
+							<output>${basedir}/src/main/ts</output>
 						</configuration>
 					</execution>
 				</executions>

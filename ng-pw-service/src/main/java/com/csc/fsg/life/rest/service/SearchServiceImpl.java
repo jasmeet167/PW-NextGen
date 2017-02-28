@@ -37,11 +37,10 @@ import com.csc.fsg.life.rest.exception.UnexpectedException;
 import com.csc.fsg.life.rest.model.ApplyFilterData;
 import com.csc.fsg.life.rest.model.AuditFilterData;
 import com.csc.fsg.life.rest.model.ChangesFilterData;
-import com.csc.fsg.life.rest.model.CommonSelectItem;
-import com.csc.fsg.life.rest.model.DateSelectItem;
 import com.csc.fsg.life.rest.model.ErrorModel;
 import com.csc.fsg.life.rest.model.PlanSearchInput;
 import com.csc.fsg.life.rest.model.PromoteFilterData;
+import com.csc.fsg.life.rest.model.SelectItem;
 import com.csc.fsg.life.rest.model.SummarySearchInput;
 import com.csc.fsg.life.rest.param.RestServiceParam;
 
@@ -58,7 +57,7 @@ public class SearchServiceImpl
 		super("com.csc.fsg.life.rest.service.SearchService");
 	}
 
-	public List<CommonSelectItem> getCommonEnvironments(RestServiceParam param)
+	public List<SelectItem> getCommonEnvironments(RestServiceParam param)
 	{
 		try {
 			CommonApplicationConfigBean pwConfig = getBean(CommonApplicationConfigBean.class);
@@ -70,16 +69,16 @@ public class SearchServiceImpl
 				throw new NotFoundException(model);
 			}
 
-			List<CommonSelectItem> envList = new ArrayList<>();
+			List<SelectItem> envList = new ArrayList<>();
 			for (MyBatisApplicationEnvironmentBean envBean : environmentMap.values()) {
-				CommonSelectItem env = new CommonSelectItem();
+				SelectItem env = new SelectItem();
 				envList.add(env);
-				env.setCoreValue(envBean.getName());
-				env.setDisplayValue(envBean.getDisplayName());
+				env.setValue(envBean.getName());
+				env.setLabel(envBean.getDisplayName());
 			}
 
 			String sessionToken = param.getSessionToken();
-			List<CommonSelectItem> response = securityService.filterAuthorizedEnvironments(sessionToken, envList);
+			List<SelectItem> response = securityService.filterAuthorizedEnvironments(sessionToken, envList);
 			if (response.isEmpty())
 				throw new ForbiddenException();
 
@@ -95,7 +94,7 @@ public class SearchServiceImpl
 		}
 	}
 
-	public List<CommonSelectItem> getPlanCommonValues(RestServiceParam param, PlanSearchInput searchInput)
+	public List<SelectItem> getPlanCommonValues(RestServiceParam param, PlanSearchInput searchInput)
 	{
 		try {
 			String envId = param.getEnvId();
@@ -148,21 +147,21 @@ public class SearchServiceImpl
 				throw new NotFoundException(model);
 			}
 
-			List<CommonSelectItem> commonValues = new ArrayList<>();
+			List<SelectItem> commonValues = new ArrayList<>();
 			for (Map.Entry<String, String> entry : commonValuesMap.entrySet()) {
-				CommonSelectItem item = new CommonSelectItem();
+				SelectItem item = new SelectItem();
 				commonValues.add(item);
-				item.setCoreValue(entry.getKey());
+				item.setValue(entry.getKey());
 
 				if (isCoreValueShown)
-					item.setDisplayValue(entry.getKey() + '-' + entry.getValue());
+					item.setLabel(entry.getKey() + '-' + entry.getValue());
 				else
-					item.setDisplayValue(entry.getValue());
+					item.setLabel(entry.getValue());
 			}
 
 			if (isCompanyCodesSearch) {
 				String sessionToken = param.getSessionToken();
-				List<CommonSelectItem> response = securityService.filterAuthorizedCompanies(sessionToken, envId, commonValues);
+				List<SelectItem> response = securityService.filterAuthorizedCompanies(sessionToken, envId, commonValues);
 				if (response.isEmpty())
 					throw new ForbiddenException();
 
@@ -182,7 +181,7 @@ public class SearchServiceImpl
 		}
 	}
 
-	public List<DateSelectItem> getPlanEffDates(RestServiceParam param, PlanSearchInput searchInput)
+	public List<SelectItem> getPlanEffDates(RestServiceParam param, PlanSearchInput searchInput)
 	{
 		try {
 			String envId = param.getEnvId();
@@ -233,15 +232,15 @@ public class SearchServiceImpl
 				dateValuesMap = context.getEffectiveDates(planCriteria);
 			}
 
-			List<DateSelectItem> dateValues = new ArrayList<>();
+			List<SelectItem> dateValues = new ArrayList<>();
 			for (Map.Entry<String, String> entry : dateValuesMap.entrySet()) {
-				DateSelectItem item = new DateSelectItem();
+				SelectItem item = new SelectItem();
 				dateValues.add(item);
 
 				Date date = Date.valueOf(entry.getKey());
 				LocalDate localDate = new LocalDate(date.getTime());
-				item.setCoreValue(localDate);
-				item.setDisplayValue(entry.getValue());
+				item.setValue(localDate);
+				item.setLabel(entry.getValue());
 			}
 
 			if (dateValues.isEmpty()) {
@@ -262,7 +261,7 @@ public class SearchServiceImpl
 		}
 	}
 
-	public List<String> getPlanProjects(RestServiceParam param)
+	public List<SelectItem> getPlanProjects(RestServiceParam param)
 	{
 		try {
 			String envId = param.getEnvId();
@@ -276,11 +275,18 @@ public class SearchServiceImpl
 			}
 
 			List<String> rawProjects = WIPRows.getDistinctItemsFromWIP(env, wipProps.getProjectName(), false);
-			List<String> projects = new ArrayList<>();
-			if (rawProjects != null)
-				for (String rawProject : rawProjects)
-					if (rawProject != null)
-						projects.add(rawProject.trim());
+			List<SelectItem> projects = new ArrayList<>();
+			if (rawProjects != null) {
+				for (String rawProject : rawProjects) {
+					if (rawProject != null) {
+						String trimProject = rawProject.trim();
+						SelectItem item = new SelectItem();
+						item.setValue(trimProject);
+						item.setLabel(trimProject);
+						projects.add(item);
+					}
+				}
+			}
 
 			if (projects.isEmpty()) {
 				HttpStatus status = NotFoundException.HTTP_STATUS;
@@ -300,7 +306,7 @@ public class SearchServiceImpl
 		}
 	}
 
-	public List<CommonSelectItem> getPlanTables(RestServiceParam param)
+	public List<SelectItem> getPlanTables(RestServiceParam param)
 	{
 		try {
 			String envId = param.getEnvId();
@@ -324,20 +330,20 @@ public class SearchServiceImpl
 				throw new NotFoundException(model);
 			}
 
-			List<CommonSelectItem> allTables = new ArrayList<>();
+			List<SelectItem> allTables = new ArrayList<>();
 			String key = null;
 
 			Set<Map.Entry<String, String>> entries = tables.entrySet();
 			for (Map.Entry<String, String> entry : entries) {
 				key = entry.getKey();
-				CommonSelectItem rule = new CommonSelectItem();
+				SelectItem rule = new SelectItem();
 				allTables.add(rule);
-				rule.setCoreValue(key);
-				rule.setDisplayValue(key + "-" + entry.getValue());
+				rule.setValue(key);
+				rule.setLabel(key + "-" + entry.getValue());
 			}
 
 			String sessionToken = param.getSessionToken();
-			List<CommonSelectItem> response = securityService.filterAuthorizedTables(sessionToken, envId, companyCode, allTables);
+			List<SelectItem> response = securityService.filterAuthorizedTables(sessionToken, envId, companyCode, allTables);
 			if (response.isEmpty())
 				throw new ForbiddenException();
 
@@ -353,7 +359,7 @@ public class SearchServiceImpl
 		}
 	}
 
-	public List<CommonSelectItem> getChangesEnvironments(RestServiceParam param)
+	public List<SelectItem> getChangesEnvironments(RestServiceParam param)
 	{
 		try {
 			// For reference, see method fetchEnvironments() in class
@@ -361,13 +367,13 @@ public class SearchServiceImpl
 			// Product Wizard.
 
 			// Only environemnts the user is authorized to access will be returned
-			List<CommonSelectItem> allEnvironments = getCommonEnvironments(param);
-			String refEnvId = allEnvironments.get(0).getCoreValue();
-			Environment refEnvironment = EnvironmentManager.getInstance().getEnvironment(refEnvId);
+			List<SelectItem> allEnvironments = getCommonEnvironments(param);
+			Object refEnvId = allEnvironments.get(0).getValue();
+			Environment refEnvironment = EnvironmentManager.getInstance().getEnvironment((String) refEnvId);
 
-			Map<String, CommonSelectItem> envMap = new HashMap<>();
-			for (CommonSelectItem environment : allEnvironments)
-				envMap.put(environment.getCoreValue(), environment);
+			Map<Object, SelectItem> envMap = new HashMap<>();
+			for (SelectItem environment : allEnvironments)
+				envMap.put(environment.getValue(), environment);
 
 			PackageBean packageHelper = new PackageBean(refEnvironment, null, null);
 			packageHelper.setSource(Constants.WIP);
@@ -377,11 +383,11 @@ public class SearchServiceImpl
 			String valueString = packageHelper.getInitialValues();
 			String[] values = valueString.split("\t");
 
-			List<CommonSelectItem> envList = new ArrayList<>();
+			List<SelectItem> envList = new ArrayList<>();
 			for (String value : values) {
 				if (value != null) {
 					String trimmedValue = value.trim();
-					CommonSelectItem env = envMap.get(trimmedValue);
+					SelectItem env = envMap.get(trimmedValue);
 					if (env != null)
 						envList.add(env);
 				}
@@ -450,9 +456,9 @@ public class SearchServiceImpl
 						if (delimiterIdx > 0)
 							coreValue = displayValue.substring(0, displayValue.indexOf("-")).trim();
 
-						CommonSelectItem item = new CommonSelectItem();
-						item.setCoreValue(coreValue);
-						item.setDisplayValue(displayValue);
+						SelectItem item = new SelectItem();
+						item.setValue(coreValue);
+						item.setLabel(displayValue);
 						filterData.addBusinessRuleTablesItem(item);
 					}
 				}
@@ -525,9 +531,9 @@ public class SearchServiceImpl
 						if (delimiterIdx > 0)
 							coreValue = displayValue.substring(0, displayValue.indexOf("-")).trim();
 
-						CommonSelectItem item = new CommonSelectItem();
-						item.setCoreValue(coreValue);
-						item.setDisplayValue(displayValue);
+						SelectItem item = new SelectItem();
+						item.setValue(coreValue);
+						item.setLabel(displayValue);
 						filterData.addPackagesItem(item);
 					}
 				}
@@ -609,9 +615,9 @@ public class SearchServiceImpl
 						if (delimiterIdx > 0)
 							coreValue = displayValue.substring(0, displayValue.indexOf("-")).trim();
 
-						CommonSelectItem item = new CommonSelectItem();
-						item.setCoreValue(coreValue);
-						item.setDisplayValue(displayValue);
+						SelectItem item = new SelectItem();
+						item.setValue(coreValue);
+						item.setLabel(displayValue);
 						filterData.addPackagesItem(item);
 					}
 				}
@@ -630,9 +636,9 @@ public class SearchServiceImpl
 						if (delimiterIdx > 0)
 							coreValue = displayValue.substring(0, displayValue.indexOf("-")).trim();
 
-						CommonSelectItem item = new CommonSelectItem();
-						item.setCoreValue(coreValue);
-						item.setDisplayValue(displayValue);
+						SelectItem item = new SelectItem();
+						item.setValue(coreValue);
+						item.setLabel(displayValue);
 						filterData.addBusinessRuleTablesItem(item);
 					}
 				}
@@ -713,9 +719,9 @@ public class SearchServiceImpl
 						if (delimiterIdx > 0)
 							coreValue = displayValue.substring(0, displayValue.indexOf("-")).trim();
 
-						CommonSelectItem item = new CommonSelectItem();
-						item.setCoreValue(coreValue);
-						item.setDisplayValue(displayValue);
+						SelectItem item = new SelectItem();
+						item.setValue(coreValue);
+						item.setLabel(displayValue);
 						filterData.addPackagesItem(item);
 					}
 				}
@@ -748,7 +754,7 @@ public class SearchServiceImpl
 		}
 	}
 
-	public List<CommonSelectItem> getSummaryCommonValues(RestServiceParam param, SummarySearchInput searchInput)
+	public List<SelectItem> getSummaryCommonValues(RestServiceParam param, SummarySearchInput searchInput)
 	{
 		try {
 			// For reference, see method getNextPlanKey() in class
@@ -813,21 +819,21 @@ public class SearchServiceImpl
 				throw new NotFoundException(model);
 			}
 
-			List<CommonSelectItem> commonValues = new ArrayList<>();
+			List<SelectItem> commonValues = new ArrayList<>();
 			for (Map.Entry<String, String> entry : commonValuesMap.entrySet()) {
-				CommonSelectItem item = new CommonSelectItem();
+				SelectItem item = new SelectItem();
 				commonValues.add(item);
-				item.setCoreValue(entry.getKey());
+				item.setValue(entry.getKey());
 
 				if (isCoreValueShown)
-					item.setDisplayValue(entry.getKey() + '-' + entry.getValue());
+					item.setLabel(entry.getKey() + '-' + entry.getValue());
 				else
-					item.setDisplayValue(entry.getValue());
+					item.setLabel(entry.getValue());
 			}
 
 			if (isCompanyCodesSearch) {
 				String sessionToken = param.getSessionToken();
-				List<CommonSelectItem> response = securityService.filterAuthorizedCompanies(sessionToken, envId, commonValues);
+				List<SelectItem> response = securityService.filterAuthorizedCompanies(sessionToken, envId, commonValues);
 				if (response.isEmpty())
 					throw new ForbiddenException();
 
@@ -847,7 +853,7 @@ public class SearchServiceImpl
 		}
 	}
 
-	public List<DateSelectItem> getSummaryEffDates(RestServiceParam param, SummarySearchInput searchInput)
+	public List<SelectItem> getSummaryEffDates(RestServiceParam param, SummarySearchInput searchInput)
 	{
 		try {
 			// For reference, see method getNextPlanKey() in class
@@ -910,15 +916,15 @@ public class SearchServiceImpl
 				dateValuesMap = context.getEffectiveDates(planCriteria);
 			}
 
-			List<DateSelectItem> dateValues = new ArrayList<>();
+			List<SelectItem> dateValues = new ArrayList<>();
 			for (Map.Entry<String, String> entry : dateValuesMap.entrySet()) {
-				DateSelectItem item = new DateSelectItem();
+				SelectItem item = new SelectItem();
 				dateValues.add(item);
 
 				Date date = Date.valueOf(entry.getKey());
 				LocalDate localDate = new LocalDate(date.getTime());
-				item.setCoreValue(localDate);
-				item.setDisplayValue(entry.getValue());
+				item.setValue(localDate);
+				item.setLabel(entry.getValue());
 			}
 
 			if (dateValues.isEmpty()) {

@@ -26,9 +26,9 @@ import com.csc.fsg.life.rest.exception.ForbiddenException;
 import com.csc.fsg.life.rest.exception.RestServiceException;
 import com.csc.fsg.life.rest.exception.UnexpectedException;
 import com.csc.fsg.life.rest.model.BusinessRuleTreeSearchInput;
-import com.csc.fsg.life.rest.model.CommonSelectItem;
 import com.csc.fsg.life.rest.model.ErrorModel;
 import com.csc.fsg.life.rest.model.PlanSearchInput;
+import com.csc.fsg.life.rest.model.SelectItem;
 import com.csc.fsg.life.rest.model.TreeNode;
 import com.csc.fsg.life.rest.model.tree.Node;
 import com.csc.fsg.life.rest.param.RestServiceParam;
@@ -142,11 +142,11 @@ public class TreeServiceImpl
 	private Vector<String> getCompanyCodes(RestServiceParam param)
 	{
 		PlanSearchInput searchInput = new PlanSearchInput();
-		List<CommonSelectItem> companyList = searchService.getPlanCommonValues(param, searchInput);
+		List<SelectItem> companyList = searchService.getPlanCommonValues(param, searchInput);
 
 		Vector<String> compCodesVector = new Vector<>();
-		for (CommonSelectItem company : companyList)
-			compCodesVector.add(company.getCoreValue());
+		for (SelectItem company : companyList)
+			compCodesVector.add((String) company.getValue());
 
 		return compCodesVector;
 	}

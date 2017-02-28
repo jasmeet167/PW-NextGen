@@ -28,9 +28,9 @@ import com.csc.fsg.life.rest.exception.ForbiddenException;
 import com.csc.fsg.life.rest.exception.RestServiceException;
 import com.csc.fsg.life.rest.exception.UnauthorizedException;
 import com.csc.fsg.life.rest.exception.UnexpectedException;
-import com.csc.fsg.life.rest.model.CommonSelectItem;
 import com.csc.fsg.life.rest.model.Credentials;
 import com.csc.fsg.life.rest.model.ErrorModel;
+import com.csc.fsg.life.rest.model.SelectItem;
 import com.csc.fsg.life.rest.model.SessionToken;
 import com.csc.fsg.life.rest.param.AuthorizationAction;
 import com.csc.fsg.life.rest.param.RestServiceParam;
@@ -232,14 +232,14 @@ public class SecurityServiceImpl
 		}
 	}
 
-	public List<CommonSelectItem> filterAuthorizedEnvironments(String sessionToken, List<CommonSelectItem> allEnvironments)
+	public List<SelectItem> filterAuthorizedEnvironments(String sessionToken, List<SelectItem> allEnvironments)
 	{
 		if (!pdpConfig.isSecurityEnabled())
 			return new ArrayList<>(allEnvironments);
 
 		List<String> resources = new ArrayList<>();
-		for (CommonSelectItem env : allEnvironments)
-			resources.add(ENVIRONMENT_URL_ROOT + env.getCoreValue());
+		for (SelectItem env : allEnvironments)
+			resources.add(ENVIRONMENT_URL_ROOT + env.getValue());
 
 		// Map of authorization decisions for all environments, for which
 		// one or more authorization policies have been established;
@@ -247,9 +247,9 @@ public class SecurityServiceImpl
 		// value represents outcome of authorization evaluation:
 		Map<String, AuthorizationResponse> authMap = evaluateAuthorization(sessionToken, resources);
 
-		List<CommonSelectItem> response = new ArrayList<>();
-		for (CommonSelectItem env : allEnvironments) {
-			AuthorizationResponse auth = authMap.get(ENVIRONMENT_URL_ROOT + env.getCoreValue());
+		List<SelectItem> response = new ArrayList<>();
+		for (SelectItem env : allEnvironments) {
+			AuthorizationResponse auth = authMap.get(ENVIRONMENT_URL_ROOT + env.getValue());
 			if (auth != null) {
 				Map<String, Boolean> actionMap = auth.getActions();
 				if (actionMap != null
@@ -261,7 +261,7 @@ public class SecurityServiceImpl
 		return response;
 	}
 
-	public List<CommonSelectItem> filterAuthorizedCompanies(String sessionToken, String envId, List<CommonSelectItem> allCompanies)
+	public List<SelectItem> filterAuthorizedCompanies(String sessionToken, String envId, List<SelectItem> allCompanies)
 	{
 		if (!pdpConfig.isSecurityEnabled())
 			return new ArrayList<>(allCompanies);
@@ -269,8 +269,8 @@ public class SecurityServiceImpl
 		String urlPrefix = COMPANY_URL_ROOT + envId + '/';
 
 		List<String> resources = new ArrayList<>();
-		for (CommonSelectItem company : allCompanies)
-			resources.add(urlPrefix + company.getCoreValue());
+		for (SelectItem company : allCompanies)
+			resources.add(urlPrefix + company.getValue());
 
 		// Map of authorization decisions for all companies, for which
 		// one or more authorization policies have been established;
@@ -279,9 +279,9 @@ public class SecurityServiceImpl
 		// evaluation:
 		Map<String, AuthorizationResponse> authMap = evaluateAuthorization(sessionToken, resources);
 
-		List<CommonSelectItem> response = new ArrayList<>();
-		for (CommonSelectItem company : allCompanies) {
-			AuthorizationResponse auth = authMap.get(urlPrefix + company.getCoreValue());
+		List<SelectItem> response = new ArrayList<>();
+		for (SelectItem company : allCompanies) {
+			AuthorizationResponse auth = authMap.get(urlPrefix + company.getValue());
 			if (auth != null) {
 				Map<String, Boolean> actionMap = auth.getActions();
 				if (actionMap != null
@@ -293,7 +293,7 @@ public class SecurityServiceImpl
 		return response;
 	}
 
-	public List<CommonSelectItem> filterAuthorizedTables(String sessionToken, String envId, String companyCode, List<CommonSelectItem> allTables)
+	public List<SelectItem> filterAuthorizedTables(String sessionToken, String envId, String companyCode, List<SelectItem> allTables)
 	{
 		if (!pdpConfig.isSecurityEnabled())
 			return new ArrayList<>(allTables);
@@ -301,8 +301,8 @@ public class SecurityServiceImpl
 		String urlPrefix = TABLE_URL_ROOT + envId + '/' + companyCode + '/';
 
 		List<String> resources = new ArrayList<>();
-		for (CommonSelectItem table : allTables)
-			resources.add(urlPrefix + table.getCoreValue());
+		for (SelectItem table : allTables)
+			resources.add(urlPrefix + table.getValue());
 
 		// Map of authorization decisions for all tables, for which
 		// one or more authorization policies have been established;
@@ -311,9 +311,9 @@ public class SecurityServiceImpl
 		// authorization evaluation:
 		Map<String, AuthorizationResponse> authMap = evaluateAuthorization(sessionToken, resources);
 
-		List<CommonSelectItem> response = new ArrayList<>();
-		for (CommonSelectItem table : allTables) {
-			AuthorizationResponse auth = authMap.get(urlPrefix + table.getCoreValue());
+		List<SelectItem> response = new ArrayList<>();
+		for (SelectItem table : allTables) {
+			AuthorizationResponse auth = authMap.get(urlPrefix + table.getValue());
 			if (auth != null) {
 				Map<String, Boolean> actionMap = auth.getActions();
 				if (actionMap != null

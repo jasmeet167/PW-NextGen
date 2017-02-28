@@ -6,10 +6,9 @@ import com.csc.fsg.life.rest.annotation.SecuredMethod;
 import com.csc.fsg.life.rest.model.ApplyFilterData;
 import com.csc.fsg.life.rest.model.AuditFilterData;
 import com.csc.fsg.life.rest.model.ChangesFilterData;
-import com.csc.fsg.life.rest.model.CommonSelectItem;
-import com.csc.fsg.life.rest.model.DateSelectItem;
 import com.csc.fsg.life.rest.model.PlanSearchInput;
 import com.csc.fsg.life.rest.model.PromoteFilterData;
+import com.csc.fsg.life.rest.model.SelectItem;
 import com.csc.fsg.life.rest.model.SummarySearchInput;
 import com.csc.fsg.life.rest.param.AuthorizationAction;
 import com.csc.fsg.life.rest.param.RestServiceParam;
@@ -17,22 +16,22 @@ import com.csc.fsg.life.rest.param.RestServiceParam;
 public interface SearchService
 {
 	@SecuredMethod
-	public List<CommonSelectItem> getCommonEnvironments(RestServiceParam param);
+	public List<SelectItem> getCommonEnvironments(RestServiceParam param);
 
 	@SecuredMethod(action = AuthorizationAction.VIEW)
-	public List<CommonSelectItem> getPlanCommonValues(RestServiceParam param, PlanSearchInput searchInput);
+	public List<SelectItem> getPlanCommonValues(RestServiceParam param, PlanSearchInput searchInput);
 
 	@SecuredMethod(action = AuthorizationAction.VIEW)
-	public List<DateSelectItem> getPlanEffDates(RestServiceParam param, PlanSearchInput searchInput);
+	public List<SelectItem> getPlanEffDates(RestServiceParam param, PlanSearchInput searchInput);
 
 	@SecuredMethod(action = AuthorizationAction.VIEW)
-	public List<String> getPlanProjects(RestServiceParam param);
+	public List<SelectItem> getPlanProjects(RestServiceParam param);
 
 	@SecuredMethod(action = AuthorizationAction.VIEW)
-	public List<CommonSelectItem> getPlanTables(RestServiceParam param);
+	public List<SelectItem> getPlanTables(RestServiceParam param);
 
 	@SecuredMethod
-	public List<CommonSelectItem> getChangesEnvironments(RestServiceParam param);
+	public List<SelectItem> getChangesEnvironments(RestServiceParam param);
 
 	@SecuredMethod(action = AuthorizationAction.VIEW)
 	public ChangesFilterData getChangesFilterValues(RestServiceParam param);
@@ -47,8 +46,8 @@ public interface SearchService
 	public PromoteFilterData getPromoteFilterValues(RestServiceParam param);
 
 	@SecuredMethod(action = AuthorizationAction.VIEW)
-	public List<CommonSelectItem> getSummaryCommonValues(RestServiceParam param, SummarySearchInput searchInput);
+	public List<SelectItem> getSummaryCommonValues(RestServiceParam param, SummarySearchInput searchInput);
 
 	@SecuredMethod(action = AuthorizationAction.VIEW)
-	public List<DateSelectItem> getSummaryEffDates(RestServiceParam param, SummarySearchInput searchInput);
+	public List<SelectItem> getSummaryEffDates(RestServiceParam param, SummarySearchInput searchInput);
 }

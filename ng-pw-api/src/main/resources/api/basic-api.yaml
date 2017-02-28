@@ -1,9 +1,9 @@
-# NG Product Wizard REST API
+# NextGen Product Wizard REST API
 swagger: '2.0'
 
 info:
-  title: NG Product Wizard Basic API
-  description: Basic REST API for NG Product Wizard
+  title: NextGen Product Wizard Basic API
+  description: Basic REST API for NextGen Product Wizard
   version: "0.0.1"
 
 host: localhost:8443
@@ -143,7 +143,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/commonSelectItem'
+              $ref: '#/definitions/selectItem'
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
@@ -206,7 +206,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/commonSelectItem'
+              $ref: '#/definitions/selectItem'
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
@@ -274,7 +274,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/commonSelectItem'
+              $ref: '#/definitions/selectItem'
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
@@ -348,7 +348,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/commonSelectItem'
+              $ref: '#/definitions/selectItem'
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
@@ -428,7 +428,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/commonSelectItem'
+              $ref: '#/definitions/selectItem'
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
@@ -514,7 +514,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/commonSelectItem'
+              $ref: '#/definitions/selectItem'
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
@@ -606,7 +606,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/dateSelectItem'
+              $ref: '#/definitions/selectItem'
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
@@ -662,7 +662,7 @@ paths:
           schema:
             type: array
             items:
-              type: string
+              $ref: '#/definitions/selectItem'
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
@@ -724,7 +724,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/commonSelectItem'
+              $ref: '#/definitions/selectItem'
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
@@ -749,7 +749,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/commonSelectItem'
+              $ref: '#/definitions/selectItem'
 
   /search/changes/environment:
     get:
@@ -780,7 +780,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/commonSelectItem'
+              $ref: '#/definitions/selectItem'
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
@@ -1083,7 +1083,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/commonSelectItem'
+              $ref: '#/definitions/selectItem'
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
@@ -1153,7 +1153,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/commonSelectItem'
+              $ref: '#/definitions/selectItem'
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
@@ -1229,7 +1229,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/commonSelectItem'
+              $ref: '#/definitions/selectItem'
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
@@ -1311,7 +1311,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/commonSelectItem'
+              $ref: '#/definitions/selectItem'
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
@@ -1399,7 +1399,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/commonSelectItem'
+              $ref: '#/definitions/selectItem'
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
@@ -1493,7 +1493,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/dateSelectItem'
+              $ref: '#/definitions/selectItem'
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
@@ -1547,26 +1547,15 @@ definitions:
         format: date-time
         description: Timestamp indicating when this application was built.
 
-  commonSelectItem:
+  selectItem:
     type: object
     properties:
-      coreValue:
-        type: string
-        description: The internal representation of value of this item.
-      displayValue:
+      label:
         type: string
         description: Representation of value of this item suitable for display.
-
-  dateSelectItem:
-    type: object
-    properties:
-      coreValue:
-        type: string
-        format: date
+      value:
+        type: object
         description: The internal representation of value of this item.
-      displayValue:
-        type: string
-        description: Representation of value of this item suitable for display.
 
   changesFilterData:
     type: object
@@ -1578,7 +1567,7 @@ definitions:
       businessRuleTables:
         type: array
         items:
-          $ref: '#/definitions/commonSelectItem'
+          $ref: '#/definitions/selectItem'
       users:
         type: array
         items:
@@ -1590,7 +1579,7 @@ definitions:
       packages:
         type: array
         items:
-          $ref: '#/definitions/commonSelectItem'
+          $ref: '#/definitions/selectItem'
       projects:
         type: array
         items:
@@ -1602,7 +1591,7 @@ definitions:
       packages:
         type: array
         items:
-          $ref: '#/definitions/commonSelectItem'
+          $ref: '#/definitions/selectItem'
       projects:
         type: array
         items:
@@ -1610,7 +1599,7 @@ definitions:
       businessRuleTables:
         type: array
         items:
-          $ref: '#/definitions/commonSelectItem'
+          $ref: '#/definitions/selectItem'
       users:
         type: array
         items:
@@ -1622,7 +1611,7 @@ definitions:
       packages:
         type: array
         items:
-          $ref: '#/definitions/commonSelectItem'
+          $ref: '#/definitions/selectItem'
       projects:
         type: array
         items:
