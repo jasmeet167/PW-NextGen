@@ -116,7 +116,7 @@
 							</execution>
 							<execution>
 								<id>ng-build</id>
-								<phase>prepare-package</phase>
+								<phase>compile</phase>
 								<goals>
 									<goal>npm</goal>
 								</goals>
