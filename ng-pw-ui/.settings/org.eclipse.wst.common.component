@@ -2,6 +2,7 @@
     <wb-module deploy-name="ng-pw-ui-0.0.1-SNAPSHOT">
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/.apt_generated"/>
         <property name="java-output-path" value="/ng-pw-ui/target/classes"/>
         <property name="context-root" value="ng-pw-ui"/>
     </wb-module>
