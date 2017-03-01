@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Response } from '@angular/http';
+import { Response, ResponseType } from '@angular/http';
 import { Message } from 'primeng/primeng';
 import { MenuItem } from 'primeng/primeng';
 import { SelectItem } from 'primeng/primeng';
@@ -69,15 +69,17 @@ export class HomeComponent implements OnInit {
     this.filterChangesOptions.push({label: 'Rules', value: false});
     this.filterChanges = true;
 
+    let envOptions: SelectItem[];
     this.filterService.getEnvOptions(this.sessionToken)
         .subscribe(
-            response => this.buildEnvDropdown(response),
-            error => {
-              if (error.status !== 404) {
-                this.handleError(error);
-              }
-              this.buildEnvDropdown(null);
+          res => envOptions = res,
+          err => {
+            if (err.status !== 404) {
+              this.handleError(err);
             }
+            this.buildEnvDropdown(null);
+          },
+          () => this.buildEnvDropdown(envOptions)
         );
 
     this.filterCompanyDisabled = true;
@@ -126,26 +128,30 @@ export class HomeComponent implements OnInit {
     } else {
       this.filterCompanyDisabled = false;
 
+      let companyOptions: SelectItem[];
       this.filterService.getCompanyOptions(this.sessionToken, this.filterChanges, this.filterEnv)
           .subscribe(
-            response => this.buildCompanyDropdown(response),
-            error => {
-                if (error.status !== 404) {
-                  this.handleError(error);
+            res => companyOptions = res,
+            err => {
+                if (err.status !== 404) {
+                  this.handleError(err);
                 }
                 this.buildCompanyDropdown(null);
-            }
+            },
+            () => this.buildCompanyDropdown(companyOptions)
           );
 
+      let projectOptions: SelectItem[];
       this.filterService.getProjects(this.sessionToken, this.filterEnv)
           .subscribe(
-            response => this.buildProjects(response),
-            error => {
-                if (error.status !== 404) {
-                  this.handleError(error);
+            res => projectOptions = res,
+            err => {
+                if (err.status !== 404) {
+                  this.handleError(err);
                 }
                 this.buildProjects(null);
-            }
+            },
+            () => this.buildProjects(projectOptions)
           );
     }
   }
@@ -167,16 +173,18 @@ export class HomeComponent implements OnInit {
     } else {
       this.filterProductDisabled = false;
 
+      let productOptions: SelectItem[];
       this.filterService.getProductOptions(this.sessionToken, this.filterChanges, this.filterEnv,
                                            this.filterCompany)
           .subscribe(
-            response => this.buildProductDropdown(response),
-            error => {
-                if (error.status !== 404) {
-                  this.handleError(error);
+            res => productOptions = res,
+            err => {
+                if (err.status !== 404) {
+                  this.handleError(err);
                 }
                 this.buildProductDropdown(null);
-            }
+            },
+            () => this.buildProductDropdown(productOptions)
           );
     }
   }
@@ -196,16 +204,18 @@ export class HomeComponent implements OnInit {
     } else {
       this.filterPlanCodeDisabled = false;
 
+      let planCodeOptions: SelectItem[];
       this.filterService.getPlanCodeOptions(this.sessionToken, this.filterChanges, this.filterEnv,
                                             this.filterCompany, this.filterProduct)
           .subscribe(
-            response => this.buildPlanCodeDropdown(response),
-            error => {
-                if (error.status !== 404) {
-                  this.handleError(error);
+            res => planCodeOptions = res,
+            err => {
+                if (err.status !== 404) {
+                  this.handleError(err);
                 }
                 this.buildPlanCodeDropdown(null);
-            }
+            },
+            () => this.buildPlanCodeDropdown(planCodeOptions)
           );
     }
   }
@@ -223,16 +233,18 @@ export class HomeComponent implements OnInit {
     } else {
       this.filterIssueStateDisabled = false;
 
+      let issueStateOptions: SelectItem[];
       this.filterService.getIssueStateOptions(this.sessionToken, this.filterChanges, this.filterEnv,
                                               this.filterCompany, this.filterProduct, this.filterPlanCode)
           .subscribe(
-            response => this.buildIssueStateDropdown(response),
-            error => {
-                if (error.status !== 404) {
-                  this.handleError(error);
+            res => issueStateOptions = res,
+            err => {
+                if (err.status !== 404) {
+                  this.handleError(err);
                 }
                 this.buildIssueStateDropdown(null);
-            }
+            },
+            () => this.buildIssueStateDropdown(issueStateOptions)
           );
     }
   }
@@ -248,17 +260,19 @@ export class HomeComponent implements OnInit {
     } else {
       this.filterLobDisabled = false;
 
+      let lobOptions: SelectItem[];
       this.filterService.getLobOptions(this.sessionToken, this.filterChanges, this.filterEnv,
                                        this.filterCompany, this.filterProduct, this.filterPlanCode,
                                        this.filterIssueState)
           .subscribe(
-            response => this.buildLobDropdown(response),
-            error => {
-                if (error.status !== 404) {
-                  this.handleError(error);
+            res => lobOptions = res,
+            err => {
+                if (err.status !== 404) {
+                  this.handleError(err);
                 }
                 this.buildLobDropdown(null);
-            }
+            },
+            () => this.buildLobDropdown(lobOptions)
           );
     }
   }
@@ -271,17 +285,19 @@ export class HomeComponent implements OnInit {
     } else {
       this.filterPlanEffDateDisabled = false;
 
+      let effDateOptions: SelectItem[];
       this.filterService.getEffDateOptions(this.sessionToken, this.filterChanges, this.filterEnv,
                                            this.filterCompany, this.filterProduct, this.filterPlanCode,
                                            this.filterIssueState, this.filterLob)
           .subscribe(
-            response => this.buildEffDateDropdown(response),
-            error => {
-                if (error.status !== 404) {
-                  this.handleError(error);
+            res => effDateOptions = res,
+            err => {
+                if (err.status !== 404) {
+                  this.handleError(err);
                 }
                 this.buildEffDateDropdown(null);
-            }
+            },
+            () => this.buildEffDateDropdown(effDateOptions)
           );
     }
   }
@@ -368,18 +384,23 @@ export class HomeComponent implements OnInit {
 
 
   // Support for display of messages
-  handleError(error: Response) {
+  handleError(err: Response) {
+    if (err.type !== ResponseType.Default) {
+      this.showError(null, 'Network error - unable to access Application Services');
+      return;
+    }
+
     let model: ErrorMessage.ErrorModel;
     try {
-      model = <ErrorMessage.ErrorModel> error.json();
+      model = <ErrorMessage.ErrorModel> err.json();
     } catch (e) {
       model = null;
     }
 
     if (model == null) {
-      const logMessage: string = 'HTTP error ' + error.status + ': ' + error.statusText;
+      const logMessage: string = 'HTTP error ' + err.status + ': ' + err.statusText;
       console.error(logMessage);
-      this.showError(null, error.statusText);
+      this.showError(null, err.statusText);
     } else {
       const logMessage: string = 'Error ' + model.errorCode + ': ' + model.message;
 

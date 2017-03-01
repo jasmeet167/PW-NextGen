@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Response } from '@angular/http';
+import { Response, ResponseType } from '@angular/http';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Message } from 'primeng/primeng';
@@ -39,19 +39,25 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(value: any) {
+    let response: LoginResponse;
     this.userName = value.userName;
     this.loginService.login(this.userName, value.password)
         .subscribe(
-          response => this.processSuccessfulLogin(response),
-          error => {
-              if (error.status === 401) {
-                this.showError('User Name or Password or both are invalid');
-              } else if (error.statusText) {
-                this.showError(error.statusText);
+          res => response = res,
+          err => {
+              if (err.type === ResponseType.Default) {
+                if (err.status === 401) {
+                  this.showError('Invalid User Name or Password');
+                } else if (err.statusText) {
+                  this.showError(err.statusText);
+                } else {
+                  this.showError('HTTP code ' + err.status + ' has been detected');
+                }
               } else {
-                this.showError('HTTP code ' + error.status + ' has been detected');
+                this.showError('Network error - unable to access Application Services');
               }
-          }
+          },
+          () => this.processSuccessfulLogin(response)
         );
   }
 
@@ -64,16 +70,21 @@ export class LoginComponent implements OnInit {
   private logout(sessionToken: string) {
     this.loginService.logout(sessionToken)
         .subscribe(
-          response => {},
-          error => {
-            if (error.status !== 401) {
-              if (error.statusText) {
-                this.showError(error.statusText);
+          res => {},
+          err => {
+              if (err.type === ResponseType.Default) {
+                if (err.status !== 401) {
+                  if (err.statusText) {
+                    this.showError(err.statusText);
+                  } else {
+                    this.showError('HTTP code ' + err.status + ' has been detected');
+                  }
+                }
               } else {
-                this.showError('HTTP code ' + error.status + ' has been detected');
+                this.showError('Network error - unable to access Application Services');
               }
-            }
-          }
+          },
+          () => { return; }
         );
   }
 
@@ -83,16 +94,22 @@ export class LoginComponent implements OnInit {
   }
 
   getConfiguration() {
+    let config: Configuration;
     this.configurationService.getConfiguration()
         .subscribe(
-          configuration => sessionStorage['restServiceBaseUrl'] = configuration.restServiceBaseUrl,
-          error => {
-              if (error.statusText) {
-                this.showError(error.statusText);
+          res => config = res,
+          err => {
+              if (err.type === ResponseType.Default) {
+                if (err.statusText) {
+                  this.showError(err.statusText);
+                } else {
+                  this.showError('HTTP code ' + err.status + ' has been detected');
+                }
               } else {
-                this.showError('HTTP code ' + error.status + ' has been detected');
+                this.showError('Network error - unable to access Application Services');
               }
-          }
+          },
+          () => sessionStorage['restServiceBaseUrl'] = config.restServiceBaseUrl
         );
-    }
+  }
 }
