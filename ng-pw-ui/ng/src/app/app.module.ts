@@ -17,6 +17,7 @@ import { InputTextModule } from 'primeng/primeng';
 import { CanvasComponent } from './canvas/canvas.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
+import { Error404HandlerComponent } from './error-404-handler/error-404-handler.component';
 
 import { ConfigurationService } from './login/service/configuration.service';
 import { LoginService } from './login/service/login.service';
@@ -29,7 +30,8 @@ import { appRoutes } from './app.routes';
   declarations: [
     CanvasComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    Error404HandlerComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
