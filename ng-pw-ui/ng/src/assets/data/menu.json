@@ -62,7 +62,7 @@
         {
           "label": "Help",
           "items": [
-            {"label": "Index", "url": "https://cscehwmanor001:9445/pw", "target":"_blank"},
+            {"label": "Index", "url": "https://cscehwmanor001:9445/pw/help/WMA/helpIndex.html", "target":"_blank"},
             {"label": "About"}
           ]
         }
