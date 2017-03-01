@@ -1,10 +1,10 @@
-import { NgProductWizardPage } from './app.po';
+import { NextGenProductWizardPage } from './app.po';
 
 describe('ng-product-wizard App', () => {
-  let page: NgProductWizardPage;
+  let page: NextGenProductWizardPage;
 
   beforeEach(() => {
-    page = new NgProductWizardPage();
+    page = new NextGenProductWizardPage();
   });
 
   it('should display message saying app works', () => {

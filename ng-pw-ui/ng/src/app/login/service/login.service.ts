@@ -13,36 +13,36 @@ export class LoginService {
   }
 
   login(userName: string, password: string): Observable<LoginResponse> {
-    let credentials = new Credentials();
+    const credentials = new Credentials();
     credentials.userName = userName;
     credentials.password = password;
 
-    let filterHeaders: Headers = new Headers();
+    const filterHeaders: Headers = new Headers();
     filterHeaders.append('Content-Type', 'application/json');
     filterHeaders.append('Accept', 'application/json');
 
-    let options: RequestOptions = new RequestOptions();
+    const options: RequestOptions = new RequestOptions();
     options.headers = filterHeaders;
     options.body = credentials;
     options.url = sessionStorage['restServiceBaseUrl'] + 'security/authentication';
     options.method = RequestMethod.Post;
 
     return this.http.request(new Request(options))
-               .map(response => {return <LoginResponse> response.json()});
+               .map(response => { return <LoginResponse> response.json(); });
   }
 
   logout(sessionToken: string) {
-    let filterHeaders: Headers = new Headers();
+    const filterHeaders: Headers = new Headers();
     filterHeaders.append('Content-Type', 'application/json');
     filterHeaders.append('Accept', 'application/json');
     filterHeaders.append('sessionToken', sessionToken);
 
-    let options: RequestOptions = new RequestOptions();
+    const options: RequestOptions = new RequestOptions();
     options.headers = filterHeaders;
     options.url = sessionStorage['restServiceBaseUrl'] + 'security/logout';
     options.method = RequestMethod.Post;
 
     return this.http.request(new Request(options))
-               .map(response => {return});
+               .map(response => { return; });
   }
 }

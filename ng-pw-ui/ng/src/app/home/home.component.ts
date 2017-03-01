@@ -9,53 +9,53 @@ import { FilterService } from './service/filter.service';
 import { ErrorMessage } from './model/error.message';
 
 @Component({
-  selector: 'pw-home-root',
+  selector: 'app-home-root',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  public msgs: Message[] = <Message[]> [];
+  public menuModel: MenuItem[];
+
+  public filterChangesOptions: SelectItem[];
+  public filterChanges: boolean;
+
+  public filterEnvOptions: SelectItem[];
+  public filterEnv: string;
+
+  public filterCompanyOptions: SelectItem[];
+  public filterCompany: string;
+  public filterCompanyDisabled: boolean;
+
+  public filterProductOptions: SelectItem[];
+  public filterProduct: string;
+  public filterProductDisabled: boolean;
+
+  public filterPlanCodeOptions: SelectItem[];
+  public filterPlanCode: string;
+  public filterPlanCodeDisabled: boolean;
+
+  public filterIssueStatOptions: SelectItem[];
+  public filterIssueState: string;
+  public filterIssueStateDisabled: boolean;
+
+  public filterLobOptions: SelectItem[];
+  public filterLob: string;
+  public filterLobDisabled: boolean;
+
+  public filterPlanEffDateOptions: SelectItem[];
+  public filterPlanEffDate: string;
+  public filterPlanEffDateDisabled: boolean;
+
+  public filterProjectRows: SelectItem[];
+  public filterProjects: string[];
+
+  public filterInclOrphans: boolean;
+  public filterInclOrphansDisabled: boolean;
+
+  public filterRememberSelections: boolean;
+
   private sessionToken: string;
-
-  private msgs: Message[] = <Message[]> [];
-  private menuModel: MenuItem[];
-
-  private filterChangesOptions: SelectItem[];
-  private filterChanges: boolean;
-
-  private filterEnvOptions: SelectItem[];
-  private filterEnv: string;
-
-  private filterCompanyOptions: SelectItem[];
-  private filterCompany: string;
-  private filterCompanyDisabled: boolean;
-
-  private filterProductOptions: SelectItem[];
-  private filterProduct: string;
-  private filterProductDisabled: boolean;
-
-  private filterPlanCodeOptions: SelectItem[];
-  private filterPlanCode: string;
-  private filterPlanCodeDisabled: boolean;
-
-  private filterIssueStatOptions: SelectItem[];
-  private filterIssueState: string;
-  private filterIssueStateDisabled: boolean;
-
-  private filterLobOptions: SelectItem[];
-  private filterLob: string;
-  private filterLobDisabled: boolean;
-
-  private filterPlanEffDateOptions: SelectItem[];
-  private filterPlanEffDate: string;
-  private filterPlanEffDateDisabled: boolean;
-
-  private filterProjectRows: SelectItem[];
-  private filterProjects: string[];
-
-  private filterInclOrphans: boolean;
-  private filterInclOrphansDisabled: boolean;
-
-  private filterRememberSelections: boolean;
 
   constructor(private menuService: MenuService, private filterService: FilterService) {
     this.sessionToken = sessionStorage['sessionToken'];
@@ -65,16 +65,17 @@ export class HomeComponent implements OnInit {
     this.menuService.getMenu().then(menuModel => this.menuModel = menuModel);
 
     this.filterChangesOptions = [];
-    this.filterChangesOptions.push({label:'Rules with Changes', value:true});
-    this.filterChangesOptions.push({label:'Rules', value:false});
+    this.filterChangesOptions.push({label: 'Rules with Changes', value: true});
+    this.filterChangesOptions.push({label: 'Rules', value: false});
     this.filterChanges = true;
 
     this.filterService.getEnvOptions(this.sessionToken)
         .subscribe(
             response => this.buildEnvDropdown(response),
             error => {
-              if (error.status != 404)
+              if (error.status !== 404) {
                 this.handleError(error);
+              }
               this.buildEnvDropdown(null);
             }
         );
@@ -122,17 +123,16 @@ export class HomeComponent implements OnInit {
 
     if (this.filterEnv == null) {
       this.filterCompanyDisabled = true;
-    }
-    else {
+    } else {
       this.filterCompanyDisabled = false;
 
       this.filterService.getCompanyOptions(this.sessionToken, this.filterChanges, this.filterEnv)
           .subscribe(
             response => this.buildCompanyDropdown(response),
             error => {
-                if (error.status != 404)
+                if (error.status !== 404) {
                   this.handleError(error);
-
+                }
                 this.buildCompanyDropdown(null);
             }
           );
@@ -141,9 +141,9 @@ export class HomeComponent implements OnInit {
           .subscribe(
             response => this.buildProjects(response),
             error => {
-                if (error.status != 404)
+                if (error.status !== 404) {
                   this.handleError(error);
-
+                }
                 this.buildProjects(null);
             }
           );
@@ -164,8 +164,7 @@ export class HomeComponent implements OnInit {
 
     if (this.filterCompany == null) {
       this.filterProductDisabled = true;
-    }
-    else {
+    } else {
       this.filterProductDisabled = false;
 
       this.filterService.getProductOptions(this.sessionToken, this.filterChanges, this.filterEnv,
@@ -173,9 +172,9 @@ export class HomeComponent implements OnInit {
           .subscribe(
             response => this.buildProductDropdown(response),
             error => {
-                if (error.status != 404)
+                if (error.status !== 404) {
                   this.handleError(error);
-
+                }
                 this.buildProductDropdown(null);
             }
           );
@@ -194,8 +193,7 @@ export class HomeComponent implements OnInit {
 
     if (this.filterProduct == null) {
       this.filterPlanCodeDisabled = true;
-    }
-    else {
+    } else {
       this.filterPlanCodeDisabled = false;
 
       this.filterService.getPlanCodeOptions(this.sessionToken, this.filterChanges, this.filterEnv,
@@ -203,9 +201,9 @@ export class HomeComponent implements OnInit {
           .subscribe(
             response => this.buildPlanCodeDropdown(response),
             error => {
-                if (error.status != 404)
+                if (error.status !== 404) {
                   this.handleError(error);
-
+                }
                 this.buildPlanCodeDropdown(null);
             }
           );
@@ -222,8 +220,7 @@ export class HomeComponent implements OnInit {
 
     if (this.filterPlanCode == null) {
       this.filterIssueStateDisabled = true;
-    }
-    else {
+    } else {
       this.filterIssueStateDisabled = false;
 
       this.filterService.getIssueStateOptions(this.sessionToken, this.filterChanges, this.filterEnv,
@@ -231,9 +228,9 @@ export class HomeComponent implements OnInit {
           .subscribe(
             response => this.buildIssueStateDropdown(response),
             error => {
-                if (error.status != 404)
+                if (error.status !== 404) {
                   this.handleError(error);
-
+                }
                 this.buildIssueStateDropdown(null);
             }
           );
@@ -248,8 +245,7 @@ export class HomeComponent implements OnInit {
 
     if (this.filterIssueState == null) {
       this.filterLobDisabled = true;
-    }
-    else {
+    } else {
       this.filterLobDisabled = false;
 
       this.filterService.getLobOptions(this.sessionToken, this.filterChanges, this.filterEnv,
@@ -258,9 +254,9 @@ export class HomeComponent implements OnInit {
           .subscribe(
             response => this.buildLobDropdown(response),
             error => {
-                if (error.status != 404)
+                if (error.status !== 404) {
                   this.handleError(error);
-
+                }
                 this.buildLobDropdown(null);
             }
           );
@@ -272,8 +268,7 @@ export class HomeComponent implements OnInit {
 
     if (this.filterLob == null) {
       this.filterPlanEffDateDisabled = true;
-    }
-    else {
+    } else {
       this.filterPlanEffDateDisabled = false;
 
       this.filterService.getEffDateOptions(this.sessionToken, this.filterChanges, this.filterEnv,
@@ -282,9 +277,9 @@ export class HomeComponent implements OnInit {
           .subscribe(
             response => this.buildEffDateDropdown(response),
             error => {
-                if (error.status != 404)
+                if (error.status !== 404) {
                   this.handleError(error);
-
+                }
                 this.buildEffDateDropdown(null);
             }
           );
@@ -292,64 +287,77 @@ export class HomeComponent implements OnInit {
   }
 
   private buildEnvDropdown (options: SelectItem[]) {
-    this.filterEnvOptions = <SelectItem[]> [{label:'Environment', value:null}];
-    if (options != null)
-      for (let option of options)
+    this.filterEnvOptions = <SelectItem[]> [{label: 'Environment', value: null}];
+    if (options !== null) {
+      for (const option of options) {
         this.filterEnvOptions.push(option);
+      }
+    }
   }
 
   private buildCompanyDropdown(options: SelectItem[]) {
-    this.filterCompanyOptions = <SelectItem[]> [{label:'Company', value:null}];
-    if (options != null)
-      for (let option of options)
+    this.filterCompanyOptions = <SelectItem[]> [{label: 'Company', value: null}];
+    if (options !== null) {
+      for (const option of options) {
         this.filterCompanyOptions.push(option);
+      }
+    }
   }
 
   private buildProductDropdown(options: SelectItem[]) {
-    this.filterProductOptions = <SelectItem[]> [{label:'Product', value:null}];
-    if (options != null)
-      for (let option of options)
+    this.filterProductOptions = <SelectItem[]> [{label: 'Product', value: null}];
+    if (options !== null) {
+      for (const option of options) {
         this.filterProductOptions.push(option);
+      }
+    }
   }
 
   private buildPlanCodeDropdown(options: SelectItem[]) {
-    this.filterPlanCodeOptions = <SelectItem[]> [{label:'Plan Code', value:null}];
-    if (options != null)
-      for (let option of options)
+    this.filterPlanCodeOptions = <SelectItem[]> [{label: 'Plan Code', value: null}];
+    if (options !== null) {
+      for (const option of options) {
         this.filterPlanCodeOptions.push(option);
+      }
+    }
   }
 
   private buildIssueStateDropdown(options: SelectItem[]) {
-    this.filterIssueStatOptions = <SelectItem[]> [{label:'Issue State', value:null}];
-    if (options != null)
-      for (let option of options)
+    this.filterIssueStatOptions = <SelectItem[]> [{label: 'Issue State', value: null}];
+    if (options !== null) {
+      for (const option of options) {
         this.filterIssueStatOptions.push(option);
+      }
+    }
   }
 
   private buildLobDropdown(options: SelectItem[]) {
-    this.filterLobOptions = <SelectItem[]> [{label:'Line of Business', value:null}];
-    if (options != null)
-      for (let option of options)
+    this.filterLobOptions = <SelectItem[]> [{label: 'Line of Business', value: null}];
+    if (options !== null) {
+      for (const option of options) {
         this.filterLobOptions.push(option);
+      }
+    }
   }
 
   private buildEffDateDropdown(options: SelectItem[]) {
-    this.filterPlanEffDateOptions = <SelectItem[]> [{label:'Plan Effective Date', value:null}];
-    if (options != null)
-      for (let option of options)
+    this.filterPlanEffDateOptions = <SelectItem[]> [{label: 'Plan Effective Date', value: null}];
+    if (options !== null) {
+      for (const option of options) {
         this.filterPlanEffDateOptions.push(option);
+      }
+    }
   }
 
   private buildProjects(rows: SelectItem[]) {
     if (rows == null) {
       this.filterProjectRows = <SelectItem[]> [];
       this.filterProjects = <string[]> [];
-    }
-    else {
-      this.filterProjectRows = <SelectItem[]> [{label:'All Projects', value:null}];
-      for (let row of rows)
+    } else {
+      this.filterProjectRows = <SelectItem[]> [{ label: 'All Projects', value: null }];
+      for (const row of rows) {
         this.filterProjectRows.push(row);
-
+      }
       this.filterProjects = <string[]> [null];
     }
   }
@@ -364,30 +372,29 @@ export class HomeComponent implements OnInit {
     let model: ErrorMessage.ErrorModel;
     try {
       model = <ErrorMessage.ErrorModel> error.json();
-    }
-    catch (e) {
+    } catch (e) {
       model = null;
     }
 
     if (model == null) {
-      let logMessage: string = 'HTTP error ' + error.status + ': ' + error.statusText;
+      const logMessage: string = 'HTTP error ' + error.status + ': ' + error.statusText;
       console.error(logMessage);
       this.showError(null, error.statusText);
-    }
-    else {
-      let logMessage: string = 'Error ' + model.errorCode + ': ' + model.message;
+    } else {
+      const logMessage: string = 'Error ' + model.errorCode + ': ' + model.message;
 
       switch (model.severity) {
         case ErrorMessage.SeverityEnum.ERROR: {
           console.error(logMessage);
           this.showError(null, model.message);
-          break;
         }
+        break;
+
         case ErrorMessage.SeverityEnum.WARNING: {
           console.warn(logMessage);
           this.showWarn(null, model.message);
-          break;
         }
+        break;
       }
     }
   }

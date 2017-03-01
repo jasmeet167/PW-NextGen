@@ -3,7 +3,7 @@
 import { TestBed, async } from '@angular/core/testing';
 import { LoginComponent } from './login.component';
 
-describe('App: NgProductWizard', () => {
+describe('App: NextGenProductWizard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -13,8 +13,8 @@ describe('App: NgProductWizard', () => {
   });
 
   it('should create the app', async(() => {
-    let fixture = TestBed.createComponent(LoginComponent);
-    let app = fixture.debugElement.componentInstance;
+    const fixture = TestBed.createComponent(LoginComponent);
+    const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
   }));
 });

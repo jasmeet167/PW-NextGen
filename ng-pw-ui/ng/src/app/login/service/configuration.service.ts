@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 
-import { Configuration } from '../model/configuration'
+import { Configuration } from '../model/configuration';
 
 import { Observable } from 'rxjs/Observable';
 
@@ -12,6 +12,6 @@ export class ConfigurationService {
 
   getConfiguration(): Observable<Configuration> {
     return this.http.get('../../assets/data/configuration.json')
-               .map(response => {return <Configuration> response.json()});
+               .map(response => { return <Configuration> response.json(); });
    }
 }

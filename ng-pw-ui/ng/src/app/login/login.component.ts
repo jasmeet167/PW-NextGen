@@ -11,22 +11,22 @@ import { LoginService } from './service/login.service';
 import { LoginResponse } from './model/login.response';
 
 @Component({
-  selector: 'pw-login',
+  selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  private msgs: Message[] = <Message[]> [];
-  private userName: string;
-  private loginForm: any;
+  public msgs: Message[] = <Message[]> [];
+  public loginForm: any;
+  public userName: string;
 
   constructor(private fb: FormBuilder, private router: Router,
               private configurationService: ConfigurationService,
               private loginService: LoginService) {
-    let sessionToken: string = sessionStorage['sessionToken'];
-    if (sessionToken)
+    const sessionToken: string = sessionStorage['sessionToken'];
+    if (sessionToken) {
       this.logout(sessionToken);
-
+    }
     sessionStorage.clear();
     this.getConfiguration();
   }
@@ -44,12 +44,13 @@ export class LoginComponent implements OnInit {
         .subscribe(
           response => this.processSuccessfulLogin(response),
           error => {
-              if (error.status == 401)
+              if (error.status === 401) {
                 this.showError('User Name or Password or both are invalid');
-              else if (error.statusText)
+              } else if (error.statusText) {
                 this.showError(error.statusText);
-              else
-                this.showError('HTTP code ' + error.status + ' has been detected')
+              } else {
+                this.showError('HTTP code ' + error.status + ' has been detected');
+              }
           }
         );
   }
@@ -65,11 +66,12 @@ export class LoginComponent implements OnInit {
         .subscribe(
           response => {},
           error => {
-            if (error.status != 401) {
-              if (error.statusText)
+            if (error.status !== 401) {
+              if (error.statusText) {
                 this.showError(error.statusText);
-              else
-                this.showError('HTTP code ' + error.status + ' has been detected')
+              } else {
+                this.showError('HTTP code ' + error.status + ' has been detected');
+              }
             }
           }
         );
@@ -85,10 +87,11 @@ export class LoginComponent implements OnInit {
         .subscribe(
           configuration => sessionStorage['restServiceBaseUrl'] = configuration.restServiceBaseUrl,
           error => {
-              if (error.statusText)
+              if (error.statusText) {
                 this.showError(error.statusText);
-              else
-                this.showError('HTTP code ' + error.status + ' has been detected')
+              } else {
+                this.showError('HTTP code ' + error.status + ' has been detected');
+              }
           }
         );
     }

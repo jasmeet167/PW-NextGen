@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/primeng';
 
 @Component({
-  selector: 'pw-canvas',
+  selector: 'app-canvas',
   template: `
     <router-outlet></router-outlet>
   `

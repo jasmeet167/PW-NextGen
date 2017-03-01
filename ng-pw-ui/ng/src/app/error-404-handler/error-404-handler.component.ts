@@ -5,7 +5,7 @@ import { PanelModule } from 'primeng/primeng';
 import { Message } from 'primeng/primeng';
 
 @Component({
-  selector: 'pw-error-404-handler',
+  selector: 'app-error-404-handler',
   template: `
     <p-messages [value]="msgs"></p-messages>
     <p-panel header="Navigation Error">
@@ -17,9 +17,10 @@ import { Message } from 'primeng/primeng';
   `
 })
 export class Error404HandlerComponent {
-  private msgs: Message[] = <Message[]> [];
-  constructor(private router: Router,) {
-    this.msgs.push({ severity : 'error', summary : null, detail : "Page not Found" });
+  public msgs: Message[] = <Message[]> [];
+
+  constructor(private router: Router) {
+    this.msgs.push({ severity : 'error', summary : null, detail : 'Page not Found' });
   }
 
   onclick() {
