@@ -1,28 +1,32 @@
-<p-dialog header="Error" [(visible)]="isMsgDisplayed" [modal]="true">
-  <img src="../../assets/img/messagebox_critical.png" style="vertical-align: middle">
-  {{msgText}}
+<p-dialog [(visible)]="isMsgDisplayed" [modal]="true" [width]="350">
+  <p-header>
+    <img src="../../assets/img/messagebox_critical.png" style="vertical-align: middle"> Error
+  </p-header>
+  <div>
+    {{msgText}}
+  </div>
   <p-footer>
-    <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+    <div class="ui-dialog-buttonpane ui-helper-clearfix">
       <button type="button" pButton icon="fa-close" (click)="isMsgDisplayed=false" label="Close"></button>
     </div>
   </p-footer>
 </p-dialog>
 
-<p-panel header="Logon to Product Wizard">
+<p-panel header="Log in to Product Wizard">
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm.value)">
     <div style="margin-left: 40px; margin-top: 30px; margin-bottom: 30px;">
       <table>
         <tr>
-          <td style="text-align: right">
-            <span>User Name*:&#xa0;</span>
+          <td>
+            <span>User Name:&#xa0;</span>
           </td>
           <td>
             <input pInputText type="text" formControlName="userName" placeholder="Required"/>
           </td>
         </tr>
         <tr>
-          <td style="text-align: right">
-            <span>Password*:&#xa0;</span>
+          <td>
+            <span>Password:&#xa0;</span>
           </td>
           <td>
              <input pInputText type="password" formControlName="password" placeholder="Required"/>

@@ -1,8 +1,12 @@
-<p-dialog header="Error" [(visible)]="isMsgDisplayed" [modal]="true">
-  <img src="../../assets/img/messagebox_critical.png" style="vertical-align: middle">
-  {{msgText}}
+<p-dialog [(visible)]="isMsgDisplayed" [modal]="true" [width]="350">
+  <p-header>
+    <img src="../../assets/img/messagebox_critical.png" style="vertical-align: middle"> Error
+  </p-header>
+  <div>
+    {{msgText}}
+  </div>
   <p-footer>
-    <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+    <div class="ui-dialog-buttonpane ui-helper-clearfix">
       <button type="button" pButton icon="fa-close" (click)="isMsgDisplayed=false" label="Close"></button>
     </div>
   </p-footer>
