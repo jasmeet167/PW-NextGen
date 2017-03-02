@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
                 this.showError('Network error - unable to access Application Services');
               }
           },
-          () => this.processSuccessfulLogin(response)
+          ()  => this.processSuccessfulLogin(response)
         );
   }
 
@@ -86,7 +86,7 @@ export class LoginComponent implements OnInit {
                 this.showError('Network error - unable to access Application Services');
               }
           },
-          () => { return; }
+          ()  =>  { return; }
         );
   }
 
@@ -106,7 +106,7 @@ export class LoginComponent implements OnInit {
                 this.showError('Network error - unable to access Application Services');
               }
           },
-          () => sessionStorage['restServiceBaseUrl'] = config.restServiceBaseUrl
+          ()  => sessionStorage['restServiceBaseUrl'] = config.restServiceBaseUrl
         );
   }
 

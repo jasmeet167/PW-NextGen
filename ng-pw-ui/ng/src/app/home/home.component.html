@@ -12,6 +12,20 @@
   </p-footer>
 </p-dialog>
 
+<p-dialog [(visible)]="isInfoAboutDisplayed" [modal]="true" [width]="350">
+  <p-header>
+    <img src="../../assets/img/messagebox_info.png" style="vertical-align: middle"> Info
+  </p-header>
+  <div>
+    {{msgText}}
+  </div>
+  <p-footer>
+    <div class="ui-dialog-buttonpane ui-helper-clearfix">
+      <button type="button" pButton icon="fa-close" (click)="isMsgDisplayed=false" label="Close"></button>
+    </div>
+  </p-footer>
+</p-dialog>
+
 <p-menubar [model]="menuModel"></p-menubar>
 <p-tabView [style]="{'margin-top':'5px'}">
     <p-tabPanel header="Business Rule Search" lazy="false">

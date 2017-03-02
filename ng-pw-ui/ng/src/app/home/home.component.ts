@@ -4,6 +4,8 @@ import { Message } from 'primeng/primeng';
 import { MenuItem } from 'primeng/primeng';
 import { SelectItem } from 'primeng/primeng';
 
+import { AboutService } from './service/about.service';
+import { AboutApplication } from './model/about.application';
 import { MenuService } from './service/menu.service';
 import { FilterService } from './service/filter.service';
 import { ErrorMessage } from './model/error.message';
@@ -16,6 +18,9 @@ import { ErrorMessage } from './model/error.message';
 export class HomeComponent implements OnInit {
   public isMsgDisplayed: boolean;
   public msgText: string;
+
+  public isInfoAboutDisplayed: boolean;
+  public infoAbout: AboutApplication;
 
   public menuModel: MenuItem[];
 
@@ -59,7 +64,8 @@ export class HomeComponent implements OnInit {
 
   private sessionToken: string;
 
-  constructor(private menuService: MenuService, private filterService: FilterService) {
+  constructor(private aboutService: AboutService, private menuService: MenuService,
+              private filterService: FilterService) {
     this.sessionToken = sessionStorage['sessionToken'];
   }
 
@@ -81,7 +87,7 @@ export class HomeComponent implements OnInit {
             }
             this.buildEnvDropdown(null);
           },
-          () => this.buildEnvDropdown(envOptions)
+          ()  => this.buildEnvDropdown(envOptions)
         );
 
     this.filterCompanyDisabled = true;
@@ -140,7 +146,7 @@ export class HomeComponent implements OnInit {
                 }
                 this.buildCompanyDropdown(null);
             },
-            () => this.buildCompanyDropdown(companyOptions)
+            ()  => this.buildCompanyDropdown(companyOptions)
           );
 
       let projectOptions: SelectItem[];
@@ -153,7 +159,7 @@ export class HomeComponent implements OnInit {
                 }
                 this.buildProjects(null);
             },
-            () => this.buildProjects(projectOptions)
+            ()  => this.buildProjects(projectOptions)
           );
     }
   }
@@ -186,7 +192,7 @@ export class HomeComponent implements OnInit {
                 }
                 this.buildProductDropdown(null);
             },
-            () => this.buildProductDropdown(productOptions)
+            ()  => this.buildProductDropdown(productOptions)
           );
     }
   }
@@ -217,7 +223,7 @@ export class HomeComponent implements OnInit {
                 }
                 this.buildPlanCodeDropdown(null);
             },
-            () => this.buildPlanCodeDropdown(planCodeOptions)
+            ()  => this.buildPlanCodeDropdown(planCodeOptions)
           );
     }
   }
@@ -246,7 +252,7 @@ export class HomeComponent implements OnInit {
                 }
                 this.buildIssueStateDropdown(null);
             },
-            () => this.buildIssueStateDropdown(issueStateOptions)
+            ()  => this.buildIssueStateDropdown(issueStateOptions)
           );
     }
   }
@@ -274,7 +280,7 @@ export class HomeComponent implements OnInit {
                 }
                 this.buildLobDropdown(null);
             },
-            () => this.buildLobDropdown(lobOptions)
+            ()  => this.buildLobDropdown(lobOptions)
           );
     }
   }
@@ -299,7 +305,7 @@ export class HomeComponent implements OnInit {
                 }
                 this.buildEffDateDropdown(null);
             },
-            () => this.buildEffDateDropdown(effDateOptions)
+            ()  => this.buildEffDateDropdown(effDateOptions)
           );
     }
   }
@@ -382,6 +388,15 @@ export class HomeComponent implements OnInit {
 
   onGoClick() {
     console.log('Click on the "Go" button has been detected');
+  }
+
+  onAboutClick() {
+    this.aboutService.getAboutApplication(this.sessionToken)
+        .subscribe(
+          res => this.infoAbout = res,
+          err => this.handleError(err),
+          ()  => this.isInfoAboutDisplayed = true
+        );
   }
 
   private handleError(err: Response) {

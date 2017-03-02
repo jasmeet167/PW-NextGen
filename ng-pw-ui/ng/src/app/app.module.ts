@@ -23,6 +23,7 @@ import { ConfigurationService } from './login/service/configuration.service';
 import { LoginService } from './login/service/login.service';
 import { MenuService } from './home/service/menu.service';
 import { FilterService } from './home/service/filter.service';
+import { AboutService } from './home/service/about.service';
 
 import { appRoutes } from './app.routes';
 
@@ -49,7 +50,7 @@ import { appRoutes } from './app.routes';
     ButtonModule,
     InputTextModule
   ],
-  providers: [ConfigurationService, LoginService, MenuService, FilterService],
+  providers: [ConfigurationService, LoginService, MenuService, FilterService, AboutService],
   bootstrap: [CanvasComponent]
 })
 
