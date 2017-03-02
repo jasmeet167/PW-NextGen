@@ -16,7 +16,9 @@ import { LoginResponse } from './model/login.response';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  public msgs: Message[] = <Message[]> [];
+  public isMsgDisplayed: boolean;
+  public msgText: string;
+
   public loginForm: any;
   public userName: string;
 
@@ -88,9 +90,9 @@ export class LoginComponent implements OnInit {
         );
   }
 
-  showError(detail) {
-    this.msgs = [];
-    this.msgs.push({ severity : 'error', summary : null, detail : detail });
+  showError(message) {
+    this.msgText = message;
+    this.isMsgDisplayed = true;
   }
 
   getConfiguration() {

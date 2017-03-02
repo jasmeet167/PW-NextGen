@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-error-404-handler',
   template: `
-    <p-messages [value]="msgs"></p-messages>
     <p-panel header="Navigation Error">
       <div><h3>Page not Found</h3></div>
       <div>The provided URL was incorrect, or there is an application problem.</div>
