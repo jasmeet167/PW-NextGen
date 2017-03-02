@@ -1,6 +1,14 @@
-<p-messages [value]="msgs"></p-messages>
-<p-menubar [model]="menuModel"></p-menubar>
+<p-dialog header="Error" [(visible)]="isMsgDisplayed" [modal]="true">
+  <img src="../../assets/img/messagebox_critical.png" style="vertical-align: middle">
+  {{msgText}}
+  <p-footer>
+    <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+      <button type="button" pButton icon="fa-close" (click)="isMsgDisplayed=false" label="Close"></button>
+    </div>
+  </p-footer>
+</p-dialog>
 
+<p-menubar [model]="menuModel"></p-menubar>
 <p-tabView [style]="{'margin-top':'5px'}">
     <p-tabPanel header="Business Rule Search" lazy="false">
       <ul>

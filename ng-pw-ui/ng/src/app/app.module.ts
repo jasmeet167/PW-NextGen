@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
 
-import { MessagesModule } from 'primeng/primeng';
 import { DialogModule } from 'primeng/primeng';
 import { MenubarModule, MenuItem } from 'primeng/primeng';
 import { PanelModule } from 'primeng/primeng';
@@ -40,9 +39,8 @@ import { appRoutes } from './app.routes';
     FormsModule,
     HttpModule,
     ReactiveFormsModule,
-    MenubarModule,
-    MessagesModule,
     DialogModule,
+    MenubarModule,
     PanelModule,
     TabViewModule,
     DropdownModule,

@@ -90,12 +90,7 @@ export class LoginComponent implements OnInit {
         );
   }
 
-  showError(message) {
-    this.msgText = message;
-    this.isMsgDisplayed = true;
-  }
-
-  getConfiguration() {
+  private getConfiguration() {
     let config: Configuration;
     this.configurationService.getConfiguration()
         .subscribe(
@@ -113,5 +108,10 @@ export class LoginComponent implements OnInit {
           },
           () => sessionStorage['restServiceBaseUrl'] = config.restServiceBaseUrl
         );
+  }
+
+  private showError(message) {
+    this.msgText = message;
+    this.isMsgDisplayed = true;
   }
 }

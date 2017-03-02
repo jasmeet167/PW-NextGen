@@ -14,7 +14,9 @@ import { ErrorMessage } from './model/error.message';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  public msgs: Message[] = <Message[]> [];
+  public isMsgDisplayed: boolean;
+  public msgText: string;
+
   public menuModel: MenuItem[];
 
   public filterChangesOptions: SelectItem[];
@@ -382,11 +384,9 @@ export class HomeComponent implements OnInit {
     console.log('Click on the "Go" button has been detected');
   }
 
-
-  // Support for display of messages
-  handleError(err: Response) {
+  private handleError(err: Response) {
     if (err.type !== ResponseType.Default) {
-      this.showError(null, 'Network error - unable to access Application Services');
+      this.showError('Network error - unable to access Application Services');
       return;
     }
 
@@ -400,44 +400,16 @@ export class HomeComponent implements OnInit {
     if (model == null) {
       const logMessage: string = 'HTTP error ' + err.status + ': ' + err.statusText;
       console.error(logMessage);
-      this.showError(null, err.statusText);
+      this.showError(err.statusText);
     } else {
       const logMessage: string = 'Error ' + model.errorCode + ': ' + model.message;
-
-      switch (model.severity) {
-        case ErrorMessage.SeverityEnum.ERROR: {
-          console.error(logMessage);
-          this.showError(null, model.message);
-        }
-        break;
-
-        case ErrorMessage.SeverityEnum.WARNING: {
-          console.warn(logMessage);
-          this.showWarn(null, model.message);
-        }
-        break;
-      }
+      console.error(logMessage);
+      this.showError(model.message);
     }
   }
 
-  showSuccess(summary, detail) {
-    this.showMessage('success', summary, detail);
-  }
-
-  showInfo(summary, detail) {
-    this.showMessage('info', summary, detail);
-  }
-
-  showWarn(summary, detail) {
-    this.showMessage('warn', summary, detail);
-  }
-
-  showError(summary, detail) {
-    this.showMessage('error', summary, detail);
-  }
-
-  showMessage (severity, summary, detail) {
-    this.msgs = [];
-    this.msgs.push({ severity : severity, summary : summary, detail : detail });
+  private showError(message) {
+    this.msgText = message;
+    this.isMsgDisplayed = true;
   }
 }
