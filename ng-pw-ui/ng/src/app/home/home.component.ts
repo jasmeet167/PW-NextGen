@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Response, ResponseType } from '@angular/http';
+import { DateFormatter } from '@angular/common/src/pipes/intl';
 import { Message } from 'primeng/primeng';
 import { MenuItem } from 'primeng/primeng';
 import { SelectItem } from 'primeng/primeng';
@@ -20,7 +21,9 @@ export class HomeComponent implements OnInit {
   public msgText: string;
 
   public isInfoAboutDisplayed: boolean;
-  public infoAbout: AboutApplication;
+  public userName: string;
+  public formattedBuildDate: string;
+  public infoAbout: AboutApplication = new AboutApplication();
 
   public menuModel: MenuItem[];
 
@@ -388,14 +391,22 @@ export class HomeComponent implements OnInit {
 
   onGoClick() {
     console.log('Click on the "Go" button has been detected');
+
+    // just for testing:
+    this.onAboutClick();
   }
 
   onAboutClick() {
+    this.userName = (<string> sessionStorage['userName']).toUpperCase();
     this.aboutService.getAboutApplication(this.sessionToken)
         .subscribe(
           res => this.infoAbout = res,
           err => this.handleError(err),
-          ()  => this.isInfoAboutDisplayed = true
+          ()  => {
+                  const date: Date = new Date(Date.parse(this.infoAbout.buildTimestamp));
+                  this.formattedBuildDate = DateFormatter.format(date, 'en', 'MMMM dd yyyy @ H:mm:ss');
+                  this.isInfoAboutDisplayed = true;
+          }
         );
   }
 

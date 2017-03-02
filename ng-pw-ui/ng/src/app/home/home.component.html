@@ -14,14 +14,16 @@
 
 <p-dialog [(visible)]="isInfoAboutDisplayed" [modal]="true" [width]="350">
   <p-header>
-    <img src="../../assets/img/messagebox_info.png" style="vertical-align: middle"> Info
+    <img src="../../assets/img/messagebox_info.png" style="vertical-align: middle"> About Product Wizard
   </p-header>
   <div>
-    {{msgText}}
+    <div>{{infoAbout.appDesignator}} {{infoAbout.appVersion}}</div>
+    <div>User ID: {{userName}}</div>
+    <div>{{formattedBuildDate}}</div>
   </div>
   <p-footer>
     <div class="ui-dialog-buttonpane ui-helper-clearfix">
-      <button type="button" pButton icon="fa-close" (click)="isMsgDisplayed=false" label="Close"></button>
+      <button type="button" pButton icon="fa-close" (click)="isInfoAboutDisplayed=false" label="Close"></button>
     </div>
   </p-footer>
 </p-dialog>
