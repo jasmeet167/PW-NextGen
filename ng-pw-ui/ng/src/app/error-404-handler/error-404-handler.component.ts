@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { MessagesModule } from 'primeng/primeng';
-import { PanelModule } from 'primeng/primeng';
-import { Message } from 'primeng/primeng';
 
 @Component({
   selector: 'app-error-404-handler',
@@ -17,10 +14,7 @@ import { Message } from 'primeng/primeng';
   `
 })
 export class Error404HandlerComponent {
-  public msgs: Message[] = <Message[]> [];
-
   constructor(private router: Router) {
-    this.msgs.push({ severity : 'error', summary : null, detail : 'Page not Found' });
   }
 
   onclick() {

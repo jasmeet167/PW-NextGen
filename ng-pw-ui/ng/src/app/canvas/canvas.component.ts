@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Response } from '@angular/http';
 import { Router } from '@angular/router';
-import { ButtonModule } from 'primeng/primeng';
 
 @Component({
   selector: 'app-canvas',

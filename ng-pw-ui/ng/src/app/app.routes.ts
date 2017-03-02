@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 
-import { CanvasComponent } from './canvas/canvas.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { Error404HandlerComponent } from './error-404-handler/error-404-handler.component';

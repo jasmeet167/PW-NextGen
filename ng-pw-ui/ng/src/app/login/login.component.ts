@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Response, ResponseType } from '@angular/http';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { ResponseType } from '@angular/http';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Message } from 'primeng/primeng';
 
