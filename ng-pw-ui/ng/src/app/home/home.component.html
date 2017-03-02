@@ -35,12 +35,10 @@
           <p-listbox [options]="filterProjectRows" [(ngModel)]="filterProjects" [multiple]="true" [style]="{'width':'350px','height':'150px','margin-bottom':'15px'}"></p-listbox>
         </li>
         <li>
-          <p-checkbox [(ngModel)]="filterInclOrphans" binary="true" [disabled]="filterInclOrphansDisabled"></p-checkbox>
-          <span>Show orphan subsets</span>
+          <p-checkbox [(ngModel)]="filterInclOrphans" binary="true" [disabled]="filterInclOrphansDisabled" label="Show orphan subsets"></p-checkbox>
         </li>
         <li>
-          <p-checkbox [(ngModel)]="filterRememberSelections" binary="true"></p-checkbox>
-          <span>Remember my selections</span>
+          <p-checkbox [(ngModel)]="filterRememberSelections" binary="true" label="Remember my selections"></p-checkbox>
         </li>
         <li class="li-extra-space">
           <button pButton type="button" (click)="onGoClick()" label="Go"></button>
