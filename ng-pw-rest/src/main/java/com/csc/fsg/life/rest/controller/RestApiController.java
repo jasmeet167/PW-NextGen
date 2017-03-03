@@ -4,28 +4,28 @@ import com.csc.fsg.life.rest.param.RestServiceParam;
 
 abstract public class RestApiController
 {
-	protected RestServiceParam buildRestServiceParam(String sessionToken)
+	protected RestServiceParam buildRestServiceParam(String authToken)
 	{
-		return new RestServiceParam(sessionToken);
+		return new RestServiceParam(authToken);
 	}
 
-	protected RestServiceParam buildRestServiceParam(String sessionToken, String envId)
+	protected RestServiceParam buildRestServiceParam(String authToken, String envId)
 	{
-		return new RestServiceParam(sessionToken, envId);
+		return new RestServiceParam(authToken, envId);
 	}
 
-	protected RestServiceParam buildRestServiceParam(String sessionToken, String[] envIds)
+	protected RestServiceParam buildRestServiceParam(String authToken, String[] envIds)
 	{
-		return new RestServiceParam(sessionToken, envIds);
+		return new RestServiceParam(authToken, envIds);
 	}
 
-	protected RestServiceParam buildRestServiceParam(String sessionToken, String envId, String companyCode)
+	protected RestServiceParam buildRestServiceParam(String authToken, String envId, String companyCode)
 	{
-		return new RestServiceParam(sessionToken, envId, companyCode);
+		return new RestServiceParam(authToken, envId, companyCode);
 	}
 
-	protected RestServiceParam buildRestServiceParam(String sessionToken, String envId, String companyCode, String tableDddlName)
+	protected RestServiceParam buildRestServiceParam(String authToken, String envId, String companyCode, String tableDddlName)
 	{
-		return new RestServiceParam(sessionToken, envId, companyCode, tableDddlName);
+		return new RestServiceParam(authToken, envId, companyCode, tableDddlName);
 	}
 }

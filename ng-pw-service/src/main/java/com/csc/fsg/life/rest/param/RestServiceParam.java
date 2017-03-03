@@ -7,26 +7,26 @@ public class RestServiceParam
 {
 	private static final long serialVersionUID = 5217150979157700468L;
 
-	private String sessionToken = null;
+	private String authToken = null;
 	private String sourceEnvId = null;
 	private String targetEnvId = null;
 	private String companyCode = null;
 	private String tableDdlName = null;
 
-	public RestServiceParam(String sessionToken)
+	public RestServiceParam(String authToken)
 	{
-		this.sessionToken = sessionToken;
+		this.authToken = authToken;
 	}
 
-	public RestServiceParam(String sessionToken, String envId)
+	public RestServiceParam(String authToken, String envId)
 	{
-		this.sessionToken = sessionToken;
+		this.authToken = authToken;
 		this.sourceEnvId = envId;
 	}
 
-	public RestServiceParam(String sessionToken, String[] envIds)
+	public RestServiceParam(String authToken, String[] envIds)
 	{
-		this.sessionToken = sessionToken;
+		this.authToken = authToken;
 		if (envIds != null) {
 			if (envIds.length > 0)
 				this.sourceEnvId = envIds[0];
@@ -35,24 +35,24 @@ public class RestServiceParam
 		}
 	}
 
-	public RestServiceParam(String sessionToken, String envId, String companyCode)
+	public RestServiceParam(String authToken, String envId, String companyCode)
 	{
-		this.sessionToken = sessionToken;
+		this.authToken = authToken;
 		this.sourceEnvId = envId;
 		this.companyCode = companyCode;
 	}
 
-	public RestServiceParam(String sessionToken, String envId, String companyCode, String tableDddlName)
+	public RestServiceParam(String authToken, String envId, String companyCode, String tableDddlName)
 	{
-		this.sessionToken = sessionToken;
+		this.authToken = authToken;
 		this.sourceEnvId = envId;
 		this.companyCode = companyCode;
 		this.tableDdlName = tableDddlName;
 	}
 
-	public String getSessionToken()
+	public String getAuthToken()
 	{
-		return sessionToken;
+		return authToken;
 	}
 
 	public String getEnvId()

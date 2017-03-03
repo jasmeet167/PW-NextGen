@@ -65,11 +65,11 @@ export class HomeComponent implements OnInit {
 
   public filterRememberSelections: boolean;
 
-  private sessionToken: string;
+  private authToken: string;
 
   constructor(private aboutService: AboutService, private menuService: MenuService,
               private filterService: FilterService) {
-    this.sessionToken = sessionStorage['sessionToken'];
+    this.authToken = sessionStorage['authToken'];
   }
 
   ngOnInit() {
@@ -81,7 +81,7 @@ export class HomeComponent implements OnInit {
     this.filterChanges = true;
 
     let envOptions: SelectItem[];
-    this.filterService.getEnvOptions(this.sessionToken)
+    this.filterService.getEnvOptions(this.authToken)
         .subscribe(
           res => envOptions = res,
           err => {
@@ -140,7 +140,7 @@ export class HomeComponent implements OnInit {
       this.filterCompanyDisabled = false;
 
       let companyOptions: SelectItem[];
-      this.filterService.getCompanyOptions(this.sessionToken, this.filterChanges, this.filterEnv)
+      this.filterService.getCompanyOptions(this.authToken, this.filterChanges, this.filterEnv)
           .subscribe(
             res => companyOptions = res,
             err => {
@@ -153,7 +153,7 @@ export class HomeComponent implements OnInit {
           );
 
       let projectOptions: SelectItem[];
-      this.filterService.getProjects(this.sessionToken, this.filterEnv)
+      this.filterService.getProjects(this.authToken, this.filterEnv)
           .subscribe(
             res => projectOptions = res,
             err => {
@@ -185,7 +185,7 @@ export class HomeComponent implements OnInit {
       this.filterProductDisabled = false;
 
       let productOptions: SelectItem[];
-      this.filterService.getProductOptions(this.sessionToken, this.filterChanges, this.filterEnv,
+      this.filterService.getProductOptions(this.authToken, this.filterChanges, this.filterEnv,
                                            this.filterCompany)
           .subscribe(
             res => productOptions = res,
@@ -216,7 +216,7 @@ export class HomeComponent implements OnInit {
       this.filterPlanCodeDisabled = false;
 
       let planCodeOptions: SelectItem[];
-      this.filterService.getPlanCodeOptions(this.sessionToken, this.filterChanges, this.filterEnv,
+      this.filterService.getPlanCodeOptions(this.authToken, this.filterChanges, this.filterEnv,
                                             this.filterCompany, this.filterProduct)
           .subscribe(
             res => planCodeOptions = res,
@@ -245,7 +245,7 @@ export class HomeComponent implements OnInit {
       this.filterIssueStateDisabled = false;
 
       let issueStateOptions: SelectItem[];
-      this.filterService.getIssueStateOptions(this.sessionToken, this.filterChanges, this.filterEnv,
+      this.filterService.getIssueStateOptions(this.authToken, this.filterChanges, this.filterEnv,
                                               this.filterCompany, this.filterProduct, this.filterPlanCode)
           .subscribe(
             res => issueStateOptions = res,
@@ -272,7 +272,7 @@ export class HomeComponent implements OnInit {
       this.filterLobDisabled = false;
 
       let lobOptions: SelectItem[];
-      this.filterService.getLobOptions(this.sessionToken, this.filterChanges, this.filterEnv,
+      this.filterService.getLobOptions(this.authToken, this.filterChanges, this.filterEnv,
                                        this.filterCompany, this.filterProduct, this.filterPlanCode,
                                        this.filterIssueState)
           .subscribe(
@@ -297,7 +297,7 @@ export class HomeComponent implements OnInit {
       this.filterPlanEffDateDisabled = false;
 
       let effDateOptions: SelectItem[];
-      this.filterService.getEffDateOptions(this.sessionToken, this.filterChanges, this.filterEnv,
+      this.filterService.getEffDateOptions(this.authToken, this.filterChanges, this.filterEnv,
                                            this.filterCompany, this.filterProduct, this.filterPlanCode,
                                            this.filterIssueState, this.filterLob)
           .subscribe(
@@ -398,7 +398,7 @@ export class HomeComponent implements OnInit {
 
   onAboutClick() {
     this.userName = (<string> sessionStorage['userName']).toUpperCase();
-    this.aboutService.getAboutApplication(this.sessionToken)
+    this.aboutService.getAboutApplication(this.authToken)
         .subscribe(
           res => this.infoAbout = res,
           err => this.handleError(err),

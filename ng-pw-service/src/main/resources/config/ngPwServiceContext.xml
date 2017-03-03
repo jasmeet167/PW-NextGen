@@ -13,7 +13,7 @@
 	<bean class="com.csc.fsg.life.openam.config.PolicyDecisionPointConfig">
 		<property name="securityEnabled" value="true"/>
 		<property name="securityManagementUrl" value="http://openam.rest-security.com:6080/openam/json"/>
-		<property name="sessionTokenCookieName" value="ngPwSessionToken"/>
+		<property name="authTokenCookieName" value="ngPwAuthToken"/>
 		<property name="realm" value="/ng-pw"/>
 		<property name="policySetName" value="GENERAL_ACCESS_POLICY_SET"/>
 		<property name="apiVersions" ref="openAmApiVersions"/>

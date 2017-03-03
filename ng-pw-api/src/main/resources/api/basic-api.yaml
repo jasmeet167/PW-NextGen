@@ -19,7 +19,7 @@ paths:
       summary: Authenticate a user.
       description: |
         This endpoint is used to authenticate a user,
-        and return the corresponding session token.
+        and return the corresponding auth token.
       consumes:
         - application/json
       produces:
@@ -42,11 +42,11 @@ paths:
             used to link service requests to the corresponding security
             session, is returned.
           schema:
-            $ref: '#/definitions/sessionToken'
+            $ref: '#/definitions/authToken'
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Session token is either missing or invalid. 
+            Auth token is either missing or invalid. 
         default:
           description: Unexpected Error.
           schema: 
@@ -56,16 +56,16 @@ paths:
     post:
       summary: Logout a user.
       description: |
-        This endpoint is used to terminate the session corresponding to
-        the provided token, thus logging out the user, who created the session. 
+        This endpoint is used to terminate the security session corresponding
+        to the provided token. 
       produces:
         - application/json
       operationId: logout
       parameters:
-        - name: sessionToken
+        - name: authToken
           in: header
           description: | 
-            Session Token.
+            Auth Token.
           required: true
           type: string
       tags:
@@ -78,7 +78,7 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Session token is either missing or invalid. 
+            Auth token is either missing or invalid. 
         default:
           description: Unexpected Error.
           schema: 
@@ -93,10 +93,10 @@ paths:
         - application/json
       operationId: getInfoAboutApplication
       parameters:
-        - name: sessionToken
+        - name: authToken
           in: header
           description: | 
-            Session Token.
+            Auth Token.
           required: true
           type: string
       tags:
@@ -110,7 +110,7 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Session token is either missing or invalid. 
+            Auth token is either missing or invalid. 
         default:
           description: Unexpected Error.
           schema: 
@@ -127,10 +127,10 @@ paths:
         - application/json
       operationId: getCommonEnvironments
       parameters:
-        - name: sessionToken
+        - name: authToken
           in: header
           description: | 
-            Session Token.
+            Auth Token.
           required: true
           type: string
       tags:
@@ -152,7 +152,7 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Session token is either missing or invalid. 
+            Auth token is either missing or invalid. 
         403:
           description: |
             Forbidden.  The user is not authorized to access
@@ -178,10 +178,10 @@ paths:
         - application/json
       operationId: getPlanCompanyCodes
       parameters:
-        - name: sessionToken
+        - name: authToken
           in: header
           description: | 
-            Session Token.
+            Auth Token.
           required: true
           type: string
         - name: viewChanges
@@ -215,7 +215,7 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Session token is either missing or invalid. 
+            Auth token is either missing or invalid. 
         403:
           description: |
             Forbidden.  The user is not authorized to access
@@ -240,10 +240,10 @@ paths:
         - application/json
       operationId: getPlanProductCodes
       parameters:
-        - name: sessionToken
+        - name: authToken
           in: header
           description: | 
-            Session Token.
+            Auth Token.
           required: true
           type: string
         - name: viewChanges
@@ -283,7 +283,7 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Session token is either missing or invalid. 
+            Auth token is either missing or invalid. 
         403:
           description: |
             Forbidden.  The user is not authorized to access
@@ -308,10 +308,10 @@ paths:
         - application/json
       operationId: getPlanPlanCodes
       parameters:
-        - name: sessionToken
+        - name: authToken
           in: header
           description: | 
-            Session Token.
+            Auth Token.
           required: true
           type: string
         - name: viewChanges
@@ -357,7 +357,7 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Session token is either missing or invalid. 
+            Auth token is either missing or invalid. 
         403:
           description: |
             Forbidden.  The user is not authorized to access
@@ -382,10 +382,10 @@ paths:
         - application/json
       operationId: getPlanIssueStates
       parameters:
-        - name: sessionToken
+        - name: authToken
           in: header
           description: | 
-            Session Token.
+            Auth Token.
           required: true
           type: string
         - name: viewChanges
@@ -437,7 +437,7 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Session token is either missing or invalid. 
+            Auth token is either missing or invalid. 
         403:
           description: |
             Forbidden.  The user is not authorized to access
@@ -462,10 +462,10 @@ paths:
         - application/json
       operationId: getPlanLobs
       parameters:
-        - name: sessionToken
+        - name: authToken
           in: header
           description: | 
-            Session Token.
+            Auth Token.
           required: true
           type: string
         - name: viewChanges
@@ -523,7 +523,7 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Session token is either missing or invalid. 
+            Auth token is either missing or invalid. 
         403:
           description: |
             Forbidden.  The user is not authorized to access
@@ -548,10 +548,10 @@ paths:
         - application/json
       operationId: getPlanEffDates
       parameters:
-        - name: sessionToken
+        - name: authToken
           in: header
           description: | 
-            Session Token.
+            Auth Token.
           required: true
           type: string
         - name: viewChanges
@@ -615,7 +615,7 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Session token is either missing or invalid. 
+            Auth token is either missing or invalid. 
         403:
           description: |
             Forbidden.  The user is not authorized to access
@@ -640,10 +640,10 @@ paths:
         - application/json
       operationId: getPlanProjects
       parameters:
-        - name: sessionToken
+        - name: authToken
           in: header
           description: | 
-            Session Token.
+            Auth Token.
           required: true
           type: string
         - name: envId
@@ -671,7 +671,7 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Session token is either missing or invalid. 
+            Auth token is either missing or invalid. 
         403:
           description: |
             Forbidden.  The user is not authorized to access
@@ -696,10 +696,10 @@ paths:
         - application/json
       operationId: getPlanTables
       parameters:
-        - name: sessionToken
+        - name: authToken
           in: header
           description: | 
-            Session Token.
+            Auth Token.
           required: true
           type: string
         - name: envId
@@ -733,7 +733,7 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Session token is either missing or invalid. 
+            Auth token is either missing or invalid. 
         403:
           description: |
             Forbidden.  The user is not authorized to access
@@ -764,10 +764,10 @@ paths:
         - application/json
       operationId: getChangesEnvironments
       parameters:
-        - name: sessionToken
+        - name: authToken
           in: header
           description: | 
-            Session Token.
+            Auth Token.
           required: true
           type: string
       tags:
@@ -789,7 +789,7 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Session token is either missing or invalid. 
+            Auth token is either missing or invalid. 
         403:
           description: |
             Forbidden.  The user is not authorized to access
@@ -817,10 +817,10 @@ paths:
         - application/json
       operationId: getChangesFilterValues
       parameters:
-        - name: sessionToken
+        - name: authToken
           in: header
           description: | 
-            Session Token.
+            Auth Token.
           required: true
           type: string
         - name: envId
@@ -845,7 +845,7 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Session token is either missing or invalid. 
+            Auth token is either missing or invalid. 
         403:
           description: |
             Forbidden.  The user is not authorized to access
@@ -873,10 +873,10 @@ paths:
         - application/json
       operationId: getApplyFilterValues
       parameters:
-        - name: sessionToken
+        - name: authToken
           in: header
           description: | 
-            Session Token.
+            Auth Token.
           required: true
           type: string
         - name: envId
@@ -901,7 +901,7 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Session token is either missing or invalid. 
+            Auth token is either missing or invalid. 
         403:
           description: |
             Forbidden.  The user is not authorized to access
@@ -929,10 +929,10 @@ paths:
         - application/json
       operationId: getAuditFilterValues
       parameters:
-        - name: sessionToken
+        - name: authToken
           in: header
           description: | 
-            Session Token.
+            Auth Token.
           required: true
           type: string
         - name: filterAspect 
@@ -965,7 +965,7 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Session token is either missing or invalid. 
+            Auth token is either missing or invalid. 
         403:
           description: |
             Forbidden.  The user is not authorized to access
@@ -993,10 +993,10 @@ paths:
         - application/json
       operationId: getPromoteFilterValues
       parameters:
-        - name: sessionToken
+        - name: authToken
           in: header
           description: | 
-            Session Token.
+            Auth Token.
           required: true
           type: string
         - name: sourceEnvId
@@ -1027,7 +1027,7 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Session token is either missing or invalid. 
+            Auth token is either missing or invalid. 
         403:
           description: |
             Forbidden.  The user is not authorized to access
@@ -1053,10 +1053,10 @@ paths:
         - application/json
       operationId: getSummaryCompanyCodes
       parameters:
-        - name: sessionToken
+        - name: authToken
           in: header
           description: | 
-            Session Token.
+            Auth Token.
           required: true
           type: string
         - name: filterAspect
@@ -1092,7 +1092,7 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Session token is either missing or invalid. 
+            Auth token is either missing or invalid. 
         403:
           description: |
             Forbidden.  The user is not authorized to access
@@ -1117,10 +1117,10 @@ paths:
         - application/json
       operationId: getSummaryProductCodes
       parameters:
-        - name: sessionToken
+        - name: authToken
           in: header
           description: | 
-            Session Token.
+            Auth Token.
           required: true
           type: string
         - name: filterAspect
@@ -1162,7 +1162,7 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Session token is either missing or invalid. 
+            Auth token is either missing or invalid. 
         403:
           description: |
             Forbidden.  The user is not authorized to access
@@ -1187,10 +1187,10 @@ paths:
         - application/json
       operationId: getSummaryPlanCodes
       parameters:
-        - name: sessionToken
+        - name: authToken
           in: header
           description: | 
-            Session Token.
+            Auth Token.
           required: true
           type: string
         - name: filterAspect
@@ -1238,7 +1238,7 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Session token is either missing or invalid. 
+            Auth token is either missing or invalid. 
         403:
           description: |
             Forbidden.  The user is not authorized to access
@@ -1263,10 +1263,10 @@ paths:
         - application/json
       operationId: getSummaryIssueStates
       parameters:
-        - name: sessionToken
+        - name: authToken
           in: header
           description: | 
-            Session Token.
+            Auth Token.
           required: true
           type: string
         - name: filterAspect
@@ -1320,7 +1320,7 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Session token is either missing or invalid. 
+            Auth token is either missing or invalid. 
         403:
           description: |
             Forbidden.  The user is not authorized to access
@@ -1345,10 +1345,10 @@ paths:
         - application/json
       operationId: getSummaryLobs
       parameters:
-        - name: sessionToken
+        - name: authToken
           in: header
           description: | 
-            Session Token.
+            Auth Token.
           required: true
           type: string
         - name: filterAspect
@@ -1408,7 +1408,7 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Session token is either missing or invalid. 
+            Auth token is either missing or invalid. 
         403:
           description: |
             Forbidden.  The user is not authorized to access
@@ -1433,10 +1433,10 @@ paths:
         - application/json
       operationId: getSummaryEffDates
       parameters:
-        - name: sessionToken
+        - name: authToken
           in: header
           description: | 
-            Session Token.
+            Auth Token.
           required: true
           type: string
         - name: filterAspect
@@ -1502,7 +1502,7 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Session token is either missing or invalid. 
+            Auth token is either missing or invalid. 
         403:
           description: |
             Forbidden.  The user is not authorized to access
@@ -1528,7 +1528,7 @@ definitions:
         type: string
         description: Password.
 
-  sessionToken:
+  authToken:
     type: string
     properties:
       tokenId:

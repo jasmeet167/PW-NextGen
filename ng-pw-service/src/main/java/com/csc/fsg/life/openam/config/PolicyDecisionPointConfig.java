@@ -12,7 +12,7 @@ public class PolicyDecisionPointConfig
 
 	private boolean isSecurityEnabled = true;
 	private String securityManagementUrl = null;
-	private String sessionTokenCookieName = null;
+	private String authTokenCookieName = null;
 	private String realm = null;
 	private String policySetName = null;
 	private Map<String, EndpointApiVersion> apiVersions = null;
@@ -37,14 +37,14 @@ public class PolicyDecisionPointConfig
 		return securityManagementUrl;
 	}
 
-	public String getSessionTokenCookieName()
+	public String getAuthTokenCookieName()
 	{
-		return sessionTokenCookieName;
+		return authTokenCookieName;
 	}
 
-	public void setSessionTokenCookieName(String sessionTokenCookieName)
+	public void setAuthTokenCookieName(String authTokenCookieName)
 	{
-		this.sessionTokenCookieName = sessionTokenCookieName;
+		this.authTokenCookieName = authTokenCookieName;
 	}
 
 	public String getRealm()

@@ -11,10 +11,10 @@ export class AboutService {
   constructor(private http: Http) {
   }
 
-  getAboutApplication(sessionToken: string): Observable<AboutApplication> {
+  getAboutApplication(authToken: string): Observable<AboutApplication> {
     const filterHeaders: Headers = new Headers();
     filterHeaders.append('Accept', 'application/json');
-    filterHeaders.append('sessionToken', sessionToken);
+    filterHeaders.append('authToken', authToken);
 
     const options: RequestOptions = new RequestOptions();
     options.headers = filterHeaders;

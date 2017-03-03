@@ -31,11 +31,11 @@ export class LoginService {
                .map(response => { return <LoginResponse> response.json(); });
   }
 
-  logout(sessionToken: string) {
+  logout(authToken: string) {
     const filterHeaders: Headers = new Headers();
     filterHeaders.append('Content-Type', 'application/json');
     filterHeaders.append('Accept', 'application/json');
-    filterHeaders.append('sessionToken', sessionToken);
+    filterHeaders.append('authToken', authToken);
 
     const options: RequestOptions = new RequestOptions();
     options.headers = filterHeaders;

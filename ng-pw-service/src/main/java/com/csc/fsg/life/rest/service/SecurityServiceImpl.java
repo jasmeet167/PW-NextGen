@@ -31,7 +31,7 @@ import com.csc.fsg.life.rest.exception.UnexpectedException;
 import com.csc.fsg.life.rest.model.Credentials;
 import com.csc.fsg.life.rest.model.ErrorModel;
 import com.csc.fsg.life.rest.model.SelectItem;
-import com.csc.fsg.life.rest.model.SessionToken;
+import com.csc.fsg.life.rest.model.AuthToken;
 import com.csc.fsg.life.rest.param.AuthorizationAction;
 import com.csc.fsg.life.rest.param.RestServiceParam;
 
@@ -60,12 +60,12 @@ public class SecurityServiceImpl
 	@Autowired
 	protected PolicyDecisionPointConfig pdpConfig = null;
 
-	public SessionToken authenticate(Credentials credentials)
+	public AuthToken authenticate(Credentials credentials)
 	{
 		if (!pdpConfig.isSecurityEnabled()) {
-			SessionToken sessionToken = new SessionToken();
-			sessionToken.setTokenId("");
-			return sessionToken;
+			AuthToken authToken = new AuthToken();
+			authToken.setTokenId("");
+			return authToken;
 		}
 
 		try {
@@ -84,7 +84,7 @@ public class SecurityServiceImpl
 			RestTemplate restTemplate = new RestTemplate();
 
 			String url = pdpConfig.getSecurityManagementUrl() + ACTION_AUTHENTICATE;
-			ResponseEntity<SessionToken> response = restTemplate.exchange(url, HttpMethod.POST, entity, SessionToken.class);
+			ResponseEntity<AuthToken> response = restTemplate.exchange(url, HttpMethod.POST, entity, AuthToken.class);
 			return response.getBody();
 		}
 		catch (HttpClientErrorException e) {
@@ -108,13 +108,13 @@ public class SecurityServiceImpl
 		}
 	}
 
-	public void validateSession(String sessionToken)
+	public void validateSession(String authToken)
 	{
 		if (!pdpConfig.isSecurityEnabled())
 			return;
 
 		try {
-			if (!StringUtils.hasText(sessionToken))
+			if (!StringUtils.hasText(authToken))
 				throw new UnauthorizedException();
 
 			HttpHeaders headers = new HttpHeaders();
@@ -124,7 +124,7 @@ public class SecurityServiceImpl
 			HttpEntity<String> entity = new HttpEntity<>(headers);
 			RestTemplate restTemplate = new RestTemplate();
 
-			String customizedAction = ACTION_VALIDATE_TOKEN.replaceFirst("\\{0\\}", sessionToken);
+			String customizedAction = ACTION_VALIDATE_TOKEN.replaceFirst("\\{0\\}", authToken);
 			String url = pdpConfig.getSecurityManagementUrl() + customizedAction;
 
 			ResponseEntity<TokenValidationResponse> httpResponse = restTemplate.exchange(url, HttpMethod.POST, entity, TokenValidationResponse.class);
@@ -142,7 +142,7 @@ public class SecurityServiceImpl
 		}
 	}
 
-	public void logout(String sessionToken)
+	public void logout(String authToken)
 	{
 		if (!pdpConfig.isSecurityEnabled())
 			return;
@@ -152,7 +152,7 @@ public class SecurityServiceImpl
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 			headers.set(HEADER_ACCEPT_API_VERSION, pdpConfig.getApiVersionHeaderForEndpoint(ENDPOINT_SESSIONS));
-			headers.set(pdpConfig.getSessionTokenCookieName(), sessionToken);
+			headers.set(pdpConfig.getAuthTokenCookieName(), authToken);
 			HttpEntity<String> entity = new HttpEntity<>(headers);
 			RestTemplate restTemplate = new RestTemplate();
 
@@ -222,8 +222,8 @@ public class SecurityServiceImpl
 			}
 		}
 
-		String sessionToken = param.getSessionToken();
-		Map<String, AuthorizationResponse> authMap = evaluateAuthorization(sessionToken, resources);
+		String authToken = param.getAuthToken();
+		Map<String, AuthorizationResponse> authMap = evaluateAuthorization(authToken, resources);
 
 		for (AuthorizationResponse auth : authMap.values()) {
 			Map<String, Boolean> actions = auth.getActions();
@@ -232,7 +232,7 @@ public class SecurityServiceImpl
 		}
 	}
 
-	public List<SelectItem> filterAuthorizedEnvironments(String sessionToken, List<SelectItem> allEnvironments)
+	public List<SelectItem> filterAuthorizedEnvironments(String authToken, List<SelectItem> allEnvironments)
 	{
 		if (!pdpConfig.isSecurityEnabled())
 			return new ArrayList<>(allEnvironments);
@@ -245,7 +245,7 @@ public class SecurityServiceImpl
 		// one or more authorization policies have been established;
 		// the map is keyed by Environment ID, and the corresponding
 		// value represents outcome of authorization evaluation:
-		Map<String, AuthorizationResponse> authMap = evaluateAuthorization(sessionToken, resources);
+		Map<String, AuthorizationResponse> authMap = evaluateAuthorization(authToken, resources);
 
 		List<SelectItem> response = new ArrayList<>();
 		for (SelectItem env : allEnvironments) {
@@ -261,7 +261,7 @@ public class SecurityServiceImpl
 		return response;
 	}
 
-	public List<SelectItem> filterAuthorizedCompanies(String sessionToken, String envId, List<SelectItem> allCompanies)
+	public List<SelectItem> filterAuthorizedCompanies(String authToken, String envId, List<SelectItem> allCompanies)
 	{
 		if (!pdpConfig.isSecurityEnabled())
 			return new ArrayList<>(allCompanies);
@@ -277,7 +277,7 @@ public class SecurityServiceImpl
 		// the map is keyed by Environment ID/Company Code, and
 		// the corresponding value represents outcome of authorization
 		// evaluation:
-		Map<String, AuthorizationResponse> authMap = evaluateAuthorization(sessionToken, resources);
+		Map<String, AuthorizationResponse> authMap = evaluateAuthorization(authToken, resources);
 
 		List<SelectItem> response = new ArrayList<>();
 		for (SelectItem company : allCompanies) {
@@ -293,7 +293,7 @@ public class SecurityServiceImpl
 		return response;
 	}
 
-	public List<SelectItem> filterAuthorizedTables(String sessionToken, String envId, String companyCode, List<SelectItem> allTables)
+	public List<SelectItem> filterAuthorizedTables(String authToken, String envId, String companyCode, List<SelectItem> allTables)
 	{
 		if (!pdpConfig.isSecurityEnabled())
 			return new ArrayList<>(allTables);
@@ -309,7 +309,7 @@ public class SecurityServiceImpl
 		// the map is keyed by Environment ID/Company Code/Table DDL
 		// Name, and the corresponding value represents outcome of
 		// authorization evaluation:
-		Map<String, AuthorizationResponse> authMap = evaluateAuthorization(sessionToken, resources);
+		Map<String, AuthorizationResponse> authMap = evaluateAuthorization(authToken, resources);
 
 		List<SelectItem> response = new ArrayList<>();
 		for (SelectItem table : allTables) {
@@ -325,20 +325,20 @@ public class SecurityServiceImpl
 		return response;
 	}
 
-	private Map<String, AuthorizationResponse> evaluateAuthorization(String sessionToken, List<String> resources)
+	private Map<String, AuthorizationResponse> evaluateAuthorization(String authToken, List<String> resources)
 	{
 		AuthorizationQuery query = new AuthorizationQuery();
 		for (String resource : resources)
 			query.addResource(resource);
 
 		query.setApplication(pdpConfig.getPolicySetName());
-		query.getSubject().setSsoToken(sessionToken);
+		query.getSubject().setSsoToken(authToken);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		headers.set(HEADER_ACCEPT_API_VERSION, pdpConfig.getApiVersionHeaderForEndpoint(ENDPOINT_POLICIES));
-		headers.set(pdpConfig.getSessionTokenCookieName(), sessionToken);
+		headers.set(pdpConfig.getAuthTokenCookieName(), authToken);
 		HttpEntity<AuthorizationQuery> entity = new HttpEntity<>(query, headers);
 		RestTemplate restTemplate = new RestTemplate();
 
@@ -355,18 +355,18 @@ public class SecurityServiceImpl
 	}
 
 	@SuppressWarnings("unused")
-	private AuthorizationTreeResponse[] evaluateAuthorizationTree(String sessionToken, String urlRoot)
+	private AuthorizationTreeResponse[] evaluateAuthorizationTree(String authToken, String urlRoot)
 	{
 		AuthorizationTreeQuery query = new AuthorizationTreeQuery();
 		query.setResource(urlRoot);
 		query.setApplication(pdpConfig.getPolicySetName());
-		query.getSubject().setSsoToken(sessionToken);
+		query.getSubject().setSsoToken(authToken);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		headers.set(HEADER_ACCEPT_API_VERSION, pdpConfig.getApiVersionHeaderForEndpoint(ENDPOINT_POLICIES));
-		headers.set(pdpConfig.getSessionTokenCookieName(), sessionToken);
+		headers.set(pdpConfig.getAuthTokenCookieName(), authToken);
 		HttpEntity<AuthorizationTreeQuery> entity = new HttpEntity<>(query, headers);
 		RestTemplate restTemplate = new RestTemplate();
 

@@ -27,10 +27,10 @@ paths:
         - application/json
       operationId: getBusinessRulesTree
       parameters:
-        - name: sessionToken
+        - name: authToken
           in: header
           description: | 
-            Session Token.
+            Auth Token.
           required: true
           type: string
         - name: viewChanges
@@ -107,7 +107,7 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Session token is either missing or invalid. 
+            Auth token is either missing or invalid. 
         403:
           description: |
             Forbidden.  The user is not authorized to access

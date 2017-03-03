@@ -29,7 +29,7 @@ public class TreeApiController
 
 	@CrossOrigin
 	@RequestMapping(value = "/tree/search", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<TreeNode>> getBusinessRulesTree(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+	public ResponseEntity<List<TreeNode>> getBusinessRulesTree(@RequestHeader(value = "authToken", required = true) String authToken,
 															   @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
 															   @RequestHeader(value = "envId", required = true) String envId,
 															   @RequestHeader(value = "companyCode", required = false) String companyCode,
@@ -40,7 +40,7 @@ public class TreeApiController
 															   @RequestHeader(value = "effDate", required = false) LocalDate effDate,
 															   @RequestHeader(value = "includeOrphans", required = false) Boolean includeOrphans)	
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
+		RestServiceParam param = buildRestServiceParam(authToken, envId, companyCode);
 
 		BusinessRuleTreeSearchInput input = new BusinessRuleTreeSearchInput();
 		input.setAreChangesIncluded(viewChanges.booleanValue());

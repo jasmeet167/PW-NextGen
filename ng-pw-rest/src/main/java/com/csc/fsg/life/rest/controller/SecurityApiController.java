@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.csc.fsg.life.rest.api.SecurityApi;
 import com.csc.fsg.life.rest.model.Credentials;
-import com.csc.fsg.life.rest.model.SessionToken;
+import com.csc.fsg.life.rest.model.AuthToken;
 import com.csc.fsg.life.rest.service.SecurityService;
 
 @Controller
@@ -25,17 +25,17 @@ public class SecurityApiController
 
 	@CrossOrigin
 	@RequestMapping(value = "/security/authentication", produces = { "application/json" }, consumes = { "application/json" }, method = RequestMethod.POST)
-	public ResponseEntity<SessionToken> authenticate(@RequestBody Credentials credentials)
+	public ResponseEntity<AuthToken> authenticate(@RequestBody Credentials credentials)
 	{
-		SessionToken response = securityService.authenticate(credentials);
+		AuthToken response = securityService.authenticate(credentials);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/security/logout", produces = { "application/json" }, method = RequestMethod.POST)
-	public ResponseEntity<Void> logout(@RequestHeader(value = "sessionToken", required = true) String sessionToken)
+	public ResponseEntity<Void> logout(@RequestHeader(value = "authToken", required = true) String authToken)
 	{
-		securityService.logout(sessionToken);
+		securityService.logout(authToken);
 		return null;
 	}
 }

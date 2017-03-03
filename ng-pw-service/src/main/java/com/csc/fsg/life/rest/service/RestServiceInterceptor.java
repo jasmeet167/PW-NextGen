@@ -38,7 +38,7 @@ public class RestServiceInterceptor
 	 * the invoked method.
 	 * <p>
 	 * For authentication purposes, only non-empty value of the property
-	 * <em>sessionToken</em> is required in the provided instance of
+	 * <em>authToken</em> is required in the provided instance of
 	 * {@code RestServiceParam}. It will be used to verify that the user has
 	 * been successfully authenticated, and the session remains active. In such
 	 * case the annotations need not have any arguments.
@@ -67,7 +67,7 @@ public class RestServiceInterceptor
 			throw new ForbiddenException();
 		}
 
-		securityService.validateSession(param.getSessionToken());
+		securityService.validateSession(param.getAuthToken());
 		securityService.assertAuthorization(param, action);
 	}
 

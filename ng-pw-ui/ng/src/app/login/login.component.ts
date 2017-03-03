@@ -25,9 +25,9 @@ export class LoginComponent implements OnInit {
   constructor(private fb: FormBuilder, private router: Router,
               private configurationService: ConfigurationService,
               private loginService: LoginService) {
-    const sessionToken: string = sessionStorage['sessionToken'];
-    if (sessionToken) {
-      this.logout(sessionToken);
+    const authToken: string = sessionStorage['authToken'];
+    if (authToken) {
+      this.logout(authToken);
     }
     sessionStorage.clear();
     this.getConfiguration();
@@ -65,12 +65,12 @@ export class LoginComponent implements OnInit {
 
   private processSuccessfulLogin(response: LoginResponse) {
     sessionStorage['userName'] = this.userName;
-    sessionStorage['sessionToken'] = response.tokenId;
+    sessionStorage['authToken'] = response.tokenId;
     this.router.navigate(['/home']);
   }
 
-  private logout(sessionToken: string) {
-    this.loginService.logout(sessionToken)
+  private logout(authToken: string) {
+    this.loginService.logout(authToken)
         .subscribe(
           res => {},
           err => {

@@ -24,9 +24,9 @@ public class ApplicationApiController
 
 	@CrossOrigin
 	@RequestMapping(value = "/application/about", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<AboutApplication> getInfoAboutApplication(@RequestHeader(value = "sessionToken", required = true) String sessionToken)
+	public ResponseEntity<AboutApplication> getInfoAboutApplication(@RequestHeader(value = "authToken", required = true) String authToken)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken);
+		RestServiceParam param = buildRestServiceParam(authToken);
 
 		AboutApplication about = applicationService.getInfoAboutApplication(param);
 		return new ResponseEntity<>(about, HttpStatus.OK);

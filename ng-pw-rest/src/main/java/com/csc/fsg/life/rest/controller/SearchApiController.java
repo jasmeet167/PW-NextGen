@@ -35,9 +35,9 @@ public class SearchApiController
 
 	@CrossOrigin
 	@RequestMapping(value = "/search/common/environment", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<SelectItem>> getCommonEnvironments(@RequestHeader(value = "sessionToken", required = true) String sessionToken)
+	public ResponseEntity<List<SelectItem>> getCommonEnvironments(@RequestHeader(value = "authToken", required = true) String authToken)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken);
+		RestServiceParam param = buildRestServiceParam(authToken);
 
 		List<SelectItem> envList = searchService.getCommonEnvironments(param);
 		PropertyComparator.sort(envList, new MutableSortDefinition("label", true, true));
@@ -46,11 +46,11 @@ public class SearchApiController
 
 	@CrossOrigin
 	@RequestMapping(value = "/search/plan/company", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<SelectItem>> getPlanCompanyCodes(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+	public ResponseEntity<List<SelectItem>> getPlanCompanyCodes(@RequestHeader(value = "authToken", required = true) String authToken,
 																@RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
 																@RequestHeader(value = "envId", required = true) String envId)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken, envId);
+		RestServiceParam param = buildRestServiceParam(authToken, envId);
 		PlanSearchInput searchInput = new PlanSearchInput();
 		searchInput.setChangesIncluded(viewChanges);
 
@@ -61,12 +61,12 @@ public class SearchApiController
 
 	@CrossOrigin
 	@RequestMapping(value = "/search/plan/product", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<SelectItem>> getPlanProductCodes(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+	public ResponseEntity<List<SelectItem>> getPlanProductCodes(@RequestHeader(value = "authToken", required = true) String authToken,
 																@RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
 																@RequestHeader(value = "envId", required = true) String envId,
 																@RequestHeader(value = "companyCode", required = true) String companyCode)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
+		RestServiceParam param = buildRestServiceParam(authToken, envId, companyCode);
 		PlanSearchInput searchInput = new PlanSearchInput();
 		searchInput.setChangesIncluded(viewChanges);
 
@@ -77,13 +77,13 @@ public class SearchApiController
 
 	@CrossOrigin
 	@RequestMapping(value = "/search/plan/plan", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<SelectItem>> getPlanPlanCodes(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+	public ResponseEntity<List<SelectItem>> getPlanPlanCodes(@RequestHeader(value = "authToken", required = true) String authToken,
 															@RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
 															@RequestHeader(value = "envId", required = true) String envId,
 															@RequestHeader(value = "companyCode", required = true) String companyCode,
 															@RequestHeader(value = "productCode", required = true) String productCode)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
+		RestServiceParam param = buildRestServiceParam(authToken, envId, companyCode);
 		PlanSearchInput searchInput = new PlanSearchInput();
 		searchInput.setChangesIncluded(viewChanges);
 		searchInput.setProductCode(productCode);
@@ -95,14 +95,14 @@ public class SearchApiController
 
 	@CrossOrigin
 	@RequestMapping(value = "/search/plan/state", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<SelectItem>> getPlanIssueStates(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+	public ResponseEntity<List<SelectItem>> getPlanIssueStates(@RequestHeader(value = "authToken", required = true) String authToken,
 															   @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
 															   @RequestHeader(value = "envId", required = true) String envId,
 															   @RequestHeader(value = "companyCode", required = true) String companyCode,
 															   @RequestHeader(value = "productCode", required = true) String productCode,
 															   @RequestHeader(value = "planCode", required = true) String planCode)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
+		RestServiceParam param = buildRestServiceParam(authToken, envId, companyCode);
 		PlanSearchInput searchInput = new PlanSearchInput();
 		searchInput.setChangesIncluded(viewChanges);
 		searchInput.setProductCode(productCode);
@@ -115,7 +115,7 @@ public class SearchApiController
 
 	@CrossOrigin
 	@RequestMapping(value = "/search/plan/lob", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<SelectItem>> getPlanLobs(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+	public ResponseEntity<List<SelectItem>> getPlanLobs(@RequestHeader(value = "authToken", required = true) String authToken,
 														@RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
 														@RequestHeader(value = "envId", required = true) String envId,
 														@RequestHeader(value = "companyCode", required = true) String companyCode,
@@ -123,7 +123,7 @@ public class SearchApiController
 														@RequestHeader(value = "planCode", required = true) String planCode,
 														@RequestHeader(value = "issueState", required = true) String issueState)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
+		RestServiceParam param = buildRestServiceParam(authToken, envId, companyCode);
 		PlanSearchInput searchInput = new PlanSearchInput();
 		searchInput.setChangesIncluded(viewChanges);
 		searchInput.setProductCode(productCode);
@@ -137,7 +137,7 @@ public class SearchApiController
 
 	@CrossOrigin
 	@RequestMapping(value = "/search/plan/effdate", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<SelectItem>> getPlanEffDates(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+	public ResponseEntity<List<SelectItem>> getPlanEffDates(@RequestHeader(value = "authToken", required = true) String authToken,
 															@RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
 															@RequestHeader(value = "envId", required = true) String envId,
 															@RequestHeader(value = "companyCode", required = true) String companyCode,
@@ -146,7 +146,7 @@ public class SearchApiController
 															@RequestHeader(value = "issueState", required = true) String issueState,
 															@RequestHeader(value = "lob", required = true) String lob)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
+		RestServiceParam param = buildRestServiceParam(authToken, envId, companyCode);
 		PlanSearchInput searchInput = new PlanSearchInput();
 		searchInput.setChangesIncluded(viewChanges);
 		searchInput.setProductCode(productCode);
@@ -161,10 +161,10 @@ public class SearchApiController
 
 	@CrossOrigin
 	@RequestMapping(value = "/search/plan/project", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<SelectItem>> getPlanProjects(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+	public ResponseEntity<List<SelectItem>> getPlanProjects(@RequestHeader(value = "authToken", required = true) String authToken,
 															@RequestHeader(value = "envId", required = true) String envId)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken, envId);
+		RestServiceParam param = buildRestServiceParam(authToken, envId);
 
 		List<SelectItem> projectList = searchService.getPlanProjects(param);
 		PropertyComparator.sort(projectList, new MutableSortDefinition("label", true, true));
@@ -173,11 +173,11 @@ public class SearchApiController
 
 	@CrossOrigin
 	@RequestMapping(value = "/search/plan/table", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<SelectItem>> getPlanTables(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+	public ResponseEntity<List<SelectItem>> getPlanTables(@RequestHeader(value = "authToken", required = true) String authToken,
 														  @RequestHeader(value = "envId", required = true) String envId,
 														  @RequestHeader(value = "companyCode", required = true) String companyCode)	
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
+		RestServiceParam param = buildRestServiceParam(authToken, envId, companyCode);
 
 		List<SelectItem> tableList = searchService.getPlanTables(param);
 		PropertyComparator.sort(tableList, new MutableSortDefinition("label", true, true));
@@ -186,9 +186,9 @@ public class SearchApiController
 
 	@CrossOrigin
 	@RequestMapping(value = "/search/changes/environment", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<SelectItem>> getChangesEnvironments(@RequestHeader(value = "sessionToken", required = true) String sessionToken)
+	public ResponseEntity<List<SelectItem>> getChangesEnvironments(@RequestHeader(value = "authToken", required = true) String authToken)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken);
+		RestServiceParam param = buildRestServiceParam(authToken);
 
 		List<SelectItem> envList = searchService.getChangesEnvironments(param);
 		PropertyComparator.sort(envList, new MutableSortDefinition("label", true, true));
@@ -197,10 +197,10 @@ public class SearchApiController
 
 	@CrossOrigin
 	@RequestMapping(value = "/search/changes/filter", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<ChangesFilterData> getChangesFilterValues(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+	public ResponseEntity<ChangesFilterData> getChangesFilterValues(@RequestHeader(value = "authToken", required = true) String authToken,
 																	@RequestHeader(value = "envId", required = true) String envId)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken, envId);
+		RestServiceParam param = buildRestServiceParam(authToken, envId);
 
 		ChangesFilterData filterData = searchService.getChangesFilterValues(param);
 		Collections.sort(filterData.getProjects());
@@ -211,10 +211,10 @@ public class SearchApiController
 
 	@CrossOrigin
 	@RequestMapping(value = "/search/apply/filter", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<ApplyFilterData> getApplyFilterValues(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+	public ResponseEntity<ApplyFilterData> getApplyFilterValues(@RequestHeader(value = "authToken", required = true) String authToken,
 																@RequestHeader(value = "envId", required = true) String envId)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken, envId);
+		RestServiceParam param = buildRestServiceParam(authToken, envId);
 
 		ApplyFilterData filterData = searchService.getApplyFilterValues(param);
 		PropertyComparator.sort(filterData.getPackages(), new MutableSortDefinition("label", true, true));
@@ -224,11 +224,11 @@ public class SearchApiController
 
 	@CrossOrigin
 	@RequestMapping(value = "/search/audit/filter", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<AuditFilterData> getAuditFilterValues(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+	public ResponseEntity<AuditFilterData> getAuditFilterValues(@RequestHeader(value = "authToken", required = true) String authToken,
 																@RequestHeader(value = "filterAspect", required = true) String filterAspect,
 																@RequestHeader(value = "envId", required = true) String envId)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken, envId);
+		RestServiceParam param = buildRestServiceParam(authToken, envId);
 
 		AuditFilterData filterData = searchService.getAuditFilterValues(param, filterAspect);
 		PropertyComparator.sort(filterData.getPackages(), new MutableSortDefinition("label", true, true));
@@ -240,11 +240,11 @@ public class SearchApiController
 
 	@CrossOrigin
 	@RequestMapping(value = "/search/promote/filter", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<PromoteFilterData> getPromoteFilterValues(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+	public ResponseEntity<PromoteFilterData> getPromoteFilterValues(@RequestHeader(value = "authToken", required = true) String authToken,
 																	@RequestHeader(value = "sourceEnvId", required = true) String sourceEnvId,
 																	@RequestHeader(value = "targetEnvId", required = true) String targetEnvId)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken, new String[] { sourceEnvId, targetEnvId });
+		RestServiceParam param = buildRestServiceParam(authToken, new String[] { sourceEnvId, targetEnvId });
 
 		PromoteFilterData filterData = searchService.getPromoteFilterValues(param);
 		PropertyComparator.sort(filterData.getPackages(), new MutableSortDefinition("label", true, true));
@@ -254,11 +254,11 @@ public class SearchApiController
 
 	@CrossOrigin
 	@RequestMapping(value = "/search/summary/company", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<SelectItem>> getSummaryCompanyCodes(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+	public ResponseEntity<List<SelectItem>> getSummaryCompanyCodes(@RequestHeader(value = "authToken", required = true) String authToken,
 																   @RequestHeader(value = "filterAspect", required = true) String filterAspect,
 																   @RequestHeader(value = "envId", required = true) String envId)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken, envId);
+		RestServiceParam param = buildRestServiceParam(authToken, envId);
 		SummarySearchInput searchInput = new SummarySearchInput();
 		searchInput.setFilterAspect(filterAspect);
 
@@ -269,12 +269,12 @@ public class SearchApiController
 
 	@CrossOrigin
 	@RequestMapping(value = "/search/summary/product", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<SelectItem>> getSummaryProductCodes(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+	public ResponseEntity<List<SelectItem>> getSummaryProductCodes(@RequestHeader(value = "authToken", required = true) String authToken,
 																   @RequestHeader(value = "filterAspect", required = true) String filterAspect,
 																   @RequestHeader(value = "envId", required = true) String envId,
 																   @RequestHeader(value = "companyCode", required = true) String companyCode)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
+		RestServiceParam param = buildRestServiceParam(authToken, envId, companyCode);
 		SummarySearchInput searchInput = new SummarySearchInput();
 		searchInput.setFilterAspect(filterAspect);
 
@@ -285,13 +285,13 @@ public class SearchApiController
 
 	@CrossOrigin
 	@RequestMapping(value = "/search/summary/plan", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<SelectItem>> getSummaryPlanCodes(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+	public ResponseEntity<List<SelectItem>> getSummaryPlanCodes(@RequestHeader(value = "authToken", required = true) String authToken,
 																@RequestHeader(value = "filterAspect", required = true) String filterAspect,
 																@RequestHeader(value = "envId", required = true) String envId,
 																@RequestHeader(value = "companyCode", required = true) String companyCode,
 																@RequestHeader(value = "productCode", required = true) String productCode)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
+		RestServiceParam param = buildRestServiceParam(authToken, envId, companyCode);
 		SummarySearchInput searchInput = new SummarySearchInput();
 		searchInput.setFilterAspect(filterAspect);
 		searchInput.setProductCode(productCode);
@@ -303,14 +303,14 @@ public class SearchApiController
 
 	@CrossOrigin
 	@RequestMapping(value = "/search/summary/state", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<SelectItem>> getSummaryIssueStates(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+	public ResponseEntity<List<SelectItem>> getSummaryIssueStates(@RequestHeader(value = "authToken", required = true) String authToken,
 																  @RequestHeader(value = "filterAspect", required = true) String filterAspect,
 																  @RequestHeader(value = "envId", required = true) String envId,
 																  @RequestHeader(value = "companyCode", required = true) String companyCode,
 																  @RequestHeader(value = "productCode", required = true) String productCode,
 																  @RequestHeader(value = "planCode", required = true) String planCode)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
+		RestServiceParam param = buildRestServiceParam(authToken, envId, companyCode);
 		SummarySearchInput searchInput = new SummarySearchInput();
 		searchInput.setFilterAspect(filterAspect);
 		searchInput.setProductCode(productCode);
@@ -323,7 +323,7 @@ public class SearchApiController
 
 	@CrossOrigin
 	@RequestMapping(value = "/search/summary/lob", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<SelectItem>> getSummaryLobs(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+	public ResponseEntity<List<SelectItem>> getSummaryLobs(@RequestHeader(value = "authToken", required = true) String authToken,
 														   @RequestHeader(value = "filterAspect", required = true) String filterAspect,
 														   @RequestHeader(value = "envId", required = true) String envId,
 														   @RequestHeader(value = "companyCode", required = true) String companyCode,
@@ -331,7 +331,7 @@ public class SearchApiController
 														   @RequestHeader(value = "planCode", required = true) String planCode,
 														   @RequestHeader(value = "issueState", required = true) String issueState)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
+		RestServiceParam param = buildRestServiceParam(authToken, envId, companyCode);
 		SummarySearchInput searchInput = new SummarySearchInput();
 		searchInput.setFilterAspect(filterAspect);
 		searchInput.setProductCode(productCode);
@@ -345,7 +345,7 @@ public class SearchApiController
 
 	@CrossOrigin
 	@RequestMapping(value = "/search/summary/effdate", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<SelectItem>> getSummaryEffDates(@RequestHeader(value = "sessionToken", required = true) String sessionToken,
+	public ResponseEntity<List<SelectItem>> getSummaryEffDates(@RequestHeader(value = "authToken", required = true) String authToken,
 															   @RequestHeader(value = "filterAspect", required = true) String filterAspect,
 															   @RequestHeader(value = "envId", required = true) String envId,
 															   @RequestHeader(value = "companyCode", required = true) String companyCode,
@@ -354,7 +354,7 @@ public class SearchApiController
 															   @RequestHeader(value = "issueState", required = true) String issueState,
 															   @RequestHeader(value = "lob", required = true) String lob)
 	{
-		RestServiceParam param = buildRestServiceParam(sessionToken, envId, companyCode);
+		RestServiceParam param = buildRestServiceParam(authToken, envId, companyCode);
 		SummarySearchInput searchInput = new SummarySearchInput();
 		searchInput.setFilterAspect(filterAspect);
 		searchInput.setProductCode(productCode);

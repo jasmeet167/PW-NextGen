@@ -77,8 +77,8 @@ public class SearchServiceImpl
 				env.setLabel(envBean.getDisplayName());
 			}
 
-			String sessionToken = param.getSessionToken();
-			List<SelectItem> response = securityService.filterAuthorizedEnvironments(sessionToken, envList);
+			String authToken = param.getAuthToken();
+			List<SelectItem> response = securityService.filterAuthorizedEnvironments(authToken, envList);
 			if (response.isEmpty())
 				throw new ForbiddenException();
 
@@ -160,8 +160,8 @@ public class SearchServiceImpl
 			}
 
 			if (isCompanyCodesSearch) {
-				String sessionToken = param.getSessionToken();
-				List<SelectItem> response = securityService.filterAuthorizedCompanies(sessionToken, envId, commonValues);
+				String authToken = param.getAuthToken();
+				List<SelectItem> response = securityService.filterAuthorizedCompanies(authToken, envId, commonValues);
 				if (response.isEmpty())
 					throw new ForbiddenException();
 
@@ -342,8 +342,8 @@ public class SearchServiceImpl
 				rule.setLabel(key + "-" + entry.getValue());
 			}
 
-			String sessionToken = param.getSessionToken();
-			List<SelectItem> response = securityService.filterAuthorizedTables(sessionToken, envId, companyCode, allTables);
+			String authToken = param.getAuthToken();
+			List<SelectItem> response = securityService.filterAuthorizedTables(authToken, envId, companyCode, allTables);
 			if (response.isEmpty())
 				throw new ForbiddenException();
 
@@ -832,8 +832,8 @@ public class SearchServiceImpl
 			}
 
 			if (isCompanyCodesSearch) {
-				String sessionToken = param.getSessionToken();
-				List<SelectItem> response = securityService.filterAuthorizedCompanies(sessionToken, envId, commonValues);
+				String authToken = param.getAuthToken();
+				List<SelectItem> response = securityService.filterAuthorizedCompanies(authToken, envId, commonValues);
 				if (response.isEmpty())
 					throw new ForbiddenException();
 
