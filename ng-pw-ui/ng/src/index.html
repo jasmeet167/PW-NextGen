@@ -6,8 +6,25 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <!-- This is a workaround for an issue in Internet Explorer, which results    -->
+  <!-- in the following script error:                                           -->
+  <!--    "Unable to get property 'apply' of undefined or null reference"       -->
+  <!--                                                                          -->
+  <!-- The root cause is lack of implenmentation in IE of the property assign,  -->
+  <!-- referenced in the first line of this function:                           -->
+  <!--   function combine(options) {                                            -->
+  <!--     return (_a = ((Object))).assign.apply(_a, [{}].concat(options));     -->
+  <!--     var _a;                                                              -->
+  <!--   }                                                                      -->
+  <!--                                                                          -->
+  <!-- The function is distributed in @angular/common/src/pipes/intl.js, and    -->
+  <!-- at run time is bundled into script vendor.bundle.js.  The referenced     -->
+  <!-- script is distributed as /node_modules/core-js/client/shim.js.           -->
+  <script src="shim.js"></script>
+
 </head>
-<body style="zoom: 75%;">
+<body>
   <app-canvas>Loading...</app-canvas>
 </body>
 </html>
