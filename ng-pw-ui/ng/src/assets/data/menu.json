@@ -1,70 +1,68 @@
-{
-    "data": [
-        {
-          "label": "File",
-          "items": [{
-              "label": "Import",
-              "items": [
-                {"label": "Rule..."},
-                {"label": "T025X Declared Rates..."},
-                {"label": "T026X Annual Statement Rates"},
-                {"label": "T060X Reserve Rates..."}
-              ]
-            },
-            {"label": "Export Rule...", "disabled": true},
-            {"label": "Save...", "disabled": true},
-            {"label": "Exit to Login", "routerLink": ["login"]}
-          ]
-        },
-        {
-          "label": "Edit",
-          "items": [
-            {"label": "Tree...", "disabled": true},
-            {"label": "Table...", "disabled": true}
-          ]
-        },
-        {
-          "label": "Wizards",
-          "items": [{
-             "label": "Company Rules",
-             "items": [
-               {"label": "Add new Line of Business...", "disabled": true},
-               {"label": "Add new Fund...", "disabled": true},
-               {"label": "Add Billing Dates"},
-               {"label": "Managed Unregistered Orphan Subsets...", "disabled": true}
-             ]
-            },
-            {"label": "Plan Rules",
-             "items": [
-               {"label": "Accumulation Plans"},
-               {"label": "Payout Plans"}
-             ]
-            },
-            {"label": "Rider/Benefit Rules",
-             "items": [
-               {"label": "Clone a Rider...", "disabled": true}
-             ]
-            }
-          ]
-        },
-        {
-          "label": "Administration",
-          "items": [
-            {"label": "Create Company..."},
-            {"label": "Allowable Values",
-             "items": [
-               {"label": "Maintain"},
-               {"label": "Verify"}
-             ]
-            }
-          ]
-        },
-        {
-          "label": "Help",
-          "items": [
-            {"label": "Index", "url": "https://cscehwmanor001:9445/pw/help/WMA/helpIndex.html", "target":"_blank"},
-            {"label": "About"}
-          ]
-        }
+[
+  {
+    "label": "File",
+    "items": [{
+        "label": "Import",
+        "items": [
+          {"label": "Rule..."},
+          {"label": "T025X Declared Rates..."},
+          {"label": "T026X Annual Statement Rates"},
+          {"label": "T060X Reserve Rates..."}
+        ]
+      },
+      {"label": "Export Rule...", "disabled": true},
+      {"label": "Save...", "disabled": true},
+      {"label": "Exit to Login", "routerLink": ["login"]}
     ]
-}
+  },
+  {
+    "label": "Edit",
+    "items": [
+      {"label": "Tree...", "disabled": true},
+      {"label": "Table...", "disabled": true}
+    ]
+  },
+  {
+    "label": "Wizards",
+    "items": [{
+       "label": "Company Rules",
+       "items": [
+         {"label": "Add new Line of Business...", "disabled": true},
+         {"label": "Add new Fund...", "disabled": true},
+         {"label": "Add Billing Dates"},
+         {"label": "Managed Unregistered Orphan Subsets...", "disabled": true}
+       ]
+      },
+      {"label": "Plan Rules",
+       "items": [
+         {"label": "Accumulation Plans"},
+         {"label": "Payout Plans"}
+       ]
+      },
+      {"label": "Rider/Benefit Rules",
+       "items": [
+         {"label": "Clone a Rider...", "disabled": true}
+       ]
+      }
+    ]
+  },
+  {
+    "label": "Administration",
+    "items": [
+      {"label": "Create Company..."},
+      {"label": "Allowable Values",
+       "items": [
+         {"label": "Maintain"},
+         {"label": "Verify"}
+       ]
+      }
+    ]
+  },
+  {
+    "label": "Help",
+    "items": [
+      {"label": "Index", "url": "https://cscehwmanor001:9445/pw/help/WMA/helpIndex.html", "target":"_blank"},
+      {"label": "About", "command": ""}
+    ]
+  }
+]

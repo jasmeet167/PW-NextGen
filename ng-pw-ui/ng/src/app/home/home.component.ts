@@ -11,6 +11,8 @@ import { MenuService } from './service/menu.service';
 import { FilterService } from './service/filter.service';
 import { ErrorMessage } from './model/error.message';
 
+import { MenuHelper } from './menu.helper';
+
 @Component({
   selector: 'app-home-root',
   templateUrl: './home.component.html',
@@ -73,7 +75,12 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.menuService.getMenu().then(menuModel => this.menuModel = menuModel);
+    this.menuService.getMenu()
+        .subscribe(
+          res => this.menuModel = res,
+          err => this.handleError(err),
+          ()  => this.buildMenuCallbacks()
+        );
 
     this.filterChangesOptions = [];
     this.filterChangesOptions.push({label: 'Rules with Changes', value: true});
@@ -117,6 +124,15 @@ export class HomeComponent implements OnInit {
     this.filterInclOrphansDisabled = true;
 
     this.filterRememberSelections = false;
+  }
+
+  private buildMenuCallbacks() {
+    if (this.menuModel) {
+      const theAboutCallback = (event: any) => {
+        this.onAboutClick();
+      };
+      new MenuHelper().injectCallback(this.menuModel, 'About', theAboutCallback);
+    }
   }
 
   onEnvChange() {
@@ -391,9 +407,6 @@ export class HomeComponent implements OnInit {
 
   onGoClick() {
     console.log('Click on the "Go" button has been detected');
-
-    // just for testing:
-    this.onAboutClick();
   }
 
   onAboutClick() {
