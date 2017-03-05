@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Response, ResponseType } from '@angular/http';
-import { DateFormatter } from '@angular/common/src/pipes/intl';
 import { Message } from 'primeng/primeng';
 import { MenuItem } from 'primeng/primeng';
 import { SelectItem } from 'primeng/primeng';
@@ -24,7 +23,7 @@ export class HomeComponent implements OnInit {
 
   public isInfoAboutDisplayed: boolean;
   public userName: string;
-  public formattedBuildDate: string;
+  public buildDate: Date;
   public infoAbout: AboutApplication = new AboutApplication();
 
   public menuModel: MenuItem[];
@@ -416,8 +415,7 @@ export class HomeComponent implements OnInit {
           res => this.infoAbout = res,
           err => this.handleError(err),
           ()  => {
-                  const date: Date = new Date(Date.parse(this.infoAbout.buildTimestamp));
-                  this.formattedBuildDate = DateFormatter.format(date, 'en', 'MMMM dd yyyy @ H:mm:ss');
+                  this.buildDate = new Date(Date.parse(this.infoAbout.buildTimestamp));
                   this.isInfoAboutDisplayed = true;
           }
         );

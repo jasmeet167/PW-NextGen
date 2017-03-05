@@ -19,7 +19,7 @@
   <div>
     <div>{{infoAbout.appDesignator}} {{infoAbout.appVersion}}</div>
     <div>User ID: {{userName}}</div>
-    <div>{{formattedBuildDate}}</div>
+    <div>{{buildDate | date:'MMMM dd yyyy @ H:mm:ss'}}</div>
   </div>
   <p-footer>
     <div class="ui-dialog-buttonpane ui-helper-clearfix">
