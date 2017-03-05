@@ -18,9 +18,7 @@
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 
-	<mvc:resources mapping="/*.html" location="/static/"/>
-	<mvc:resources mapping="/html/**" location="/html/"/>
-	<mvc:resources mapping="/css/**" location="/css/"/>
-	<mvc:resources mapping="/img/**" location="/img/"/>
-	<mvc:resources mapping="/js/**" location="/js/"/>
+	<mvc:cors>
+		<mvc:mapping path="/**"/>
+	</mvc:cors>
 </beans>

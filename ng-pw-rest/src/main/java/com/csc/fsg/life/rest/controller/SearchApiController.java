@@ -9,7 +9,6 @@ import org.springframework.beans.support.PropertyComparator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,7 +32,6 @@ public class SearchApiController
 	@Autowired
 	private SearchService searchService = null;
 
-	@CrossOrigin
 	@RequestMapping(value = "/search/common/environment", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<SelectItem>> getCommonEnvironments(@RequestHeader(value = "authToken", required = true) String authToken)
 	{
@@ -44,7 +42,6 @@ public class SearchApiController
 		return new ResponseEntity<>(envList, HttpStatus.OK);
 	}
 
-	@CrossOrigin
 	@RequestMapping(value = "/search/plan/company", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<SelectItem>> getPlanCompanyCodes(@RequestHeader(value = "authToken", required = true) String authToken,
 																@RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
@@ -59,7 +56,6 @@ public class SearchApiController
 		return new ResponseEntity<>(companyList, HttpStatus.OK);
 	}
 
-	@CrossOrigin
 	@RequestMapping(value = "/search/plan/product", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<SelectItem>> getPlanProductCodes(@RequestHeader(value = "authToken", required = true) String authToken,
 																@RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
@@ -75,7 +71,6 @@ public class SearchApiController
 		return new ResponseEntity<>(productList, HttpStatus.OK);
 	}
 
-	@CrossOrigin
 	@RequestMapping(value = "/search/plan/plan", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<SelectItem>> getPlanPlanCodes(@RequestHeader(value = "authToken", required = true) String authToken,
 															@RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
@@ -93,7 +88,6 @@ public class SearchApiController
 		return new ResponseEntity<>(planList, HttpStatus.OK);
 	}
 
-	@CrossOrigin
 	@RequestMapping(value = "/search/plan/state", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<SelectItem>> getPlanIssueStates(@RequestHeader(value = "authToken", required = true) String authToken,
 															   @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
@@ -113,7 +107,6 @@ public class SearchApiController
 		return new ResponseEntity<>(stateList, HttpStatus.OK);
 	}
 
-	@CrossOrigin
 	@RequestMapping(value = "/search/plan/lob", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<SelectItem>> getPlanLobs(@RequestHeader(value = "authToken", required = true) String authToken,
 														@RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
@@ -135,7 +128,6 @@ public class SearchApiController
 		return new ResponseEntity<>(lobList, HttpStatus.OK);
 	}
 
-	@CrossOrigin
 	@RequestMapping(value = "/search/plan/effdate", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<SelectItem>> getPlanEffDates(@RequestHeader(value = "authToken", required = true) String authToken,
 															@RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
@@ -159,7 +151,6 @@ public class SearchApiController
 		return new ResponseEntity<>(effDateList, HttpStatus.OK);
 	}
 
-	@CrossOrigin
 	@RequestMapping(value = "/search/plan/project", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<SelectItem>> getPlanProjects(@RequestHeader(value = "authToken", required = true) String authToken,
 															@RequestHeader(value = "envId", required = true) String envId)
@@ -171,7 +162,6 @@ public class SearchApiController
 		return new ResponseEntity<>(projectList, HttpStatus.OK);
 	}
 
-	@CrossOrigin
 	@RequestMapping(value = "/search/plan/table", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<SelectItem>> getPlanTables(@RequestHeader(value = "authToken", required = true) String authToken,
 														  @RequestHeader(value = "envId", required = true) String envId,
@@ -184,7 +174,6 @@ public class SearchApiController
 		return new ResponseEntity<>(tableList, HttpStatus.OK);
 	}
 
-	@CrossOrigin
 	@RequestMapping(value = "/search/changes/environment", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<SelectItem>> getChangesEnvironments(@RequestHeader(value = "authToken", required = true) String authToken)
 	{
@@ -195,7 +184,6 @@ public class SearchApiController
 		return new ResponseEntity<>(envList, HttpStatus.OK);
 	}
 
-	@CrossOrigin
 	@RequestMapping(value = "/search/changes/filter", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<ChangesFilterData> getChangesFilterValues(@RequestHeader(value = "authToken", required = true) String authToken,
 																	@RequestHeader(value = "envId", required = true) String envId)
@@ -209,7 +197,6 @@ public class SearchApiController
 		return new ResponseEntity<>(filterData, HttpStatus.OK);
 	}
 
-	@CrossOrigin
 	@RequestMapping(value = "/search/apply/filter", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<ApplyFilterData> getApplyFilterValues(@RequestHeader(value = "authToken", required = true) String authToken,
 																@RequestHeader(value = "envId", required = true) String envId)
@@ -222,7 +209,6 @@ public class SearchApiController
 		return new ResponseEntity<>(filterData, HttpStatus.OK);
 	}
 
-	@CrossOrigin
 	@RequestMapping(value = "/search/audit/filter", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<AuditFilterData> getAuditFilterValues(@RequestHeader(value = "authToken", required = true) String authToken,
 																@RequestHeader(value = "filterAspect", required = true) String filterAspect,
@@ -238,7 +224,6 @@ public class SearchApiController
 		return new ResponseEntity<>(filterData, HttpStatus.OK);
 	}
 
-	@CrossOrigin
 	@RequestMapping(value = "/search/promote/filter", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<PromoteFilterData> getPromoteFilterValues(@RequestHeader(value = "authToken", required = true) String authToken,
 																	@RequestHeader(value = "sourceEnvId", required = true) String sourceEnvId,
@@ -252,7 +237,6 @@ public class SearchApiController
 		return new ResponseEntity<>(filterData, HttpStatus.OK);
 	}
 
-	@CrossOrigin
 	@RequestMapping(value = "/search/summary/company", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<SelectItem>> getSummaryCompanyCodes(@RequestHeader(value = "authToken", required = true) String authToken,
 																   @RequestHeader(value = "filterAspect", required = true) String filterAspect,
@@ -267,7 +251,6 @@ public class SearchApiController
 		return new ResponseEntity<>(companyList, HttpStatus.OK);
 	}
 
-	@CrossOrigin
 	@RequestMapping(value = "/search/summary/product", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<SelectItem>> getSummaryProductCodes(@RequestHeader(value = "authToken", required = true) String authToken,
 																   @RequestHeader(value = "filterAspect", required = true) String filterAspect,
@@ -283,7 +266,6 @@ public class SearchApiController
 		return new ResponseEntity<>(productList, HttpStatus.OK);
 	}
 
-	@CrossOrigin
 	@RequestMapping(value = "/search/summary/plan", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<SelectItem>> getSummaryPlanCodes(@RequestHeader(value = "authToken", required = true) String authToken,
 																@RequestHeader(value = "filterAspect", required = true) String filterAspect,
@@ -301,7 +283,6 @@ public class SearchApiController
 		return new ResponseEntity<>(planList, HttpStatus.OK);
 	}
 
-	@CrossOrigin
 	@RequestMapping(value = "/search/summary/state", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<SelectItem>> getSummaryIssueStates(@RequestHeader(value = "authToken", required = true) String authToken,
 																  @RequestHeader(value = "filterAspect", required = true) String filterAspect,
@@ -321,7 +302,6 @@ public class SearchApiController
 		return new ResponseEntity<>(stateList, HttpStatus.OK);
 	}
 
-	@CrossOrigin
 	@RequestMapping(value = "/search/summary/lob", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<SelectItem>> getSummaryLobs(@RequestHeader(value = "authToken", required = true) String authToken,
 														   @RequestHeader(value = "filterAspect", required = true) String filterAspect,
@@ -343,7 +323,6 @@ public class SearchApiController
 		return new ResponseEntity<>(lobList, HttpStatus.OK);
 	}
 
-	@CrossOrigin
 	@RequestMapping(value = "/search/summary/effdate", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<SelectItem>> getSummaryEffDates(@RequestHeader(value = "authToken", required = true) String authToken,
 															   @RequestHeader(value = "filterAspect", required = true) String filterAspect,

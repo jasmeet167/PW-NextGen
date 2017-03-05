@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,7 +26,6 @@ public class TreeApiController
 	@Autowired
 	private TreeService treeService = null;
 
-	@CrossOrigin
 	@RequestMapping(value = "/tree/search", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<TreeNode>> getBusinessRulesTree(@RequestHeader(value = "authToken", required = true) String authToken,
 															   @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
