@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Response, ResponseType } from '@angular/http';
+
 import { Message } from 'primeng/primeng';
 import { MenuItem } from 'primeng/primeng';
 import { SelectItem } from 'primeng/primeng';
@@ -9,11 +10,9 @@ import { AboutApplication } from './model/about.application';
 import { MenuService } from './service/menu.service';
 import { FilterService } from './service/filter.service';
 import { ErrorMessage } from './model/error.message';
-
 import { MenuHelper } from './menu.helper';
 
 @Component({
-  selector: 'app-home-root',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
-import { Configuration } from '../model/configuration';
-
 import { Observable } from 'rxjs/Observable';
 
+import { Configuration } from '../model/configuration';
+
 @Injectable()
-export class ConfigurationService {
+export class ConfigService {
   constructor(private http: Http) {
   }
 

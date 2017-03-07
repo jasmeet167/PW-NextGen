@@ -4,14 +4,13 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Message } from 'primeng/primeng';
 
-import { ConfigurationService } from './service/configuration.service';
+import { ConfigService } from './service/config.service';
 import { Configuration } from './model/configuration';
 
 import { LoginService } from './service/login.service';
 import { LoginResponse } from './model/login.response';
 
 @Component({
-  selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -23,7 +22,7 @@ export class LoginComponent implements OnInit {
   public userName: string;
 
   constructor(private fb: FormBuilder, private router: Router,
-              private configurationService: ConfigurationService,
+              private configService: ConfigService,
               private loginService: LoginService) {
     const authToken: string = sessionStorage['authToken'];
     if (authToken) {
@@ -92,7 +91,7 @@ export class LoginComponent implements OnInit {
 
   private getConfiguration() {
     let config: Configuration;
-    this.configurationService.getConfiguration()
+    this.configService.getConfiguration()
         .subscribe(
           res => config = res,
           err => {
