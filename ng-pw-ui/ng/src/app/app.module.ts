@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 // Feature modules
 import { LoginModule } from './login/login.module';
 import { HomeModule } from './home/home.module';
-import { BadPageModule } from './bad-page/bad-page.module';
+import { PageNotFoundModule } from './page-not-found/page-not-found.module';
 
 // Routing module
 import { AppRoutingModule } from './app-routing.module';
@@ -17,7 +17,7 @@ import { AppRoutingModule } from './app-routing.module';
     BrowserModule,
     LoginModule.forRoot(),
     HomeModule,
-    BadPageModule,
+    PageNotFoundModule,
     AppRoutingModule
   ],
   declarations: [

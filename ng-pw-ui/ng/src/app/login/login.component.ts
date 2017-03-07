@@ -12,7 +12,6 @@ import { LoginResponse } from './model/login.response';
 
 @Component({
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
   public isMsgDisplayed: boolean;

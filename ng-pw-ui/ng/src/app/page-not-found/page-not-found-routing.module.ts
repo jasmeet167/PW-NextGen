@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { BadPageComponent } from './bad-page.component';
+import { PageNotFoundComponent } from './page-not-found.component';
 
 const routes: Routes = [
-  { path: '**', component: BadPageComponent }
+  { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({
@@ -15,5 +15,5 @@ const routes: Routes = [
     RouterModule
   ]
 })
-export class BadPageRoutingModule {
+export class PageNotFoundRoutingModule {
 }

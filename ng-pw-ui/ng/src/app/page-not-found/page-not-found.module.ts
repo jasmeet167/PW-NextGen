@@ -6,21 +6,21 @@ import { PanelModule } from 'primeng/primeng';
 import { ButtonModule } from 'primeng/primeng';
 
 // Module components and services
-import { BadPageComponent } from './bad-page.component';
+import { PageNotFoundComponent } from './page-not-found.component';
 
 // Routing module
-import { BadPageRoutingModule } from './bad-page-routing.module';
+import { PageNotFoundRoutingModule } from './page-not-found-routing.module';
 
 @NgModule({
   imports: [
     CommonModule,
     PanelModule,
     ButtonModule,
-    BadPageRoutingModule
+    PageNotFoundRoutingModule
   ],
   declarations: [
-    BadPageComponent
+    PageNotFoundComponent
   ]
 })
-export class BadPageModule {
+export class PageNotFoundModule {
 }

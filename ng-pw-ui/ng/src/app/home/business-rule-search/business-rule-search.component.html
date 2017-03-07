@@ -1,0 +1,55 @@
+<p-dialog [(visible)]="isMsgDisplayed" [modal]="true" [width]="350">
+  <p-header>
+    <img src="../../../assets/img/messagebox_critical.png" style="vertical-align: middle"> Error
+  </p-header>
+  <div>
+    {{msgText}}
+  </div>
+  <p-footer>
+    <div class="ui-dialog-buttonpane ui-helper-clearfix">
+      <button type="button" pButton icon="fa-close" (click)="isMsgDisplayed=false" label="Close"></button>
+    </div>
+  </p-footer>
+</p-dialog>
+
+<ul>
+  <li>
+    <p-dropdown [options]="filterChangesOptions" [(ngModel)]="filterChanges" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+  </li>
+  <li>
+    <p-dropdown [options]="filterEnvOptions" [(ngModel)]="filterEnv" (onChange)="onEnvChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+  </li>
+  <li>
+    <p-dropdown [options]="filterCompanyOptions" [(ngModel)]="filterCompany" [disabled]="filterCompanyDisabled" (onChange)="onCompanyChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+  </li>
+  <li>
+    <p-dropdown [options]="filterProductOptions" [(ngModel)]="filterProduct" [disabled]="filterProductDisabled" (onChange)="onProductChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+  </li>
+  <li>
+    <p-dropdown [options]="filterPlanCodeOptions" [(ngModel)]="filterPlanCode" [disabled]="filterPlanCodeDisabled" (onChange)="onPlanCodeChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+  </li>
+  <li>
+    <p-dropdown [options]="filterIssueStatOptions" [(ngModel)]="filterIssueState" [disabled]="filterIssueStateDisabled" (onChange)="onIssueStateChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+  </li>
+  <li>
+    <p-dropdown [options]="filterLobOptions" [(ngModel)]="filterLob" [disabled]="filterLobDisabled" (onChange)="onLobChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+  </li>
+  <li>
+    <p-dropdown [options]="filterPlanEffDateOptions" [(ngModel)]="filterPlanEffDate" [disabled]="filterPlanEffDateDisabled" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+  </li>
+  <li class="li-extra-space">
+    <span>Project(s)</span>
+  </li>
+  <li>
+    <p-listbox [options]="filterProjectRows" [(ngModel)]="filterProjects" [multiple]="true" [style]="{'width':'350px','height':'150px','margin-bottom':'15px'}"></p-listbox>
+  </li>
+  <li>
+    <p-checkbox [(ngModel)]="filterInclOrphans" binary="true" [disabled]="filterInclOrphansDisabled" label="Show orphan subsets"></p-checkbox>
+  </li>
+  <li>
+    <p-checkbox [(ngModel)]="filterRememberSelections" binary="true" label="Remember my selections"></p-checkbox>
+  </li>
+  <li class="li-extra-space">
+    <button pButton type="button" (click)="onGoClick()" label="Go"></button>
+  </li>
+</ul>
