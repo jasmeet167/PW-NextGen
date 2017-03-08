@@ -10,7 +10,7 @@ export class MenuService {
   }
 
   getMenu(): Observable<MenuItem[]> {
-    return this.http.get('../../assets/data/menu.json')
+    return this.http.get('assets/data/menu.json')
                .map(response => { return <MenuItem[]> response.json(); });
     }
 }

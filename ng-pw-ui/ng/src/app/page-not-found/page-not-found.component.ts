@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
     <p-panel>
       <p-header>
         <span style="font-size: 1.5em; font-weight: bold;">
-          <img src="../../assets/img/messagebox_critical.png" style="vertical-align: middle"> Error
+          <img src="assets/img/messagebox_critical.png" style="vertical-align: middle"> Error
         </span>
       </p-header>
       <div style="margin-top: 20px;"><h4>Page not found.</h4></div>

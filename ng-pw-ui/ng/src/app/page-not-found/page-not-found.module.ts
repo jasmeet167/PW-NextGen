@@ -1,3 +1,4 @@
+// Core
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -5,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { PanelModule } from 'primeng/primeng';
 import { ButtonModule } from 'primeng/primeng';
 
-// Module components and services
+// Module components
 import { PageNotFoundComponent } from './page-not-found.component';
 
 // Routing module

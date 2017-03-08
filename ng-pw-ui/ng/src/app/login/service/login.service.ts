@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, RequestMethod, Request } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-import { Credentials } from '../model/credentials';
-import { LoginResponse } from '../model/login.response';
+import { Credentials } from 'app/login/model/credentials';
+import { LoginResponse } from 'app/login/model/login.response';
 
 import 'rxjs/add/operator/map';
 

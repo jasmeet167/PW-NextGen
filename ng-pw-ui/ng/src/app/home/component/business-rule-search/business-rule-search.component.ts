@@ -3,8 +3,9 @@ import { Response, ResponseType } from '@angular/http';
 
 import { SelectItem } from 'primeng/primeng';
 
+import { ErrorMessage } from 'app/home/model/error.message';
 import { FilterService } from './service/filter.service';
-import { ErrorMessage } from '../model/error.message';
+
 
 @Component({
   selector: 'app-business-rule-search',

@@ -1,3 +1,4 @@
+// Core
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
@@ -13,19 +14,20 @@ import { ListboxModule } from 'primeng/primeng';
 import { CheckboxModule } from 'primeng/primeng';
 import { ButtonModule } from 'primeng/primeng';
 
-// Module components and services
+// Module components
 import { HomeComponent } from './home.component';
-import { BusinessRuleSearchComponent } from './business-rule-search/business-rule-search.component';
-import { EntireTableViewComponent } from './entire-table-view/entire-table-view.component';
-import { ChangesOnlyComponent } from './changes-only/changes-only.component';
-import { ApplyChangesComponent } from './apply-changes/apply-changes.component';
-import { AuditErrorComponent } from './audit-error/audit-error.component';
-import { PromoteComponent } from './promote/promote.component';
-import { SummaryComponent } from './summary/summary.component';
-import { ContinuityCheckComponent } from './continuity-check/continuity-check.component';
+import { BusinessRuleSearchComponent } from './component/business-rule-search/business-rule-search.component';
+import { EntireTableViewComponent } from './component/entire-table-view/entire-table-view.component';
+import { ChangesOnlyComponent } from './component/changes-only/changes-only.component';
+import { ApplyChangesComponent } from './component/apply-changes/apply-changes.component';
+import { AuditErrorComponent } from './component/audit-error/audit-error.component';
+import { PromoteComponent } from './component/promote/promote.component';
+import { SummaryComponent } from './component/summary/summary.component';
+import { ContinuityCheckComponent } from './component/continuity-check/continuity-check.component';
 
+// Module services
 import { MenuService } from './service/menu.service';
-import { FilterService } from './business-rule-search/service/filter.service';
+import { FilterService } from './component/business-rule-search/service/filter.service';
 import { AboutService } from './service/about.service';
 
 // Routing module
@@ -63,5 +65,5 @@ import { HomeRoutingModule } from './home-routing.module';
     AboutService
   ]
 })
-export class HomeModule {
+export default class HomeModule {
 }

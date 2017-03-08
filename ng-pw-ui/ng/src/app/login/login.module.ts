@@ -1,3 +1,4 @@
+// Core
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
@@ -9,8 +10,10 @@ import { PanelModule } from 'primeng/primeng';
 import { ButtonModule } from 'primeng/primeng';
 import { InputTextModule } from 'primeng/primeng';
 
-// Module components and services
+// Module components
 import { LoginComponent } from './login.component';
+
+// Module services
 import { ConfigService } from './service/config.service';
 import { LoginService } from './service/login.service';
 
@@ -37,7 +40,7 @@ import { LoginRoutingModule } from './login-routing.module';
     LoginService
   ]
 })
-export class LoginModule {
+export default class LoginModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: LoginModule,
