@@ -6,7 +6,8 @@ export namespace ErrorMessage {
   }
 
   export enum SeverityEnum {
-    ERROR = <any> 'ERROR',
-    WARNING = <any> 'WARNING'
+    INFO = <any> 'INFO',
+    WARNING = <any> 'WARNING',
+    ERROR = <any> 'ERROR'
   }
 }

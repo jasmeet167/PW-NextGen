@@ -1,17 +1,3 @@
-<p-dialog [(visible)]="isMsgDisplayed" [modal]="true" [width]="350">
-  <p-header>
-    <img src="assets/img/messagebox_critical.png" style="vertical-align: middle"> Error
-  </p-header>
-  <div>
-    {{msgText}}
-  </div>
-  <p-footer>
-    <div class="ui-dialog-buttonpane ui-helper-clearfix">
-      <button type="button" pButton icon="fa-close" (click)="isMsgDisplayed=false" label="Close"></button>
-    </div>
-  </p-footer>
-</p-dialog>
-
 <ul>
   <li>
     <p-dropdown [options]="filterChangesOptions" [(ngModel)]="filterChanges" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>

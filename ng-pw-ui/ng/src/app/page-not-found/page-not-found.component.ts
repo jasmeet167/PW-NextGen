@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
       <div>The provided URL was incorrect, or there is an application problem.</div>
       <div style="margin-bottom: 30px;">Either way, the system was unable to complete the navigation.</div>
       <div>
-        <button pButton class="ui-button-info" type="button" (click)="onclick()"
+        <button pButton type="button" (click)="onclick()"
                 label="Go to Log in" icon="fa-arrow-right" iconPos="right"></button>
       </div>
     </p-panel>

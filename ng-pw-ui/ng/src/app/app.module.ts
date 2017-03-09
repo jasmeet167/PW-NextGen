@@ -2,23 +2,41 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-// Application root
-import { AppComponent } from './app.component';
+// PrimeNG
+import { DialogModule } from 'primeng/primeng';
+import { ButtonModule } from 'primeng/primeng';
 
-// Feature modules - modules, which are lazy-loaded need not be imported
-import { PageNotFoundModule } from './page-not-found/page-not-found.module';
+// Application root
+import { AppComponent } from 'app/app.component';
+
+// Eagerly loaded feature modules
+import { NotificationModule } from 'app/notification/notification.module';
+import { PageNotFoundModule } from 'app/page-not-found/page-not-found.module';
+
+// Module components
+import { NotificationComponent } from 'app/notification/notification.component';
+
+// Services
+import { NotificationService } from 'app/notification/service/notification.service';
 
 // Routing module
-import { AppRoutingModule } from './app-routing.module';
+import { AppRoutingModule } from 'app/app-routing.module';
 
 @NgModule({
   imports: [
     BrowserModule,
+    DialogModule,
+    ButtonModule,
+    NotificationModule,
     PageNotFoundModule,
     AppRoutingModule
   ],
   declarations: [
-    AppComponent
+    AppComponent,
+    NotificationComponent
+  ],
+  providers: [
+    NotificationService
   ],
   bootstrap: [
     AppComponent

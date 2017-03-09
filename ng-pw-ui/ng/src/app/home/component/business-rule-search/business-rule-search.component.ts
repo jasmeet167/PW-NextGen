@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Response, ResponseType } from '@angular/http';
 
 import { SelectItem } from 'primeng/primeng';
 
-import { ErrorMessage } from 'app/home/model/error.message';
+import { NotificationService } from 'app/notification/service/notification.service';
 import { FilterService } from './service/filter.service';
-
 
 @Component({
   selector: 'app-business-rule-search',
@@ -13,9 +11,6 @@ import { FilterService } from './service/filter.service';
   styleUrls: ['./business-rule-search.component.css']
 })
 export class BusinessRuleSearchComponent implements OnInit  {
-  public isMsgDisplayed: boolean;
-  public msgText: string;
-
   public filterChangesOptions: SelectItem[];
   public filterChanges: boolean;
 
@@ -56,7 +51,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
 
   private authToken: string;
 
-  constructor(private filterService: FilterService) {
+  constructor(private notificationService: NotificationService, private filterService: FilterService) {
     this.authToken = sessionStorage['authToken'];
   }
 
@@ -72,7 +67,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
           res => envOptions = res,
           err => {
             if (err.status !== 404) {
-              this.handleError(err);
+              this.notificationService.handleError(err);
             }
             this.buildEnvDropdown(null);
           },
@@ -131,7 +126,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
             res => companyOptions = res,
             err => {
                 if (err.status !== 404) {
-                  this.handleError(err);
+                  this.notificationService.handleError(err);
                 }
                 this.buildCompanyDropdown(null);
             },
@@ -144,7 +139,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
             res => projectOptions = res,
             err => {
                 if (err.status !== 404) {
-                  this.handleError(err);
+                  this.notificationService.handleError(err);
                 }
                 this.buildProjects(null);
             },
@@ -177,7 +172,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
             res => productOptions = res,
             err => {
                 if (err.status !== 404) {
-                  this.handleError(err);
+                  this.notificationService.handleError(err);
                 }
                 this.buildProductDropdown(null);
             },
@@ -208,7 +203,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
             res => planCodeOptions = res,
             err => {
                 if (err.status !== 404) {
-                  this.handleError(err);
+                  this.notificationService.handleError(err);
                 }
                 this.buildPlanCodeDropdown(null);
             },
@@ -237,7 +232,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
             res => issueStateOptions = res,
             err => {
                 if (err.status !== 404) {
-                  this.handleError(err);
+                  this.notificationService.handleError(err);
                 }
                 this.buildIssueStateDropdown(null);
             },
@@ -265,7 +260,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
             res => lobOptions = res,
             err => {
                 if (err.status !== 404) {
-                  this.handleError(err);
+                  this.notificationService.handleError(err);
                 }
                 this.buildLobDropdown(null);
             },
@@ -290,7 +285,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
             res => effDateOptions = res,
             err => {
                 if (err.status !== 404) {
-                  this.handleError(err);
+                  this.notificationService.handleError(err);
                 }
                 this.buildEffDateDropdown(null);
             },
@@ -375,36 +370,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
     }
   }
 
-  private handleError(err: Response) {
-    if (err.type !== ResponseType.Default) {
-      this.showError('Network error - unable to access Application Services');
-      return;
-    }
-
-    let model: ErrorMessage.ErrorModel;
-    try {
-      model = <ErrorMessage.ErrorModel> err.json();
-    } catch (e) {
-      model = null;
-    }
-
-    if (model == null) {
-      const logMessage: string = 'HTTP error ' + err.status + ': ' + err.statusText;
-      console.error(logMessage);
-      this.showError(err.statusText);
-    } else {
-      const logMessage: string = 'Error ' + model.errorCode + ': ' + model.message;
-      console.error(logMessage);
-      this.showError(model.message);
-    }
-  }
-
   onGoClick() {
     console.log('Click on the "Go" button has been detected');
-  }
-
-  private showError(message) {
-    this.msgText = message;
-    this.isMsgDisplayed = true;
   }
 }

@@ -1,0 +1,19 @@
+<p-dialog [(visible)]="isMessageRendered" [modal]="true" [width]="350">
+  <p-header *ngIf="isInfo">
+    <img src="assets/img/messagebox_info.png" style="vertical-align: middle"> Info
+  </p-header>
+  <p-header *ngIf="isWarning">
+    <img src="assets/img/messagebox_warning.png" style="vertical-align: middle"> Warning
+  </p-header>
+  <p-header *ngIf="isError">
+    <img src="assets/img/messagebox_critical.png" style="vertical-align: middle"> Error
+  </p-header>
+  <div>
+    {{messageText}}
+  </div>
+  <p-footer>
+    <div class="ui-dialog-buttonpane ui-helper-clearfix">
+      <button type="button" pButton icon="fa-close" (click)="isMessageRendered = false" label="Close"></button>
+    </div>
+  </p-footer>
+</p-dialog>
