@@ -8,7 +8,7 @@ describe('App: NextGenProductWizard', () => {
     TestBed.configureTestingModule({
       declarations: [
         LoginComponent
-      ],
+      ]
     });
   });
 

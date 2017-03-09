@@ -10,7 +10,7 @@ import { AboutApplication } from './model/about.application';
 import { MenuHelper } from './menu.helper';
 
 @Component({
-  templateUrl: './home.component.html',
+  templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit {
   public isInfoAboutDisplayed: boolean;
