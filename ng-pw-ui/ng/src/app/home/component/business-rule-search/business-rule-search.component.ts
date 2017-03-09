@@ -62,16 +62,21 @@ export class BusinessRuleSearchComponent implements OnInit  {
     this.filterChanges = true;
 
     let envOptions: SelectItem[];
+    this.notificationService.showWaitIndicator(true);
     this.filterService.getEnvOptions(this.authToken)
         .subscribe(
           res => envOptions = res,
           err => {
-            if (err.status !== 404) {
-              this.notificationService.handleError(err);
-            }
-            this.buildEnvDropdown(null);
+              if (err.status !== 404) {
+                this.notificationService.handleError(err);
+              }
+              this.buildEnvDropdown(null);
+              this.notificationService.showWaitIndicator(false);
           },
-          ()  => this.buildEnvDropdown(envOptions)
+          ()  => {
+              this.buildEnvDropdown(envOptions);
+              this.notificationService.showWaitIndicator(false);
+          }
         );
 
     this.filterCompanyDisabled = true;
@@ -121,6 +126,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
       this.filterCompanyDisabled = false;
 
       let companyOptions: SelectItem[];
+      this.notificationService.showWaitIndicator(true);
       this.filterService.getCompanyOptions(this.authToken, this.filterChanges, this.filterEnv)
           .subscribe(
             res => companyOptions = res,
@@ -142,8 +148,12 @@ export class BusinessRuleSearchComponent implements OnInit  {
                   this.notificationService.handleError(err);
                 }
                 this.buildProjects(null);
+                this.notificationService.showWaitIndicator(false);
             },
-            ()  => this.buildProjects(projectOptions)
+            ()  => {
+                this.buildProjects(projectOptions);
+                this.notificationService.showWaitIndicator(false);
+            }
           );
     }
   }
@@ -166,6 +176,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
       this.filterProductDisabled = false;
 
       let productOptions: SelectItem[];
+      this.notificationService.showWaitIndicator(true);
       this.filterService.getProductOptions(this.authToken, this.filterChanges, this.filterEnv,
                                            this.filterCompany)
           .subscribe(
@@ -175,8 +186,12 @@ export class BusinessRuleSearchComponent implements OnInit  {
                   this.notificationService.handleError(err);
                 }
                 this.buildProductDropdown(null);
+                this.notificationService.showWaitIndicator(false);
             },
-            ()  => this.buildProductDropdown(productOptions)
+            ()  => {
+                this.buildProductDropdown(productOptions);
+                this.notificationService.showWaitIndicator(false);
+            }
           );
     }
   }
@@ -197,6 +212,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
       this.filterPlanCodeDisabled = false;
 
       let planCodeOptions: SelectItem[];
+      this.notificationService.showWaitIndicator(true);
       this.filterService.getPlanCodeOptions(this.authToken, this.filterChanges, this.filterEnv,
                                             this.filterCompany, this.filterProduct)
           .subscribe(
@@ -206,8 +222,12 @@ export class BusinessRuleSearchComponent implements OnInit  {
                   this.notificationService.handleError(err);
                 }
                 this.buildPlanCodeDropdown(null);
+                this.notificationService.showWaitIndicator(false);
             },
-            ()  => this.buildPlanCodeDropdown(planCodeOptions)
+            ()  => {
+                this.buildPlanCodeDropdown(planCodeOptions);
+                this.notificationService.showWaitIndicator(false);
+            }
           );
     }
   }
@@ -226,6 +246,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
       this.filterIssueStateDisabled = false;
 
       let issueStateOptions: SelectItem[];
+      this.notificationService.showWaitIndicator(true);
       this.filterService.getIssueStateOptions(this.authToken, this.filterChanges, this.filterEnv,
                                               this.filterCompany, this.filterProduct, this.filterPlanCode)
           .subscribe(
@@ -235,8 +256,12 @@ export class BusinessRuleSearchComponent implements OnInit  {
                   this.notificationService.handleError(err);
                 }
                 this.buildIssueStateDropdown(null);
+                this.notificationService.showWaitIndicator(false);
             },
-            ()  => this.buildIssueStateDropdown(issueStateOptions)
+            ()  => {
+                this.buildIssueStateDropdown(issueStateOptions);
+                this.notificationService.showWaitIndicator(false);
+            }
           );
     }
   }
@@ -253,6 +278,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
       this.filterLobDisabled = false;
 
       let lobOptions: SelectItem[];
+      this.notificationService.showWaitIndicator(true);
       this.filterService.getLobOptions(this.authToken, this.filterChanges, this.filterEnv,
                                        this.filterCompany, this.filterProduct, this.filterPlanCode,
                                        this.filterIssueState)
@@ -263,8 +289,12 @@ export class BusinessRuleSearchComponent implements OnInit  {
                   this.notificationService.handleError(err);
                 }
                 this.buildLobDropdown(null);
+                this.notificationService.showWaitIndicator(false);
             },
-            ()  => this.buildLobDropdown(lobOptions)
+            ()  => {
+                this.buildLobDropdown(lobOptions);
+                this.notificationService.showWaitIndicator(false);
+            }
           );
     }
   }
@@ -278,6 +308,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
       this.filterPlanEffDateDisabled = false;
 
       let effDateOptions: SelectItem[];
+      this.notificationService.showWaitIndicator(true);
       this.filterService.getEffDateOptions(this.authToken, this.filterChanges, this.filterEnv,
                                            this.filterCompany, this.filterProduct, this.filterPlanCode,
                                            this.filterIssueState, this.filterLob)
@@ -288,8 +319,12 @@ export class BusinessRuleSearchComponent implements OnInit  {
                   this.notificationService.handleError(err);
                 }
                 this.buildEffDateDropdown(null);
+                this.notificationService.showWaitIndicator(false);
             },
-            ()  => this.buildEffDateDropdown(effDateOptions)
+            ()  => {
+                this.buildEffDateDropdown(effDateOptions);
+                this.notificationService.showWaitIndicator(false);
+            }
           );
     }
   }

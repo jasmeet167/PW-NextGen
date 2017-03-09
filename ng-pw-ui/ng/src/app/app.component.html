@@ -1,0 +1,18 @@
+<div class="ui-widget ui-widget-content" [style.visibility]="waitBoxVisibility"
+     style="position: absolute; z-index: 10000; margin: 0; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%);">
+ <table style="width: 200px; height: 120px; border-collapse: collapse; background-color: white;">
+   <tr>
+     <td align="center" valign="middle">
+        <div style="margin-bottom: 10px;">
+          Please wait...
+        </div>
+        <div style="margin-bottom: 15px;">
+          <img src='assets/img/wait.gif'>
+        </div>
+     </td>
+   </tr>
+ </table>
+</div>
+
+<app-notification></app-notification>
+<router-outlet></router-outlet>

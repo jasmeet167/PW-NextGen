@@ -18,7 +18,7 @@ export class NotificationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.notificationService.initialize((message: string, level: number) => {
+    this.notificationService.initMessageControl((message: string, level: number) => {
       this.showMessage(message, level);
     });
   }

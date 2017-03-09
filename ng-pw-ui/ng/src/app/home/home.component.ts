@@ -47,13 +47,19 @@ export class HomeComponent implements OnInit {
 
   onAboutClick() {
     this.userName = (<string> sessionStorage['userName']).toUpperCase();
+
+    this.notificationService.showWaitIndicator(true);
     this.aboutService.getAboutApplication(this.authToken)
         .subscribe(
           res => this.infoAbout = res,
-          err => this.notificationService.handleError(err),
+          err => {
+              this.notificationService.handleError(err);
+              this.notificationService.showWaitIndicator(false);
+          },
           ()  => {
-                  this.buildDate = new Date(Date.parse(this.infoAbout.buildTimestamp));
-                  this.isInfoAboutDisplayed = true;
+              this.buildDate = new Date(Date.parse(this.infoAbout.buildTimestamp));
+              this.isInfoAboutDisplayed = true;
+              this.notificationService.showWaitIndicator(false);
           }
         );
   }

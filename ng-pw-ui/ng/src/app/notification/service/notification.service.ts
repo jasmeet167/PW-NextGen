@@ -9,26 +9,35 @@ export class NotificationService {
   static readonly WARNING = 1;
   static readonly ERROR = 2;
 
-  private messageCallback: (message: string, level: number) => void;
+  private showWaitIndicatorCallback: (isWaitVisible: boolean) => void;
+  private showMessageDialogCallback: (message: string, level: number) => void;
 
-  initialize(messageCallback: (message: string, level: number) => void) {
-    this.messageCallback = messageCallback;
+  initWaitControl(showWaitIndicator: (isWaitVisible: boolean) => void) {
+    this.showWaitIndicatorCallback = showWaitIndicator;
+  }
+
+  initMessageControl(showMessageDialog: (message: string, level: number) => void) {
+    this.showMessageDialogCallback = showMessageDialog;
+  }
+
+  showWaitIndicator(isVisible: boolean) {
+    this.showWaitIndicatorCallback(isVisible);
   }
 
   showMessage(message: string, level: number) {
-    this.messageCallback(message, level);
+    this.showMessageDialogCallback(message, level);
   }
 
   showInfo(message: string) {
-    this.messageCallback(message, NotificationService.INFO);
+    this.showMessageDialogCallback(message, NotificationService.INFO);
   }
 
   showWarning(message: string) {
-    this.messageCallback(message, NotificationService.WARNING);
+    this.showMessageDialogCallback(message, NotificationService.WARNING);
   }
 
   showError(message: string) {
-    this.messageCallback(message, NotificationService.ERROR);
+    this.showMessageDialogCallback(message, NotificationService.ERROR);
   }
 
   showGenericCommError() {

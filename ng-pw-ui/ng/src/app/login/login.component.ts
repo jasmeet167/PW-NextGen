@@ -12,7 +12,7 @@ import { Configuration } from './model/configuration';
 import { LoginResponse } from './model/login.response';
 
 @Component({
-  templateUrl: './login.component.html',
+  templateUrl: './login.component.html'
 })
 export class LoginComponent implements OnInit {
   public loginForm: any;
@@ -40,6 +40,8 @@ export class LoginComponent implements OnInit {
   onSubmit(value: any) {
     let response: LoginResponse;
     this.userName = value.userName;
+
+    this.notificationService.showWaitIndicator(true);
     this.loginService.login(this.userName, value.password)
         .subscribe(
           res => response = res,
@@ -55,8 +57,12 @@ export class LoginComponent implements OnInit {
               } else {
                 this.notificationService.showGenericCommError();
               }
+              this.notificationService.showWaitIndicator(false);
           },
-          ()  => this.processSuccessfulLogin(response)
+          ()  => {
+              this.processSuccessfulLogin(response);
+              // this.notificationService.showWaitIndicator(false);
+          }
         );
   }
 
@@ -67,9 +73,11 @@ export class LoginComponent implements OnInit {
   }
 
   private logout(authToken: string) {
+    this.notificationService.showWaitIndicator(true);
     this.loginService.logout(authToken)
         .subscribe(
-          res => {},
+          res => {
+          },
           err => {
               if (err.type === ResponseType.Default) {
                 if (err.status !== 401) {
@@ -82,8 +90,11 @@ export class LoginComponent implements OnInit {
               } else {
                 this.notificationService.showGenericCommError();
               }
+              this.notificationService.showWaitIndicator(false);
           },
-          ()  =>  { return; }
+          ()  =>  {
+              this.notificationService.showWaitIndicator(false);
+           }
         );
   }
 
