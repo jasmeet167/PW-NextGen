@@ -11,6 +11,7 @@ export class NotificationService {
 
   private showWaitIndicatorCallback: (isWaitVisible: boolean) => void;
   private showMessageDialogCallback: (message: string, level: number) => void;
+  private navigateToLoginCallback: () => void;
 
   initWaitControl(showWaitIndicator: (isWaitVisible: boolean) => void) {
     this.showWaitIndicatorCallback = showWaitIndicator;
@@ -18,6 +19,10 @@ export class NotificationService {
 
   initMessageControl(showMessageDialog: (message: string, level: number) => void) {
     this.showMessageDialogCallback = showMessageDialog;
+  }
+
+  initLoginNavigation(navigateToLogin: () => void) {
+    this.navigateToLoginCallback = navigateToLogin;
   }
 
   showWaitIndicator(isVisible: boolean) {
@@ -50,6 +55,13 @@ export class NotificationService {
       return;
     }
 
+    if (err.status === 401) {
+      console.error('Invalid Auth Token - HTTP response 401 detected');
+      this.showError('Session has expired. Please log in.');
+      this.navigateToLoginCallback();
+      return;
+    }
+
     let model: ErrorMessage.ErrorModel;
     try {
       model = <ErrorMessage.ErrorModel> err.json();
@@ -75,5 +87,9 @@ export class NotificationService {
         this.showError(message);
       }
     }
+  }
+
+  navigateToLogin(): void {
+    this.navigateToLoginCallback();
   }
 }

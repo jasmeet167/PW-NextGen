@@ -56,7 +56,12 @@ export class BusinessRuleSearchComponent implements OnInit  {
   }
 
   ngOnInit() {
-   this.filterChangesOptions = [];
+    if (!this.authToken || this.authToken.trim() === '') {
+      this.notificationService.navigateToLogin();
+      return;
+    }
+
+    this.filterChangesOptions = [];
     this.filterChangesOptions.push({label: 'Rules with Changes', value: true});
     this.filterChangesOptions.push({label: 'Rules', value: false});
     this.filterChanges = true;

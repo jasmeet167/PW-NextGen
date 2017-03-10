@@ -28,6 +28,11 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (!this.authToken || this.authToken.trim() === '') {
+      this.notificationService.navigateToLogin();
+      return;
+    }
+
     this.menuService.getMenu()
         .subscribe(
           res => this.menuModel = res,

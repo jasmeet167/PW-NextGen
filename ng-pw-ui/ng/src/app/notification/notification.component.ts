@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { NotificationService } from 'app/notification/service/notification.service';
 
@@ -14,12 +15,16 @@ export class NotificationComponent implements OnInit {
   public isWarning: boolean;
   public isError: boolean;
 
-  constructor(private notificationService: NotificationService) {
+  constructor(private router: Router, private notificationService: NotificationService) {
   }
 
   ngOnInit() {
     this.notificationService.initMessageControl((message: string, level: number) => {
       this.showMessage(message, level);
+    });
+
+    this.notificationService.initLoginNavigation(() => {
+      this.navigateToLogin();
     });
   }
 
@@ -29,5 +34,9 @@ export class NotificationComponent implements OnInit {
     this.isWarning = level === NotificationService.WARNING;
     this.isError = level === NotificationService.ERROR;
     this.isMessageRendered = true;
+  }
+
+  private navigateToLogin() {
+    this.router.navigate(['/login']);
   }
 }
