@@ -54,13 +54,13 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>generate-business-rules-tree-api</id>
+						<id>generate-business-rule-tree-api</id>
 						<phase>generate-sources</phase>
 						<goals>
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>${basedir}/src/main/resources/api/business-rules-tree-api.yaml</inputSpec>
+							<inputSpec>${basedir}/src/main/resources/api/business-rule-tree-api.yaml</inputSpec>
 							<apiPackage>com.csc.fsg.life.rest.api</apiPackage>
 							<modelPackage>com.csc.fsg.life.rest.model</modelPackage>
 							<language>spring</language>

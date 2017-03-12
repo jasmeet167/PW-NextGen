@@ -2,8 +2,8 @@
 swagger: '2.0'
 
 info:
-  title: NextGen Product Wizard Business Rules Tree API
-  description: Business Rules Tree REST API for NextGen Product Wizard
+  title: NextGen Product Wizard Business Rule Tree API
+  description: Business Rule Tree REST API for NextGen Product Wizard
   version: "0.0.1"
 
 host: localhost:8443
@@ -17,15 +17,15 @@ paths:
   /tree/search:
     get:
       summary: |
-        Retrieve information comprising the Business Rules tree
+        Retrieve information comprising the Business Rule tree
         with contents matching the provided key values.
       description: |
         This endpoint returns information, which can be used to
-        construct display of the Business Rules tree, with contents
+        construct display of the Business Rule tree, with contents
         matching the provided key values.
       produces:
         - application/json
-      operationId: getBusinessRulesTree
+      operationId: getBusinessRuleTree
       parameters:
         - name: authToken
           in: header
@@ -90,11 +90,11 @@ paths:
           required: false
           type: boolean
       tags:
-        - Business Rules Tree
+        - Business Rule Tree
       responses:
         200:
           description: |
-            OK.  The Business Rules tree data model is returned.
+            OK.  The Business Rule tree data model is returned.
           schema:
             type: array
             items:
