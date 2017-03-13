@@ -27,16 +27,16 @@ public class TreeApiController
 	private TreeService treeService = null;
 
 	@RequestMapping(value = "/tree/search", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<List<TreeNode>> getBusinessRulesTree(@RequestHeader(value = "authToken", required = true) String authToken,
-															   @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
-															   @RequestHeader(value = "envId", required = true) String envId,
-															   @RequestHeader(value = "companyCode", required = false) String companyCode,
-															   @RequestHeader(value = "productCode", required = false) String productCode,
-															   @RequestHeader(value = "planCode", required = false) String planCode,
-															   @RequestHeader(value = "issueState", required = false) String issueState,
-															   @RequestHeader(value = "lob", required = false) String lob,
-															   @RequestHeader(value = "effDate", required = false) LocalDate effDate,
-															   @RequestHeader(value = "includeOrphans", required = false) Boolean includeOrphans)	
+	public ResponseEntity<List<TreeNode>> getBusinessRuleTree(@RequestHeader(value = "authToken", required = true) String authToken,
+															  @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
+															  @RequestHeader(value = "envId", required = true) String envId,
+															  @RequestHeader(value = "companyCode", required = false) String companyCode,
+															  @RequestHeader(value = "productCode", required = false) String productCode,
+															  @RequestHeader(value = "planCode", required = false) String planCode,
+															  @RequestHeader(value = "issueState", required = false) String issueState,
+															  @RequestHeader(value = "lob", required = false) String lob,
+															  @RequestHeader(value = "effDate", required = false) LocalDate effDate,
+															  @RequestHeader(value = "includeOrphans", required = false) Boolean includeOrphans)
 	{
 		RestServiceParam param = buildRestServiceParam(authToken, envId, companyCode);
 
