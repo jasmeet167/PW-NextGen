@@ -34,16 +34,16 @@ import com.csc.fsg.life.rest.model.tree.Node;
 import com.csc.fsg.life.rest.param.RestServiceParam;
 
 @Service
-public class TreeServiceImpl
+public class BusinessRuleTreeServiceImpl
 	extends RestServiceImpl
-	implements TreeService
+	implements BusinessRuleTreeService
 {
 	@Autowired
 	private SearchService searchService = null;
 
-	public TreeServiceImpl()
+	public BusinessRuleTreeServiceImpl()
 	{
-		super("com.csc.fsg.life.rest.service.TreeService");
+		super("com.csc.fsg.life.rest.service.BusinessRuleTreeService");
 	}
 
 	public List<TreeNode> getBusinessRulesTree(RestServiceParam param, BusinessRuleTreeSearchInput input)

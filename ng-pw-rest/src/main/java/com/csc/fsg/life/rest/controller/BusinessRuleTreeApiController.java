@@ -11,21 +11,21 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.csc.fsg.life.rest.api.TreeApi;
+import com.csc.fsg.life.rest.api.BusinessRuleTreeApi;
 import com.csc.fsg.life.rest.model.BusinessRuleTreeSearchInput;
 import com.csc.fsg.life.rest.model.TreeNode;
 import com.csc.fsg.life.rest.param.RestServiceParam;
-import com.csc.fsg.life.rest.service.TreeService;
+import com.csc.fsg.life.rest.service.BusinessRuleTreeService;
 
 @Controller
-public class TreeApiController
+public class BusinessRuleTreeApiController
 	extends RestApiController
-	implements TreeApi
+	implements BusinessRuleTreeApi
 {
 	@Autowired
-	private TreeService treeService = null;
+	private BusinessRuleTreeService businessRuleTreeService = null;
 
-	@RequestMapping(value = "/tree/search", produces = { "application/json" }, method = RequestMethod.GET)
+	@RequestMapping(value = "/business-rule-tree/search", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<TreeNode>> getBusinessRuleTree(@RequestHeader(value = "authToken", required = true) String authToken,
 															  @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
 															  @RequestHeader(value = "envId", required = true) String envId,
@@ -50,7 +50,7 @@ public class TreeApiController
 
 		input.setOrphansIncluded(Boolean.TRUE.equals(includeOrphans));
 
-		List<TreeNode> branches = treeService.getBusinessRulesTree(param, input);
+		List<TreeNode> branches = businessRuleTreeService.getBusinessRulesTree(param, input);
 		return new ResponseEntity<>(branches, HttpStatus.OK);
 	}
 }

@@ -14,7 +14,7 @@ schemes:
 basePath: /ng-pw-rest
 
 paths:
-  /tree/search:
+  /business-rule-tree/search:
     get:
       summary: |
         Retrieve information comprising the Business Rule tree

@@ -42,7 +42,7 @@ export class BusinessRuleTreeService {
 
     const options: RequestOptions = new RequestOptions();
     options.headers = filterHeaders;
-    options.url = sessionStorage['restServiceBaseUrl'] + 'tree/search';
+    options.url = sessionStorage['restServiceBaseUrl'] + 'business-rule-tree/search';
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
