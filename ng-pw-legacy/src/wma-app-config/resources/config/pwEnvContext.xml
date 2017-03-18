@@ -25,6 +25,7 @@
 <!-- 				<entry key="TRADIMPROV" value-ref="TRADIMPROV" /> -->
 <!-- 				<entry key="TMURRAY2" value-ref="TMURRAY2" /> -->
 <!-- 				<entry key="MFEVPMS" value-ref="MFEVPMS" /> -->
+				<entry key="NETEXPRESS_A" value-ref="NETEXPRESS_A" />
 			</map>
 		</property>
 	</bean>
@@ -178,4 +179,12 @@
 	<bean class="com.csc.fsg.life.common.config.MyBatisDynamicConfigurationBean">
 		<property name="configLocationPattern" value="classpath:com/csc/fsg/life/pw/web/actions/rcm/service/mapper-config.xml"/>
 	</bean>
+
+	<config:environment id="NETEXPRESS_A" displayName="NEX Dev-A" databaseId="WMAPRDA" dataSchema="VCSTSTNT" rulesSchema="VCSTSTNT" 
+			dataFile="A" rulesFile="A" converter="asciiConverter" highValueEncoding="cp1252">
+	    <config:datasource driverClassName="com.ibm.db2.jcc.DB2Driver"   url="jdbc:db2://CSCEHDBBNOR005:50003/WMAPRDA"
+   						   validationQuery="${wma.validationQuery}"
+						   username="db2admin"  password="DB2@min5"/>
+		<config:connection systemId="WMA"   transactionId="WMAT"  ipAddress="CSCEHTSSNOR003"  port="10650"  timeout="600000" />
+	</config:environment>
 </beans>

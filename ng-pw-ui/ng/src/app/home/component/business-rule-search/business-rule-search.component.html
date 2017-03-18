@@ -1,41 +1,61 @@
-<ul>
-  <li>
-    <p-dropdown [options]="filterChangesOptions" [(ngModel)]="filterChanges" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
-  </li>
-  <li>
-    <p-dropdown [options]="filterEnvOptions" [(ngModel)]="filterEnv" (onChange)="onEnvChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
-  </li>
-  <li>
-    <p-dropdown [options]="filterCompanyOptions" [(ngModel)]="filterCompany" [disabled]="filterCompanyDisabled" (onChange)="onCompanyChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
-  </li>
-  <li>
-    <p-dropdown [options]="filterProductOptions" [(ngModel)]="filterProduct" [disabled]="filterProductDisabled" (onChange)="onProductChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
-  </li>
-  <li>
-    <p-dropdown [options]="filterPlanCodeOptions" [(ngModel)]="filterPlanCode" [disabled]="filterPlanCodeDisabled" (onChange)="onPlanCodeChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
-  </li>
-  <li>
-    <p-dropdown [options]="filterIssueStatOptions" [(ngModel)]="filterIssueState" [disabled]="filterIssueStateDisabled" (onChange)="onIssueStateChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
-  </li>
-  <li>
-    <p-dropdown [options]="filterLobOptions" [(ngModel)]="filterLob" [disabled]="filterLobDisabled" (onChange)="onLobChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
-  </li>
-  <li>
-    <p-dropdown [options]="filterPlanEffDateOptions" [(ngModel)]="filterPlanEffDate" [disabled]="filterPlanEffDateDisabled" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
-  </li>
-  <li class="li-extra-space">
-    <span>Project(s)</span>
-  </li>
-  <li>
-    <p-listbox [options]="filterProjectRows" [(ngModel)]="filterProjects" [multiple]="true" [style]="{'width':'350px','height':'150px','margin-bottom':'15px'}"></p-listbox>
-  </li>
-  <li>
-    <p-checkbox [(ngModel)]="filterInclOrphans" binary="true" [disabled]="filterInclOrphansDisabled" label="Show orphan subsets"></p-checkbox>
-  </li>
-  <li>
-    <p-checkbox [(ngModel)]="filterRememberSelections" binary="true" label="Remember my selections"></p-checkbox>
-  </li>
-  <li class="li-extra-space">
-    <button pButton type="button" (click)="onGoClick()" label="Go"></button>
-  </li>
-</ul>
+<table>
+  <tr>
+    <td valign="top" width="360px">
+      <ul>
+        <li>
+          <p-dropdown [options]="viewChangesOptions" [(ngModel)]="viewChanges" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="envIdOptions" [(ngModel)]="envId" (onChange)="onEnvIdChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="companyCodeOptions" [(ngModel)]="companyCode" [disabled]="isCompanyCodeDisabled" (onChange)="onCompanyCodeChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="productCodeOptions" [(ngModel)]="productCode" [disabled]="isProductCodeDisabled" (onChange)="onProductChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="planCodeOptions" [(ngModel)]="planCode" [disabled]="isPlanCodeDisabled" (onChange)="onPlanCodeChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="issueStateOptions" [(ngModel)]="issueState" [disabled]="isIssueStateDisabled" (onChange)="onIssueStateChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="lobOptions" [(ngModel)]="lob" [disabled]="isLobDisabled" (onChange)="onLobChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="effDateOptions" [(ngModel)]="effDate" [disabled]="isEffDateDisabled" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li class="li-extra-space">
+          <span>Project(s)</span>
+        </li>
+        <li>
+          <p-listbox [options]="projectRows" [(ngModel)]="projects" [multiple]="true" [style]="{'width':'350px','height':'150px','margin-bottom':'15px'}"></p-listbox>
+        </li>
+        <li>
+          <p-checkbox [(ngModel)]="includeOrphans" binary="true" [disabled]="isIncludeOrphansDisabled" label="Show orphan subsets"></p-checkbox>
+        </li>
+        <li>
+          <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Remember my selections"></p-checkbox>
+        </li>
+        <li class="li-extra-space">
+          <button pButton type="button" [disabled]="isGoDisabled" (click)="onGoClick()" label="Go"></button>
+        </li>
+      </ul>
+    </td>
+    <td valign="top" width="100%">
+      <div class="ui-g">
+        <div class="ui-g-12 ui-sm-12 ui-md-6 ui-lg-6" style="overflow: auto; padding: 0px; margin-top: -5px;">
+          <app-business-rule-tree #tree
+                                  [viewChanges]="viewChanges" [envId]="envId" [companyCode]="companyCode"
+                                  [productCode]="productCode" [planCode]="planCode" [issueState]="issueState"
+                                  [lob]="lob" [effDate]="effDate" [includeOrphans]="includeOrphans">
+          </app-business-rule-tree>
+        </div>
+        <div class="ui-g-12 ui-sm-12 ui-md-6 ui-lg-6" style="overflow: auto; padding: 0px; margin-top: -5px;">
+          <!-- The second tree will go here -->
+        </div>
+      </div>
+    </td>
+  </tr>
+</table>

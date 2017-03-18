@@ -32,14 +32,6 @@ public class TreeNodePlanKeySerializer
 	{
 		gen.writeStartObject();
 
-		String envId = value.getEnvId();
-		if (StringUtils.hasText(envId))
-			gen.writeStringField("envId", envId);
-
-		String companyCode = value.getCompanyCode();
-		if (StringUtils.hasText(companyCode))
-			gen.writeStringField("companyCode", companyCode);
-
 		String productPrefix = value.getProductPrefix();
 		if (StringUtils.hasText(productPrefix))
 			gen.writeStringField("productPrefix", productPrefix);

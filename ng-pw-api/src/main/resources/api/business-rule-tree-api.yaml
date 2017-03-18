@@ -49,13 +49,13 @@ paths:
           in: header
           description: |
             Company Code.
-          required: false
+          required: true
           type: string
         - name: productCode
           in: header
           description: |
             Product Code.
-          required: false
+          required: true
           type: string
         - name: planCode
           in: header
@@ -81,7 +81,6 @@ paths:
             Effective Date.
           required: false
           type: string
-          format: date
         - name: includeOrphans
           in: header
           description: |
@@ -124,34 +123,52 @@ definitions:
       type:
         type: string
         enum:
-          - DISPLAY
-          - PACKAGE
-          - PROJECT
-          - COMPANY
-          - ANNUITIY_FOLDER
-          - UNIV_LIFE_FOLDER
-          - TRADITIONAL_FOLDER
-          - COMMON_TABLE_FOLDER
-          - PLAN_FOLDER
-          - RIDER_FOLDER
-          - PLAN
-          - RIDER
-          - TABLE
-          - COMMON_TABLE
-          - TABLE_SUBSET
-          - PDFPLAN_FOLDER
-          - ORPHAN_FOLDER
-          - COMMON_FOLDER
-          - ORPHAN_TABLE_SUBSET
-          - PAYOUT_PLAN
-          - PAYOUTPLAN_FOLDER
-          - ORPHAN_GROUP
-      display:
+          - D   # DISPLAY
+          - PA  # PACKAGE
+          - PR  # PROJECT
+          - C   # COMPANY
+          - AF  # ANNUITIY_FOLDER
+          - UF  # UNIV_LIFE_FOLDER
+          - TF  # TRADITIONAL_FOLDER
+          - CTF # COMMON_TABLE_FOLDER
+          - PF  # PLAN_FOLDER
+          - RF  # RIDER_FOLDER
+          - P   # PLAN
+          - R   # RIDER
+          - T   # TABLE
+          - CT  # COMMON_TABLE
+          - TS  # TABLE_SUBSET
+          - PDF # PDFPLAN_FOLDER
+          - OF  # ORPHAN_FOLDER
+          - CF  # COMMON_FOLDER
+          - OTS # ORPHAN_TABLE_SUBSET
+          - PP  # PAYOUT_PLAN
+          - PPF # PAYOUTPLAN_FOLDER
+          - OG  # ORPHAN_GROUP
+      label:
         type: string
-      envId:
+      styleClass:
         type: string
-      companyCode:
+      icon:
         type: string
+      expandedIcon:
+        type: string
+      collapsedIcon:
+        type: string
+      leaf:
+        type: boolean
+      expanded:
+        type: boolean
+      data:
+        $ref: '#/definitions/treeNodeData'
+      children:
+        type: array
+        items:
+          $ref: '#/definitions/treeNode'
+
+  treeNodeData:
+    type: object
+    properties:
       name:
         type: string
       tableId:
@@ -160,32 +177,14 @@ definitions:
         type: string
       packageId:
         type: string
-      attributes:
-        $ref: '#/definitions/treeNodeAttributes'
       planKey:
         $ref: '#/definitions/treeNodePlanKey'
-      children:
-        type: array
-        items:
-          $ref: '#/definitions/treeNode'
-
-  treeNodeAttributes:
-    type: object
-    properties:
-      disabled:
-        type: boolean
-      inquiryAllowed:
-        type: boolean
-      updateAllowed:
-        type: boolean
+      attributes:
+        $ref: '#/definitions/treeNodeAttributes'
 
   treeNodePlanKey:
     type: object
     properties:
-      envId:
-        type: string
-      companyCode:
-        type: string
       productPrefix:
         type: string
       productSuffix:
@@ -207,6 +206,16 @@ definitions:
         type: string
       tablePtrSubset:
         type: string
+
+  treeNodeAttributes:
+    type: object
+    properties:
+      disabled:
+        type: boolean
+      inquiryAllowed:
+        type: boolean
+      updateAllowed:
+        type: boolean
 
 # ========================================================
 # Common definitions, which begin at this point,

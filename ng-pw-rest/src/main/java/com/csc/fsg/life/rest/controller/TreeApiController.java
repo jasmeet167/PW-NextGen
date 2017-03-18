@@ -3,7 +3,6 @@ package com.csc.fsg.life.rest.controller;
 import java.sql.Date;
 import java.util.List;
 
-import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,12 +29,12 @@ public class TreeApiController
 	public ResponseEntity<List<TreeNode>> getBusinessRuleTree(@RequestHeader(value = "authToken", required = true) String authToken,
 															  @RequestHeader(value = "viewChanges", required = true) Boolean viewChanges,
 															  @RequestHeader(value = "envId", required = true) String envId,
-															  @RequestHeader(value = "companyCode", required = false) String companyCode,
-															  @RequestHeader(value = "productCode", required = false) String productCode,
+															  @RequestHeader(value = "companyCode", required = true) String companyCode,
+															  @RequestHeader(value = "productCode", required = true) String productCode,
 															  @RequestHeader(value = "planCode", required = false) String planCode,
 															  @RequestHeader(value = "issueState", required = false) String issueState,
 															  @RequestHeader(value = "lob", required = false) String lob,
-															  @RequestHeader(value = "effDate", required = false) LocalDate effDate,
+															  @RequestHeader(value = "effDate", required = false) String effDate,
 															  @RequestHeader(value = "includeOrphans", required = false) Boolean includeOrphans)
 	{
 		RestServiceParam param = buildRestServiceParam(authToken, envId, companyCode);

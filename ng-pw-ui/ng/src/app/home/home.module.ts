@@ -9,6 +9,7 @@ import { DialogModule } from 'primeng/primeng';
 import { PanelModule } from 'primeng/primeng';
 import { MenubarModule, MenuItem } from 'primeng/primeng';
 import { TabViewModule } from 'primeng/primeng';
+import { TreeModule } from 'primeng/primeng';
 import { DropdownModule } from 'primeng/primeng';
 import { ListboxModule } from 'primeng/primeng';
 import { CheckboxModule } from 'primeng/primeng';
@@ -17,6 +18,7 @@ import { ButtonModule } from 'primeng/primeng';
 // Module components
 import { HomeComponent } from './home.component';
 import { BusinessRuleSearchComponent } from './component/business-rule-search/business-rule-search.component';
+import { BusinessRuleTreeComponent } from './component/business-rule-tree/business-rule-tree.component';
 import { EntireTableViewComponent } from './component/entire-table-view/entire-table-view.component';
 import { ChangesOnlyComponent } from './component/changes-only/changes-only.component';
 import { ApplyChangesComponent } from './component/apply-changes/apply-changes.component';
@@ -28,6 +30,7 @@ import { ContinuityCheckComponent } from './component/continuity-check/continuit
 // Module services
 import { MenuService } from './service/menu.service';
 import { FilterService } from './component/business-rule-search/service/filter.service';
+import { BusinessRuleTreeService } from './component/business-rule-tree/service/business-rule-tree.service';
 import { AboutService } from './service/about.service';
 
 // Routing module
@@ -42,6 +45,7 @@ import { HomeRoutingModule } from './home-routing.module';
     PanelModule,
     MenubarModule,
     TabViewModule,
+    TreeModule,
     DropdownModule,
     ListboxModule,
     CheckboxModule,
@@ -51,6 +55,7 @@ import { HomeRoutingModule } from './home-routing.module';
   declarations: [
     HomeComponent,
     BusinessRuleSearchComponent,
+    BusinessRuleTreeComponent,
     EntireTableViewComponent,
     ChangesOnlyComponent,
     ApplyChangesComponent,
@@ -62,6 +67,7 @@ import { HomeRoutingModule } from './home-routing.module';
   providers: [
     MenuService,
     FilterService,
+    BusinessRuleTreeService,
     AboutService
   ]
 })

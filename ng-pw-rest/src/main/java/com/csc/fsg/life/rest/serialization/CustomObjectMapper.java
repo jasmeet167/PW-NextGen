@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import com.csc.fsg.life.rest.model.TreeNode;
+import com.csc.fsg.life.rest.model.TreeNodeData;
 import com.csc.fsg.life.rest.model.TreeNodePlanKey;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.Version;
@@ -25,8 +26,9 @@ public class CustomObjectMapper
 		module.addSerializer(DateTime.class, new DateTimeSerializer());
 		module.addDeserializer(DateTime.class, new DateTimeDeserializer());
 
-		module.addSerializer(TreeNodePlanKey.class, new TreeNodePlanKeySerializer());
 		module.addSerializer(TreeNode.class, new TreeNodeSerializer());
+		module.addSerializer(TreeNodeData.class, new TreeNodeDataSerializer());
+		module.addSerializer(TreeNodePlanKey.class, new TreeNodePlanKeySerializer());
 
 		registerModule(module);
 	}

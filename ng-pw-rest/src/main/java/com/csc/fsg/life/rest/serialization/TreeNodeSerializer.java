@@ -6,7 +6,8 @@ import java.util.List;
 import org.springframework.util.StringUtils;
 
 import com.csc.fsg.life.rest.model.TreeNode;
-import com.csc.fsg.life.rest.model.TreeNodePlanKey;
+import com.csc.fsg.life.rest.model.TreeNode.TypeEnum;
+import com.csc.fsg.life.rest.model.TreeNodeData;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -32,76 +33,47 @@ public class TreeNodeSerializer
 		throws IOException, JsonProcessingException
 	{
 		gen.writeStartObject();
-		gen.writeStringField("type", value.getType().toString());
 
-		String display = value.getDisplay();
-		if (StringUtils.hasText(display))
-			gen.writeStringField("display", display);
+		TypeEnum type = value.getType();
+		if (type != null)
+			gen.writeStringField("type", type.toString());
 
-		String envId = value.getEnvId();
-		if (StringUtils.hasText(envId))
-			gen.writeStringField("envId", envId);
+		String label = value.getLabel();
+		if (StringUtils.hasText(label))
+			gen.writeStringField("label", label);
 
-		String companyCode = value.getCompanyCode();
-		if (StringUtils.hasText(companyCode))
-			gen.writeStringField("companyCode", companyCode);
+		String styleClass = value.getStyleClass();
+		if (StringUtils.hasText(styleClass))
+			gen.writeStringField("styleClass", styleClass);
 
-		String name = value.getName();
-		if (StringUtils.hasText(name))
-			gen.writeStringField("name", name);
+		String icon = value.getIcon();
+		if (StringUtils.hasText(icon))
+			gen.writeStringField("icon", icon);
 
-		String tableId = value.getTableId();
-		if (StringUtils.hasText(tableId))
-			gen.writeStringField("tableId", tableId);
+		String expandedIcon = value.getExpandedIcon();
+		if (StringUtils.hasText(expandedIcon))
+			gen.writeStringField("expandedIcon", expandedIcon);
 
-		String projectName = value.getProjectName();
-		if (StringUtils.hasText(projectName))
-			gen.writeStringField("projectName", projectName);
+		String collapsedIcon = value.getCollapsedIcon();
+		if (StringUtils.hasText(collapsedIcon))
+			gen.writeStringField("collapsedIcon", collapsedIcon);
 
-		String packageId = value.getPackageId();
-		if (StringUtils.hasText(packageId))
-			gen.writeStringField("packageId", packageId);
+		Boolean isLeaf = value.getLeaf();
+		if (Boolean.TRUE.equals(isLeaf))
+			gen.writeBooleanField("leaf", isLeaf.booleanValue());
 
-		TreeNodePlanKey planKey = value.getPlanKey();
-		if (planKey != null && !isEmpty(planKey))
-			gen.writeObjectField("planKey", planKey);
+		Boolean isExpanded = value.getExpanded();
+		if (Boolean.TRUE.equals(isExpanded))
+			gen.writeBooleanField("expanded", isExpanded.booleanValue());
 
-		gen.writeObjectField("attributes", value.getAttributes());
+		TreeNodeData data = value.getData();
+		if (!TreeNodeDataSerializer.isEmptyData(data))
+			gen.writeObjectField("data", data);
 
 		List<TreeNode> children = value.getChildren();
 		if (!children.isEmpty())
 			gen.writeObjectField("children", children);
 
 		gen.writeEndObject();
-	}
-
-	private boolean isEmpty(TreeNodePlanKey planKey)
-	{
-		if (StringUtils.hasText(planKey.getEnvId()))
-			return false;
-		if (StringUtils.hasText(planKey.getCompanyCode()))
-			return false;
-		if (StringUtils.hasText(planKey.getProductPrefix()))
-			return false;
-		if (StringUtils.hasText(planKey.getProductSuffix()))
-			return false;
-		if (StringUtils.hasText(planKey.getPlanCode()))
-			return false;
-		if (StringUtils.hasText(planKey.getIssueState()))
-			return false;
-		if (StringUtils.hasText(planKey.getLob()))
-			return false;
-		if (planKey.getEffDate() != null)
-			return false;
-		if (StringUtils.hasText(planKey.getPlanType()))
-			return false;
-		if (StringUtils.hasText(planKey.getTablePtrId()))
-			return false;
-		if (StringUtils.hasText(planKey.getTablePtrVar()))
-			return false;
-		if (StringUtils.hasText(planKey.getTablePtrSubset()))
-			return false;
-
-		return true;
 	}
 }

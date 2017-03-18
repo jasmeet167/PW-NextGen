@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { MenuItem } from 'primeng/primeng';
 
@@ -9,8 +9,12 @@ import { MenuService } from './service/menu.service';
 import { AboutApplication } from './model/about.application';
 import { MenuHelper } from './menu.helper';
 
+// The property encapsulation: ViewEncapsulation.None is required to load resources,
+// such as those pointed to by the property styleUrls.
 @Component({
-  templateUrl: './home.component.html'
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class HomeComponent implements OnInit {
   public isInfoAboutDisplayed: boolean;

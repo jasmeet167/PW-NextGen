@@ -11,8 +11,10 @@ public class PlanKeyPropertiesBuilder
 	static public void buildValues(TreeNodePlanKey planKey, String[] streamComponents)
 	{
 		int i = 0;
-		if (i < streamComponents.length)
-			planKey.setCompanyCode(streamComponents[i++]);
+		if (i < streamComponents.length) {
+			// Ignore Company Code
+			i++;
+		}
 		if (i < streamComponents.length)
 			planKey.setProductPrefix(streamComponents[i++]);
 		if (i < streamComponents.length)

@@ -63,6 +63,18 @@ public class TreeServiceImpl
 				throw new BadRequestException(model);
 			}
 
+			if (!StringUtils.hasText(param.getCompanyCode())) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_company"));
+				throw new BadRequestException(model);
+			}
+
+			if (!StringUtils.hasText(input.getProductCode())) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_product"));
+				throw new BadRequestException(model);
+			}
+
 			HashMap<String, String> keyValues = buildKeyValues(param, input);
 			PlanCriteriaTO planCriteria = new PlanCriteriaTO(keyValues);
 			planCriteria.setLoadNP(true);
@@ -89,7 +101,11 @@ public class TreeServiceImpl
 			processTreeNode(reader, root, new TreeNodeContainer(), param.getEnvId());
 
 			List<Node> treeNodes = root.getChildren().get(0).getChildren();
-			return transformToDeclaredTypes(treeNodes);
+			List<TreeNode> transformedNodes = transformToDeclaredTypes(treeNodes);
+			for (TreeNode transformedNode : transformedNodes)
+				transformedNode.setExpanded(Boolean.TRUE);
+
+			return transformedNodes;
 		}
 		catch (RestServiceException e) {
 			throw e;
@@ -231,20 +247,22 @@ public class TreeServiceImpl
 		for (Node existingNode : existingNodes) {
 			TreeNode transformedNode = new TreeNode();
 			transformedNodes.add(transformedNode);
-
 			transformedNode.setType(existingNode.getType());
-			transformedNode.setDisplay(existingNode.getDisplay());
-			transformedNode.setEnvId(existingNode.getEnvId());
-			transformedNode.setCompanyCode(existingNode.getCompanyCode());
-			transformedNode.setName(existingNode.getName());
-			transformedNode.setTableId(existingNode.getTableId());
-			transformedNode.setProjectName(existingNode.getProjectName());
-			transformedNode.setPackageId(existingNode.getPackageId());
-			transformedNode.setAttributes(existingNode.getAttributes());
-			transformedNode.setPlanKey(existingNode.getPlanKey());
+			transformedNode.setLabel(existingNode.getDisplay());
+			transformedNode.setData(existingNode.getData());
 
 			List<TreeNode> transformedChildren = transformToDeclaredTypes(existingNode.getChildren());
 			transformedNode.getChildren().addAll(transformedChildren);
+
+			if (transformedChildren.isEmpty()) {
+				transformedNode.setStyleClass("tn-2");
+				transformedNode.setIcon("fa-cube");
+				transformedNode.setLeaf(Boolean.TRUE);
+			}
+			else {
+				transformedNode.setStyleClass("tn-1");
+				transformedNode.setIcon("fa-cubes");
+			}
 		}
 
 		return transformedNodes;

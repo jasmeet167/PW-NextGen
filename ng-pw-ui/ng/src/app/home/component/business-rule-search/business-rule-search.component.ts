@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { SelectItem } from 'primeng/primeng';
+
+import { BusinessRuleTreeComponent } from '../business-rule-tree/business-rule-tree.component';
 
 import { NotificationService } from 'app/notification/service/notification.service';
 import { FilterService } from './service/filter.service';
@@ -11,45 +13,48 @@ import { FilterService } from './service/filter.service';
   styleUrls: ['./business-rule-search.component.css']
 })
 export class BusinessRuleSearchComponent implements OnInit  {
-  public filterChangesOptions: SelectItem[];
-  public filterChanges: boolean;
+  public viewChangesOptions: SelectItem[];
+  public viewChanges: boolean;
 
-  public filterEnvOptions: SelectItem[];
-  public filterEnv: string;
+  public envIdOptions: SelectItem[];
+  public envId: string;
 
-  public filterCompanyOptions: SelectItem[];
-  public filterCompany: string;
-  public filterCompanyDisabled: boolean;
+  public companyCodeOptions: SelectItem[];
+  public companyCode: string;
+  public isCompanyCodeDisabled: boolean;
 
-  public filterProductOptions: SelectItem[];
-  public filterProduct: string;
-  public filterProductDisabled: boolean;
+  public productCodeOptions: SelectItem[];
+  public productCode: string;
+  public isProductCodeDisabled: boolean;
 
-  public filterPlanCodeOptions: SelectItem[];
-  public filterPlanCode: string;
-  public filterPlanCodeDisabled: boolean;
+  public planCodeOptions: SelectItem[];
+  public planCode: string;
+  public isPlanCodeDisabled: boolean;
 
-  public filterIssueStatOptions: SelectItem[];
-  public filterIssueState: string;
-  public filterIssueStateDisabled: boolean;
+  public issueStateOptions: SelectItem[];
+  public issueState: string;
+  public isIssueStateDisabled: boolean;
 
-  public filterLobOptions: SelectItem[];
-  public filterLob: string;
-  public filterLobDisabled: boolean;
+  public lobOptions: SelectItem[];
+  public lob: string;
+  public isLobDisabled: boolean;
 
-  public filterPlanEffDateOptions: SelectItem[];
-  public filterPlanEffDate: string;
-  public filterPlanEffDateDisabled: boolean;
+  public effDateOptions: SelectItem[];
+  public effDate: string;
+  public isEffDateDisabled: boolean;
 
-  public filterProjectRows: SelectItem[];
-  public filterProjects: string[];
+  public projectRows: SelectItem[];
+  public projects: string[];
 
-  public filterInclOrphans: boolean;
-  public filterInclOrphansDisabled: boolean;
+  public includeOrphans: boolean;
+  public isIncludeOrphansDisabled: boolean;
 
-  public filterRememberSelections: boolean;
+  public rememberSelections: boolean;
+  public isGoDisabled: boolean;
 
   private authToken: string;
+
+  @ViewChild('tree') tree: BusinessRuleTreeComponent;
 
   constructor(private notificationService: NotificationService, private filterService: FilterService) {
     this.authToken = sessionStorage['authToken'];
@@ -61,10 +66,10 @@ export class BusinessRuleSearchComponent implements OnInit  {
       return;
     }
 
-    this.filterChangesOptions = [];
-    this.filterChangesOptions.push({label: 'Rules with Changes', value: true});
-    this.filterChangesOptions.push({label: 'Rules', value: false});
-    this.filterChanges = true;
+    this.viewChangesOptions = [];
+    this.viewChangesOptions.push({label: 'Rules with Changes', value: true});
+    this.viewChangesOptions.push({label: 'Rules', value: false});
+    this.viewChanges = true;
 
     let envOptions: SelectItem[];
     this.notificationService.showWaitIndicator(true);
@@ -84,55 +89,57 @@ export class BusinessRuleSearchComponent implements OnInit  {
           }
         );
 
-    this.filterCompanyDisabled = true;
+    this.isCompanyCodeDisabled = true;
     this.buildCompanyDropdown(null);
 
-    this.filterProductDisabled = true;
+    this.isProductCodeDisabled = true;
     this.buildProductDropdown(null);
 
-    this.filterPlanCodeDisabled = true;
+    this.isPlanCodeDisabled = true;
     this.buildPlanCodeDropdown(null);
 
-    this.filterIssueStateDisabled = true;
+    this.isIssueStateDisabled = true;
     this.buildIssueStateDropdown(null);
 
-    this.filterLobDisabled = true;
+    this.isLobDisabled = true;
     this.buildLobDropdown(null);
 
-    this.filterPlanEffDateDisabled = true;
+    this.isEffDateDisabled = true;
     this.buildEffDateDropdown(null);
 
-    this.filterProjectRows = <SelectItem[]> [];
+    this.projectRows = <SelectItem[]> [];
 
-    this.filterInclOrphans = false;
-    this.filterInclOrphansDisabled = true;
+    this.includeOrphans = false;
+    this.isIncludeOrphansDisabled = true;
 
-    this.filterRememberSelections = false;
+    this.rememberSelections = false;
+
+    this.evaluateStatusOfGo();
   }
 
-  onEnvChange() {
-    this.filterCompany = null;
-    this.filterProduct = null;
-    this.filterPlanCode = null;
-    this.filterIssueState = null;
-    this.filterLob = null;
-    this.filterPlanEffDate = null;
-    this.filterProjects = <string[]> [];
+  onEnvIdChange() {
+    this.companyCode = null;
+    this.productCode = null;
+    this.planCode = null;
+    this.issueState = null;
+    this.lob = null;
+    this.effDate = null;
+    this.projects = <string[]> [];
 
-    this.filterProductDisabled = true;
-    this.filterPlanCodeDisabled = true;
-    this.filterIssueStateDisabled = true;
-    this.filterLobDisabled = true;
-    this.filterPlanEffDateDisabled = true;
+    this.isProductCodeDisabled = true;
+    this.isPlanCodeDisabled = true;
+    this.isIssueStateDisabled = true;
+    this.isLobDisabled = true;
+    this.isEffDateDisabled = true;
 
-    if (this.filterEnv == null) {
-      this.filterCompanyDisabled = true;
+    if (this.envId == null) {
+      this.isCompanyCodeDisabled = true;
     } else {
-      this.filterCompanyDisabled = false;
+      this.isCompanyCodeDisabled = false;
 
       let companyOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getCompanyOptions(this.authToken, this.filterChanges, this.filterEnv)
+      this.filterService.getCompanyOptions(this.authToken, this.viewChanges, this.envId)
           .subscribe(
             res => companyOptions = res,
             err => {
@@ -140,12 +147,13 @@ export class BusinessRuleSearchComponent implements OnInit  {
                   this.notificationService.handleError(err);
                 }
                 this.buildCompanyDropdown(null);
+                this.notificationService.showWaitIndicator(false);
             },
             ()  => this.buildCompanyDropdown(companyOptions)
           );
 
       let projectOptions: SelectItem[];
-      this.filterService.getProjects(this.authToken, this.filterEnv)
+      this.filterService.getProjects(this.authToken, this.envId)
           .subscribe(
             res => projectOptions = res,
             err => {
@@ -161,29 +169,31 @@ export class BusinessRuleSearchComponent implements OnInit  {
             }
           );
     }
+
+    this.evaluateStatusOfGo();
   }
 
-  onCompanyChange() {
-    this.filterProduct = null;
-    this.filterPlanCode = null;
-    this.filterIssueState = null;
-    this.filterLob = null;
-    this.filterPlanEffDate = null;
+  onCompanyCodeChange() {
+    this.productCode = null;
+    this.planCode = null;
+    this.issueState = null;
+    this.lob = null;
+    this.effDate = null;
 
-    this.filterPlanCodeDisabled = true;
-    this.filterIssueStateDisabled = true;
-    this.filterLobDisabled = true;
-    this.filterPlanEffDateDisabled = true;
+    this.isPlanCodeDisabled = true;
+    this.isIssueStateDisabled = true;
+    this.isLobDisabled = true;
+    this.isEffDateDisabled = true;
 
-    if (this.filterCompany == null) {
-      this.filterProductDisabled = true;
+    if (this.companyCode == null) {
+      this.isProductCodeDisabled = true;
     } else {
-      this.filterProductDisabled = false;
+      this.isProductCodeDisabled = false;
 
       let productOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getProductOptions(this.authToken, this.filterChanges, this.filterEnv,
-                                           this.filterCompany)
+      this.filterService.getProductOptions(this.authToken, this.viewChanges, this.envId,
+                                           this.companyCode)
           .subscribe(
             res => productOptions = res,
             err => {
@@ -199,27 +209,29 @@ export class BusinessRuleSearchComponent implements OnInit  {
             }
           );
     }
+
+    this.evaluateStatusOfGo();
   }
 
   onProductChange() {
-    this.filterPlanCode = null;
-    this.filterIssueState = null;
-    this.filterLob = null;
-    this.filterPlanEffDate = null;
+    this.planCode = null;
+    this.issueState = null;
+    this.lob = null;
+    this.effDate = null;
 
-    this.filterIssueStateDisabled = true;
-    this.filterLobDisabled = true;
-    this.filterPlanEffDateDisabled = true;
+    this.isIssueStateDisabled = true;
+    this.isLobDisabled = true;
+    this.isEffDateDisabled = true;
 
-    if (this.filterProduct == null) {
-      this.filterPlanCodeDisabled = true;
+    if (this.productCode == null) {
+      this.isPlanCodeDisabled = true;
     } else {
-      this.filterPlanCodeDisabled = false;
+      this.isPlanCodeDisabled = false;
 
       let planCodeOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getPlanCodeOptions(this.authToken, this.filterChanges, this.filterEnv,
-                                            this.filterCompany, this.filterProduct)
+      this.filterService.getPlanCodeOptions(this.authToken, this.viewChanges, this.envId,
+                                            this.companyCode, this.productCode)
           .subscribe(
             res => planCodeOptions = res,
             err => {
@@ -235,25 +247,27 @@ export class BusinessRuleSearchComponent implements OnInit  {
             }
           );
     }
+
+    this.evaluateStatusOfGo();
   }
 
   onPlanCodeChange() {
-    this.filterIssueState = null;
-    this.filterLob = null;
-    this.filterPlanEffDate = null;
+    this.issueState = null;
+    this.lob = null;
+    this.effDate = null;
 
-    this.filterLobDisabled = true;
-    this.filterPlanEffDateDisabled = true;
+    this.isLobDisabled = true;
+    this.isEffDateDisabled = true;
 
-    if (this.filterPlanCode == null) {
-      this.filterIssueStateDisabled = true;
+    if (this.planCode == null) {
+      this.isIssueStateDisabled = true;
     } else {
-      this.filterIssueStateDisabled = false;
+      this.isIssueStateDisabled = false;
 
       let issueStateOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getIssueStateOptions(this.authToken, this.filterChanges, this.filterEnv,
-                                              this.filterCompany, this.filterProduct, this.filterPlanCode)
+      this.filterService.getIssueStateOptions(this.authToken, this.viewChanges, this.envId,
+                                              this.companyCode, this.productCode, this.planCode)
           .subscribe(
             res => issueStateOptions = res,
             err => {
@@ -272,21 +286,21 @@ export class BusinessRuleSearchComponent implements OnInit  {
   }
 
   onIssueStateChange() {
-    this.filterLob = null;
-    this.filterPlanEffDate = null;
+    this.lob = null;
+    this.effDate = null;
 
-    this.filterPlanEffDateDisabled = true;
+    this.isEffDateDisabled = true;
 
-    if (this.filterIssueState == null) {
-      this.filterLobDisabled = true;
+    if (this.issueState == null) {
+      this.isLobDisabled = true;
     } else {
-      this.filterLobDisabled = false;
+      this.isLobDisabled = false;
 
       let lobOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getLobOptions(this.authToken, this.filterChanges, this.filterEnv,
-                                       this.filterCompany, this.filterProduct, this.filterPlanCode,
-                                       this.filterIssueState)
+      this.filterService.getLobOptions(this.authToken, this.viewChanges, this.envId,
+                                       this.companyCode, this.productCode, this.planCode,
+                                       this.issueState)
           .subscribe(
             res => lobOptions = res,
             err => {
@@ -305,18 +319,18 @@ export class BusinessRuleSearchComponent implements OnInit  {
   }
 
   onLobChange() {
-    this.filterPlanEffDate = null;
+    this.effDate = null;
 
-    if (this.filterLob == null) {
-      this.filterPlanEffDateDisabled = true;
+    if (this.lob == null) {
+      this.isEffDateDisabled = true;
     } else {
-      this.filterPlanEffDateDisabled = false;
+      this.isEffDateDisabled = false;
 
       let effDateOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getEffDateOptions(this.authToken, this.filterChanges, this.filterEnv,
-                                           this.filterCompany, this.filterProduct, this.filterPlanCode,
-                                           this.filterIssueState, this.filterLob)
+      this.filterService.getEffDateOptions(this.authToken, this.viewChanges, this.envId,
+                                           this.companyCode, this.productCode, this.planCode,
+                                           this.issueState, this.lob)
           .subscribe(
             res => effDateOptions = res,
             err => {
@@ -335,82 +349,92 @@ export class BusinessRuleSearchComponent implements OnInit  {
   }
 
   private buildEnvDropdown (options: SelectItem[]) {
-    this.filterEnvOptions = <SelectItem[]> [{label: 'Environment', value: null}];
+    this.envIdOptions = <SelectItem[]> [{label: 'Environment', value: null}];
     if (options !== null) {
       for (const option of options) {
-        this.filterEnvOptions.push(option);
+        this.envIdOptions.push(option);
       }
     }
   }
 
   private buildCompanyDropdown(options: SelectItem[]) {
-    this.filterCompanyOptions = <SelectItem[]> [{label: 'Company', value: null}];
+    this.companyCodeOptions = <SelectItem[]> [{label: 'Company', value: null}];
     if (options !== null) {
       for (const option of options) {
-        this.filterCompanyOptions.push(option);
+        this.companyCodeOptions.push(option);
       }
     }
   }
 
   private buildProductDropdown(options: SelectItem[]) {
-    this.filterProductOptions = <SelectItem[]> [{label: 'Product', value: null}];
+    this.productCodeOptions = <SelectItem[]> [{label: 'Product', value: null}];
     if (options !== null) {
       for (const option of options) {
-        this.filterProductOptions.push(option);
+        this.productCodeOptions.push(option);
       }
     }
   }
 
   private buildPlanCodeDropdown(options: SelectItem[]) {
-    this.filterPlanCodeOptions = <SelectItem[]> [{label: 'Plan Code', value: null}];
+    this.planCodeOptions = <SelectItem[]> [{label: 'Plan Code', value: null}];
     if (options !== null) {
       for (const option of options) {
-        this.filterPlanCodeOptions.push(option);
+        this.planCodeOptions.push(option);
       }
     }
   }
 
   private buildIssueStateDropdown(options: SelectItem[]) {
-    this.filterIssueStatOptions = <SelectItem[]> [{label: 'Issue State', value: null}];
+    this.issueStateOptions = <SelectItem[]> [{label: 'Issue State', value: null}];
     if (options !== null) {
       for (const option of options) {
-        this.filterIssueStatOptions.push(option);
+        this.issueStateOptions.push(option);
       }
     }
   }
 
   private buildLobDropdown(options: SelectItem[]) {
-    this.filterLobOptions = <SelectItem[]> [{label: 'Line of Business', value: null}];
+    this.lobOptions = <SelectItem[]> [{label: 'Line of Business', value: null}];
     if (options !== null) {
       for (const option of options) {
-        this.filterLobOptions.push(option);
+        this.lobOptions.push(option);
       }
     }
   }
 
   private buildEffDateDropdown(options: SelectItem[]) {
-    this.filterPlanEffDateOptions = <SelectItem[]> [{label: 'Plan Effective Date', value: null}];
+    this.effDateOptions = <SelectItem[]> [{label: 'Plan Effective Date', value: null}];
     if (options !== null) {
       for (const option of options) {
-        this.filterPlanEffDateOptions.push(option);
+        this.effDateOptions.push(option);
       }
     }
   }
 
   private buildProjects(rows: SelectItem[]) {
     if (rows == null) {
-      this.filterProjectRows = <SelectItem[]> [];
-      this.filterProjects = <string[]> [];
+      this.projectRows = <SelectItem[]> [];
+      this.projects = <string[]> [];
     } else {
-      this.filterProjectRows = <SelectItem[]> [{ label: 'All Projects', value: null }];
+      this.projectRows = <SelectItem[]> [{ label: 'All Projects', value: null }];
       for (const row of rows) {
-        this.filterProjectRows.push(row);
+        this.projectRows.push(row);
       }
-      this.filterProjects = <string[]> [null];
+      this.projects = <string[]> [null];
+    }
+  }
+
+  private evaluateStatusOfGo() {
+    if ((this.envId && this.envId.trim() !== '')
+    &&  (this.companyCode && this.companyCode.trim() !== '')
+    &&  (this.productCode && this.productCode.trim() !== '')) {
+      this.isGoDisabled = false;
+    } else {
+      this.isGoDisabled = true;
     }
   }
 
   onGoClick() {
-    console.log('Click on the "Go" button has been detected');
+    this.tree.showTree();
   }
 }
