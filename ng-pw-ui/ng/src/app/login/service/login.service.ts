@@ -3,7 +3,7 @@ import { Http, Headers, RequestOptions, RequestMethod, Request } from '@angular/
 import { Observable } from 'rxjs/Observable';
 
 import { Credentials } from 'app/login/model/credentials';
-import { LoginResponse } from 'app/login/model/login.response';
+import { LoginResponse } from 'app/login/model/login-response';
 
 import 'rxjs/add/operator/map';
 

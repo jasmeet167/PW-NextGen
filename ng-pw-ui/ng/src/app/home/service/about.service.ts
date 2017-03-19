@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 
 import 'rxjs/add/operator/map';
 
-import { AboutApplication } from 'app/home/model/about.application';
+import { AboutApplication } from 'app/home/model/about-application';
 
 @Injectable()
 export class AboutService {

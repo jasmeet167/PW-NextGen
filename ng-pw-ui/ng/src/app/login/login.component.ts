@@ -9,7 +9,7 @@ import { ConfigService } from './service/config.service';
 import { LoginService } from './service/login.service';
 
 import { Configuration } from './model/configuration';
-import { LoginResponse } from './model/login.response';
+import { LoginResponse } from './model/login-response';
 
 @Component({
   templateUrl: './login.component.html'
