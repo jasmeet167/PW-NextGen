@@ -81,6 +81,20 @@
 							<output>${basedir}/src/main/ts</output>
 						</configuration>
 					</execution>
+					<execution>
+						<id>generate-business-rule-tree-scripts</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${basedir}/src/main/resources/api/business-rule-tree-api.yaml</inputSpec>
+							<apiPackage>api</apiPackage>
+							<modelPackage>model</modelPackage>
+							<language>typescript-angular</language>
+							<output>${basedir}/src/main/ts</output>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 		</plugins>
