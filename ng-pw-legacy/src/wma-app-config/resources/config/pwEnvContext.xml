@@ -25,7 +25,7 @@
 <!-- 				<entry key="TRADIMPROV" value-ref="TRADIMPROV" /> -->
 <!-- 				<entry key="TMURRAY2" value-ref="TMURRAY2" /> -->
 <!-- 				<entry key="MFEVPMS" value-ref="MFEVPMS" /> -->
-				<entry key="NETEXPRESS_A" value-ref="NETEXPRESS_A" />
+<!-- 				<entry key="NETEXPRESS_A" value-ref="NETEXPRESS_A" /> -->
 			</map>
 		</property>
 	</bean>
