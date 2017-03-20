@@ -3,8 +3,8 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MenuItem } from 'primeng/primeng';
 
 import { NotificationService } from 'app/notification/service/notification.service';
+import { MenuService } from 'app/util/service/menu.service';
 import { AboutService } from './service/about.service';
-import { MenuService } from './service/menu.service';
 
 import { MenuHelper } from 'app/util/menu.helper';
 import { AboutApplication } from './model/about-application';
@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    this.menuService.getMenu()
+    this.menuService.getMenu('assets/data/home/menu.json')
         .subscribe(
           res => this.menuModel = res,
           err => this.notificationService.handleError(err),

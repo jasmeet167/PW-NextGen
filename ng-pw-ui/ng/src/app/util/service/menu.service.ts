@@ -9,8 +9,8 @@ export class MenuService {
   constructor(private http: Http) {
   }
 
-  getMenu(): Observable<MenuItem[]> {
-    return this.http.get('assets/data/menu.json')
+  getMenu(resourceUrl: string): Observable<MenuItem[]> {
+    return this.http.get(resourceUrl)
                .map(response => { return <MenuItem[]> response.json(); });
     }
 }

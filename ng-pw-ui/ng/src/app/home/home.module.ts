@@ -28,7 +28,7 @@ import { SummaryComponent } from './component/summary/summary.component';
 import { ContinuityCheckComponent } from './component/continuity-check/continuity-check.component';
 
 // Module services
-import { MenuService } from './service/menu.service';
+import { MenuService } from 'app/util/service/menu.service';
 import { FilterService } from './component/business-rule-search/service/filter.service';
 import { BusinessRuleTreeService } from './component/business-rule-tree/service/business-rule-tree.service';
 import { AboutService } from './service/about.service';
