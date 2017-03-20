@@ -6,8 +6,8 @@ import { NotificationService } from 'app/notification/service/notification.servi
 import { AboutService } from './service/about.service';
 import { MenuService } from './service/menu.service';
 
+import { MenuHelper } from 'app/util/menu.helper';
 import { AboutApplication } from './model/about-application';
-import { MenuHelper } from './menu.helper';
 
 // The property encapsulation: ViewEncapsulation.None is required to load resources,
 // such as those pointed to by the property styleUrls.
