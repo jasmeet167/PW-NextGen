@@ -102,8 +102,10 @@ public class BusinessRuleTreeServiceImpl
 
 			List<Node> treeNodes = root.getChildren().get(0).getChildren();
 			List<TreeNode> transformedNodes = transformToDeclaredTypes(treeNodes);
-			for (TreeNode transformedNode : transformedNodes)
+			for (TreeNode transformedNode : transformedNodes) {
 				transformedNode.setExpanded(Boolean.TRUE);
+				setFolderIcons(transformedNode);
+			}
 
 			return transformedNodes;
 		}
@@ -254,17 +256,41 @@ public class BusinessRuleTreeServiceImpl
 			List<TreeNode> transformedChildren = transformToDeclaredTypes(existingNode.getChildren());
 			transformedNode.getChildren().addAll(transformedChildren);
 
-			if (transformedChildren.isEmpty()) {
-				transformedNode.setStyleClass("tn-2");
-				transformedNode.setIcon("fa-cube");
-				transformedNode.setLeaf(Boolean.TRUE);
-			}
-			else {
-				transformedNode.setStyleClass("tn-1");
-				transformedNode.setIcon("fa-cubes");
+			switch (existingNode.getType()) {
+				case AF:		// ANNUITIY_FOLDER
+				case UF:		// UNIV_LIFE_FOLDER
+				case TF:		// TRADITIONAL_FOLDER
+				case PDF:		// PDFPLAN_FOLDER
+				case OF:		// ORPHAN_FOLDER
+				case CTF:		// COMMON_TABLE_FOLDER
+				case PF:		// PLAN_FOLDER
+				case RF:		// RIDER_FOLDER
+				case PPF: {		// PAYOUTPLAN_FOLDER
+					transformedNode.setStyleClass("tn-1");
+					setFolderIcons(transformedNode);
+					break;
+				}
+				default: {
+					if (transformedChildren.isEmpty()) {
+						transformedNode.setStyleClass("tn-2");
+						transformedNode.setIcon("fa-cube");
+					}
+					else {
+						transformedNode.setStyleClass("tn-1");
+						setFolderIcons(transformedNode);
+					}
+					break;
+				}
 			}
 		}
 
 		return transformedNodes;
+	}
+
+	private void setFolderIcons(TreeNode node)
+	{
+		node.setIcon(null);
+		node.setExpandedIcon("fa-folder-open");
+		node.setCollapsedIcon("fa-folder");
 	}
 }
