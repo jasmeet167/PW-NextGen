@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    this.menuService.getMenu('assets/data/home/menu.json')
+    this.menuService.getMenu('assets/data/home/home-menu.json')
         .subscribe(
           res => this.menuModel = res,
           err => this.notificationService.handleError(err),

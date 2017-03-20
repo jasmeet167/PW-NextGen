@@ -1,4 +1,7 @@
+<p-contextMenu #treeContextMenu [model]="contextMenuModel"></p-contextMenu>
+
 <p-tree [value]="businessRuleTree"
+        [contextMenu]="treeContextMenu"
         [(selection)]="selectedNode" selectionMode="single"
-        (onNodeSelect)="onNodeSelect($event)"
+        (onNodeContextMenuSelect)="onNodeContextMenuSelect($event)"
         [style]="{'border':'none','width':'inherit','max-width':'inherit'}"></p-tree>

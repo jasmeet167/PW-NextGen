@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 // PrimeNG
 import { DialogModule } from 'primeng/primeng';
 import { PanelModule } from 'primeng/primeng';
-import { MenubarModule, MenuItem } from 'primeng/primeng';
+import { MenubarModule, ContextMenuModule, MenuItem } from 'primeng/primeng';
 import { TabViewModule } from 'primeng/primeng';
 import { TreeModule } from 'primeng/primeng';
 import { DropdownModule } from 'primeng/primeng';
@@ -44,6 +44,7 @@ import { HomeRoutingModule } from './home-routing.module';
     DialogModule,
     PanelModule,
     MenubarModule,
+    ContextMenuModule,
     TabViewModule,
     TreeModule,
     DropdownModule,

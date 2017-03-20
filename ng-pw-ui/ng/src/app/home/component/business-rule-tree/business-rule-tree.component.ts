@@ -1,8 +1,9 @@
-import { Component, ViewEncapsulation, Input } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
 
-import { TreeNode } from 'primeng/primeng';
+import { TreeNode, MenuItem } from 'primeng/primeng';
 
 import { NotificationService } from 'app/notification/service/notification.service';
+import { MenuService } from 'app/util/service/menu.service';
 import { BusinessRuleTreeService } from './service/business-rule-tree.service';
 
 // The property encapsulation: ViewEncapsulation.None is required to load resources,
@@ -13,7 +14,7 @@ import { BusinessRuleTreeService } from './service/business-rule-tree.service';
   styleUrls: ['./business-rule-tree.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class BusinessRuleTreeComponent {
+export class BusinessRuleTreeComponent implements OnInit {
   @Input() public viewChanges: boolean;
   @Input() public envId: string;
   @Input() public companyCode: string;
@@ -26,12 +27,43 @@ export class BusinessRuleTreeComponent {
 
   public businessRuleTree: TreeNode[];
   public selectedNode: TreeNode;
+  public contextMenuModel: MenuItem[];
 
   private authToken: string;
 
-  constructor(private notificationService: NotificationService,
+  private companyMenuModel: MenuItem[];
+  private planFolderMenuModel: MenuItem[];
+  private generalMenuModel: MenuItem[];
+
+  constructor(private notificationService: NotificationService, private menuService: MenuService,
               private businessRuleTreeService: BusinessRuleTreeService) {
     this.authToken = sessionStorage['authToken'];
+  }
+
+  ngOnInit() {
+    if (!this.authToken || this.authToken.trim() === '') {
+      this.notificationService.navigateToLogin();
+      return;
+    }
+
+    this.menuService.getMenu('assets/data/business-rule-tree/company-menu.json')
+        .subscribe(
+          res => this.companyMenuModel = res,
+          err => this.notificationService.handleError(err),
+          ()  => {}
+        );
+    this.menuService.getMenu('assets/data/business-rule-tree/plan-folder-menu.json')
+        .subscribe(
+          res => this.planFolderMenuModel = res,
+          err => this.notificationService.handleError(err),
+          ()  => {}
+        );
+    this.menuService.getMenu('assets/data/business-rule-tree/general-menu.json')
+        .subscribe(
+          res => this.generalMenuModel = res,
+          err => this.notificationService.handleError(err),
+          ()  => {}
+        );
   }
 
   public showTree() {
@@ -56,7 +88,28 @@ export class BusinessRuleTreeComponent {
         );
   }
 
-  public onNodeSelect(event: any) {
-    console.log('Node Selected');
+  public onNodeContextMenuSelect(event: any) {
+    const node: TreeNode = event.node;
+    console.log('Node Type = ' + node.type);
+
+    switch (node.type) {
+        case 'C':       // Company
+                this.contextMenuModel = this.companyMenuModel;
+                break;
+        case 'CTF':     // Common Table Folder
+        case 'PDF':     // PDF Plans Folder
+        case 'PF':      // Plan Folder
+        case 'PPF':     // Payout Plan Folder
+        case 'RF':      // Rider Folder
+                this.contextMenuModel = this.generalMenuModel;
+                break;
+        case 'AF':      // Annuity Folder
+        case 'UF':      // UL Folder
+        case 'TF':      // Traditional Folder
+                this.contextMenuModel = this.planFolderMenuModel;
+                break;
+        default:
+            this.contextMenuModel = null;
+    }
   }
 }
