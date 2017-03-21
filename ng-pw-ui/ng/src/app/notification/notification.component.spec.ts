@@ -1,7 +1,7 @@
 import { TestBed, async } from '@angular/core/testing';
 import { NotificationComponent } from './notification.component';
 
-describe('App: NextGenProductWizard', () => {
+describe('App: ProductWizard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [

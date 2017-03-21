@@ -1,7 +1,7 @@
 import { TestBed, async } from '@angular/core/testing';
 import { ContinuityCheckComponent } from './continuity-check.component';
 
-describe('App: NextGenProductWizard', () => {
+describe('App: ProductWizard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [

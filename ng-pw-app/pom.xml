@@ -120,7 +120,7 @@
 		</dependencies>
 	</dependencyManagement>
 	<properties>
-		<ng-pw.designator>NextGen Product Wizard</ng-pw.designator>
+		<ng-pw.designator>wmA Business Rules</ng-pw.designator>
 		<ng-pw.version>1701</ng-pw.version>
 
 		<ng-pw-development.version>0.0.1-SNAPSHOT</ng-pw-development.version>

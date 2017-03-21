@@ -6,7 +6,8 @@
          id="WebApp_ID"
          metadata-complete="true">
 
-	<display-name>NextGen Product Wizard User Interface</display-name>
+	<display-name>Product Wizard User Interface</display-name>
+
 	<error-page>
 		<error-code>404</error-code>
 		<location>/</location>

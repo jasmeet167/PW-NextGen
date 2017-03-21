@@ -1,6 +1,6 @@
 import { browser, element, by } from 'protractor';
 
-export class NextGenProductWizardPage {
+export class ProductWizardPage {
   navigateTo() {
     return browser.get('/');
   }

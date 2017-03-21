@@ -1,7 +1,7 @@
 import { TestBed, async } from '@angular/core/testing';
 import { BusinessRuleSearchComponent } from './business-rule-search.component';
 
-describe('App: NextGenProductWizard', () => {
+describe('App: ProductWizard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
