@@ -88,9 +88,17 @@ export class BusinessRuleTreeComponent implements OnInit {
         );
   }
 
+  public onNodeExpand(event: any) {
+    console.log('Node Expanded: ' + event.node.data.tableId);
+  }
+
+  public onNodeCollapse(event: any) {
+    console.log('Node Collapsed: ' + event.node.data.tableId);
+  }
+
   public onNodeContextMenuSelect(event: any) {
     const node: TreeNode = event.node;
-    console.log('Node Type = ' + node.type);
+    console.log('Context Menu for Node Type = ' + node.type);
 
     switch (node.type) {
         case 'C':       // Company

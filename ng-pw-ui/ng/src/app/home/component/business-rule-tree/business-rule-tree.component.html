@@ -2,6 +2,8 @@
 
 <p-tree [value]="businessRuleTree"
         [contextMenu]="treeContextMenu"
+        (onNodeExpand)="onNodeExpand($event)"
+        (onNodeCollapse)="onNodeCollapse($event)"
         [(selection)]="selectedNode" selectionMode="single"
         (onNodeContextMenuSelect)="onNodeContextMenuSelect($event)"
         [style]="{'border':'none','width':'inherit','max-width':'inherit'}"></p-tree>
