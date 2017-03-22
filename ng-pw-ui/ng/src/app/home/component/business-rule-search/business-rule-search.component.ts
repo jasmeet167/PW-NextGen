@@ -132,6 +132,9 @@ export class BusinessRuleSearchComponent implements OnInit  {
     this.isLobDisabled = true;
     this.isEffDateDisabled = true;
 
+    this.isIncludeOrphansDisabled = true;
+    this.includeOrphans = false;
+
     if (this.envId == null) {
       this.isCompanyCodeDisabled = true;
     } else {
@@ -185,6 +188,9 @@ export class BusinessRuleSearchComponent implements OnInit  {
     this.isLobDisabled = true;
     this.isEffDateDisabled = true;
 
+    this.isIncludeOrphansDisabled = true;
+    this.includeOrphans = false;
+
     if (this.companyCode == null) {
       this.isProductCodeDisabled = true;
     } else {
@@ -225,8 +231,11 @@ export class BusinessRuleSearchComponent implements OnInit  {
 
     if (this.productCode == null) {
       this.isPlanCodeDisabled = true;
+      this.isIncludeOrphansDisabled = true;
+      this.includeOrphans = false;
     } else {
       this.isPlanCodeDisabled = false;
+      this.isIncludeOrphansDisabled = false;
 
       let planCodeOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
