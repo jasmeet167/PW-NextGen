@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -22,13 +21,10 @@ import com.csc.fsg.life.pw.web.actions.tree.TreeWriter;
 import com.csc.fsg.life.pw.web.environment.Environment;
 import com.csc.fsg.life.pw.web.environment.EnvironmentManager;
 import com.csc.fsg.life.rest.exception.BadRequestException;
-import com.csc.fsg.life.rest.exception.ForbiddenException;
 import com.csc.fsg.life.rest.exception.RestServiceException;
 import com.csc.fsg.life.rest.exception.UnexpectedException;
 import com.csc.fsg.life.rest.model.BusinessRuleTreeSearchInput;
 import com.csc.fsg.life.rest.model.ErrorModel;
-import com.csc.fsg.life.rest.model.PlanSearchInput;
-import com.csc.fsg.life.rest.model.SelectItem;
 import com.csc.fsg.life.rest.model.TreeNode;
 import com.csc.fsg.life.rest.model.tree.Node;
 import com.csc.fsg.life.rest.param.RestServiceParam;
@@ -38,9 +34,6 @@ public class BusinessRuleTreeServiceImpl
 	extends RestServiceImpl
 	implements BusinessRuleTreeService
 {
-	@Autowired
-	private SearchService searchService = null;
-
 	public BusinessRuleTreeServiceImpl()
 	{
 		super("com.csc.fsg.life.rest.service.BusinessRuleTreeService");
