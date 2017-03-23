@@ -80,18 +80,7 @@ public class BusinessRuleTreeServiceImpl
 			planCriteria.setLoadNP(true);
 
 			Vector<String> compCodesVector = new Vector<>();
-			if (StringUtils.hasText(planCriteria.getCompanyCode())) {
-				compCodesVector.add(planCriteria.getCompanyCode());
-			}
-			else {
-				Vector<String> companyCodes = getCompanyCodes(param);
-				// Empty contents of companyCodes indicates that the user is not
-				// authorized to view information associated with any company:
-				if (companyCodes.isEmpty())
-					throw new ForbiddenException();
-
-				compCodesVector.addAll(companyCodes);
-			}
+			compCodesVector.add(planCriteria.getCompanyCode());
 
 			List<PlanCriteriaTO> list = Arrays.asList(planCriteria);
 			boolean includeOrphans = input.areOrphansIncluded();
@@ -155,18 +144,6 @@ public class BusinessRuleTreeServiceImpl
 			keyValues.put(PlanTOBase.EFFECTIVE_DATE_KEY, effDate.toString());
 
 		return keyValues;
-	}
-
-	private Vector<String> getCompanyCodes(RestServiceParam param)
-	{
-		PlanSearchInput searchInput = new PlanSearchInput();
-		List<SelectItem> companyList = searchService.getPlanCommonValues(param, searchInput);
-
-		Vector<String> compCodesVector = new Vector<>();
-		for (SelectItem company : companyList)
-			compCodesVector.add((String) company.getValue());
-
-		return compCodesVector;
 	}
 
 	private void processTreeNode(BufferedReader reader, Node parentNode, TreeNodeContainer pushBack, String envId)
