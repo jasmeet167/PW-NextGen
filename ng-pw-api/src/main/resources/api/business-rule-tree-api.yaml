@@ -14,6 +14,69 @@ schemes:
 basePath: /ng-pw-rest
 
 paths:
+  /business-rule-tree/core:
+    get:
+      summary: |
+        Retrieve information required to populate
+        the core part of Business Rule Tree.
+      description: |
+        This endpoint returns information, which can be used
+        to populate the core part of Business Rule Tree.
+      produces:
+        - application/json
+      operationId: getBusinessRuleTreeCore
+      parameters:
+        - name: authToken
+          in: header
+          description: | 
+            Auth Token.
+          required: true
+          type: string
+        - name: envId
+          in: header
+          description: |
+            Environment Id. 
+          required: true
+          type: string
+        - name: companyCode
+          in: header
+          description: |
+            Company Code.
+          required: true
+          type: string
+        - name: productCode
+          in: header
+          description: |
+            Product Code.
+          required: true
+          type: string
+      tags:
+        - Business Rule Tree
+      responses:
+        200:
+          description: |
+            OK.  The data model corresponding to the Company
+            node is returned.
+          schema:
+            $ref: '#/definitions/treeNode'
+        400:
+          description: |
+            Bad Request.  Invalid or malformed request detected.
+          schema: 
+            $ref: '#/definitions/errorModel'
+        401:
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Auth token is either missing or invalid. 
+        403:
+          description: |
+            Forbidden.  The user is not authorized to access
+            the required resources.
+        default:
+          description: Unexpected Error.
+          schema: 
+            $ref: '#/definitions/errorModel'
+
   /business-rule-tree/search:
     get:
       summary: |
@@ -169,6 +232,20 @@ definitions:
   treeNodeData:
     type: object
     properties:
+      lazyNode:
+        type: boolean
+      lazyType:
+        type: string
+        enum:
+          - C   # COMMON
+          - PDF # PDF FUNDS
+          - CC  # COMMON COVERAGE
+          - AB  # ANNUITY BASE PLANS
+          - AP  # PAYOUT PLANS
+          - UB  # UL BASE PLANS
+          - UR  # UL RIDER PLANS
+          - TB  # TRAD BASE PLANS
+          - TR  # TRAD RIDER PLANS
       name:
         type: string
       tableId:

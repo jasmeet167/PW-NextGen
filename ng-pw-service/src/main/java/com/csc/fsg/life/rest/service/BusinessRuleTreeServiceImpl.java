@@ -4,9 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -26,6 +26,9 @@ import com.csc.fsg.life.rest.exception.UnexpectedException;
 import com.csc.fsg.life.rest.model.BusinessRuleTreeSearchInput;
 import com.csc.fsg.life.rest.model.ErrorModel;
 import com.csc.fsg.life.rest.model.TreeNode;
+import com.csc.fsg.life.rest.model.TreeNode.TypeEnum;
+import com.csc.fsg.life.rest.model.TreeNodeData;
+import com.csc.fsg.life.rest.model.TreeNodeData.LazyTypeEnum;
 import com.csc.fsg.life.rest.model.tree.Node;
 import com.csc.fsg.life.rest.param.RestServiceParam;
 
@@ -34,9 +37,227 @@ public class BusinessRuleTreeServiceImpl
 	extends RestServiceImpl
 	implements BusinessRuleTreeService
 {
+	static private final String STYLE_FOLDER = "tn-1";
+	static private final String STYLE_LEAF = "tn-2";
+
+	static private final String ICON_FOLDER_OPEN = "fa-folder-open";
+	static private final String ICON_FOLDER_CLOSED = "fa-folder";
+	static private final String ICON_LEAF = "fa-cube";
+
 	public BusinessRuleTreeServiceImpl()
 	{
 		super("com.csc.fsg.life.rest.service.BusinessRuleTreeService");
+	}
+
+	public TreeNode getBusinessRuleTreeCore(RestServiceParam param, String productCode)
+	{
+		try {
+			String envId = param.getEnvId();
+			String companyCode = param.getCompanyCode();
+
+			boolean isGoodEnvironment = false;
+			if (StringUtils.hasText(envId)) {
+				Map<String, Environment> environments = EnvironmentManager.getInstance().getEnvironments();
+				if (environments.get(envId) != null)
+					isGoodEnvironment = true;
+			}
+			if (!isGoodEnvironment) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_environment"));
+				throw new BadRequestException(model);
+			}
+
+			if (!StringUtils.hasText(companyCode)) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_company"));
+				throw new BadRequestException(model);
+			}
+
+			Environment environment = EnvironmentManager.getInstance().getEnvironment(envId);
+			String companyName = environment.getAssistent().getCompanyCodesAndNames().get(companyCode);
+			if (companyName == null)
+				companyName = companyCode;
+
+			TreeNode node = new TreeNode();
+			node.setType(TypeEnum.C);
+			node.setLabel(companyName);
+			node.setStyleClass(STYLE_FOLDER);
+			node.setExpanded(Boolean.TRUE);
+			setFolderIcons(node);
+			node.setChildren(getStarterNodes(productCode));
+
+			return node;
+		}
+		catch (RestServiceException e) {
+			throw e;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			ErrorModel model = errorModelFactory.newErrorModel(UnexpectedException.HTTP_STATUS);
+			throw new UnexpectedException(model);
+		}
+	}
+
+	private List<TreeNode> getStarterNodes(String productCode)
+	{
+		List<TreeNode> starterNodes = new LinkedList<>();
+
+		TreeNode common = new TreeNode();
+		common.setType(TypeEnum.CTF);
+		common.setLabel(getMessage("common_folder_label"));
+		common.setStyleClass(STYLE_FOLDER);
+		setFolderIcons(common);
+		TreeNodeData commonData = new TreeNodeData();
+		commonData.setLazyNode(Boolean.TRUE);
+		commonData.setLazyType(LazyTypeEnum.C);
+		common.setData(commonData);
+		starterNodes.add(common);
+
+		TreeNode pdf = new TreeNode();
+		pdf.setType(TypeEnum.PDF);
+		pdf.setLabel(getMessage("pdf_folder_label"));
+		pdf.setStyleClass(STYLE_FOLDER);
+		setFolderIcons(pdf);
+		TreeNodeData pdfData = new TreeNodeData();
+		pdfData.setLazyNode(Boolean.TRUE);
+		pdfData.setLazyType(LazyTypeEnum.PDF);
+		pdf.setData(pdfData);
+		starterNodes.add(pdf);
+
+		TreeNode commonCoverage = new TreeNode();
+		commonCoverage.setType(TypeEnum.PDF);
+		commonCoverage.setLabel(getMessage("common_cov_folder_label"));
+		commonCoverage.setStyleClass(STYLE_FOLDER);
+		setFolderIcons(commonCoverage);
+		TreeNodeData commonCovData = new TreeNodeData();
+		commonCovData.setLazyNode(Boolean.TRUE);
+		commonCovData.setLazyType(LazyTypeEnum.CC);
+		commonCoverage.setData(commonCovData);
+		starterNodes.add(commonCoverage);
+
+		if (productCode.startsWith("A")) {
+			TreeNode ann = new TreeNode();
+			starterNodes.add(ann);
+
+			ann.setType(TypeEnum.AF);
+			ann.setLabel(getMessage("annuity_folder_label"));
+			ann.setStyleClass(STYLE_FOLDER);
+			setFolderIcons(ann);
+			ann.setChildren(getAnnuityStarterNodes(productCode));
+		}
+		else if (productCode.startsWith("U")) {
+			TreeNode ul = new TreeNode();
+			starterNodes.add(ul);
+
+			ul.setType(TypeEnum.UF);
+			ul.setLabel(getMessage("ul_folder_label"));
+			ul.setStyleClass(STYLE_FOLDER);
+			setFolderIcons(ul);
+			ul.setChildren(getUlStarterNodes());
+		}
+		else if (productCode.startsWith("T")) {
+			TreeNode trad = new TreeNode();
+			starterNodes.add(trad);
+
+			trad.setType(TypeEnum.TF);
+			trad.setLabel(getMessage("trad_folder_label"));
+			trad.setStyleClass(STYLE_FOLDER);
+			setFolderIcons(trad);
+			trad.setChildren(getTradStarterNodes());
+		}
+
+		return starterNodes;
+	}
+
+	private List<TreeNode> getAnnuityStarterNodes(String productCode)
+	{
+		List<TreeNode> starterNodes = new LinkedList<>();
+
+		TreeNode basePlanFolder = new TreeNode();
+		basePlanFolder.setType(TypeEnum.PF);
+		basePlanFolder.setLabel(getMessage("base_plans_folder_label"));
+		basePlanFolder.setStyleClass(STYLE_FOLDER);
+		TreeNodeData basePlanData = new TreeNodeData();
+		basePlanData.setLazyNode(Boolean.TRUE);
+		basePlanData.setLazyType(LazyTypeEnum.AB);
+		basePlanFolder.setData(basePlanData);
+		setFolderIcons(basePlanFolder);
+		starterNodes.add(basePlanFolder);
+		if (!productCode.matches("A[01234\\*]"))
+			basePlanFolder.setLeaf(Boolean.TRUE);
+
+		TreeNode payoutPlanFolder = new TreeNode();
+		payoutPlanFolder.setType(TypeEnum.PPF);
+		payoutPlanFolder.setLabel(getMessage("payout_plans_folder_label"));
+		payoutPlanFolder.setStyleClass(STYLE_FOLDER);
+		TreeNodeData payoutPlanData = new TreeNodeData();
+		payoutPlanData.setLazyNode(Boolean.TRUE);
+		payoutPlanData.setLazyType(LazyTypeEnum.AP);
+		payoutPlanFolder.setData(payoutPlanData);
+		setFolderIcons(payoutPlanFolder);
+		starterNodes.add(payoutPlanFolder);
+		if (!productCode.matches("A[5\\*]"))
+			payoutPlanFolder.setLeaf(Boolean.TRUE);
+
+		return starterNodes;
+	}
+
+	private List<TreeNode> getUlStarterNodes()
+	{
+		List<TreeNode> starterNodes = new LinkedList<>();
+
+		TreeNode basePlanFolder = new TreeNode();
+		basePlanFolder.setType(TypeEnum.PF);
+		basePlanFolder.setLabel(getMessage("base_plans_folder_label"));
+		basePlanFolder.setStyleClass(STYLE_FOLDER);
+		TreeNodeData basePlanData = new TreeNodeData();
+		basePlanData.setLazyNode(Boolean.TRUE);
+		basePlanData.setLazyType(LazyTypeEnum.UB);
+		basePlanFolder.setData(basePlanData);
+		setFolderIcons(basePlanFolder);
+		starterNodes.add(basePlanFolder);
+
+		TreeNode riderPlanFolder = new TreeNode();
+		riderPlanFolder.setType(TypeEnum.RF);
+		riderPlanFolder.setLabel(getMessage("rider_plans_folder_label"));
+		riderPlanFolder.setStyleClass(STYLE_FOLDER);
+		TreeNodeData riderPlanData = new TreeNodeData();
+		riderPlanData.setLazyNode(Boolean.TRUE);
+		riderPlanData.setLazyType(LazyTypeEnum.UR);
+		riderPlanFolder.setData(riderPlanData);
+		setFolderIcons(riderPlanFolder);
+		starterNodes.add(riderPlanFolder);
+
+		return starterNodes;
+	}
+
+	private List<TreeNode> getTradStarterNodes()
+	{
+		List<TreeNode> starterNodes = new LinkedList<>();
+
+		TreeNode basePlanFolder = new TreeNode();
+		basePlanFolder.setType(TypeEnum.PF);
+		basePlanFolder.setLabel(getMessage("base_plans_folder_label"));
+		basePlanFolder.setStyleClass(STYLE_FOLDER);
+		TreeNodeData basePlanData = new TreeNodeData();
+		basePlanData.setLazyNode(Boolean.TRUE);
+		basePlanData.setLazyType(LazyTypeEnum.TB);
+		basePlanFolder.setData(basePlanData);
+		setFolderIcons(basePlanFolder);
+		starterNodes.add(basePlanFolder);
+
+		TreeNode riderPlanFolder = new TreeNode();
+		riderPlanFolder.setType(TypeEnum.RF);
+		riderPlanFolder.setLabel(getMessage("rider_plans_folder_label"));
+		riderPlanFolder.setStyleClass(STYLE_FOLDER);
+		TreeNodeData riderPlanData = new TreeNodeData();
+		riderPlanData.setLazyNode(Boolean.TRUE);
+		riderPlanData.setLazyType(LazyTypeEnum.TR);
+		riderPlanFolder.setData(riderPlanData);
+		setFolderIcons(riderPlanFolder);
+		starterNodes.add(riderPlanFolder);
+
+		return starterNodes;
 	}
 
 	public List<TreeNode> getBusinessRulesTree(RestServiceParam param, BusinessRuleTreeSearchInput input)
@@ -214,7 +435,7 @@ public class BusinessRuleTreeServiceImpl
 
 	private List<TreeNode> transformToDeclaredTypes(List<Node> existingNodes)
 	{
-		List<TreeNode> transformedNodes = new ArrayList<>();
+		List<TreeNode> transformedNodes = new LinkedList<>();
 
 		for (Node existingNode : existingNodes) {
 			TreeNode transformedNode = new TreeNode();
@@ -236,17 +457,17 @@ public class BusinessRuleTreeServiceImpl
 				case PF:		// PLAN_FOLDER
 				case RF:		// RIDER_FOLDER
 				case PPF: {		// PAYOUTPLAN_FOLDER
-					transformedNode.setStyleClass("tn-1");
+					transformedNode.setStyleClass(STYLE_FOLDER);
 					setFolderIcons(transformedNode);
 					break;
 				}
 				default: {
 					if (transformedChildren.isEmpty()) {
-						transformedNode.setStyleClass("tn-2");
-						transformedNode.setIcon("fa-cube");
+						transformedNode.setStyleClass(STYLE_LEAF);
+						transformedNode.setIcon(ICON_LEAF);
 					}
 					else {
-						transformedNode.setStyleClass("tn-1");
+						transformedNode.setStyleClass(STYLE_FOLDER);
 						setFolderIcons(transformedNode);
 					}
 					break;
@@ -260,7 +481,7 @@ public class BusinessRuleTreeServiceImpl
 	private void setFolderIcons(TreeNode node)
 	{
 		node.setIcon(null);
-		node.setExpandedIcon("fa-folder-open");
-		node.setCollapsedIcon("fa-folder");
+		node.setExpandedIcon(ICON_FOLDER_OPEN);
+		node.setCollapsedIcon(ICON_FOLDER_CLOSED);
 	}
 }

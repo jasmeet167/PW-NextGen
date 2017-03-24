@@ -33,6 +33,14 @@ public class TreeNodeDataSerializer
 	{
 		gen.writeStartObject();
 
+		Boolean isLazyNode = value.getLazyNode();
+		if (isLazyNode != null)
+			gen.writeBooleanField("lazyNode", isLazyNode.booleanValue());
+
+		String lazyType = value.getLazyType().toString();
+		if (StringUtils.hasText(lazyType))
+			gen.writeStringField("lazyType", lazyType);
+
 		String name = value.getName();
 		if (StringUtils.hasText(name))
 			gen.writeStringField("name", name);
@@ -62,6 +70,13 @@ public class TreeNodeDataSerializer
 
 	static public boolean isEmptyData(TreeNodeData data)
 	{
+		if (data == null)
+			return true;
+
+		if (data.getLazyNode() != null)
+			return false;
+		if (data.getLazyType() != null)
+			return false;
 		if (StringUtils.hasText(data.getName()))
 			return false;
 		if (StringUtils.hasText(data.getTableId()))
@@ -84,6 +99,9 @@ public class TreeNodeDataSerializer
 
 	static private boolean isEmpty(TreeNodePlanKey planKey)
 	{
+		if (planKey == null)
+			return true;
+
 		if (StringUtils.hasText(planKey.getProductPrefix()))
 			return false;
 		if (StringUtils.hasText(planKey.getProductSuffix()))

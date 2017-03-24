@@ -11,5 +11,8 @@ import com.csc.fsg.life.rest.param.RestServiceParam;
 public interface BusinessRuleTreeService
 {
 	@SecuredMethod(action = AuthorizationAction.VIEW)
+	public TreeNode getBusinessRuleTreeCore(RestServiceParam param, String productCode);
+
+	@SecuredMethod(action = AuthorizationAction.VIEW)
 	public List<TreeNode> getBusinessRulesTree(RestServiceParam param, BusinessRuleTreeSearchInput input);
 }
