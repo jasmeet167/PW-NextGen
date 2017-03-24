@@ -55,10 +55,12 @@ paths:
       responses:
         200:
           description: |
-            OK.  The data model corresponding to the Company
-            node is returned.
+            OK.  The data model corresponding to the core part
+            of Business Rule Tree is returned.
           schema:
-            $ref: '#/definitions/treeNode'
+            type: array
+            items:
+              $ref: '#/definitions/treeNode'
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.

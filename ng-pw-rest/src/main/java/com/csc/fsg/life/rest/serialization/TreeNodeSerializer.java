@@ -59,11 +59,11 @@ public class TreeNodeSerializer
 			gen.writeStringField("collapsedIcon", collapsedIcon);
 
 		Boolean isLeaf = value.getLeaf();
-		if (Boolean.TRUE.equals(isLeaf))
+		if (isLeaf != null)
 			gen.writeBooleanField("leaf", isLeaf.booleanValue());
 
 		Boolean isExpanded = value.getExpanded();
-		if (Boolean.TRUE.equals(isExpanded))
+		if (isExpanded != null)
 			gen.writeBooleanField("expanded", isExpanded.booleanValue());
 
 		TreeNodeData data = value.getData();

@@ -9,6 +9,30 @@ export class BusinessRuleTreeService {
   constructor(private http: Http) {
   }
 
+  getBusinessRuleTreeCore(authToken: string, envId: string, companyCode: string,
+                          productCode: string): Observable<TreeNode[]> {
+    const filterHeaders: Headers = new Headers();
+    filterHeaders.append('Accept', 'application/json');
+    filterHeaders.append('authToken', authToken);
+    if (envId) {
+      filterHeaders.append('envId', envId);
+    }
+    if (companyCode) {
+      filterHeaders.append('companyCode', companyCode);
+    }
+    if (productCode) {
+      filterHeaders.append('productCode', productCode);
+    }
+
+    const options: RequestOptions = new RequestOptions();
+    options.headers = filterHeaders;
+    options.url = sessionStorage['restServiceBaseUrl'] + '/business-rule-tree/core';
+    options.method = RequestMethod.Get;
+
+    return this.http.request(new Request(options))
+               .map(response => { return <TreeNode[]> response.json(); });
+  }
+
   getBusinessRuleTree(authToken: string, viewChanges: boolean, envId: string,
                       companyCode: string, productCode: string, planCode: string,
                       issueState: string, lob: string, effDate: string,

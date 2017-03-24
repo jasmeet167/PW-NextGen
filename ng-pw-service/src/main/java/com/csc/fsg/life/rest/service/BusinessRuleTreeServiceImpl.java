@@ -49,7 +49,7 @@ public class BusinessRuleTreeServiceImpl
 		super("com.csc.fsg.life.rest.service.BusinessRuleTreeService");
 	}
 
-	public TreeNode getBusinessRuleTreeCore(RestServiceParam param, String productCode)
+	public List<TreeNode> getBusinessRuleTreeCore(RestServiceParam param, String productCode)
 	{
 		try {
 			String envId = param.getEnvId();
@@ -86,7 +86,9 @@ public class BusinessRuleTreeServiceImpl
 			setFolderIcons(node);
 			node.setChildren(getStarterNodes(productCode));
 
-			return node;
+			List<TreeNode> treeCore = new LinkedList<>();
+			treeCore.add(node);
+			return treeCore;
 		}
 		catch (RestServiceException e) {
 			throw e;
@@ -106,6 +108,7 @@ public class BusinessRuleTreeServiceImpl
 		common.setType(TypeEnum.CTF);
 		common.setLabel(getMessage("common_folder_label"));
 		common.setStyleClass(STYLE_FOLDER);
+		common.setLeaf(Boolean.FALSE);
 		setFolderIcons(common);
 		TreeNodeData commonData = new TreeNodeData();
 		commonData.setLazyNode(Boolean.TRUE);
@@ -117,6 +120,7 @@ public class BusinessRuleTreeServiceImpl
 		pdf.setType(TypeEnum.PDF);
 		pdf.setLabel(getMessage("pdf_folder_label"));
 		pdf.setStyleClass(STYLE_FOLDER);
+		pdf.setLeaf(Boolean.FALSE);
 		setFolderIcons(pdf);
 		TreeNodeData pdfData = new TreeNodeData();
 		pdfData.setLazyNode(Boolean.TRUE);
@@ -128,6 +132,7 @@ public class BusinessRuleTreeServiceImpl
 		commonCoverage.setType(TypeEnum.PDF);
 		commonCoverage.setLabel(getMessage("common_cov_folder_label"));
 		commonCoverage.setStyleClass(STYLE_FOLDER);
+		commonCoverage.setLeaf(Boolean.FALSE);
 		setFolderIcons(commonCoverage);
 		TreeNodeData commonCovData = new TreeNodeData();
 		commonCovData.setLazyNode(Boolean.TRUE);
@@ -174,6 +179,7 @@ public class BusinessRuleTreeServiceImpl
 		List<TreeNode> starterNodes = new LinkedList<>();
 
 		TreeNode basePlanFolder = new TreeNode();
+		starterNodes.add(basePlanFolder);
 		basePlanFolder.setType(TypeEnum.PF);
 		basePlanFolder.setLabel(getMessage("base_plans_folder_label"));
 		basePlanFolder.setStyleClass(STYLE_FOLDER);
@@ -182,11 +188,13 @@ public class BusinessRuleTreeServiceImpl
 		basePlanData.setLazyType(LazyTypeEnum.AB);
 		basePlanFolder.setData(basePlanData);
 		setFolderIcons(basePlanFolder);
-		starterNodes.add(basePlanFolder);
-		if (!productCode.matches("A[01234\\*]"))
+		if (productCode.matches("A[01234\\*]"))
+			basePlanFolder.setLeaf(Boolean.FALSE);
+		else
 			basePlanFolder.setLeaf(Boolean.TRUE);
 
 		TreeNode payoutPlanFolder = new TreeNode();
+		starterNodes.add(payoutPlanFolder);
 		payoutPlanFolder.setType(TypeEnum.PPF);
 		payoutPlanFolder.setLabel(getMessage("payout_plans_folder_label"));
 		payoutPlanFolder.setStyleClass(STYLE_FOLDER);
@@ -195,8 +203,9 @@ public class BusinessRuleTreeServiceImpl
 		payoutPlanData.setLazyType(LazyTypeEnum.AP);
 		payoutPlanFolder.setData(payoutPlanData);
 		setFolderIcons(payoutPlanFolder);
-		starterNodes.add(payoutPlanFolder);
-		if (!productCode.matches("A[5\\*]"))
+		if (productCode.matches("A[5\\*]"))
+			payoutPlanFolder.setLeaf(Boolean.FALSE);
+		else
 			payoutPlanFolder.setLeaf(Boolean.TRUE);
 
 		return starterNodes;
@@ -207,26 +216,28 @@ public class BusinessRuleTreeServiceImpl
 		List<TreeNode> starterNodes = new LinkedList<>();
 
 		TreeNode basePlanFolder = new TreeNode();
+		starterNodes.add(basePlanFolder);
 		basePlanFolder.setType(TypeEnum.PF);
 		basePlanFolder.setLabel(getMessage("base_plans_folder_label"));
 		basePlanFolder.setStyleClass(STYLE_FOLDER);
+		basePlanFolder.setLeaf(Boolean.FALSE);
 		TreeNodeData basePlanData = new TreeNodeData();
 		basePlanData.setLazyNode(Boolean.TRUE);
 		basePlanData.setLazyType(LazyTypeEnum.UB);
 		basePlanFolder.setData(basePlanData);
 		setFolderIcons(basePlanFolder);
-		starterNodes.add(basePlanFolder);
 
 		TreeNode riderPlanFolder = new TreeNode();
+		starterNodes.add(riderPlanFolder);
 		riderPlanFolder.setType(TypeEnum.RF);
 		riderPlanFolder.setLabel(getMessage("rider_plans_folder_label"));
 		riderPlanFolder.setStyleClass(STYLE_FOLDER);
+		riderPlanFolder.setLeaf(Boolean.FALSE);
 		TreeNodeData riderPlanData = new TreeNodeData();
 		riderPlanData.setLazyNode(Boolean.TRUE);
 		riderPlanData.setLazyType(LazyTypeEnum.UR);
 		riderPlanFolder.setData(riderPlanData);
 		setFolderIcons(riderPlanFolder);
-		starterNodes.add(riderPlanFolder);
 
 		return starterNodes;
 	}
@@ -236,26 +247,28 @@ public class BusinessRuleTreeServiceImpl
 		List<TreeNode> starterNodes = new LinkedList<>();
 
 		TreeNode basePlanFolder = new TreeNode();
+		starterNodes.add(basePlanFolder);
 		basePlanFolder.setType(TypeEnum.PF);
 		basePlanFolder.setLabel(getMessage("base_plans_folder_label"));
 		basePlanFolder.setStyleClass(STYLE_FOLDER);
+		basePlanFolder.setLeaf(Boolean.FALSE);
 		TreeNodeData basePlanData = new TreeNodeData();
 		basePlanData.setLazyNode(Boolean.TRUE);
 		basePlanData.setLazyType(LazyTypeEnum.TB);
 		basePlanFolder.setData(basePlanData);
 		setFolderIcons(basePlanFolder);
-		starterNodes.add(basePlanFolder);
 
 		TreeNode riderPlanFolder = new TreeNode();
+		starterNodes.add(riderPlanFolder);
 		riderPlanFolder.setType(TypeEnum.RF);
 		riderPlanFolder.setLabel(getMessage("rider_plans_folder_label"));
 		riderPlanFolder.setStyleClass(STYLE_FOLDER);
+		riderPlanFolder.setLeaf(Boolean.FALSE);
 		TreeNodeData riderPlanData = new TreeNodeData();
 		riderPlanData.setLazyNode(Boolean.TRUE);
 		riderPlanData.setLazyType(LazyTypeEnum.TR);
 		riderPlanFolder.setData(riderPlanData);
 		setFolderIcons(riderPlanFolder);
-		starterNodes.add(riderPlanFolder);
 
 		return starterNodes;
 	}

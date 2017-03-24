@@ -26,14 +26,14 @@ public class BusinessRuleTreeApiController
 	private BusinessRuleTreeService businessRuleTreeService = null;
 
 	@RequestMapping(value = "/business-rule-tree/core", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<TreeNode> getBusinessRuleTreeCore(@RequestHeader(value = "authToken", required = true) String authToken,
-															@RequestHeader(value = "envId", required = true) String envId,
-															@RequestHeader(value = "companyCode", required = true) String companyCode,
-															@RequestHeader(value = "productCode", required = true) String productCode)
+	public ResponseEntity<List<TreeNode>> getBusinessRuleTreeCore(@RequestHeader(value = "authToken", required = true) String authToken,
+																  @RequestHeader(value = "envId", required = true) String envId,
+																  @RequestHeader(value = "companyCode", required = true) String companyCode,
+																  @RequestHeader(value = "productCode", required = true) String productCode)
 	{
 		RestServiceParam param = buildRestServiceParam(authToken, envId, companyCode);
-		TreeNode companyNode = businessRuleTreeService.getBusinessRuleTreeCore(param, productCode);
-		return new ResponseEntity<>(companyNode, HttpStatus.OK);
+		List<TreeNode> treeCore = businessRuleTreeService.getBusinessRuleTreeCore(param, productCode);
+		return new ResponseEntity<>(treeCore, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/business-rule-tree/search", produces = { "application/json" }, method = RequestMethod.GET)

@@ -4,6 +4,7 @@ import { TreeNode, MenuItem } from 'primeng/primeng';
 
 import { NotificationService } from 'app/notification/service/notification.service';
 import { MenuService } from 'app/util/service/menu.service';
+import { TreeNodeData } from './model/tree-node-data';
 import { BusinessRuleTreeService } from './service/business-rule-tree.service';
 
 // The property encapsulation: ViewEncapsulation.None is required to load resources,
@@ -75,9 +76,8 @@ export class BusinessRuleTreeComponent implements OnInit {
     this.businessRuleTree = null;
     this.notificationService.showWaitIndicator(true);
     this.businessRuleTreeService
-        .getBusinessRuleTree(this.authToken, this.viewChanges, this.envId,
-                             this.companyCode, this.productCode, this.planCode,
-                             this.issueState, this.lob, this.effDate, this.includeOrphans)
+        .getBusinessRuleTreeCore(this.authToken, this.envId,
+                                 this.companyCode, this.productCode)
         .subscribe(
           res => this.businessRuleTree = res,
           err => {
@@ -89,11 +89,14 @@ export class BusinessRuleTreeComponent implements OnInit {
   }
 
   public onNodeExpand(event: any) {
-    console.log('Node Expanded: ' + event.node.data.tableId);
   }
 
   public onNodeCollapse(event: any) {
-    console.log('Node Collapsed: ' + event.node.data.tableId);
+    const node: TreeNode = event.node;
+    const data: TreeNodeData = node.data;
+    if (data && data.lazyNode) {
+      node.children = <TreeNode[]> [];
+    }
   }
 
   public onNodeContextMenuSelect(event: any) {
