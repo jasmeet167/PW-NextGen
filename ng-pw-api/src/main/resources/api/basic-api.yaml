@@ -31,7 +31,7 @@ paths:
           description: |
             Credentials required to authenticate a user.
           required: true
-          schema: 
+          schema:
             $ref: '#/definitions/credentials'
       tags:
         - Security
@@ -46,10 +46,10 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Auth token is either missing or invalid. 
+            Auth token is either missing or invalid.
         default:
           description: Unexpected Error.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
 
   /security/logout:
@@ -57,14 +57,14 @@ paths:
       summary: Logout a user.
       description: |
         This endpoint is used to terminate the security session corresponding
-        to the provided token. 
+        to the provided token.
       produces:
         - application/json
       operationId: logout
       parameters:
         - name: authToken
           in: header
-          description: | 
+          description: |
             Auth Token.
           required: true
           type: string
@@ -74,28 +74,28 @@ paths:
         200:
           description: |
             OK.  Logout has been successfully completed, and
-            the corresponding security session has been invalidated. 
+            the corresponding security session has been invalidated.
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Auth token is either missing or invalid. 
+            Auth token is either missing or invalid.
         default:
           description: Unexpected Error.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
 
   /application/about:
     get:
       summary: Retrieve general information about the application.
       description: |
-        This endpoint returns general information about the application. 
+        This endpoint returns general information about the application.
       produces:
         - application/json
       operationId: getInfoAboutApplication
       parameters:
         - name: authToken
           in: header
-          description: | 
+          description: |
             Auth Token.
           required: true
           type: string
@@ -110,10 +110,10 @@ paths:
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Auth token is either missing or invalid. 
+            Auth token is either missing or invalid.
         default:
           description: Unexpected Error.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
 
   /search/common/environment:
@@ -122,14 +122,14 @@ paths:
       description: |
         This endpoint returns a list of Environments configured in
         the Product Wizard installation, which the authenticated user
-        is authorized to access. 
+        is authorized to access.
       produces:
         - application/json
       operationId: getCommonEnvironments
       parameters:
         - name: authToken
           in: header
-          description: | 
+          description: |
             Auth Token.
           required: true
           type: string
@@ -147,24 +147,24 @@ paths:
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Auth token is either missing or invalid. 
+            Auth token is either missing or invalid.
         403:
           description: |
             Forbidden.  The user is not authorized to access
             any of the configured environments.
         404:
           description: |
-            Not Found.  No configured environments have been found. 
-          schema: 
+            Not Found.  No configured environments have been found.
+          schema:
             $ref: '#/definitions/errorModel'
         default:
           description: Unexpected Error.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
 
   /search/plan/company:
@@ -173,27 +173,27 @@ paths:
       description: |
         This endpoint returns a list of Company Codes, which
         the authenticated user is authorized to access, for
-        filters in Business Rule views. 
+        filters in Business Rule views.
       produces:
         - application/json
       operationId: getPlanCompanyCodes
       parameters:
         - name: authToken
           in: header
-          description: | 
+          description: |
             Auth Token.
           required: true
           type: string
         - name: viewChanges
           in: header
           description: |
-            Indicator used to request Rules or Rules with changes.  
+            Indicator used to request Rules or Rules with changes.
           required: true
           type: boolean
         - name: envId
           in: header
           description: |
-            Environment Id. 
+            Environment Id.
           required: true
           type: string
       tags:
@@ -210,24 +210,24 @@ paths:
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Auth token is either missing or invalid. 
+            Auth token is either missing or invalid.
         403:
           description: |
             Forbidden.  The user is not authorized to access
             the required resources.
         404:
           description: |
-            Not Found.  No data found matching the provided key values. 
-          schema: 
+            Not Found.  No data found matching the provided key values.
+          schema:
             $ref: '#/definitions/errorModel'
         default:
           description: Unexpected Error.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
 
   /search/plan/product:
@@ -242,20 +242,20 @@ paths:
       parameters:
         - name: authToken
           in: header
-          description: | 
+          description: |
             Auth Token.
           required: true
           type: string
         - name: viewChanges
           in: header
           description: |
-            Indicator used to request Rules or Rules with changes.  
+            Indicator used to request Rules or Rules with changes.
           required: true
           type: boolean
         - name: envId
           in: header
           description: |
-            Environment Id. 
+            Environment Id.
           required: true
           type: string
         - name: companyCode
@@ -278,24 +278,24 @@ paths:
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Auth token is either missing or invalid. 
+            Auth token is either missing or invalid.
         403:
           description: |
             Forbidden.  The user is not authorized to access
             the required resources.
         404:
           description: |
-            Not Found.  No data found matching the provided key values. 
-          schema: 
+            Not Found.  No data found matching the provided key values.
+          schema:
             $ref: '#/definitions/errorModel'
         default:
           description: Unexpected Error.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
 
   /search/plan/plan:
@@ -310,20 +310,20 @@ paths:
       parameters:
         - name: authToken
           in: header
-          description: | 
+          description: |
             Auth Token.
           required: true
           type: string
         - name: viewChanges
           in: header
           description: |
-            Indicator used to request Rules or Rules with changes.  
+            Indicator used to request Rules or Rules with changes.
           required: true
           type: boolean
         - name: envId
           in: header
           description: |
-            Environment Id. 
+            Environment Id.
           required: true
           type: string
         - name: companyCode
@@ -352,24 +352,24 @@ paths:
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Auth token is either missing or invalid. 
+            Auth token is either missing or invalid.
         403:
           description: |
             Forbidden.  The user is not authorized to access
             the required resources.
         404:
           description: |
-            Not Found.  No data found matching the provided key values. 
-          schema: 
+            Not Found.  No data found matching the provided key values.
+          schema:
             $ref: '#/definitions/errorModel'
         default:
           description: Unexpected Error.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
 
   /search/plan/state:
@@ -384,20 +384,20 @@ paths:
       parameters:
         - name: authToken
           in: header
-          description: | 
+          description: |
             Auth Token.
           required: true
           type: string
         - name: viewChanges
           in: header
           description: |
-            Indicator used to request Rules or Rules with changes.  
+            Indicator used to request Rules or Rules with changes.
           required: true
           type: boolean
         - name: envId
           in: header
           description: |
-            Environment Id. 
+            Environment Id.
           required: true
           type: string
         - name: companyCode
@@ -432,24 +432,24 @@ paths:
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Auth token is either missing or invalid. 
+            Auth token is either missing or invalid.
         403:
           description: |
             Forbidden.  The user is not authorized to access
             the required resources.
         404:
           description: |
-            Not Found.  No data found matching the provided key values. 
-          schema: 
+            Not Found.  No data found matching the provided key values.
+          schema:
             $ref: '#/definitions/errorModel'
         default:
           description: Unexpected Error.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
 
   /search/plan/lob:
@@ -464,20 +464,20 @@ paths:
       parameters:
         - name: authToken
           in: header
-          description: | 
+          description: |
             Auth Token.
           required: true
           type: string
         - name: viewChanges
           in: header
           description: |
-            Indicator used to request Rules or Rules with changes.  
+            Indicator used to request Rules or Rules with changes.
           required: true
           type: boolean
         - name: envId
           in: header
           description: |
-            Environment Id. 
+            Environment Id.
           required: true
           type: string
         - name: companyCode
@@ -518,24 +518,24 @@ paths:
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Auth token is either missing or invalid. 
+            Auth token is either missing or invalid.
         403:
           description: |
             Forbidden.  The user is not authorized to access
             the required resources.
         404:
           description: |
-            Not Found.  No data found matching the provided key values. 
-          schema: 
+            Not Found.  No data found matching the provided key values.
+          schema:
             $ref: '#/definitions/errorModel'
         default:
           description: Unexpected Error.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
 
   /search/plan/effdate:
@@ -550,20 +550,20 @@ paths:
       parameters:
         - name: authToken
           in: header
-          description: | 
+          description: |
             Auth Token.
           required: true
           type: string
         - name: viewChanges
           in: header
           description: |
-            Indicator used to request Rules or Rules with changes.  
+            Indicator used to request Rules or Rules with changes.
           required: true
           type: boolean
         - name: envId
           in: header
           description: |
-            Environment Id. 
+            Environment Id.
           required: true
           type: string
         - name: companyCode
@@ -610,24 +610,24 @@ paths:
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Auth token is either missing or invalid. 
+            Auth token is either missing or invalid.
         403:
           description: |
             Forbidden.  The user is not authorized to access
             the required resources.
         404:
           description: |
-            Not Found.  No data found matching the provided key values. 
-          schema: 
+            Not Found.  No data found matching the provided key values.
+          schema:
             $ref: '#/definitions/errorModel'
         default:
           description: Unexpected Error.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
 
   /search/plan/project:
@@ -642,7 +642,7 @@ paths:
       parameters:
         - name: authToken
           in: header
-          description: | 
+          description: |
             Auth Token.
           required: true
           type: string
@@ -666,24 +666,24 @@ paths:
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Auth token is either missing or invalid. 
+            Auth token is either missing or invalid.
         403:
           description: |
             Forbidden.  The user is not authorized to access
             the required resources.
         404:
           description: |
-            Not Found.  No projects found matching the provided key values. 
-          schema: 
+            Not Found.  No projects found matching the provided key values.
+          schema:
             $ref: '#/definitions/errorModel'
         default:
           description: Unexpected Error.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
 
   /search/plan/table:
@@ -698,7 +698,7 @@ paths:
       parameters:
         - name: authToken
           in: header
-          description: | 
+          description: |
             Auth Token.
           required: true
           type: string
@@ -728,12 +728,12 @@ paths:
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Auth token is either missing or invalid. 
+            Auth token is either missing or invalid.
         403:
           description: |
             Forbidden.  The user is not authorized to access
@@ -741,8 +741,8 @@ paths:
         404:
           description: |
             Not Found.  No business rule tables found matching
-            the provided key values. 
-          schema: 
+            the provided key values.
+          schema:
             $ref: '#/definitions/errorModel'
         default:
           description: Unexpected Error.
@@ -766,7 +766,7 @@ paths:
       parameters:
         - name: authToken
           in: header
-          description: | 
+          description: |
             Auth Token.
           required: true
           type: string
@@ -784,24 +784,24 @@ paths:
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Auth token is either missing or invalid. 
+            Auth token is either missing or invalid.
         403:
           description: |
             Forbidden.  The user is not authorized to access
             the required resources.
         404:
           description: |
-            Not Found. 
-          schema: 
+            Not Found.
+          schema:
             $ref: '#/definitions/errorModel'
         default:
           description: Unexpected Error.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
 
   /search/changes/filter:
@@ -819,7 +819,7 @@ paths:
       parameters:
         - name: authToken
           in: header
-          description: | 
+          description: |
             Auth Token.
           required: true
           type: string
@@ -840,24 +840,24 @@ paths:
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Auth token is either missing or invalid. 
+            Auth token is either missing or invalid.
         403:
           description: |
             Forbidden.  The user is not authorized to access
             the required resources.
         404:
           description: |
-            Not Found. 
-          schema: 
+            Not Found.
+          schema:
             $ref: '#/definitions/errorModel'
         default:
           description: Unexpected Error.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
 
   /search/apply/filter:
@@ -875,7 +875,7 @@ paths:
       parameters:
         - name: authToken
           in: header
-          description: | 
+          description: |
             Auth Token.
           required: true
           type: string
@@ -896,24 +896,24 @@ paths:
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Auth token is either missing or invalid. 
+            Auth token is either missing or invalid.
         403:
           description: |
             Forbidden.  The user is not authorized to access
             the required resources.
         404:
           description: |
-            Not Found. 
-          schema: 
+            Not Found.
+          schema:
             $ref: '#/definitions/errorModel'
         default:
           description: Unexpected Error.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
 
   /search/audit/filter:
@@ -931,11 +931,11 @@ paths:
       parameters:
         - name: authToken
           in: header
-          description: | 
+          description: |
             Auth Token.
           required: true
           type: string
-        - name: filterAspect 
+        - name: filterAspect
           in: header
           description: |
             Switch used to request filter data for either Audit Log
@@ -960,24 +960,24 @@ paths:
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Auth token is either missing or invalid. 
+            Auth token is either missing or invalid.
         403:
           description: |
             Forbidden.  The user is not authorized to access
             the required resources.
         404:
           description: |
-            Not Found. 
-          schema: 
+            Not Found.
+          schema:
             $ref: '#/definitions/errorModel'
         default:
           description: Unexpected Error.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
 
   /search/promote/filter:
@@ -995,7 +995,7 @@ paths:
       parameters:
         - name: authToken
           in: header
-          description: | 
+          description: |
             Auth Token.
           required: true
           type: string
@@ -1022,24 +1022,24 @@ paths:
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Auth token is either missing or invalid. 
+            Auth token is either missing or invalid.
         403:
           description: |
             Forbidden.  The user is not authorized to access
             the required resources.
         404:
           description: |
-            Not Found. 
-          schema: 
+            Not Found.
+          schema:
             $ref: '#/definitions/errorModel'
         default:
           description: Unexpected Error.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
 
   /search/summary/company:
@@ -1048,14 +1048,14 @@ paths:
       description: |
         This endpoint returns a list of Company Codes, which
         the authenticated user is authorized to access, for
-        filters in Summary views. 
+        filters in Summary views.
       produces:
         - application/json
       operationId: getSummaryCompanyCodes
       parameters:
         - name: authToken
           in: header
-          description: | 
+          description: |
             Auth Token.
           required: true
           type: string
@@ -1087,24 +1087,24 @@ paths:
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Auth token is either missing or invalid. 
+            Auth token is either missing or invalid.
         403:
           description: |
             Forbidden.  The user is not authorized to access
             the required resources.
         404:
           description: |
-            Not Found.  No data found matching the provided key values. 
-          schema: 
+            Not Found.  No data found matching the provided key values.
+          schema:
             $ref: '#/definitions/errorModel'
         default:
           description: Unexpected Error.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
 
   /search/summary/product:
@@ -1119,7 +1119,7 @@ paths:
       parameters:
         - name: authToken
           in: header
-          description: | 
+          description: |
             Auth Token.
           required: true
           type: string
@@ -1157,24 +1157,24 @@ paths:
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Auth token is either missing or invalid. 
+            Auth token is either missing or invalid.
         403:
           description: |
             Forbidden.  The user is not authorized to access
             the required resources.
         404:
           description: |
-            Not Found.  No data found matching the provided key values. 
-          schema: 
+            Not Found.  No data found matching the provided key values.
+          schema:
             $ref: '#/definitions/errorModel'
         default:
           description: Unexpected Error.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
 
   /search/summary/plan:
@@ -1189,7 +1189,7 @@ paths:
       parameters:
         - name: authToken
           in: header
-          description: | 
+          description: |
             Auth Token.
           required: true
           type: string
@@ -1233,24 +1233,24 @@ paths:
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Auth token is either missing or invalid. 
+            Auth token is either missing or invalid.
         403:
           description: |
             Forbidden.  The user is not authorized to access
             the required resources.
         404:
           description: |
-            Not Found.  No data found matching the provided key values. 
-          schema: 
+            Not Found.  No data found matching the provided key values.
+          schema:
             $ref: '#/definitions/errorModel'
         default:
           description: Unexpected Error.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
 
   /search/summary/state:
@@ -1265,7 +1265,7 @@ paths:
       parameters:
         - name: authToken
           in: header
-          description: | 
+          description: |
             Auth Token.
           required: true
           type: string
@@ -1315,24 +1315,24 @@ paths:
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Auth token is either missing or invalid. 
+            Auth token is either missing or invalid.
         403:
           description: |
             Forbidden.  The user is not authorized to access
             the required resources.
         404:
           description: |
-            Not Found.  No data found matching the provided key values. 
-          schema: 
+            Not Found.  No data found matching the provided key values.
+          schema:
             $ref: '#/definitions/errorModel'
         default:
           description: Unexpected Error.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
 
   /search/summary/lob:
@@ -1347,7 +1347,7 @@ paths:
       parameters:
         - name: authToken
           in: header
-          description: | 
+          description: |
             Auth Token.
           required: true
           type: string
@@ -1403,24 +1403,24 @@ paths:
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Auth token is either missing or invalid. 
+            Auth token is either missing or invalid.
         403:
           description: |
             Forbidden.  The user is not authorized to access
             the required resources.
         404:
           description: |
-            Not Found.  No data found matching the provided key values. 
-          schema: 
+            Not Found.  No data found matching the provided key values.
+          schema:
             $ref: '#/definitions/errorModel'
         default:
           description: Unexpected Error.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
 
   /search/summary/effdate:
@@ -1435,7 +1435,7 @@ paths:
       parameters:
         - name: authToken
           in: header
-          description: | 
+          description: |
             Auth Token.
           required: true
           type: string
@@ -1497,24 +1497,24 @@ paths:
         400:
           description: |
             Bad Request.  Invalid or malformed request detected.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
         401:
           description: |
             Unauthorized.  Required authorization information not found.
-            Auth token is either missing or invalid. 
+            Auth token is either missing or invalid.
         403:
           description: |
             Forbidden.  The user is not authorized to access
             the required resources.
         404:
           description: |
-            Not Found.  No data found matching the provided key values. 
-          schema: 
+            Not Found.  No data found matching the provided key values.
+          schema:
             $ref: '#/definitions/errorModel'
         default:
           description: Unexpected Error.
-          schema: 
+          schema:
             $ref: '#/definitions/errorModel'
 
 definitions:
@@ -1533,7 +1533,7 @@ definitions:
     properties:
       tokenId:
         type: string
-        description: A token used to link service requests to the corresponding security session. 
+        description: A token used to link service requests to the corresponding security session.
 
   aboutApplication:
     type: object

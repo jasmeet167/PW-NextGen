@@ -12,6 +12,8 @@ import com.csc.fsg.life.rest.model.TreeNodeAttributes;
 import com.csc.fsg.life.rest.model.TreeNodeData;
 import com.csc.fsg.life.rest.model.TreeNodePlanKey;
 
+/* This class is loosely based on com.csc.fsg.life.pw.client.tree.CscTreeNode in the old Product Wizard */
+
 public class Node
 	implements Serializable
 {
@@ -34,6 +36,12 @@ public class Node
 		level = -1;
 	}
 
+	public Node(short level)
+	{
+		this.level = level;
+	}
+
+	/* For reference, see the constructor public CscTreeNode(String nodeInfo, char delim, CscTree tree) in the old Product Wizard */
 	public Node(String envId, String payload)
 	{
 		data.setAttributes(attributes);

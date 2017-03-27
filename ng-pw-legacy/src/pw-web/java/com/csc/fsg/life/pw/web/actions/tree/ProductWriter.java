@@ -6,22 +6,27 @@
 
 package com.csc.fsg.life.pw.web.actions.tree;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Set;
 
-import com.csc.fsg.life.pw.common.PolicyConstants;
 import com.csc.fsg.life.pw.common.StructureNode;
-import com.csc.fsg.life.pw.common.User;
 import com.csc.fsg.life.pw.common.transferobjects.PlanCriteriaTO;
 import com.csc.fsg.life.pw.common.transferobjects.PlanRowTO;
 import com.csc.fsg.life.pw.common.transferobjects.PlanTO;
-import com.csc.fsg.life.pw.common.util.*;
-import com.csc.fsg.life.pw.web.avm.*;
+import com.csc.fsg.life.pw.common.util.Constants;
+import com.csc.fsg.life.pw.common.util.Utils;
+import com.csc.fsg.life.pw.web.avm.AVManager;
+import com.csc.fsg.life.pw.web.avm.PlanNameAssistent;
 import com.csc.fsg.life.pw.web.environment.EnvironmentManager;
-import com.csc.fsg.life.pw.web.io.*;
 import com.csc.fsg.life.pw.web.io.descriptor.wma.T000XARow;
 import com.csc.fsg.life.pw.web.utils.sql.SQLBuilderMERGEDX;
 //import com.csc.fsg.life.pw.web.controller.PWTask;
+import com.csc.fsg.life.rest.model.TreeNodeLazyType;
 
 /**
  * Class ProductWriterThread
@@ -73,8 +78,8 @@ public class ProductWriter {
 		return new SQLBuilderMERGEDX(planCriteria.getEnvironment(), planCriteria).buildSelectTablePtrsForWriterStatement();
 	}
 
-	public PlanBuffer getStream(String env, String company, String product,
-	        Connection conn, boolean isWithChanges /*, PWTask task*/) throws Exception {
+	public PlanBuffer getStream(TreeNodeLazyType lazyType, String env, String company, String product,
+	        Connection conn, boolean viewChanges /*, PWTask task*/) throws Exception {
 
 		ResultSet rs = null;
 		Statement stmt = null;
@@ -107,17 +112,20 @@ public class ProductWriter {
 				planTO.setEnvironment(env);
 				String planType = planTO.getPlanType();
 				PlanCriteriaTO tmpPlan = new PlanCriteriaTO(planTO);
-				tmpPlan.setViewChanges(isWithChanges);
+				tmpPlan.setViewChanges(viewChanges);
 //				task.setStatus(0, "  Found " + tmpPlan.getPlanCode() + " plan" );
-				String plan = writePlan(tmpPlan, conn, xaStmt/*, task*/);
-				if (planType.equalsIgnoreCase("B") || planType.equalsIgnoreCase("H")) 
-					buffer.appendBase(plan);
-				else if (planType.equalsIgnoreCase("R"))
-					buffer.appendRider(plan);
-				else if (planType.equalsIgnoreCase("P"))
-					buffer.appendArch(plan);
-				else if (planType.equalsIgnoreCase("W"))
-					buffer.appendPayout(plan);
+				
+				if (isPlanApplicable(planType, lazyType)) {
+					String plan = writePlan(lazyType, tmpPlan, conn, xaStmt);
+					if (planType.equalsIgnoreCase("B") || planType.equalsIgnoreCase("H")) 
+						buffer.appendBase(plan);
+					else if (planType.equalsIgnoreCase("R"))
+						buffer.appendRider(plan);
+					else if (planType.equalsIgnoreCase("P"))
+						buffer.appendArch(plan);
+					else if (planType.equalsIgnoreCase("W"))
+						buffer.appendPayout(plan);
+				}
 			}
 		} catch (Exception e) {
 			throw e;
@@ -130,8 +138,36 @@ public class ProductWriter {
 		return buffer;
 	}
 
-	private String writePlan(PlanCriteriaTO planCriteria,Connection conn,
-			PreparedStatement xaStmt /*, PWTask task*/) throws Exception {
+	private boolean isPlanApplicable(String planType, TreeNodeLazyType lazyType)
+	{
+		if (lazyType == null)
+			return true;
+
+		if (planType.equalsIgnoreCase("P"))
+			if (lazyType == TreeNodeLazyType.PDF)
+				return true;
+
+		if (planType.equalsIgnoreCase("H"))
+			if (lazyType == TreeNodeLazyType.H)
+				return true;
+
+		if (planType.equalsIgnoreCase("B"))
+			if (lazyType == TreeNodeLazyType.B)
+				return true;
+
+		if (planType.equalsIgnoreCase("R"))
+			if (lazyType == TreeNodeLazyType.R)
+				return true;
+
+		if (planType.equalsIgnoreCase("W"))
+			if (lazyType == TreeNodeLazyType.P)
+				return true;
+
+		return false;
+	}
+
+	private String writePlan(TreeNodeLazyType lazyType, PlanCriteriaTO planCriteria, Connection conn,
+			PreparedStatement xaStmt) throws Exception {
 		String productPrefix = planCriteria.getProductPrefix();
 		String planType = planCriteria.getPlanType();
 		
@@ -157,6 +193,11 @@ public class ProductWriter {
 		buffer.append(getDisplayName(planCriteria, conn)).append(TAB);
 		buffer.append(planCriteria.getPlanKey(TAB));
 		buffer.append(NEW_LINE);
+
+		// If lazy-loading a branch in Business Rule Tree, return only top-level plan information
+		if (lazyType != null)
+			return buffer.toString();
+		
 		ResultSet rs = null;
 		Statement stmt = null;
 		

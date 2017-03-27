@@ -77,7 +77,7 @@ public class TreeWriter {
 				String company = companyCodesList.get(i);
 //				task.setStatus(0, "Processing " + company + " company");
 				treeStream.append(
-					cw.getStream(envId, company, firstPlan.getProductPrefix(),
+					cw.getStream(null, envId, company, firstPlan.getProductPrefix(),
 							 	wipConn, mfConn, firstPlan.isViewChanges(),
 							 	includeOrphans, tx, txa /*, task,user*/) );
 			}

@@ -89,6 +89,76 @@ export class BusinessRuleTreeComponent implements OnInit {
   }
 
   public onNodeExpand(event: any) {
+    const node: TreeNode = event.node;
+    const data: TreeNodeData = node.data;
+
+    // Ignore the event if node already has children
+    if (node.children && node.children.length > 0) {
+      return;
+    }
+    // Ignore the event if node's children are not lazy
+    if (!data || !data.lazyNode) {
+      return;
+    }
+
+    node.children = <TreeNode[]> [];
+    switch (node.type) {
+      case 'CTF':     // COMMON_TABLE_FOLDER
+            this.buildCommonTablesList(node);
+            break;
+      case 'PDF':     // PDFPLAN_FOLDER
+      case 'PF':      // PLAN_FOLDER
+      case 'PPF':     // PAYOUTPLAN_FOLDER
+      case 'RF':      // RIDER_FOLDER
+            this.buildPlanCodeList(node);
+            break;
+      default:
+            break;
+    }
+  }
+
+  private buildCommonTablesList(node: TreeNode) {
+    this.notificationService.showWaitIndicator(true);
+    this.businessRuleTreeService
+        .getBusinessRuleTreeCommonTablesList(this.authToken, this.envId,
+                                             this.companyCode, this.viewChanges)
+        .subscribe(
+          res => node.children = res,
+          err => {
+              this.notificationService.handleError(err);
+              this.notificationService.showWaitIndicator(false);
+          },
+          ()  => {
+              this.notificationService.showWaitIndicator(false);
+              if (!node.children || node.children.length === 0) {
+                node.leaf = true;
+              }
+          }
+        );
+  }
+
+  private buildPlanCodeList(node: TreeNode) {
+    const data: TreeNodeData = node.data;
+
+    this.notificationService.showWaitIndicator(true);
+    this.businessRuleTreeService
+        .getBusinessRuleTreePlanList(this.authToken, data.lazyType, this.envId,
+                                     this.companyCode, this.productCode, this.planCode,
+                                     this.issueState, this.lob, this.effDate,
+                                     this.viewChanges, this.includeOrphans)
+        .subscribe(
+          res => node.children = res,
+          err => {
+              this.notificationService.handleError(err);
+              this.notificationService.showWaitIndicator(false);
+          },
+          ()  => {
+              this.notificationService.showWaitIndicator(false);
+              if (!node.children || node.children.length === 0) {
+                node.leaf = true;
+              }
+          }
+        );
   }
 
   public onNodeCollapse(event: any) {

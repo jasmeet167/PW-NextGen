@@ -11,8 +11,14 @@ import com.csc.fsg.life.rest.param.RestServiceParam;
 public interface BusinessRuleTreeService
 {
 	@SecuredMethod(action = AuthorizationAction.VIEW)
-	public List<TreeNode> getBusinessRuleTreeCore(RestServiceParam param, String productCode);
+	public List<TreeNode> getBusinessRuleTreeCore(RestServiceParam param, String productCode, boolean includeOrphans);
 
 	@SecuredMethod(action = AuthorizationAction.VIEW)
-	public List<TreeNode> getBusinessRulesTree(RestServiceParam param, BusinessRuleTreeSearchInput input);
+	public List<TreeNode> getBusinessRuleTreeCommonTables(RestServiceParam param, boolean includeChanges);
+
+	@SecuredMethod(action = AuthorizationAction.VIEW)
+	public List<TreeNode> getBusinessRuleTreePlanList(RestServiceParam param, BusinessRuleTreeSearchInput searchInput);
+
+	@SecuredMethod(action = AuthorizationAction.VIEW)
+	public List<TreeNode> getBusinessRulesTree(RestServiceParam param, BusinessRuleTreeSearchInput searchInput);
 }

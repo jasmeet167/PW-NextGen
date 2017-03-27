@@ -3,6 +3,7 @@ package com.csc.fsg.life.rest.service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.sql.Connection;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,9 +18,14 @@ import org.springframework.util.StringUtils;
 
 import com.csc.fsg.life.pw.common.transferobjects.PlanCriteriaTO;
 import com.csc.fsg.life.pw.common.transferobjects.PlanTOBase;
+import com.csc.fsg.life.pw.web.actions.tree.CommonTablesWriter;
+import com.csc.fsg.life.pw.web.actions.tree.CompanyWriter;
+import com.csc.fsg.life.pw.web.actions.tree.IndexMergeAssistent;
+import com.csc.fsg.life.pw.web.actions.tree.PlanMergeAssistent;
 import com.csc.fsg.life.pw.web.actions.tree.TreeWriter;
 import com.csc.fsg.life.pw.web.environment.Environment;
 import com.csc.fsg.life.pw.web.environment.EnvironmentManager;
+import com.csc.fsg.life.pw.web.utils.DBConnMgr;
 import com.csc.fsg.life.rest.exception.BadRequestException;
 import com.csc.fsg.life.rest.exception.RestServiceException;
 import com.csc.fsg.life.rest.exception.UnexpectedException;
@@ -28,7 +34,7 @@ import com.csc.fsg.life.rest.model.ErrorModel;
 import com.csc.fsg.life.rest.model.TreeNode;
 import com.csc.fsg.life.rest.model.TreeNode.TypeEnum;
 import com.csc.fsg.life.rest.model.TreeNodeData;
-import com.csc.fsg.life.rest.model.TreeNodeData.LazyTypeEnum;
+import com.csc.fsg.life.rest.model.TreeNodeLazyType;
 import com.csc.fsg.life.rest.model.tree.Node;
 import com.csc.fsg.life.rest.param.RestServiceParam;
 
@@ -49,9 +55,10 @@ public class BusinessRuleTreeServiceImpl
 		super("com.csc.fsg.life.rest.service.BusinessRuleTreeService");
 	}
 
-	public List<TreeNode> getBusinessRuleTreeCore(RestServiceParam param, String productCode)
+	public List<TreeNode> getBusinessRuleTreeCore(RestServiceParam param, String productCode, boolean includeOrphans)
 	{
 		try {
+			// TODO: +++ Add processing of includeOrphans
 			String envId = param.getEnvId();
 			String companyCode = param.getCompanyCode();
 
@@ -112,7 +119,7 @@ public class BusinessRuleTreeServiceImpl
 		setFolderIcons(common);
 		TreeNodeData commonData = new TreeNodeData();
 		commonData.setLazyNode(Boolean.TRUE);
-		commonData.setLazyType(LazyTypeEnum.C);
+		commonData.setLazyType(TreeNodeLazyType.C);
 		common.setData(commonData);
 		starterNodes.add(common);
 
@@ -124,7 +131,7 @@ public class BusinessRuleTreeServiceImpl
 		setFolderIcons(pdf);
 		TreeNodeData pdfData = new TreeNodeData();
 		pdfData.setLazyNode(Boolean.TRUE);
-		pdfData.setLazyType(LazyTypeEnum.PDF);
+		pdfData.setLazyType(TreeNodeLazyType.PDF);
 		pdf.setData(pdfData);
 		starterNodes.add(pdf);
 
@@ -136,7 +143,7 @@ public class BusinessRuleTreeServiceImpl
 		setFolderIcons(commonCoverage);
 		TreeNodeData commonCovData = new TreeNodeData();
 		commonCovData.setLazyNode(Boolean.TRUE);
-		commonCovData.setLazyType(LazyTypeEnum.CC);
+		commonCovData.setLazyType(TreeNodeLazyType.H);
 		commonCoverage.setData(commonCovData);
 		starterNodes.add(commonCoverage);
 
@@ -185,10 +192,10 @@ public class BusinessRuleTreeServiceImpl
 		basePlanFolder.setStyleClass(STYLE_FOLDER);
 		TreeNodeData basePlanData = new TreeNodeData();
 		basePlanData.setLazyNode(Boolean.TRUE);
-		basePlanData.setLazyType(LazyTypeEnum.AB);
+		basePlanData.setLazyType(TreeNodeLazyType.B);
 		basePlanFolder.setData(basePlanData);
 		setFolderIcons(basePlanFolder);
-		if (productCode.matches("A[01234\\*]"))
+		if (productCode.matches("A[1234\\*]"))
 			basePlanFolder.setLeaf(Boolean.FALSE);
 		else
 			basePlanFolder.setLeaf(Boolean.TRUE);
@@ -200,7 +207,7 @@ public class BusinessRuleTreeServiceImpl
 		payoutPlanFolder.setStyleClass(STYLE_FOLDER);
 		TreeNodeData payoutPlanData = new TreeNodeData();
 		payoutPlanData.setLazyNode(Boolean.TRUE);
-		payoutPlanData.setLazyType(LazyTypeEnum.AP);
+		payoutPlanData.setLazyType(TreeNodeLazyType.P);
 		payoutPlanFolder.setData(payoutPlanData);
 		setFolderIcons(payoutPlanFolder);
 		if (productCode.matches("A[5\\*]"))
@@ -223,7 +230,7 @@ public class BusinessRuleTreeServiceImpl
 		basePlanFolder.setLeaf(Boolean.FALSE);
 		TreeNodeData basePlanData = new TreeNodeData();
 		basePlanData.setLazyNode(Boolean.TRUE);
-		basePlanData.setLazyType(LazyTypeEnum.UB);
+		basePlanData.setLazyType(TreeNodeLazyType.B);
 		basePlanFolder.setData(basePlanData);
 		setFolderIcons(basePlanFolder);
 
@@ -235,7 +242,7 @@ public class BusinessRuleTreeServiceImpl
 		riderPlanFolder.setLeaf(Boolean.FALSE);
 		TreeNodeData riderPlanData = new TreeNodeData();
 		riderPlanData.setLazyNode(Boolean.TRUE);
-		riderPlanData.setLazyType(LazyTypeEnum.UR);
+		riderPlanData.setLazyType(TreeNodeLazyType.R);
 		riderPlanFolder.setData(riderPlanData);
 		setFolderIcons(riderPlanFolder);
 
@@ -254,7 +261,7 @@ public class BusinessRuleTreeServiceImpl
 		basePlanFolder.setLeaf(Boolean.FALSE);
 		TreeNodeData basePlanData = new TreeNodeData();
 		basePlanData.setLazyNode(Boolean.TRUE);
-		basePlanData.setLazyType(LazyTypeEnum.TB);
+		basePlanData.setLazyType(TreeNodeLazyType.B);
 		basePlanFolder.setData(basePlanData);
 		setFolderIcons(basePlanFolder);
 
@@ -266,14 +273,237 @@ public class BusinessRuleTreeServiceImpl
 		riderPlanFolder.setLeaf(Boolean.FALSE);
 		TreeNodeData riderPlanData = new TreeNodeData();
 		riderPlanData.setLazyNode(Boolean.TRUE);
-		riderPlanData.setLazyType(LazyTypeEnum.TR);
+		riderPlanData.setLazyType(TreeNodeLazyType.R);
 		riderPlanFolder.setData(riderPlanData);
 		setFolderIcons(riderPlanFolder);
 
 		return starterNodes;
 	}
 
-	public List<TreeNode> getBusinessRulesTree(RestServiceParam param, BusinessRuleTreeSearchInput input)
+	public List<TreeNode> getBusinessRuleTreeCommonTables(RestServiceParam param, boolean includeChanges)
+	{
+		Connection brConn = null;
+		Connection wipConn = null;
+
+		try {
+			String envId = param.getEnvId();
+			String companyCode = param.getCompanyCode();
+
+			boolean isGoodEnvironment = false;
+			if (StringUtils.hasText(envId)) {
+				Map<String, Environment> environments = EnvironmentManager.getInstance().getEnvironments();
+				if (environments.get(envId) != null)
+					isGoodEnvironment = true;
+			}
+			if (!isGoodEnvironment) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_environment"));
+				throw new BadRequestException(model);
+			}
+
+			if (!StringUtils.hasText(companyCode)) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_company"));
+				throw new BadRequestException(model);
+			}
+
+			brConn = DBConnMgr.getInstance().getConnection(envId, DBConnMgr.BUSINESS_RULES);
+			wipConn = DBConnMgr.getInstance().getConnection(envId, DBConnMgr.APPL);
+
+			List<TreeNode> commonTableList = getCommonTableList(brConn, wipConn, param, includeChanges);
+			return commonTableList;
+		}
+		catch (RestServiceException e) {
+			throw e;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			ErrorModel model = errorModelFactory.newErrorModel(UnexpectedException.HTTP_STATUS);
+			throw new UnexpectedException(model);
+		}
+		finally {
+			if (brConn != null) {
+				try {
+					DBConnMgr.getInstance().releaseConnection(brConn);
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (wipConn != null) {
+				try {
+					DBConnMgr.getInstance().releaseConnection(wipConn);
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private List<TreeNode> getCommonTableList(Connection brConn, Connection wipConn, RestServiceParam param, boolean includeChanges)
+		throws Exception
+	{
+		String envId = param.getEnvId();
+		String companyCode = param.getCompanyCode();
+
+		CommonTablesWriter commonTablesWriter = new CommonTablesWriter(envId, companyCode, includeChanges, brConn, wipConn);
+		String payload = commonTablesWriter.getStream();
+
+		BufferedReader reader = new BufferedReader(new StringReader(payload));
+		Node root = new Node((short) 2);
+		processTreeNode(reader, root, new TreeNodeContainer(), envId);
+
+		List<Node> commonTableNodes = root.getChildren();
+		List<TreeNode> commonTableTreeNodes = transformToDeclaredTypes(commonTableNodes, false);
+		return commonTableTreeNodes;
+	}
+
+	public List<TreeNode> getBusinessRuleTreePlanList(RestServiceParam param, BusinessRuleTreeSearchInput searchInput)
+	{
+		Connection brConn = null;
+		Connection wipConn = null;
+
+		try {
+			String envId = param.getEnvId();
+			String companyCode = param.getCompanyCode();
+			String productCode = searchInput.getProductCode();
+
+			boolean isGoodEnvironment = false;
+			if (StringUtils.hasText(envId)) {
+				Map<String, Environment> environments = EnvironmentManager.getInstance().getEnvironments();
+				if (environments.get(envId) != null)
+					isGoodEnvironment = true;
+			}
+			if (!isGoodEnvironment) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_environment"));
+				throw new BadRequestException(model);
+			}
+
+			if (!StringUtils.hasText(companyCode)) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_company"));
+				throw new BadRequestException(model);
+			}
+
+			if (!StringUtils.hasText(productCode) || productCode.length() != 2) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_product"));
+				throw new BadRequestException(model);
+			}
+
+			brConn = DBConnMgr.getInstance().getConnection(envId, DBConnMgr.BUSINESS_RULES);
+			wipConn = DBConnMgr.getInstance().getConnection(envId, DBConnMgr.APPL);
+
+			List<TreeNode> planList = getPlanList(brConn, wipConn, param, searchInput);
+			return planList;
+		}
+		catch (RestServiceException e) {
+			throw e;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			ErrorModel model = errorModelFactory.newErrorModel(UnexpectedException.HTTP_STATUS);
+			throw new UnexpectedException(model);
+		}
+		finally {
+			if (brConn != null) {
+				try {
+					DBConnMgr.getInstance().releaseConnection(brConn);
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (wipConn != null) {
+				try {
+					DBConnMgr.getInstance().releaseConnection(wipConn);
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private List<TreeNode> getPlanList(Connection brConn, Connection wipConn, RestServiceParam param, BusinessRuleTreeSearchInput searchInput)
+		throws Exception
+	{
+		PlanMergeAssistent pmAssist = null;
+		IndexMergeAssistent imAssist = null;
+
+		try {
+			TreeNodeLazyType lazyType = searchInput.getLazyType();
+			String envId = param.getEnvId();
+			String companyCode = param.getCompanyCode();
+			String productCode = searchInput.getProductCode();
+			String productPrefix = productCode.substring(0, 1);
+			String productSuffix = productCode.substring(1);
+			String planCode = searchInput.getPlanCode();
+			String issueState = searchInput.getIssueState();
+			String lob = searchInput.getLob();
+
+			String effDate = null;
+			Date effectiveDate = searchInput.getEffDate();
+			if (effectiveDate != null)
+				effDate = effectiveDate.toString();
+
+			boolean viewChanges = searchInput.getViewChanges();
+			boolean includeOrphans = searchInput.getIncludeOrphans();
+
+			HashMap<String, String> planCriteriaKey = new HashMap<>();
+			planCriteriaKey.put(PlanTOBase.ENVIRONMENT_KEY, envId);
+			planCriteriaKey.put(PlanTOBase.COMPANY_CODE_KEY, companyCode);
+			planCriteriaKey.put(PlanTOBase.PRODUCT_CODE_KEY, productCode);
+			planCriteriaKey.put(PlanTOBase.PRODUCT_PREFIX_KEY, productPrefix);
+			planCriteriaKey.put(PlanTOBase.PRODUCT_SUFFIX_KEY, productSuffix);
+			planCriteriaKey.put(PlanTOBase.PLAN_CODE_KEY, planCode);
+			planCriteriaKey.put(PlanTOBase.ISSUE_STATE_KEY, issueState);
+			planCriteriaKey.put(PlanTOBase.LINE_OF_BUSINESS_KEY, lob);
+			planCriteriaKey.put(PlanTOBase.EFFECTIVE_DATE_KEY, effDate);
+			planCriteriaKey.put(PlanCriteriaTO.MERGED_VIEW_KEY, String.valueOf(viewChanges));
+
+			PlanCriteriaTO planCriteria = new PlanCriteriaTO(planCriteriaKey);
+			planCriteria.setLoadNP(true);
+			PlanCriteriaTO indexCriteria = new PlanCriteriaTO(planCriteria);
+			indexCriteria.setLoadNP(true);
+
+			// Read Plan Table T000X
+			List<PlanCriteriaTO> planKeyList = new LinkedList<>();
+			planKeyList.add(planCriteria);
+			pmAssist = new PlanMergeAssistent(wipConn, planKeyList, true);
+
+			// Read Subset Index Table T000XA
+			String view = viewChanges ? "with" : "without";
+			imAssist = new IndexMergeAssistent(wipConn, indexCriteria.toHashMap(), true, view, true);
+
+			String payload = new CompanyWriter().getStream(lazyType, envId, companyCode, productPrefix, wipConn, brConn,
+														   viewChanges, includeOrphans, pmAssist, imAssist);
+			List<Node> planNodes = new LinkedList<>();
+			String line = null;
+
+			BufferedReader reader = new BufferedReader(new StringReader(payload));
+			while ((line = reader.readLine()) != null) {
+				if (!line.startsWith("0\t"))
+					continue;
+
+				Node node = new Node(envId, line);
+				planNodes.add(node);
+			}
+
+			List<TreeNode> planList = transformToDeclaredTypes(planNodes, true);
+			return planList;
+		}
+		finally {
+			if (pmAssist != null)
+				pmAssist.clean(wipConn);
+			if (imAssist != null)
+				imAssist.clean(wipConn);
+		}
+	}
+
+	public List<TreeNode> getBusinessRulesTree(RestServiceParam param, BusinessRuleTreeSearchInput searchInput)
 	{
 		try {
 			String envId = param.getEnvId();
@@ -296,13 +526,13 @@ public class BusinessRuleTreeServiceImpl
 				throw new BadRequestException(model);
 			}
 
-			if (!StringUtils.hasText(input.getProductCode())) {
+			if (!StringUtils.hasText(searchInput.getProductCode())) {
 				HttpStatus status = BadRequestException.HTTP_STATUS;
 				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_product"));
 				throw new BadRequestException(model);
 			}
 
-			HashMap<String, String> keyValues = buildKeyValues(param, input);
+			HashMap<String, String> keyValues = buildKeyValues(param, searchInput);
 			PlanCriteriaTO planCriteria = new PlanCriteriaTO(keyValues);
 			planCriteria.setLoadNP(true);
 
@@ -310,14 +540,14 @@ public class BusinessRuleTreeServiceImpl
 			compCodesVector.add(planCriteria.getCompanyCode());
 
 			List<PlanCriteriaTO> list = Arrays.asList(planCriteria);
-			boolean includeOrphans = input.areOrphansIncluded();
+			boolean includeOrphans = searchInput.getIncludeOrphans();
 			String payload = TreeWriter.getStream(list, compCodesVector, includeOrphans);
 			BufferedReader reader = new BufferedReader(new StringReader(payload));
 			Node root = new Node();
 			processTreeNode(reader, root, new TreeNodeContainer(), param.getEnvId());
 
 			List<Node> treeNodes = root.getChildren().get(0).getChildren();
-			List<TreeNode> transformedNodes = transformToDeclaredTypes(treeNodes);
+			List<TreeNode> transformedNodes = transformToDeclaredTypes(treeNodes, false);
 			for (TreeNode transformedNode : transformedNodes) {
 				transformedNode.setExpanded(Boolean.TRUE);
 				setFolderIcons(transformedNode);
@@ -339,7 +569,7 @@ public class BusinessRuleTreeServiceImpl
 	{
 		HashMap<String, String> keyValues = new HashMap<>();
 
-		keyValues.put(PlanCriteriaTO.MERGED_VIEW_KEY, Boolean.valueOf(input.isAreChangesIncluded()).toString());
+		keyValues.put(PlanCriteriaTO.MERGED_VIEW_KEY, Boolean.valueOf(input.getViewChanges()).toString());
 		keyValues.put(PlanTOBase.ENVIRONMENT_KEY, param.getEnvId());
 
 		String companyCode = param.getCompanyCode();
@@ -377,7 +607,7 @@ public class BusinessRuleTreeServiceImpl
 		throws IOException
 	{
 		// For reference, see method private void processTreeNode(CscTreeNode parentNode) in class CscTree
-		int parentLevel = parentNode.getLevel();
+		short parentLevel = parentNode.getLevel();
 		Node node = null;
 		Node prevNode = null;
 
@@ -446,7 +676,7 @@ public class BusinessRuleTreeServiceImpl
 		}
 	}
 
-	private List<TreeNode> transformToDeclaredTypes(List<Node> existingNodes)
+	private List<TreeNode> transformToDeclaredTypes(List<Node> existingNodes, boolean isEachNodeLazy)
 	{
 		List<TreeNode> transformedNodes = new LinkedList<>();
 
@@ -457,33 +687,24 @@ public class BusinessRuleTreeServiceImpl
 			transformedNode.setLabel(existingNode.getDisplay());
 			transformedNode.setData(existingNode.getData());
 
-			List<TreeNode> transformedChildren = transformToDeclaredTypes(existingNode.getChildren());
-			transformedNode.getChildren().addAll(transformedChildren);
+			if (isEachNodeLazy) {
+				transformedNode.setLeaf(Boolean.FALSE);
+				transformedNode.getData().setLazyNode(Boolean.TRUE);
+				transformedNode.setStyleClass(STYLE_FOLDER);
+				setFolderIcons(transformedNode);
+			}
+			else {
+				// The flag isEachNodeLazy is overridden with false for each subsequent level
+				List<TreeNode> transformedChildren = transformToDeclaredTypes(existingNode.getChildren(), false);
+				transformedNode.getChildren().addAll(transformedChildren);
 
-			switch (existingNode.getType()) {
-				case AF:		// ANNUITIY_FOLDER
-				case UF:		// UNIV_LIFE_FOLDER
-				case TF:		// TRADITIONAL_FOLDER
-				case PDF:		// PDFPLAN_FOLDER
-				case OF:		// ORPHAN_FOLDER
-				case CTF:		// COMMON_TABLE_FOLDER
-				case PF:		// PLAN_FOLDER
-				case RF:		// RIDER_FOLDER
-				case PPF: {		// PAYOUTPLAN_FOLDER
+				if (transformedChildren.isEmpty()) {
+					transformedNode.setStyleClass(STYLE_LEAF);
+					transformedNode.setIcon(ICON_LEAF);
+				}
+				else {
 					transformedNode.setStyleClass(STYLE_FOLDER);
 					setFolderIcons(transformedNode);
-					break;
-				}
-				default: {
-					if (transformedChildren.isEmpty()) {
-						transformedNode.setStyleClass(STYLE_LEAF);
-						transformedNode.setIcon(ICON_LEAF);
-					}
-					else {
-						transformedNode.setStyleClass(STYLE_FOLDER);
-						setFolderIcons(transformedNode);
-					}
-					break;
 				}
 			}
 		}

@@ -6,17 +6,25 @@
 
 package com.csc.fsg.life.pw.web.actions.tree;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.Vector;
 
-import com.csc.fsg.life.pw.common.PolicyConstants;
-import com.csc.fsg.life.pw.common.User;
 import com.csc.fsg.life.pw.common.transferobjects.PlanCriteriaTO;
-import com.csc.fsg.life.pw.common.util.*;
-import com.csc.fsg.life.pw.web.avm.*;
-import com.csc.fsg.life.pw.web.config.*;
-import com.csc.fsg.life.pw.web.environment.*;
+import com.csc.fsg.life.pw.common.util.Constants;
+import com.csc.fsg.life.pw.common.util.InstallConfigBean;
+import com.csc.fsg.life.pw.common.util.Utils;
+import com.csc.fsg.life.pw.web.config.ProductManager;
+import com.csc.fsg.life.pw.web.config.ProductObject;
+import com.csc.fsg.life.pw.web.environment.Environment;
+import com.csc.fsg.life.pw.web.environment.EnvironmentManager;
 //import com.csc.fsg.life.pw.web.controller.PWTask;
+import com.csc.fsg.life.rest.model.TreeNodeLazyType;
 
 /* Modifications: T0103, T0091 ,HAVMENH, CCCV-E501 ,T0120, WMABASEIXI-4515, T0129, ENH1063.06, WMA-1209 */
 // ENH961 - set status in PWTask
@@ -33,8 +41,8 @@ public class CompanyWriter {
 
 	private static final String NEW_LINE = "\n";
 
-	public String getStream(String env, String company, String prefix,
-	        Connection wipConn, Connection mfConn, boolean isWithChanges,
+	public String getStream(TreeNodeLazyType lazyType, String env, String company, String prefix,
+	        Connection wipConn, Connection mfConn, boolean viewChanges,
 	        boolean includeOrphans,PlanMergeAssistent pm, IndexMergeAssistent im /*,
 	        PWTask task,User user*/)
 	        throws Exception {
@@ -49,22 +57,27 @@ public class CompanyWriter {
 				tableAuth = Constants.NODE_ATTR_UPDATE;
 //		}
 		
-		treeStream.append("999999" + TAB + "1" + TAB + "3" + TAB).append(
-				tableAuth).append(TAB);
+		// Return the Company information only if not lazy-loading a branch in Business Rule Tree
+		if (lazyType == null) {
+			treeStream.append("999999" + TAB + "1" + TAB + "3" + TAB).append(
+					tableAuth).append(TAB);
+			
+			Environment environment = EnvironmentManager.getInstance().getEnvironment(env);
+			String companyName = environment.getAssistent() .getCompanyCodesAndNames().get(company);
+			if (companyName==null)
+				companyName = company;
+			treeStream.append(companyName).append(TAB);
+			treeStream.append(company).append(NEW_LINE);
+		}
 		
-		Environment environment = EnvironmentManager.getInstance().getEnvironment(env);
-		String companyName = environment.getAssistent() .getCompanyCodesAndNames().get(company);
-		if (companyName==null)
-			companyName = company;
-		treeStream.append(companyName).append(TAB);
-		treeStream.append(company).append(NEW_LINE);
-		
-//		task.setStatus(0, " Searching for Common Tables");
-		CommonTablesWriter ctw = new CommonTablesWriter(env, company,
-		        isWithChanges, mfConn, wipConn /*, task,user*/);
-		treeStream.append("999999" + TAB + "2" + TAB + "7" + TAB).append(
-				tableAuth).append("\tCommon\n");
-		treeStream.append(ctw.getStream());
+		if (lazyType == TreeNodeLazyType.C) {
+			CommonTablesWriter ctw = new CommonTablesWriter(env, company,
+			        viewChanges, mfConn, wipConn /*, task,user*/);
+			treeStream.append("999999" + TAB + "2" + TAB + "7" + TAB).append(
+					tableAuth).append("\tCommon\n");
+			treeStream.append(ctw.getStream());
+			return treeStream.toString();
+		}
 
 		ArrayList al = getProductsList(company, wipConn);
 
@@ -97,7 +110,7 @@ public class CompanyWriter {
 				else if ( productCode.startsWith("H") )
 					display = "H* Product";
 //				task.setStatus(0, " Searching for " + display + " Plans");
-				planBuffer = pw.getStream(env, company, productCode, wipConn, isWithChanges /*, task*/);
+				planBuffer = pw.getStream(lazyType, env, company, productCode, wipConn, viewChanges /*, task*/);
 
 				if (map.containsKey(pp)) {
 					map.get(pp).add(planBuffer);

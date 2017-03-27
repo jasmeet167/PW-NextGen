@@ -6,6 +6,7 @@ import org.springframework.util.StringUtils;
 
 import com.csc.fsg.life.rest.model.TreeNodeAttributes;
 import com.csc.fsg.life.rest.model.TreeNodeData;
+import com.csc.fsg.life.rest.model.TreeNodeLazyType;
 import com.csc.fsg.life.rest.model.TreeNodePlanKey;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -37,9 +38,9 @@ public class TreeNodeDataSerializer
 		if (isLazyNode != null)
 			gen.writeBooleanField("lazyNode", isLazyNode.booleanValue());
 
-		String lazyType = value.getLazyType().toString();
-		if (StringUtils.hasText(lazyType))
-			gen.writeStringField("lazyType", lazyType);
+		TreeNodeLazyType lazyType = value.getLazyType();
+		if (lazyType != null)
+			gen.writeStringField("lazyType", lazyType.toString());
 
 		String name = value.getName();
 		if (StringUtils.hasText(name))
