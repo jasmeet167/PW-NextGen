@@ -23,11 +23,9 @@ import com.csc.fsg.life.pw.web.config.ProductManager;
 import com.csc.fsg.life.pw.web.config.ProductObject;
 import com.csc.fsg.life.pw.web.environment.Environment;
 import com.csc.fsg.life.pw.web.environment.EnvironmentManager;
-//import com.csc.fsg.life.pw.web.controller.PWTask;
 import com.csc.fsg.life.rest.model.TreeNodeLazyType;
 
 /* Modifications: T0103, T0091 ,HAVMENH, CCCV-E501 ,T0120, WMABASEIXI-4515, T0129, ENH1063.06, WMA-1209 */
-// ENH961 - set status in PWTask
 
 /**
  * Class CompanyWriterThread
@@ -109,7 +107,6 @@ public class CompanyWriter {
 					display = "NP Product";
 				else if ( productCode.startsWith("H") )
 					display = "H* Product";
-//				task.setStatus(0, " Searching for " + display + " Plans");
 				planBuffer = pw.getStream(lazyType, env, company, productCode, wipConn, viewChanges /*, task*/);
 
 				if (map.containsKey(pp)) {
@@ -288,12 +285,10 @@ public class CompanyWriter {
 
 	}
 
-	
-	
 	private void writeOrphans(String env,String company,String productPrefix,
 			Connection wipConn, StringBuffer treeStream,PlanMergeAssistent tx,
-			IndexMergeAssistent txa/*, PWTask task,User user*/) throws Exception{
-//		task.setStatus(0, " Searching for Orphan Tables");
+			IndexMergeAssistent txa) throws Exception{
+		// Searching for Orphan Tables
 		cleanNRecreateMergedView(env,company,productPrefix,wipConn,tx,txa);
 		OrphanTreeWriter otw = new OrphanTreeWriter();
 		otw.writeOrphans(env, company, productPrefix, wipConn,treeStream/*,task,user*/);

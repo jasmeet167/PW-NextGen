@@ -9,16 +9,11 @@ package com.csc.fsg.life.pw.web.actions.tree;
 import java.sql.Connection;
 import java.util.*;
 
-import com.csc.fsg.life.pw.common.PolicyConstants;
-import com.csc.fsg.life.pw.common.User;
 import com.csc.fsg.life.pw.common.transferobjects.PlanCriteriaTO;
 import com.csc.fsg.life.pw.common.util.Constants;
-import com.csc.fsg.life.pw.web.environment.*;
 import com.csc.fsg.life.pw.web.utils.DBConnMgr;
-//import com.csc.fsg.life.pw.web.controller.PWTask;
 
 /* Modifications: T0103, T0091 ,HAVMENH, ENH961 ,T0120, T0129 */
-// ENH961 - set status in PWTask
 
 /**
  * Class TreeWriter
@@ -30,7 +25,7 @@ import com.csc.fsg.life.pw.web.utils.DBConnMgr;
 public class TreeWriter {
 
 	public static String getStream(List<PlanCriteriaTO> planCriteriaList, Vector<String> companyCodes,
-			boolean includeOrphans /*, PWTask task,User user*/) throws Exception {
+			boolean includeOrphans) throws Exception {
 		StringBuffer treeStream = new StringBuffer();
 		
 		Connection mfConn = null;
@@ -45,14 +40,14 @@ public class TreeWriter {
 			mfConn = DBConnMgr.getInstance().getConnection(envId,DBConnMgr.BUSINESS_RULES);
 			wipConn = DBConnMgr.getInstance().getConnection(envId,DBConnMgr.APPL);
 			
-//			task.setStatus(0, "Reading Plan Table T000X");
+			// Read Plan Table T000X
 			tx = new PlanMergeAssistent(wipConn, planCriteriaList, true);
 			String view;
 			if (firstPlan.isViewChanges()) 
 				view = "with";
 			else
 				view = "without";
-//			task.setStatus(0, "Reading Subset Index Table T000XA");
+			// Reading Subset Index Table T000XA
 			txa = new IndexMergeAssistent(wipConn, firstPlan.toHashMap(), firstPlan.isLoadNP(), view, true);
 						
 			
@@ -75,7 +70,6 @@ public class TreeWriter {
 			Collections.sort(companyCodesList);
 			for (int i = 0; i < companyCodesList.size(); i++) {
 				String company = companyCodesList.get(i);
-//				task.setStatus(0, "Processing " + company + " company");
 				treeStream.append(
 					cw.getStream(null, envId, company, firstPlan.getProductPrefix(),
 							 	wipConn, mfConn, firstPlan.isViewChanges(),
@@ -95,9 +89,7 @@ public class TreeWriter {
 
 		}
 
-	//	System.out.println(treeStream.toString());
 		return treeStream.toString();
-		
 	}
 
 	// refactor plan key

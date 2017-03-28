@@ -6,28 +6,21 @@
 
 package com.csc.fsg.life.pw.web.actions.tree;
 
-import java.io.InputStream;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.xml.parsers.*;
-
 import org.w3c.dom.*;
 
-import com.csc.fsg.life.pw.common.PolicyConstants;
-import com.csc.fsg.life.pw.common.User;
 import com.csc.fsg.life.pw.common.util.Constants;
 import com.csc.fsg.life.pw.web.avm.AVManager;
 import com.csc.fsg.life.pw.web.environment.*;
 import com.csc.fsg.life.pw.web.io.*;
 import com.csc.fsg.life.pw.web.config.ProductManager;
-//import com.csc.fsg.life.pw.web.controller.PWTask;
 
 /* Modifications: T0091, ENH961 ,T0115,T0120, T0129*/
-// ENH961 - set status in task.
 
 /**
  * Class CommonTablesWriterThread
@@ -52,11 +45,10 @@ public class CommonTablesWriter {
 	private Map<String, Integer> wipCounts = null;
 	
 	public CommonTablesWriter(String env, String company, boolean withChanges,
-	        Connection mfConn, Connection wipConn /*, PWTask task, User user*/) throws Exception {
+	        Connection mfConn, Connection wipConn) throws Exception {
 		this.company = company;
 		this.env = env;
 		this.isWithChanges = withChanges;
-//		this.user = user;
 		rowCounter = new HashMap();
 
 		Environment environment = EnvironmentManager.getInstance().getEnvironment(env);
@@ -70,7 +62,7 @@ public class CommonTablesWriter {
 		TableRowCounter counter = new TableRowCounter(environment);
 		wipCounts = counter.getWIPCountsByTable(company, wipConn);
 
-		initRowCounts(mfConn, wipConn, rootNode, environment /*, task*/);
+		initRowCounts(mfConn, wipConn, rootNode, environment);
 	}
 
 	public String getStream() throws Exception {
@@ -148,7 +140,7 @@ public class CommonTablesWriter {
 	}
 
 	private void initRowCounts(Connection mfconn, Connection wipConn,
-	        Node node, Environment environment/*, PWTask task*/) throws Exception {
+	        Node node, Environment environment) throws Exception {
 
 		NodeList list = node.getChildNodes();
 
@@ -173,11 +165,10 @@ public class CommonTablesWriter {
 				}
 
 				if (rowCount > 0) {
-					//task.setStatus(0, "  Found Common Table " + tableName);
 					rowCounter.put(tableName, rowCount + "");
 				}
 			}
-			initRowCounts(mfconn, wipConn, cnode, environment /*, task*/);
+			initRowCounts(mfconn, wipConn, cnode, environment);
 		}
 	}
 

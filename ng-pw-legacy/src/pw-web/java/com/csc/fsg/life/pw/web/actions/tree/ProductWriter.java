@@ -25,7 +25,6 @@ import com.csc.fsg.life.pw.web.avm.PlanNameAssistent;
 import com.csc.fsg.life.pw.web.environment.EnvironmentManager;
 import com.csc.fsg.life.pw.web.io.descriptor.wma.T000XARow;
 import com.csc.fsg.life.pw.web.utils.sql.SQLBuilderMERGEDX;
-//import com.csc.fsg.life.pw.web.controller.PWTask;
 import com.csc.fsg.life.rest.model.TreeNodeLazyType;
 
 /**
@@ -37,7 +36,6 @@ import com.csc.fsg.life.rest.model.TreeNodeLazyType;
 
 /* Modifications: CCCV-D911, T0103, T0091, ENH961, ENH962 ,T0120, T0129 */
 // CCCV-D911 pad spaces if company code is less than 3 chars
-// ENH961 - set status in task.
 
 public class ProductWriter {
 	private Hashtable<String, String> _xaCache = new Hashtable<String, String>();
@@ -48,12 +46,10 @@ public class ProductWriter {
 
 	private static final String NEW_LINE = "\n";
 
-//	private User user = null;
 	private PlanMergeAssistent pma = null;
 	private IndexMergeAssistent ima = null;
 	
-	public ProductWriter(/*User user,*/ PlanMergeAssistent pma, IndexMergeAssistent ima){
-//		this.user = user;
+	public ProductWriter(PlanMergeAssistent pma, IndexMergeAssistent ima){
 		this.pma = pma;
 		this.ima = ima;
 	}
@@ -113,7 +109,6 @@ public class ProductWriter {
 				String planType = planTO.getPlanType();
 				PlanCriteriaTO tmpPlan = new PlanCriteriaTO(planTO);
 				tmpPlan.setViewChanges(viewChanges);
-//				task.setStatus(0, "  Found " + tmpPlan.getPlanCode() + " plan" );
 				
 				if (isPlanApplicable(planType, lazyType)) {
 					String plan = writePlan(lazyType, tmpPlan, conn, xaStmt);
@@ -230,7 +225,6 @@ public class ProductWriter {
 				String var = "";
 				if ( planRow.getTablePtrVar().trim().length() > 0 )
 					var += "~" + planRow.getTablePtrVar(); 
-				//task.setStatus(0, "    Found Table " + ddlName + var);
 
 				// ENH962 - use getStructureNode
 				StructureNode sn = TreeUtils.getStructureNode(
@@ -264,7 +258,6 @@ public class ProductWriter {
 				buffer.append(planCriteria.getPlanKey("|")).append("|").append(TAB);
 				buffer.append("F").append(TAB);
 				buffer.append(NEW_LINE);
-				
 				
 				writePointers(planCriteria, sn.getNodeId()+"", buffer, level, ddlName,xaStmt);
 			}
