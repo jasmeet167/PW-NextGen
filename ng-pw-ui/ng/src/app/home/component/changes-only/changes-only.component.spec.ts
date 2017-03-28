@@ -1,7 +1,9 @@
+/* tslint:disable:no-unused-variable */
+
 import { TestBed, async } from '@angular/core/testing';
 import { ChangesOnlyComponent } from './changes-only.component';
 
-describe('App: ProductWizard', () => {
+describe('App: NextGenProductWizard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [

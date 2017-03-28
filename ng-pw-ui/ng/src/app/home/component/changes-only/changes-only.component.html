@@ -1,0 +1,124 @@
+<ul>
+  <li>
+  <table>
+   <tr>
+     <td>
+       <label> <span style="align-content: center"> Environment </span></label>
+        </td> 
+     <td> 
+    <p-dropdown [options]="filterEnvOptions" [(ngModel)]="filterEnv" (onChange)="onEnvChange()" [autoWidth]="false" [style]="{'width':'350px','margin-left':'50px'}"></p-dropdown>
+ </td>
+  </tr>
+  </table>
+  </li>
+  <li>
+
+ <table>
+ <tr>
+   <td>
+ <label><span style="align-content: center"> Projects </span></label>
+   </td>
+
+<td>
+<p-pickList [source]="filterProjectInputRows" [target]="filterProjectOutputRows" [showSourceControls]="false"  [showTargetControls]="false" 
+[sourceStyle]="{'width':'350px','margin-left': '84px','margin-bottom':'15px','height':'165px'}" [targetStyle]="{'width':'350px','margin-bottom':'15px','height':'165px'}" >
+ <template let-project pTemplate="item">
+       
+          
+            <div>{{project.label}}</div>
+    
+    </template>
+
+ 
+</p-pickList>
+</td>
+
+
+ </tr>
+ </table>
+
+  </li>
+
+  <li>
+<table>
+ <tr>
+   <td>
+ <label> <span style="align-content: center"> Business Rules </span> </label>
+   </td>
+
+<td>
+  <li class="ui-picklist-buttons">
+<p-pickList  [source]="filterBussRulesInputRows" [target]="filterBussRulesOutputRows" [showSourceControls]="false"  [showTargetControls]="false" 
+[sourceStyle]="{'width':'350px','margin-left': '38px','margin-bottom':'15px','height':'165px'}" [targetStyle]="{'width':'350px','margin-bottom':'15px','height':'165px'}">
+ <template let-bussRule pTemplate="item">
+       
+          
+            <div style="margin-bottom:3px">{{bussRule.label}}</div>
+    
+    </template>
+
+ 
+</p-pickList>
+</li>
+</td>
+
+
+ </tr>
+ </table>
+  </li>
+
+
+
+  <li>
+ 
+<table>
+ <tr>
+   <td>
+ <label> <span style="align-content: center"> User ID's </span></label>
+   </td>
+
+<td>
+<p-pickList [source]="filterUserIdInputRows" [target]="filterUserIdOutputRows" [showSourceControls]="false"  [showTargetControls]="false" 
+[sourceStyle]="{'width':'350px','margin-left': '75px','margin-bottom':'15px','height':'165px'}" [targetStyle]="{'width':'350px','margin-bottom':'15px','height':'165px'}">
+ <template let-userId pTemplate="item">
+       
+          
+            <div>{{userId.label}}</div>
+    
+    </template>
+
+ 
+</p-pickList>
+</td>
+
+
+ </tr>
+ </table>
+ 
+  </li>
+ 
+  <li class="li-extra-space">
+    <button pButton type="button" (click)="onGoClick()"   [disabled]="isGoDisabled"      label="Go" [style]="{'margin-left':'150px'}"></button>
+  </li>
+  
+   <li class="li-extra-space">
+    <button pButton type="button" (click)="onResetClick()" label="Reset"   [disabled]="isResetDisabled"    [style]="{'margin-left':'150px'}"></button>
+  </li>
+
+  <li>
+ 
+<table>
+ <tr>
+  
+  <td>
+
+  </td>
+
+ </tr>
+ </table>
+ 
+  </li>
+
+
+
+</ul>
