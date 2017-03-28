@@ -112,6 +112,11 @@ export class BusinessRuleTreeComponent implements OnInit {
       case 'RF':      // RIDER_FOLDER
             this.buildPlanCodeList(node);
             break;
+      case 'P':       // PLAN
+      case 'R':       // RIDER_FOLDER
+      case 'PP':      // PAYOUT_PLAN
+            this.buildPlanDetails(node);
+            break;
       default:
             break;
     }
@@ -146,6 +151,28 @@ export class BusinessRuleTreeComponent implements OnInit {
                                      this.companyCode, this.productCode, this.planCode,
                                      this.issueState, this.lob, this.effDate,
                                      this.viewChanges, this.includeOrphans)
+        .subscribe(
+          res => node.children = res,
+          err => {
+              this.notificationService.handleError(err);
+              this.notificationService.showWaitIndicator(false);
+          },
+          ()  => {
+              this.notificationService.showWaitIndicator(false);
+              if (!node.children || node.children.length === 0) {
+                node.leaf = true;
+              }
+          }
+        );
+  }
+
+  private buildPlanDetails(node: TreeNode) {
+    const data: TreeNodeData = node.data;
+
+    this.notificationService.showWaitIndicator(true);
+    this.businessRuleTreeService
+        .getBusinessRuleTreePlanDetails(this.authToken, this.envId, this.companyCode,
+                                        data.planKey, this.viewChanges)
         .subscribe(
           res => node.children = res,
           err => {

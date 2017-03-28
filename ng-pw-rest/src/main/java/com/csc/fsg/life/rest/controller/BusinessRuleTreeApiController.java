@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.csc.fsg.life.rest.api.BusinessRuleTreeApi;
 import com.csc.fsg.life.rest.model.BusinessRuleTreeSearchInput;
 import com.csc.fsg.life.rest.model.TreeNode;
+import com.csc.fsg.life.rest.model.TreeNodePlanKey;
 import com.csc.fsg.life.rest.param.RestServiceParam;
 import com.csc.fsg.life.rest.service.BusinessRuleTreeService;
 
@@ -78,6 +80,19 @@ public class BusinessRuleTreeApiController
 
 		List<TreeNode> planList = businessRuleTreeService.getBusinessRuleTreePlanList(param, searchInput);
 		return new ResponseEntity<>(planList, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/business-rule-tree/plan/detail", produces = { "application/json" }, consumes = { "application/json" }, method = RequestMethod.POST)
+	public ResponseEntity<List<TreeNode>> getBusinessRuleTreePlanDetails(@RequestHeader(value = "authToken", required = true) String authToken,
+																		 @RequestHeader(value = "envId", required = true) String envId,
+																		 @RequestHeader(value = "companyCode", required = true) String companyCode,
+																		 @RequestBody TreeNodePlanKey planKey,
+																		 @RequestHeader(value = "viewChanges", required = false) Boolean viewChanges)
+	{
+		RestServiceParam param = buildRestServiceParam(authToken, envId, companyCode);
+		boolean includeChanges = Boolean.TRUE.equals(viewChanges);
+		List<TreeNode> planDetails = businessRuleTreeService.getBusinessRuleTreePlanDetails(param, planKey, includeChanges);
+		return new ResponseEntity<>(planDetails, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/business-rule-tree/search", produces = { "application/json" }, method = RequestMethod.GET)

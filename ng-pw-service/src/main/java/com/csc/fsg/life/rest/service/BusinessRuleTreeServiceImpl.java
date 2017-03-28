@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import org.joda.time.LocalDate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -22,6 +23,7 @@ import com.csc.fsg.life.pw.web.actions.tree.CommonTablesWriter;
 import com.csc.fsg.life.pw.web.actions.tree.CompanyWriter;
 import com.csc.fsg.life.pw.web.actions.tree.IndexMergeAssistent;
 import com.csc.fsg.life.pw.web.actions.tree.PlanMergeAssistent;
+import com.csc.fsg.life.pw.web.actions.tree.ProductWriter;
 import com.csc.fsg.life.pw.web.actions.tree.TreeWriter;
 import com.csc.fsg.life.pw.web.environment.Environment;
 import com.csc.fsg.life.pw.web.environment.EnvironmentManager;
@@ -35,6 +37,7 @@ import com.csc.fsg.life.rest.model.TreeNode;
 import com.csc.fsg.life.rest.model.TreeNode.TypeEnum;
 import com.csc.fsg.life.rest.model.TreeNodeData;
 import com.csc.fsg.life.rest.model.TreeNodeLazyType;
+import com.csc.fsg.life.rest.model.TreeNodePlanKey;
 import com.csc.fsg.life.rest.model.tree.Node;
 import com.csc.fsg.life.rest.param.RestServiceParam;
 
@@ -494,6 +497,123 @@ public class BusinessRuleTreeServiceImpl
 
 			List<TreeNode> planList = transformToDeclaredTypes(planNodes, true);
 			return planList;
+		}
+		finally {
+			if (pmAssist != null)
+				pmAssist.clean(wipConn);
+			if (imAssist != null)
+				imAssist.clean(wipConn);
+		}
+	}
+
+	public List<TreeNode> getBusinessRuleTreePlanDetails(RestServiceParam param, TreeNodePlanKey planKey, boolean viewChanges)
+	{
+		Connection wipConn = null;
+
+		try {
+			String envId = param.getEnvId();
+			String companyCode = param.getCompanyCode();
+
+			boolean isGoodEnvironment = false;
+			if (StringUtils.hasText(envId)) {
+				Map<String, Environment> environments = EnvironmentManager.getInstance().getEnvironments();
+				if (environments.get(envId) != null)
+					isGoodEnvironment = true;
+			}
+			if (!isGoodEnvironment) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_environment"));
+				throw new BadRequestException(model);
+			}
+
+			if (!StringUtils.hasText(companyCode)) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_company"));
+				throw new BadRequestException(model);
+			}
+
+			List<TreeNode> planDetails = getPlanDetails(wipConn, param, viewChanges, planKey);
+			return planDetails;
+		}
+		catch (RestServiceException e) {
+			throw e;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			ErrorModel model = errorModelFactory.newErrorModel(UnexpectedException.HTTP_STATUS);
+			throw new UnexpectedException(model);
+		}
+		finally {
+			if (wipConn != null) {
+				try {
+					DBConnMgr.getInstance().releaseConnection(wipConn);
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private List<TreeNode> getPlanDetails(Connection wipConn, RestServiceParam param, boolean viewChanges, TreeNodePlanKey planKey)
+		throws Exception
+	{
+		PlanMergeAssistent pmAssist = null;
+		IndexMergeAssistent imAssist = null;
+
+		try {
+			String envId = param.getEnvId();
+			String companyCode = param.getCompanyCode();
+			String productPrefix = planKey.getProductPrefix();
+			String productSuffix = planKey.getProductSuffix();
+
+			HashMap<String, String> planCriteriaKey = new HashMap<>();
+			planCriteriaKey.put(PlanTOBase.ENVIRONMENT_KEY, envId);
+			planCriteriaKey.put(PlanTOBase.COMPANY_CODE_KEY, companyCode);
+			planCriteriaKey.put(PlanTOBase.PRODUCT_CODE_KEY, productPrefix + productSuffix);
+			planCriteriaKey.put(PlanTOBase.PRODUCT_PREFIX_KEY, productPrefix);
+			planCriteriaKey.put(PlanTOBase.PRODUCT_SUFFIX_KEY, productSuffix);
+			planCriteriaKey.put(PlanTOBase.PLAN_CODE_KEY, planKey.getPlanCode());
+			planCriteriaKey.put(PlanTOBase.PLAN_TYPE_KEY, planKey.getPlanType());
+			planCriteriaKey.put(PlanTOBase.ISSUE_STATE_KEY, planKey.getIssueState());
+			planCriteriaKey.put(PlanTOBase.LINE_OF_BUSINESS_KEY, planKey.getLob());
+
+			LocalDate effDate = planKey.getEffDate();
+			if (effDate != null)
+				planCriteriaKey.put(PlanTOBase.EFFECTIVE_DATE_KEY, effDate.toString());
+
+			planCriteriaKey.put(PlanCriteriaTO.MERGED_VIEW_KEY, String.valueOf(viewChanges));
+
+			PlanCriteriaTO planCriteria = new PlanCriteriaTO(planCriteriaKey);
+			planCriteria.setLoadNP(true);
+			PlanCriteriaTO indexCriteria = new PlanCriteriaTO(planCriteria);
+			indexCriteria.setLoadNP(true);
+
+			wipConn = DBConnMgr.getInstance().getConnection(envId, DBConnMgr.APPL);
+
+			// Read Plan Table T000X
+			List<PlanCriteriaTO> planKeyList = new LinkedList<>();
+			planKeyList.add(planCriteria);
+			pmAssist = new PlanMergeAssistent(wipConn, planKeyList, true);
+
+			// Read Subset Index Table T000XA
+			String view = viewChanges ? "with" : "without";
+			imAssist = new IndexMergeAssistent(wipConn, indexCriteria.toHashMap(), true, view, true);
+
+			String payload = new ProductWriter(pmAssist, imAssist).getPlanDetailStream(wipConn, planCriteria);
+			BufferedReader reader = new BufferedReader(new StringReader(payload));
+
+			Node root = null;
+			if ("H".equals(productPrefix) || "N".equals(productPrefix))
+				root = new Node((short) 3);
+			else
+				root = new Node((short) 4);
+
+			processTreeNode(reader, root, new TreeNodeContainer(), envId);
+
+			List<Node> planDetails = root.getChildren();
+			List<TreeNode> planDetailsTreeNodes = transformToDeclaredTypes(planDetails, false);
+			return planDetailsTreeNodes;
 		}
 		finally {
 			if (pmAssist != null)

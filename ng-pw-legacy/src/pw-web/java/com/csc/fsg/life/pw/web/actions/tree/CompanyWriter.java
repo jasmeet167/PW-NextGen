@@ -41,8 +41,7 @@ public class CompanyWriter {
 
 	public String getStream(TreeNodeLazyType lazyType, String env, String company, String prefix,
 	        Connection wipConn, Connection mfConn, boolean viewChanges,
-	        boolean includeOrphans,PlanMergeAssistent pm, IndexMergeAssistent im /*,
-	        PWTask task,User user*/)
+	        boolean includeOrphans,PlanMergeAssistent pm, IndexMergeAssistent im)
 	        throws Exception {
 
 		StringBuffer treeStream = new StringBuffer();
@@ -92,7 +91,7 @@ public class CompanyWriter {
 				tableAuth = Constants.NODE_ATTR_UPDATE;
 //		}
 
-		ProductWriter pw = new ProductWriter(/*user,*/ pm, im);
+		ProductWriter pw = new ProductWriter(pm, im);
 
 		TreeMap<String, ArrayList<PlanBuffer>> map = new TreeMap<String, ArrayList<PlanBuffer>>();
 		PlanBuffer planBuffer = null;
@@ -107,7 +106,7 @@ public class CompanyWriter {
 					display = "NP Product";
 				else if ( productCode.startsWith("H") )
 					display = "H* Product";
-				planBuffer = pw.getStream(lazyType, env, company, productCode, wipConn, viewChanges /*, task*/);
+				planBuffer = pw.getPlanListStream(lazyType, env, company, productCode, wipConn, viewChanges);
 
 				if (map.containsKey(pp)) {
 					map.get(pp).add(planBuffer);
@@ -121,7 +120,7 @@ public class CompanyWriter {
 
 		writeProducts(env,company,treeStream, map,prefix,wipConn,tableAuth);
 		if (includeOrphans)
-			writeOrphans(env, company, prefix, wipConn, treeStream,pm,im /*,task,user*/);
+			writeOrphans(env, company, prefix, wipConn, treeStream, pm, im);
 		return treeStream.toString();
 	}
 

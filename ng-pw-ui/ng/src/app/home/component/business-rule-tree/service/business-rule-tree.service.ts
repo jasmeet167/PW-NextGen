@@ -4,6 +4,8 @@ import { Observable } from 'rxjs/Observable';
 
 import { TreeNode } from 'primeng/primeng';
 
+import { TreeNodePlanKey } from '../model/tree-node-plan-key';
+
 @Injectable()
 export class BusinessRuleTreeService {
   constructor(private http: Http) {
@@ -93,6 +95,30 @@ export class BusinessRuleTreeService {
     options.headers = filterHeaders;
     options.url = sessionStorage['restServiceBaseUrl'] + 'business-rule-tree/plan/list';
     options.method = RequestMethod.Get;
+
+    return this.http.request(new Request(options))
+               .map(response => { return <TreeNode[]> response.json(); });
+  }
+
+  getBusinessRuleTreePlanDetails(authToken: string, envId: string, companyCode: string,
+                                 planKey: TreeNodePlanKey, viewChanges: boolean): Observable<TreeNode[]> {
+    const filterHeaders: Headers = new Headers();
+    filterHeaders.append('Content-Type', 'application/json');
+    filterHeaders.append('Accept', 'application/json');
+    filterHeaders.append('authToken', authToken);
+    if (envId) {
+      filterHeaders.append('envId', envId);
+    }
+    if (companyCode) {
+      filterHeaders.append('companyCode', companyCode);
+    }
+    filterHeaders.append('viewChanges', viewChanges.toString());
+
+    const options: RequestOptions = new RequestOptions();
+    options.headers = filterHeaders;
+    options.body = planKey;
+    options.url = sessionStorage['restServiceBaseUrl'] + 'business-rule-tree/plan/detail';
+    options.method = RequestMethod.Post;
 
     return this.http.request(new Request(options))
                .map(response => { return <TreeNode[]> response.json(); });

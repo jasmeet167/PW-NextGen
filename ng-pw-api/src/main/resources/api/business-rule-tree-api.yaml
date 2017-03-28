@@ -17,7 +17,7 @@ paths:
   /business-rule-tree/core:
     get:
       summary: |
-        Retrieve information required to populate
+        Retrieves information required to populate
         the core part of Business Rule Tree.
       description: |
         This endpoint returns information, which can be used
@@ -89,7 +89,7 @@ paths:
   /business-rule-tree/common/tables:
     get:
       summary: |
-        Retrieve information required to populate
+        Retrieves information required to populate
         the Common Table subtree of Business Rule Tree.
       description: |
         This endpoint returns information, which can be used
@@ -155,7 +155,7 @@ paths:
   /business-rule-tree/plan/list:
     get:
       summary: |
-        Retrieve a list of plans matching the provided criteria.
+        Retrieves a list of plans matching the provided criteria.
       description: |
         This endpoint returns a list of Business Rule Tree nodes,
         containing information about the plans matching
@@ -242,6 +242,79 @@ paths:
           description: |
             OK.  The data model corresponding to the list
             of plans matching the provided criteria is returned.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/treeNode'
+        400:
+          description: |
+            Bad Request.  Invalid or malformed request detected.
+          schema:
+            $ref: '#/definitions/errorModel'
+        401:
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Auth token is either missing or invalid.
+        403:
+          description: |
+            Forbidden.  The user is not authorized to access
+            the required resources.
+        default:
+          description: Unexpected Error.
+          schema:
+            $ref: '#/definitions/errorModel'
+
+  /business-rule-tree/plan/detail:
+    post:
+      summary: |
+        Retrieves detailed information about a plan.
+      description: |
+        This endpoint returns detailed information about a plan
+        indicated by the provided key information.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: getBusinessRuleTreePlanDetails
+      parameters:
+        - name: authToken
+          in: header
+          description: |
+            Auth Token.
+          required: true
+          type: string
+        - name: envId
+          in: header
+          description: |
+            Environment Id.
+          required: true
+          type: string
+        - name: companyCode
+          in: header
+          description: |
+            Company Code.
+          required: true
+          type: string
+        - name: planKey
+          in: body
+          description: |
+            Key information required to retrieve plan information.
+          required: true
+          schema:
+            $ref: '#/definitions/treeNodePlanKey'
+        - name: viewChanges
+          in: header
+          description: |
+            Indicator used to request Rules or Rules with Changes.
+          required: false
+          type: boolean
+      tags:
+        - Business Rule Tree
+      responses:
+        200:
+          description: |
+            OK.  The data model corresponding to the selected
+            plan is returned.
           schema:
             type: array
             items:

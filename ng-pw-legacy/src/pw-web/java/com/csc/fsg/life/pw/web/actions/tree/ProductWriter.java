@@ -74,60 +74,32 @@ public class ProductWriter {
 		return new SQLBuilderMERGEDX(planCriteria.getEnvironment(), planCriteria).buildSelectTablePtrsForWriterStatement();
 	}
 
-	public PlanBuffer getStream(TreeNodeLazyType lazyType, String env, String company, String product,
-	        Connection conn, boolean viewChanges /*, PWTask task*/) throws Exception {
-
-		ResultSet rs = null;
-		Statement stmt = null;
-		PreparedStatement xaStmt = null;
+	public PlanBuffer getPlanListStream(TreeNodeLazyType lazyType, String env, String company, String product,
+	        Connection conn, boolean viewChanges) throws Exception {
 
 		PlanBuffer buffer = new PlanBuffer();
 
-		try {
-
-			xaStmt = conn.prepareStatement(getXAQuery());
-			// refactor plan sql.
-			stmt = conn.createStatement();
-
-			/*
-			PlanCriteriaTO planCriteria = new PlanCriteriaTO();
-			planCriteria.setCompanyCode(company);
-			planCriteria.setProductCode(product);
-			planCriteria.setViewChanges(isWithChanges);
-			String sql = getPlanQuery(planCriteria);
-			rs = stmt.executeQuery(sql);
-			while (rs.next()) {
-				// refactor plan key.
-				PlanRowTO planRow = new PlanRowTO(rs);
-			*/
-			Set<String> planKeys = pma.getPlans();
-			for (String planKey : planKeys ) {
-				PlanTO planTO = new PlanTO(planKey, "|");
-				if ( !planTO.getCompanyCode().equals(company) || !planTO.getProductCode().equals(product) )
-					continue;
-				planTO.setEnvironment(env);
-				String planType = planTO.getPlanType();
-				PlanCriteriaTO tmpPlan = new PlanCriteriaTO(planTO);
-				tmpPlan.setViewChanges(viewChanges);
-				
-				if (isPlanApplicable(planType, lazyType)) {
-					String plan = writePlan(lazyType, tmpPlan, conn, xaStmt);
-					if (planType.equalsIgnoreCase("B") || planType.equalsIgnoreCase("H")) 
-						buffer.appendBase(plan);
-					else if (planType.equalsIgnoreCase("R"))
-						buffer.appendRider(plan);
-					else if (planType.equalsIgnoreCase("P"))
-						buffer.appendArch(plan);
-					else if (planType.equalsIgnoreCase("W"))
-						buffer.appendPayout(plan);
-				}
+		Set<String> planKeys = pma.getPlans();
+		for (String planKey : planKeys ) {
+			PlanTO planTO = new PlanTO(planKey, "|");
+			if ( !planTO.getCompanyCode().equals(company) || !planTO.getProductCode().equals(product) )
+				continue;
+			planTO.setEnvironment(env);
+			String planType = planTO.getPlanType();
+			PlanCriteriaTO tmpPlan = new PlanCriteriaTO(planTO);
+			tmpPlan.setViewChanges(viewChanges);
+			
+			if (isPlanApplicable(planType, lazyType)) {
+				String plan = writePlan(tmpPlan, conn);
+				if (planType.equalsIgnoreCase("B") || planType.equalsIgnoreCase("H")) 
+					buffer.appendBase(plan);
+				else if (planType.equalsIgnoreCase("R"))
+					buffer.appendRider(plan);
+				else if (planType.equalsIgnoreCase("P"))
+					buffer.appendArch(plan);
+				else if (planType.equalsIgnoreCase("W"))
+					buffer.appendPayout(plan);
 			}
-		} catch (Exception e) {
-			throw e;
-		} finally {
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
-			Utils.closePreparedStatement(xaStmt);
 		}
 
 		return buffer;
@@ -161,20 +133,21 @@ public class ProductWriter {
 		return false;
 	}
 
-	private String writePlan(TreeNodeLazyType lazyType, PlanCriteriaTO planCriteria, Connection conn,
-			PreparedStatement xaStmt) throws Exception {
+	private String writePlan(PlanCriteriaTO planCriteria, Connection conn)
+		throws Exception
+	{
 		String productPrefix = planCriteria.getProductPrefix();
 		String planType = planCriteria.getPlanType();
 		
 		StringBuffer buffer = new StringBuffer();
 		if (!(productPrefix.equals("N") || productPrefix.equals("H"))) 
-			buffer.append("0"+TAB+"4"+TAB);
+			buffer.append("0" + TAB + "4" + TAB);
 		else
-			buffer.append("0"+TAB+"3"+TAB);
+			buffer.append("0" + TAB + "3" + TAB);
 		
-		if (planType.trim().equals("W")){	
+		if (planType.trim().equals("W")) {	
 			buffer.append("24").append(TAB);                     
-		} else if (!planType.trim().equals("R")){
+		} else if (!planType.trim().equals("R")) {
 			buffer.append("10").append(TAB);                     
 		} else {
 			buffer.append("11").append(TAB);                     
@@ -189,26 +162,21 @@ public class ProductWriter {
 		buffer.append(planCriteria.getPlanKey(TAB));
 		buffer.append(NEW_LINE);
 
-		// If lazy-loading a branch in Business Rule Tree, return only top-level plan information
-		if (lazyType != null)
-			return buffer.toString();
-		
-		ResultSet rs = null;
-		Statement stmt = null;
-		
-	
-		try {
-			int level = 5;
-			/*
-			String sql = getPointerQuery(planCriteria);
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(sql);
+		return buffer.toString();
+	}
 
-			task.setStatus(0, "   Searching for Plan-oriented Tables");
-			while (rs.next()) 
-			{
-				PlanRowTO planRow = new PlanRowTO(rs);
-			*/
+	public String getPlanDetailStream(Connection conn, PlanCriteriaTO planCriteria)
+		throws Exception
+	{
+		PreparedStatement xaStmt = null;
+
+		StringBuffer buffer = new StringBuffer();
+		String productPrefix = planCriteria.getProductPrefix();
+
+		try {
+			xaStmt = conn.prepareStatement(getXAQuery());
+
+			int level = 5;
 			Set<PlanRowTO> planRows = pma.getPlanRows(planCriteria);
 			for (PlanRowTO planRow : planRows ) {
 				planCriteria.setTablePtrId(planRow.getTablePtrId());
@@ -218,13 +186,9 @@ public class ProductWriter {
 				String ddlName = EnvironmentManager.getInstance()
 					.getEnvironment(planCriteria.getEnvironment())
 					.getTableDescMgr().getDDLName(planCriteria.getTablePtrId());
-				if (ddlName==null){
+				if (ddlName==null) {
 					continue;
 				}
-				
-				String var = "";
-				if ( planRow.getTablePtrVar().trim().length() > 0 )
-					var += "~" + planRow.getTablePtrVar(); 
 
 				// ENH962 - use getStructureNode
 				StructureNode sn = TreeUtils.getStructureNode(
@@ -239,9 +203,9 @@ public class ProductWriter {
 					tablePrepend += " ";
 				
 				if ((productPrefix.equals("N") || productPrefix.equals("H"))) 
-					level =4;
+					level = 4;
 				
-				tableAuth = Constants.NODE_ATTR_INQUIRY;
+				int tableAuth = Constants.NODE_ATTR_INQUIRY;
 //				if (user.isPermitted(planCriteria.getEnvironment(), planCriteria.getCompanyCode(), planCriteria.getTablePtrId(), PolicyConstants.UPDATE))
 					tableAuth = Constants.NODE_ATTR_UPDATE;
 					
@@ -259,17 +223,15 @@ public class ProductWriter {
 				buffer.append("F").append(TAB);
 				buffer.append(NEW_LINE);
 				
-				writePointers(planCriteria, sn.getNodeId()+"", buffer, level, ddlName,xaStmt);
+				writePointers(planCriteria, sn.getNodeId() + "", buffer, level, ddlName, xaStmt);
 			}
 
 			return buffer.toString();
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
+			Utils.closePreparedStatement(xaStmt);
 		}
-
 	}
 
 	private void writePointers(PlanCriteriaTO planCriteria, String parentNodeId, 
