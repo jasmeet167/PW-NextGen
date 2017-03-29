@@ -3,6 +3,8 @@ import { Http, Response, Headers, RequestOptions, RequestMethod, Request } from 
 import { Observable } from 'rxjs/Observable';
 import { SelectItem } from 'primeng/primeng';
 
+import { ChangeOnlyTabMsg } from '../component/changes-only/model/changeonly.message';
+
 import 'rxjs/add/operator/map';
 
 @Injectable()
@@ -10,7 +12,7 @@ export class FilterService {
   constructor(private http: Http) {
   }
 
-  getEnvOptions(authToken: string): Observable<SelectItem[]> {
+  getCommonEnvOptions(authToken: string): Observable<SelectItem[]> {
     const filterHeaders: Headers = new Headers();
     filterHeaders.append('Accept', 'application/json');
     filterHeaders.append('authToken', authToken);
@@ -24,7 +26,7 @@ export class FilterService {
                .map(response => { return <SelectItem[]> response.json(); });
   }
 
-  getCompanyOptions(authToken: string, viewChanges: boolean, envId: string): Observable<SelectItem[]> {
+  getPlanCompanyOptions(authToken: string, viewChanges: boolean, envId: string): Observable<SelectItem[]> {
     const filterHeaders: Headers = new Headers();
     filterHeaders.append('Accept', 'application/json');
     filterHeaders.append('authToken', authToken);
@@ -40,8 +42,8 @@ export class FilterService {
                .map(response => { return <SelectItem[]> response.json(); });
   }
 
-  getProductOptions(authToken: string, viewChanges: boolean, envId: string,
-                    companyCode: string): Observable<SelectItem[]> {
+  getPlanProductOptions(authToken: string, viewChanges: boolean, envId: string,
+                        companyCode: string): Observable<SelectItem[]> {
     const filterHeaders: Headers = new Headers();
     filterHeaders.append('Accept', 'application/json');
     filterHeaders.append('authToken', authToken);
@@ -58,8 +60,8 @@ export class FilterService {
                .map(response => { return <SelectItem[]> response.json(); });
   }
 
-  getPlanCodeOptions(authToken: string, viewChanges: boolean, envId: string,
-                     companyCode: string, productCode: string): Observable<SelectItem[]> {
+  getPlanPlanCodeOptions(authToken: string, viewChanges: boolean, envId: string,
+                         companyCode: string, productCode: string): Observable<SelectItem[]> {
     const filterHeaders: Headers = new Headers();
     filterHeaders.append('Accept', 'application/json');
     filterHeaders.append('authToken', authToken);
@@ -77,8 +79,8 @@ export class FilterService {
                .map(response => { return <SelectItem[]> response.json(); });
   }
 
-  getIssueStateOptions(authToken: string, viewChanges: boolean, envId: string,
-                     companyCode: string, productCode: string, planCode: string): Observable<SelectItem[]> {
+  getPlanIssueStateOptions(authToken: string, viewChanges: boolean, envId: string,
+                           companyCode: string, productCode: string, planCode: string): Observable<SelectItem[]> {
     const filterHeaders: Headers = new Headers();
     filterHeaders.append('Accept', 'application/json');
     filterHeaders.append('authToken', authToken);
@@ -97,9 +99,9 @@ export class FilterService {
                .map(response => { return <SelectItem[]> response.json(); });
   }
 
-  getLobOptions(authToken: string, viewChanges: boolean, envId: string,
-                companyCode: string, productCode: string, planCode: string,
-                issueState: string): Observable<SelectItem[]> {
+  getPlanLobOptions(authToken: string, viewChanges: boolean, envId: string,
+                    companyCode: string, productCode: string, planCode: string,
+                    issueState: string): Observable<SelectItem[]> {
     const filterHeaders: Headers = new Headers();
     filterHeaders.append('Accept', 'application/json');
     filterHeaders.append('authToken', authToken);
@@ -119,9 +121,9 @@ export class FilterService {
                .map(response => { return <SelectItem[]> response.json(); });
   }
 
-  getEffDateOptions(authToken: string, viewChanges: boolean, envId: string,
-                    companyCode: string, productCode: string, planCode: string,
-                    issueState: string, lob: string): Observable<SelectItem[]> {
+  getPlanEffDateOptions(authToken: string, viewChanges: boolean, envId: string,
+                        companyCode: string, productCode: string, planCode: string,
+                        issueState: string, lob: string): Observable<SelectItem[]> {
     const filterHeaders: Headers = new Headers();
     filterHeaders.append('Accept', 'application/json');
     filterHeaders.append('authToken', authToken);
@@ -142,7 +144,7 @@ export class FilterService {
                .map(response => { return <SelectItem[]> response.json(); });
   }
 
-  getProjects(authToken: string, envId: string): Observable<SelectItem[]> {
+  getPlanProjectOptions(authToken: string, envId: string): Observable<SelectItem[]> {
     const filterHeaders: Headers = new Headers();
     filterHeaders.append('Accept', 'application/json');
     filterHeaders.append('authToken', authToken);
@@ -155,5 +157,50 @@ export class FilterService {
 
     return this.http.request(new Request(options))
                .map(response => { return <SelectItem[]> response.json(); });
+  }
+
+  getChangesEnvOptions(authToken: string): Observable<SelectItem[]> {
+    const filterHeaders: Headers = new Headers();
+    filterHeaders.append('Accept', 'application/json');
+    filterHeaders.append('authToken', authToken);
+
+    const options: RequestOptions = new RequestOptions();
+    options.headers = filterHeaders;
+    options.url = sessionStorage['restServiceBaseUrl'] + '/search/changes/environment';
+    options.method = RequestMethod.Get;
+
+    return this.http.request(new Request(options))
+                    .map(response => { return <SelectItem[]> response.json(); });
+  }
+
+  getPlanTableOptions(authToken: string, envId: string, compCode: string): Observable<SelectItem[]> {
+    const filterHeaders: Headers = new Headers();
+    filterHeaders.append('Accept', 'application/json');
+    filterHeaders.append('authToken', authToken);
+    filterHeaders.append('envId', envId);
+    filterHeaders.append('companyCode', compCode);
+
+    const options: RequestOptions = new RequestOptions();
+    options.headers = filterHeaders;
+    options.url = sessionStorage['restServiceBaseUrl'] + 'search/plan/table';
+    options.method = RequestMethod.Get;
+
+    return this.http.request(new Request(options))
+               .map(response => { return <SelectItem[]> response.json(); });
+  }
+
+  getChangesWipDetails(authToken: string, envId: string): Observable<ChangeOnlyTabMsg> {
+    const filterHeaders: Headers = new Headers();
+    filterHeaders.append('Accept', 'application/json');
+    filterHeaders.append('authToken', authToken);
+    filterHeaders.append('envId', envId);
+
+    const options: RequestOptions = new RequestOptions();
+    options.headers = filterHeaders;
+    options.url = sessionStorage['restServiceBaseUrl'] + '/search/changes/filter';
+    options.method = RequestMethod.Get;
+
+    return this.http.request(new Request(options))
+               .map(response => { return <ChangeOnlyTabMsg> response.json(); });
   }
 }

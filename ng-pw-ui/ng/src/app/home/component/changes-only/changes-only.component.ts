@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
-import { NotificationService } from 'app/notification/service/notification.service';
 import { SelectItem } from 'primeng/primeng';
-import { FilterServiceCO } from './service/filter.service_CO'
-import {ChangeOnlyTabMsg} from './model/changeonly.message'
+
+import { NotificationService } from 'app/notification/service/notification.service';
+import { FilterService } from 'app/home/service/filter.service';
+
+import { ChangeOnlyTabMsg } from './model/changeonly.message';
 
 @Component({
   selector: 'app-changes-only',
@@ -17,7 +19,7 @@ export class ChangesOnlyComponent implements OnInit {
   public filterProjectInputRows: SelectItem[];
   public filterBussRulesInputRows: SelectItem[];
   public filterUserIdInputRows:SelectItem[];
- 
+
 
 
   public filterEnv: string;
@@ -33,7 +35,7 @@ export class ChangesOnlyComponent implements OnInit {
 
 
 
-  constructor(private notificationService: NotificationService, private filterServiceCO:FilterServiceCO ) {
+  constructor(private filterService: FilterService, private notificationService: NotificationService) {
     this.authToken = sessionStorage['authToken'];
   }
 
@@ -51,10 +53,10 @@ export class ChangesOnlyComponent implements OnInit {
     this.filterUserIdOutputRows = <SelectItem[]>[];
     this.isGoDisabled=true;
     this.isResetDisabled=true;
-   
+
     let envOptions: SelectItem[];
 
-  this.filterServiceCO.getChangedEnvOptions(this.authToken)
+  this.filterService.getChangesEnvOptions(this.authToken)
         .subscribe(
           res => envOptions = res,
           err => {
@@ -86,11 +88,11 @@ export class ChangesOnlyComponent implements OnInit {
  {
    let changeonlyTabmsg: ChangeOnlyTabMsg;
    changeonlyTabmsg=null;
-   
+
    if(this.filterEnv!=null)
    {
      this.notificationService.showWaitIndicator(true);
-  this.filterServiceCO.getChangedWIPDetails(this.authToken,  this.filterEnv)
+  this.filterService.getChangesWipDetails(this.authToken,  this.filterEnv)
        .subscribe(
           res => changeonlyTabmsg = res,
           err => {
@@ -134,7 +136,7 @@ export class ChangesOnlyComponent implements OnInit {
       for(const bussRuleTab of changeonlyTabmsg.businessRuleTables)
       {
         this.filterBussRulesInputRows.push(bussRuleTab);
-  
+
       }
     }
   if(changeonlyTabmsg.projects!=null)
@@ -156,9 +158,9 @@ if(changeonlyTabmsg.users!=null)
 }
 
 
-  this.filterBussRulesInputRows.sort(function(a,b) {return (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0);} ); 
-  this.filterProjectInputRows.sort(function(a,b) {return (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0);} ); 
-  this.filterUserIdInputRows.sort(function(a,b) {return (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0);} ); 
+  this.filterBussRulesInputRows.sort(function(a,b) {return (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0);} );
+  this.filterProjectInputRows.sort(function(a,b) {return (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0);} );
+  this.filterUserIdInputRows.sort(function(a,b) {return (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0);} );
   }
 
 
@@ -186,7 +188,7 @@ onGoClick()
 onResetClick()
 {
   console.log("on onResetClick ");
-  
+
     this.filterProjectInputRows =  <SelectItem[]>[];
     this.filterBussRulesInputRows = <SelectItem[]>[];
     this.filterProjectOutputRows = <SelectItem[]>[];
@@ -195,7 +197,7 @@ onResetClick()
 
     this.filterUserIdInputRows= <SelectItem[]>[];
     let envOptions: SelectItem[];
-    
+
 
 }
 

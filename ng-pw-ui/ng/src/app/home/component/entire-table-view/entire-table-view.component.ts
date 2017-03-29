@@ -1,19 +1,16 @@
 import { Component } from '@angular/core';
-import {  OnInit } from '@angular/core';
+import { OnInit } from '@angular/core';
 
 import { SelectItem } from 'primeng/primeng';
 
 import { NotificationService } from 'app/notification/service/notification.service';
-
-import { FilterServiceET } from './service/filter.service_ET'
-
-import { FilterService } from 'app/home/component/business-rule-search/service/filter.service'
+import { FilterService } from 'app/home/service/filter.service';
 
 @Component({
   selector: 'app-entire-table-view',
   templateUrl: './entire-table-view.component.html' ,
   styleUrls: ['./entire-table-view.component.css']
-  
+
 })
 export class EntireTableViewComponent implements  OnInit{
 
@@ -34,11 +31,9 @@ export class EntireTableViewComponent implements  OnInit{
 
   public filterRememberSelections: boolean;
 
-constructor(private filterEntireTableService:FilterServiceET, private notificationService: NotificationService,
-private filterService:FilterService)
-{
-this.authToken = sessionStorage['authToken'];
-}
+  constructor(private filterService: FilterService, private notificationService: NotificationService) {
+    this.authToken = sessionStorage['authToken'];
+  }
 
   ngOnInit() {
     if (!this.authToken || this.authToken.trim() === '') {
@@ -53,8 +48,8 @@ this.authToken = sessionStorage['authToken'];
 
     let envOptions: SelectItem[];
     this.notificationService.showWaitIndicator(true);
-  
-     this.filterService.getEnvOptions(this.authToken)
+
+     this.filterService.getCommonEnvOptions(this.authToken)
         .subscribe(
           res => envOptions = res,
           err => {
@@ -98,7 +93,7 @@ this.authToken = sessionStorage['authToken'];
 
  onEnvChange() {
     this.filterCompany = null;
- 
+
 
     if (this.filterEnv == null) {
       this.filterCompanyDisabled = true;
@@ -107,7 +102,7 @@ this.authToken = sessionStorage['authToken'];
 
       let companyOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getCompanyOptions(this.authToken, this.filterChanges, this.filterEnv)
+      this.filterService.getPlanCompanyOptions(this.authToken, this.filterChanges, this.filterEnv)
           .subscribe(
             res => companyOptions = res,
             err => {
@@ -117,14 +112,14 @@ this.authToken = sessionStorage['authToken'];
                 this.buildCompanyDropdown(null);
                  this.notificationService.showWaitIndicator(false);
             },
-            ()  => 
+            ()  =>
             {
               this.buildCompanyDropdown(companyOptions);
                this.notificationService.showWaitIndicator(false);
             }
           );
 
- 
+
     }
   }
 
@@ -132,7 +127,7 @@ onCompanyChange(){
 let tableRowsOptions: SelectItem[];
 this.notificationService.showWaitIndicator(true);
 
-     this.filterEntireTableService.getTables(this.authToken, this.filterEnv,this.filterCompany)
+     this.filterService.getPlanTableOptions(this.authToken, this.filterEnv,this.filterCompany)
           .subscribe(
             res => tableRowsOptions = res,
             err => {
@@ -156,10 +151,10 @@ buildTableRows(tableRowsOptions:SelectItem[])
 {   if (tableRowsOptions == null) {
       this.filterTableRows = <SelectItem[]> [];
       this.filterTables = <string[]> [];
-    } 
+    }
     if(tableRowsOptions!=null)
      {
-     
+
       for (const row of tableRowsOptions) {
         this.filterTableRows.push(row);
       }

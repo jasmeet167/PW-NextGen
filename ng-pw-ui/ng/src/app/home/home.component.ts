@@ -4,7 +4,7 @@ import { MenuItem } from 'primeng/primeng';
 
 import { NotificationService } from 'app/notification/service/notification.service';
 import { MenuService } from 'app/util/service/menu.service';
-import { AboutService } from './service/about.service';
+import { AboutService } from 'app/home/service/about.service';
 
 import { MenuHelper } from 'app/util/menu.helper';
 import { AboutApplication } from './model/about-application';

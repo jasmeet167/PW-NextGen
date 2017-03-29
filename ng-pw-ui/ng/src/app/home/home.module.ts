@@ -14,7 +14,7 @@ import { DropdownModule } from 'primeng/primeng';
 import { ListboxModule } from 'primeng/primeng';
 import { CheckboxModule } from 'primeng/primeng';
 import { ButtonModule } from 'primeng/primeng';
-import  { PickListModule } from 'primeng/primeng';
+import { PickListModule } from 'primeng/primeng';
 
 // Module components
 import { HomeComponent } from './home.component';
@@ -30,11 +30,10 @@ import { ContinuityCheckComponent } from './component/continuity-check/continuit
 
 // Module services
 import { MenuService } from 'app/util/service/menu.service';
-import { FilterService } from './component/business-rule-search/service/filter.service';
+import { FilterService } from 'app/home/service/filter.service';
 import { BusinessRuleTreeService } from './component/business-rule-tree/service/business-rule-tree.service';
 import { AboutService } from './service/about.service';
-import { FilterServiceCO } from './component/changes-only/service/filter.service_CO';
-import {FilterServiceET} from './component/entire-table-view/service/filter.service_ET'
+
 // Routing module
 import { HomeRoutingModule } from './home-routing.module';
 
@@ -55,7 +54,7 @@ import { HomeRoutingModule } from './home-routing.module';
     ButtonModule,
     HomeRoutingModule,
     PickListModule
-    
+
  ],
   declarations: [
     HomeComponent,
@@ -73,9 +72,7 @@ import { HomeRoutingModule } from './home-routing.module';
     MenuService,
     FilterService,
     BusinessRuleTreeService,
-    AboutService,
-    FilterServiceCO,
-    FilterServiceET
+    AboutService
   ]
 })
 export default class HomeModule {

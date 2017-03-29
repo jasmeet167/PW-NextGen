@@ -5,7 +5,7 @@ import { SelectItem } from 'primeng/primeng';
 import { BusinessRuleTreeComponent } from '../business-rule-tree/business-rule-tree.component';
 
 import { NotificationService } from 'app/notification/service/notification.service';
-import { FilterService } from './service/filter.service';
+import { FilterService } from 'app/home/service/filter.service';
 
 @Component({
   selector: 'app-business-rule-search',
@@ -73,7 +73,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
 
     let envOptions: SelectItem[];
     this.notificationService.showWaitIndicator(true);
-    this.filterService.getEnvOptions(this.authToken)
+    this.filterService.getCommonEnvOptions(this.authToken)
         .subscribe(
           res => envOptions = res,
           err => {
@@ -142,7 +142,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
 
       let companyOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getCompanyOptions(this.authToken, this.viewChanges, this.envId)
+      this.filterService.getPlanCompanyOptions(this.authToken, this.viewChanges, this.envId)
           .subscribe(
             res => companyOptions = res,
             err => {
@@ -156,7 +156,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
           );
 
       let projectOptions: SelectItem[];
-      this.filterService.getProjects(this.authToken, this.envId)
+      this.filterService.getPlanProjectOptions(this.authToken, this.envId)
           .subscribe(
             res => projectOptions = res,
             err => {
@@ -198,7 +198,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
 
       let productOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getProductOptions(this.authToken, this.viewChanges, this.envId,
+      this.filterService.getPlanProductOptions(this.authToken, this.viewChanges, this.envId,
                                            this.companyCode)
           .subscribe(
             res => productOptions = res,
@@ -239,7 +239,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
 
       let planCodeOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getPlanCodeOptions(this.authToken, this.viewChanges, this.envId,
+      this.filterService.getPlanPlanCodeOptions(this.authToken, this.viewChanges, this.envId,
                                             this.companyCode, this.productCode)
           .subscribe(
             res => planCodeOptions = res,
@@ -275,7 +275,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
 
       let issueStateOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getIssueStateOptions(this.authToken, this.viewChanges, this.envId,
+      this.filterService.getPlanIssueStateOptions(this.authToken, this.viewChanges, this.envId,
                                               this.companyCode, this.productCode, this.planCode)
           .subscribe(
             res => issueStateOptions = res,
@@ -307,7 +307,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
 
       let lobOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getLobOptions(this.authToken, this.viewChanges, this.envId,
+      this.filterService.getPlanLobOptions(this.authToken, this.viewChanges, this.envId,
                                        this.companyCode, this.productCode, this.planCode,
                                        this.issueState)
           .subscribe(
@@ -337,7 +337,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
 
       let effDateOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getEffDateOptions(this.authToken, this.viewChanges, this.envId,
+      this.filterService.getPlanEffDateOptions(this.authToken, this.viewChanges, this.envId,
                                            this.companyCode, this.productCode, this.planCode,
                                            this.issueState, this.lob)
           .subscribe(
