@@ -290,7 +290,7 @@ public class CompanyWriter {
 		// Searching for Orphan Tables
 		cleanNRecreateMergedView(env,company,productPrefix,wipConn,tx,txa);
 		OrphanTreeWriter otw = new OrphanTreeWriter();
-		otw.writeOrphans(env, company, productPrefix, wipConn,treeStream/*,task,user*/);
+		otw.writeOrphans(env, company, productPrefix, wipConn,treeStream);
 	}
 	
 	private void cleanNRecreateMergedView(String env,String company,String productPrefix,Connection wipConn,PlanMergeAssistent tx, IndexMergeAssistent txa) throws Exception{

@@ -12,7 +12,7 @@ export class BusinessRuleTreeService {
   }
 
   getBusinessRuleTreeCore(authToken: string, envId: string, companyCode: string,
-                          productCode: string): Observable<TreeNode[]> {
+                          productCode: string, includeOrphans: boolean): Observable<TreeNode[]> {
     const filterHeaders: Headers = new Headers();
     filterHeaders.append('Accept', 'application/json');
     filterHeaders.append('authToken', authToken);
@@ -24,6 +24,9 @@ export class BusinessRuleTreeService {
     }
     if (productCode) {
       filterHeaders.append('productCode', productCode);
+    }
+    if (includeOrphans) {
+      filterHeaders.append('includeOrphans', includeOrphans.toString());
     }
 
     const options: RequestOptions = new RequestOptions();

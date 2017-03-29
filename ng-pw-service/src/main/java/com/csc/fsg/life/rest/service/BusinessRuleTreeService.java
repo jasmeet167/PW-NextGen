@@ -22,4 +22,7 @@ public interface BusinessRuleTreeService
 
 	@SecuredMethod(action = AuthorizationAction.VIEW)
 	public List<TreeNode> getBusinessRuleTreePlanDetails(RestServiceParam param, TreeNodePlanKey planKey, boolean viewChanges);
+
+	@SecuredMethod(action = AuthorizationAction.VIEW)
+	public List<TreeNode> getBusinessRuleTreeOrphanSubsets(RestServiceParam param, String productCode);
 }

@@ -112,7 +112,7 @@ export class BusinessRuleSearchComponent implements OnInit  {
     this.includeOrphans = false;
     this.isIncludeOrphansDisabled = true;
 
-    this.rememberSelections = false;
+    this.rememberSelections = true;
 
     this.evaluateStatusOfGo();
   }

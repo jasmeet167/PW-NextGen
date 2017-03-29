@@ -20,6 +20,7 @@ import com.csc.fsg.life.pw.common.transferobjects.PlanTOBase;
 import com.csc.fsg.life.pw.web.actions.tree.CommonTablesWriter;
 import com.csc.fsg.life.pw.web.actions.tree.CompanyWriter;
 import com.csc.fsg.life.pw.web.actions.tree.IndexMergeAssistent;
+import com.csc.fsg.life.pw.web.actions.tree.OrphanTreeWriter;
 import com.csc.fsg.life.pw.web.actions.tree.PlanMergeAssistent;
 import com.csc.fsg.life.pw.web.actions.tree.ProductWriter;
 import com.csc.fsg.life.pw.web.environment.Environment;
@@ -58,7 +59,6 @@ public class BusinessRuleTreeServiceImpl
 	public List<TreeNode> getBusinessRuleTreeCore(RestServiceParam param, String productCode, boolean includeOrphans)
 	{
 		try {
-			// TODO: +++ Add processing of includeOrphans
 			String envId = param.getEnvId();
 			String companyCode = param.getCompanyCode();
 
@@ -91,7 +91,7 @@ public class BusinessRuleTreeServiceImpl
 			node.setStyleClass(STYLE_FOLDER);
 			node.setExpanded(Boolean.TRUE);
 			setFolderIcons(node);
-			node.setChildren(getStarterNodes(productCode));
+			node.setChildren(getStarterNodes(productCode, includeOrphans));
 
 			List<TreeNode> treeCore = new LinkedList<>();
 			treeCore.add(node);
@@ -107,9 +107,9 @@ public class BusinessRuleTreeServiceImpl
 		}
 	}
 
-	private List<TreeNode> getStarterNodes(String productCode)
+	private List<TreeNode> getStarterNodes(String productCode, boolean includeOrphans)
 	{
-		List<TreeNode> starterNodes = new LinkedList<>();
+		LinkedList<TreeNode> starterNodes = new LinkedList<>();
 
 		TreeNode common = new TreeNode();
 		common.setType(TypeEnum.CTF);
@@ -133,7 +133,6 @@ public class BusinessRuleTreeServiceImpl
 		pdfData.setLazyNode(Boolean.TRUE);
 		pdfData.setLazyType(TreeNodeLazyType.PDF);
 		pdf.setData(pdfData);
-		starterNodes.add(pdf);
 
 		TreeNode commonCoverage = new TreeNode();
 		commonCoverage.setType(TypeEnum.PDF);
@@ -145,7 +144,15 @@ public class BusinessRuleTreeServiceImpl
 		commonCovData.setLazyNode(Boolean.TRUE);
 		commonCovData.setLazyType(TreeNodeLazyType.H);
 		commonCoverage.setData(commonCovData);
-		starterNodes.add(commonCoverage);
+
+		if (productCode.startsWith("N")) {
+			starterNodes.add(commonCoverage);
+			starterNodes.add(pdf);
+		}
+		else {
+			starterNodes.add(pdf);
+			starterNodes.add(commonCoverage);
+		}
 
 		if (productCode.startsWith("A")) {
 			TreeNode ann = new TreeNode();
@@ -176,6 +183,13 @@ public class BusinessRuleTreeServiceImpl
 			trad.setStyleClass(STYLE_FOLDER);
 			setFolderIcons(trad);
 			trad.setChildren(getTradStarterNodes());
+		}
+
+		if (includeOrphans
+		&& !productCode.startsWith("H")
+		&& !productCode.startsWith("N")) {
+			TreeNode orphanSubsetNode = getOrphanSubsetStarterNode();
+			starterNodes.getLast().getChildren().add(orphanSubsetNode);
 		}
 
 		return starterNodes;
@@ -278,6 +292,23 @@ public class BusinessRuleTreeServiceImpl
 		setFolderIcons(riderPlanFolder);
 
 		return starterNodes;
+	}
+
+	private TreeNode getOrphanSubsetStarterNode()
+	{
+		TreeNode orphans = new TreeNode();
+		orphans.setType(TypeEnum.OF);
+		orphans.setLabel(getMessage("orphan_subsets_folder_label"));
+		orphans.setStyleClass(STYLE_FOLDER);
+		orphans.setLeaf(Boolean.FALSE);
+		setFolderIcons(orphans);
+
+		TreeNodeData orphansData = new TreeNodeData();
+		orphansData.setLazyNode(Boolean.TRUE);
+		orphansData.setLazyType(TreeNodeLazyType.O);
+		orphans.setData(orphansData);
+
+		return orphans;
 	}
 
 	public List<TreeNode> getBusinessRuleTreeCommonTables(RestServiceParam param, boolean includeChanges)
@@ -397,6 +428,14 @@ public class BusinessRuleTreeServiceImpl
 			wipConn = DBConnMgr.getInstance().getConnection(envId, DBConnMgr.APPL);
 
 			List<TreeNode> planList = getPlanList(brConn, wipConn, param, searchInput);
+			if (searchInput.getIncludeOrphans()) {
+				if ((productCode.startsWith("N") && searchInput.getLazyType() == TreeNodeLazyType.PDF) 
+				 || (productCode.startsWith("H") && searchInput.getLazyType() == TreeNodeLazyType.H)) {
+					TreeNode orphanSubsetNode = getOrphanSubsetStarterNode();
+					planList.add(orphanSubsetNode);
+				}
+			}
+
 			return planList;
 		}
 		catch (RestServiceException e) {
@@ -618,6 +657,73 @@ public class BusinessRuleTreeServiceImpl
 			if (imAssist != null)
 				imAssist.clean(wipConn);
 		}
+	}
+
+	public List<TreeNode> getBusinessRuleTreeOrphanSubsets(RestServiceParam param, String productCode)
+	{
+		Connection wipConn = null;
+
+		try {
+			String envId = param.getEnvId();
+			String companyCode = param.getCompanyCode();
+
+			boolean isGoodEnvironment = false;
+			if (StringUtils.hasText(envId)) {
+				Map<String, Environment> environments = EnvironmentManager.getInstance().getEnvironments();
+				if (environments.get(envId) != null)
+					isGoodEnvironment = true;
+			}
+			if (!isGoodEnvironment) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_environment"));
+				throw new BadRequestException(model);
+			}
+
+			if (!StringUtils.hasText(companyCode)) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_company"));
+				throw new BadRequestException(model);
+			}
+
+			wipConn = DBConnMgr.getInstance().getConnection(envId, DBConnMgr.APPL);
+
+			List<TreeNode> planDetails = getOrphans(wipConn, param, productCode);
+			return planDetails;
+		}
+		catch (RestServiceException e) {
+			throw e;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			ErrorModel model = errorModelFactory.newErrorModel(UnexpectedException.HTTP_STATUS);
+			throw new UnexpectedException(model);
+		}
+		finally {
+			if (wipConn != null) {
+				try {
+					DBConnMgr.getInstance().releaseConnection(wipConn);
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private List<TreeNode> getOrphans(Connection wipConn, RestServiceParam param, String productCode)
+		throws Exception
+	{
+		String envId = param.getEnvId();
+		String companyCode = param.getCompanyCode();
+		String productCodePrefix = productCode.substring(0, 1);
+
+		OrphanTreeWriter orphanWriter = new OrphanTreeWriter();
+		StringBuffer buf = new StringBuffer();
+		orphanWriter.writeOrphans(envId, companyCode, productCodePrefix, wipConn, buf);
+		String payload = buf.toString();
+
+		System.out.println(payload);
+		return null;
 	}
 
 	private void processTreeNode(BufferedReader reader, Node parentNode, TreeNodeContainer pushBack, String envId)

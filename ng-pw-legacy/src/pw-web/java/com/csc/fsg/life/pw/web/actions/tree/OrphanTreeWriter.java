@@ -6,9 +6,7 @@ import java.util.*;
 
 import org.apache.commons.logging.Log;
 
-import com.csc.fsg.life.pw.common.PolicyConstants;
 import com.csc.fsg.life.pw.common.User;
-import com.csc.fsg.life.pw.common.rules.SpecialHandling;
 import com.csc.fsg.life.pw.common.util.Constants;
 import com.csc.fsg.life.pw.web.actions.clone.*;
 import com.csc.fsg.life.pw.web.avm.AVManager;
@@ -16,11 +14,8 @@ import com.csc.fsg.life.pw.web.environment.Environment;
 import com.csc.fsg.life.pw.web.environment.EnvironmentManager;
 import com.csc.fsg.life.pw.web.io.*;
 import com.csc.fsg.life.pw.web.log.PWServerLogManager;
-//import com.csc.fsg.life.pw.web.controller.PWTask;
-
 
 /* Modifications: T0091, ENH961,T0120, T0129, WMA-1209 */
-// ENH961 - set status in task.
 
 public class OrphanTreeWriter {
 	private static Log _log = PWServerLogManager.getLog(OrphanTreeWriter.class
@@ -36,7 +31,7 @@ public class OrphanTreeWriter {
 	private TableDescriptorManager tableDescMgr = null;
 		
 	public void writeOrphans(String env,String company,String prefix,
-	        Connection conn, StringBuffer treeStream/*, PWTask task,User user*/) throws Exception {
+	        Connection conn, StringBuffer treeStream) throws Exception {
 		
 		this.env = env;
 		this.company = company;
@@ -138,8 +133,5 @@ public class OrphanTreeWriter {
 		Iterator children = node.getChildren().iterator();
 		while (children.hasNext())
 			processNode((Node) children.next(),treeStream,level+1,nodeId);
-		
 	}
-		
-	
 }

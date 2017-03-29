@@ -76,8 +76,8 @@ export class BusinessRuleTreeComponent implements OnInit {
     this.businessRuleTree = null;
     this.notificationService.showWaitIndicator(true);
     this.businessRuleTreeService
-        .getBusinessRuleTreeCore(this.authToken, this.envId,
-                                 this.companyCode, this.productCode)
+        .getBusinessRuleTreeCore(this.authToken, this.envId, this.companyCode,
+                                 this.productCode, this.includeOrphans)
         .subscribe(
           res => this.businessRuleTree = res,
           err => {
@@ -116,6 +116,9 @@ export class BusinessRuleTreeComponent implements OnInit {
       case 'R':       // RIDER_FOLDER
       case 'PP':      // PAYOUT_PLAN
             this.buildPlanDetails(node);
+            break;
+      case 'OF':      // ORPHAN_FOLDER
+            this.buildOrphanSubsetList(node);
             break;
       default:
             break;
@@ -186,6 +189,28 @@ export class BusinessRuleTreeComponent implements OnInit {
               }
           }
         );
+  }
+
+  private buildOrphanSubsetList(node: TreeNode) {
+    const data: TreeNodeData = node.data;
+
+    // this.notificationService.showWaitIndicator(true);
+    // this.businessRuleTreeService
+    //     .getBusinessRuleTreePlanDetails(this.authToken, this.envId, this.companyCode,
+    //                                     data.planKey, this.viewChanges)
+    //     .subscribe(
+    //       res => node.children = res,
+    //       err => {
+    //           this.notificationService.handleError(err);
+    //           this.notificationService.showWaitIndicator(false);
+    //       },
+    //       ()  => {
+    //           this.notificationService.showWaitIndicator(false);
+    //           if (!node.children || node.children.length === 0) {
+    //             node.leaf = true;
+    //           }
+    //       }
+    //     );
   }
 
   public onNodeCollapse(event: any) {

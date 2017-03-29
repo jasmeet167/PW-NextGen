@@ -94,4 +94,15 @@ public class BusinessRuleTreeApiController
 		List<TreeNode> planDetails = businessRuleTreeService.getBusinessRuleTreePlanDetails(param, planKey, includeChanges);
 		return new ResponseEntity<>(planDetails, HttpStatus.OK);
 	}
+
+	@RequestMapping(value = "/business-rule-tree/orphans", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<List<TreeNode>> getBusinessRuleTreeOrphanSubsets(@RequestHeader(value = "authToken", required = true) String authToken,
+																		   @RequestHeader(value = "envId", required = true) String envId,
+																		   @RequestHeader(value = "companyCode", required = true) String companyCode,
+																		   @RequestHeader(value = "productCode", required = true) String productCode)
+	{
+		RestServiceParam param = buildRestServiceParam(authToken, envId, companyCode);
+		List<TreeNode> orphans = businessRuleTreeService.getBusinessRuleTreeOrphanSubsets(param, productCode);
+		return new ResponseEntity<>(orphans, HttpStatus.OK);
+	}
 }
