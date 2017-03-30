@@ -266,7 +266,7 @@ export class BusinessRuleTreeComponent implements OnInit {
 
     const data: TreeNodeData = node.data;
     if (data) {
-      let tip: string = '';
+      let tip = '';
       if (data.name) {
         tip += 'Table: ' + data.name + ' ';
       }
