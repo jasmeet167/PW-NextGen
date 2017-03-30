@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { SelectItem } from 'primeng/primeng';
 
@@ -7,10 +7,13 @@ import { FilterService } from 'app/home/service/filter.service';
 
 import { ChangeOnlyTabMsg } from './model/changeonly.message';
 
+// The property encapsulation: ViewEncapsulation.None is required to load resources,
+// such as those pointed to by the property styleUrls.
 @Component({
   selector: 'app-changes-only',
   templateUrl: './changes-only.component.html',
-  styleUrls: ['./changes-only.component.css']
+  styleUrls: ['./changes-only.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ChangesOnlyComponent implements OnInit {
 
