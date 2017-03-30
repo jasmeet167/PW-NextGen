@@ -482,14 +482,12 @@ public class BusinessRuleTreeServiceImpl
 			String planCode = searchInput.getPlanCode();
 			String issueState = searchInput.getIssueState();
 			String lob = searchInput.getLob();
+			boolean viewChanges = searchInput.getViewChanges();
 
 			String effDate = null;
 			Date effectiveDate = searchInput.getEffDate();
 			if (effectiveDate != null)
 				effDate = effectiveDate.toString();
-
-			boolean viewChanges = searchInput.getViewChanges();
-			boolean includeOrphans = searchInput.getIncludeOrphans();
 
 			HashMap<String, String> planCriteriaKey = new HashMap<>();
 			planCriteriaKey.put(PlanTOBase.ENVIRONMENT_KEY, envId);
@@ -503,22 +501,11 @@ public class BusinessRuleTreeServiceImpl
 			planCriteriaKey.put(PlanTOBase.EFFECTIVE_DATE_KEY, effDate);
 			planCriteriaKey.put(PlanCriteriaTO.MERGED_VIEW_KEY, String.valueOf(viewChanges));
 
-			PlanCriteriaTO planCriteria = new PlanCriteriaTO(planCriteriaKey);
-			planCriteria.setLoadNP(true);
-			PlanCriteriaTO indexCriteria = new PlanCriteriaTO(planCriteria);
-			indexCriteria.setLoadNP(true);
-
-			// Read Plan Table T000X
-			List<PlanCriteriaTO> planKeyList = new LinkedList<>();
-			planKeyList.add(planCriteria);
-			pmAssist = new PlanMergeAssistent(wipConn, planKeyList, true);
-
-			// Read Subset Index Table T000XA
-			String view = viewChanges ? "with" : "without";
-			imAssist = new IndexMergeAssistent(wipConn, indexCriteria.toHashMap(), true, view, true);
-
+			MergeAssistant assist = new MergeAssistant().init(wipConn, planCriteriaKey, viewChanges);
+			pmAssist = assist.getPmAssistant();
+			imAssist = assist.getImAssistant();
 			String payload = new CompanyWriter().getStream(lazyType, envId, companyCode, productPrefix, wipConn, brConn,
-														   viewChanges, includeOrphans, pmAssist, imAssist);
+														   viewChanges, false, pmAssist, imAssist);
 			List<Node> planNodes = new LinkedList<>();
 			String line = null;
 
@@ -568,6 +555,7 @@ public class BusinessRuleTreeServiceImpl
 				throw new BadRequestException(model);
 			}
 
+			wipConn = DBConnMgr.getInstance().getConnection(envId, DBConnMgr.APPL);
 			List<TreeNode> planDetails = getPlanDetails(wipConn, param, viewChanges, planKey);
 			return planDetails;
 		}
@@ -613,29 +601,15 @@ public class BusinessRuleTreeServiceImpl
 			planCriteriaKey.put(PlanTOBase.PLAN_TYPE_KEY, planKey.getPlanType());
 			planCriteriaKey.put(PlanTOBase.ISSUE_STATE_KEY, planKey.getIssueState());
 			planCriteriaKey.put(PlanTOBase.LINE_OF_BUSINESS_KEY, planKey.getLob());
-
+			planCriteriaKey.put(PlanCriteriaTO.MERGED_VIEW_KEY, String.valueOf(viewChanges));
 			LocalDate effDate = planKey.getEffDate();
 			if (effDate != null)
 				planCriteriaKey.put(PlanTOBase.EFFECTIVE_DATE_KEY, effDate.toString());
 
-			planCriteriaKey.put(PlanCriteriaTO.MERGED_VIEW_KEY, String.valueOf(viewChanges));
-
-			PlanCriteriaTO planCriteria = new PlanCriteriaTO(planCriteriaKey);
-			planCriteria.setLoadNP(true);
-			PlanCriteriaTO indexCriteria = new PlanCriteriaTO(planCriteria);
-			indexCriteria.setLoadNP(true);
-
-			wipConn = DBConnMgr.getInstance().getConnection(envId, DBConnMgr.APPL);
-
-			// Read Plan Table T000X
-			List<PlanCriteriaTO> planKeyList = new LinkedList<>();
-			planKeyList.add(planCriteria);
-			pmAssist = new PlanMergeAssistent(wipConn, planKeyList, true);
-
-			// Read Subset Index Table T000XA
-			String view = viewChanges ? "with" : "without";
-			imAssist = new IndexMergeAssistent(wipConn, indexCriteria.toHashMap(), true, view, true);
-
+			MergeAssistant assist = new MergeAssistant().init(wipConn, planCriteriaKey, viewChanges);
+			PlanCriteriaTO planCriteria = assist.getPlanCriteria();
+			pmAssist = assist.getPmAssistant();
+			imAssist = assist.getImAssistant();
 			String payload = new ProductWriter(pmAssist, imAssist).getPlanDetailStream(wipConn, planCriteria);
 			BufferedReader reader = new BufferedReader(new StringReader(payload));
 
@@ -659,13 +633,14 @@ public class BusinessRuleTreeServiceImpl
 		}
 	}
 
-	public List<TreeNode> getBusinessRuleTreeOrphanSubsets(RestServiceParam param, String productCode)
+	public List<TreeNode> getBusinessRuleTreeOrphanSubsets(RestServiceParam param, BusinessRuleTreeSearchInput searchInput)
 	{
 		Connection wipConn = null;
 
 		try {
 			String envId = param.getEnvId();
 			String companyCode = param.getCompanyCode();
+			String productCode = searchInput.getProductCode();
 
 			boolean isGoodEnvironment = false;
 			if (StringUtils.hasText(envId)) {
@@ -685,9 +660,14 @@ public class BusinessRuleTreeServiceImpl
 				throw new BadRequestException(model);
 			}
 
-			wipConn = DBConnMgr.getInstance().getConnection(envId, DBConnMgr.APPL);
+			if (!StringUtils.hasText(productCode) || productCode.length() != 2) {
+				HttpStatus status = BadRequestException.HTTP_STATUS;
+				ErrorModel model = errorModelFactory.newErrorModel(status, status.getReasonPhrase() + getMessage("missing_product"));
+				throw new BadRequestException(model);
+			}
 
-			List<TreeNode> planDetails = getOrphans(wipConn, param, productCode);
+			wipConn = DBConnMgr.getInstance().getConnection(envId, DBConnMgr.APPL);
+			List<TreeNode> planDetails = getOrphans(wipConn, param, searchInput);
 			return planDetails;
 		}
 		catch (RestServiceException e) {
@@ -710,20 +690,63 @@ public class BusinessRuleTreeServiceImpl
 		}
 	}
 
-	private List<TreeNode> getOrphans(Connection wipConn, RestServiceParam param, String productCode)
+	private List<TreeNode> getOrphans(Connection wipConn, RestServiceParam param, BusinessRuleTreeSearchInput searchInput)
 		throws Exception
 	{
-		String envId = param.getEnvId();
-		String companyCode = param.getCompanyCode();
-		String productCodePrefix = productCode.substring(0, 1);
+		PlanMergeAssistent pmAssist = null;
+		IndexMergeAssistent imAssist = null;
 
-		OrphanTreeWriter orphanWriter = new OrphanTreeWriter();
-		StringBuffer buf = new StringBuffer();
-		orphanWriter.writeOrphans(envId, companyCode, productCodePrefix, wipConn, buf);
-		String payload = buf.toString();
+		try {
+			String envId = param.getEnvId();
+			String companyCode = param.getCompanyCode();
+			String productCode = searchInput.getProductCode();
+			String productPrefix = productCode.substring(0, 1);
+			String productSuffix = productCode.substring(1);
+			String planCode = searchInput.getPlanCode();
+			String issueState = searchInput.getIssueState();
+			String lob = searchInput.getLob();
+			boolean viewChanges = searchInput.getViewChanges();
 
-		System.out.println(payload);
-		return null;
+			String effDate = null;
+			Date effectiveDate = searchInput.getEffDate();
+			if (effectiveDate != null)
+				effDate = effectiveDate.toString();
+
+			HashMap<String, String> planCriteriaKey = new HashMap<>();
+			planCriteriaKey.put(PlanTOBase.ENVIRONMENT_KEY, envId);
+			planCriteriaKey.put(PlanTOBase.COMPANY_CODE_KEY, companyCode);
+			planCriteriaKey.put(PlanTOBase.PRODUCT_CODE_KEY, productCode);
+			planCriteriaKey.put(PlanTOBase.PRODUCT_PREFIX_KEY, productPrefix);
+			planCriteriaKey.put(PlanTOBase.PRODUCT_SUFFIX_KEY, productSuffix);
+			planCriteriaKey.put(PlanTOBase.PLAN_CODE_KEY, planCode);
+			planCriteriaKey.put(PlanTOBase.ISSUE_STATE_KEY, issueState);
+			planCriteriaKey.put(PlanTOBase.LINE_OF_BUSINESS_KEY, lob);
+			planCriteriaKey.put(PlanTOBase.EFFECTIVE_DATE_KEY, effDate);
+			planCriteriaKey.put(PlanCriteriaTO.MERGED_VIEW_KEY, String.valueOf(viewChanges));
+
+			MergeAssistant assist = new MergeAssistant().init(wipConn, planCriteriaKey, viewChanges);
+			pmAssist = assist.getPmAssistant();
+			imAssist = assist.getImAssistant();
+
+			OrphanTreeWriter orphanWriter = new OrphanTreeWriter();
+			StringBuffer buf = new StringBuffer();
+			orphanWriter.writeOrphans(envId, companyCode, productPrefix, wipConn, buf);
+			String payload = buf.toString();
+
+			BufferedReader reader = new BufferedReader(new StringReader(payload));
+			Node root = new Node((short) 3);
+			processTreeNode(reader, root, new TreeNodeContainer(), envId);
+
+			List<Node> orphans = root.getChildren();
+			List<TreeNode> orphansTreeNodes = transformToDeclaredTypes(orphans, false);
+			return orphansTreeNodes;
+		}
+		finally {
+			if (pmAssist != null)
+				pmAssist.clean(wipConn);
+			if (imAssist != null)
+				imAssist.clean(wipConn);
+		}
 	}
 
 	private void processTreeNode(BufferedReader reader, Node parentNode, TreeNodeContainer pushBack, String envId)
@@ -839,6 +862,48 @@ public class BusinessRuleTreeServiceImpl
 		private void clear()
 		{
 			node = null;
+		}
+	}
+
+	static private class MergeAssistant
+	{
+		private PlanCriteriaTO planCriteria = null;
+		private PlanMergeAssistent pmAssist = null;
+		private IndexMergeAssistent imAssist = null;
+
+		private MergeAssistant init(Connection wipConn, HashMap<String, String> planCriteriaKey, boolean viewChanges)
+			throws Exception
+		{
+			planCriteria = new PlanCriteriaTO(planCriteriaKey);
+			planCriteria.setLoadNP(true);
+			PlanCriteriaTO indexCriteria = new PlanCriteriaTO(planCriteria);
+			indexCriteria.setLoadNP(true);
+
+			// Read Plan Table T000X
+			List<PlanCriteriaTO> planKeyList = new LinkedList<>();
+			planKeyList.add(planCriteria);
+			pmAssist = new PlanMergeAssistent(wipConn, planKeyList, true);
+
+			// Read Subset Index Table T000XA
+			String view = viewChanges ? "with" : "without";
+			imAssist = new IndexMergeAssistent(wipConn, indexCriteria.toHashMap(), true, view, true);
+
+			return this;
+		}
+
+		private PlanCriteriaTO getPlanCriteria()
+		{
+			return planCriteria;
+		}
+
+		private PlanMergeAssistent getPmAssistant()
+		{
+			return pmAssist;
+		}
+
+		private IndexMergeAssistent getImAssistant()
+		{
+			return imAssist;
 		}
 	}
 }

@@ -127,14 +127,13 @@ export class BusinessRuleTreeService {
                .map(response => { return <TreeNode[]> response.json(); });
   }
 
-  getBusinessRuleTree(authToken: string, viewChanges: boolean, envId: string,
-                      companyCode: string, productCode: string, planCode: string,
-                      issueState: string, lob: string, effDate: string,
-                      includeOrphans: boolean): Observable<TreeNode[]> {
+  getBusinessRuleTreeOrphanSubsets(authToken: string, envId: string,
+                                   companyCode: string, productCode: string, planCode: string,
+                                   issueState: string, lob: string, effDate: string,
+                                   viewChanges: boolean): Observable<TreeNode[]> {
     const filterHeaders: Headers = new Headers();
     filterHeaders.append('Accept', 'application/json');
     filterHeaders.append('authToken', authToken);
-    filterHeaders.append('viewChanges', viewChanges.toString());
     if (envId) {
       filterHeaders.append('envId', envId);
     }
@@ -156,11 +155,11 @@ export class BusinessRuleTreeService {
     if (effDate) {
       filterHeaders.append('effDate', effDate);
     }
-    filterHeaders.append('includeOrphans', includeOrphans.toString());
+    filterHeaders.append('viewChanges', viewChanges.toString());
 
     const options: RequestOptions = new RequestOptions();
     options.headers = filterHeaders;
-    options.url = sessionStorage['restServiceBaseUrl'] + 'business-rule-tree/search';
+    options.url = sessionStorage['restServiceBaseUrl'] + 'business-rule-tree/orphans';
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))

@@ -373,6 +373,36 @@ paths:
             Product Code.
           required: true
           type: string
+        - name: planCode
+          in: header
+          description: |
+            Plan Code.
+          required: false
+          type: string
+        - name: issueState
+          in: header
+          description: |
+            Issue State.
+          required: false
+          type: string
+        - name: lob
+          in: header
+          description: |
+            Line of Business.
+          required: false
+          type: string
+        - name: effDate
+          in: header
+          description: |
+            Effective Date.
+          required: false
+          type: string
+        - name: viewChanges
+          in: header
+          description: |
+            Indicator used to request Rules or Rules with Changes.
+          required: false
+          type: boolean
       tags:
         - Business Rule Tree
       responses:

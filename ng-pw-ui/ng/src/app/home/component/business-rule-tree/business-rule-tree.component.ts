@@ -194,23 +194,25 @@ export class BusinessRuleTreeComponent implements OnInit {
   private buildOrphanSubsetList(node: TreeNode) {
     const data: TreeNodeData = node.data;
 
-    // this.notificationService.showWaitIndicator(true);
-    // this.businessRuleTreeService
-    //     .getBusinessRuleTreePlanDetails(this.authToken, this.envId, this.companyCode,
-    //                                     data.planKey, this.viewChanges)
-    //     .subscribe(
-    //       res => node.children = res,
-    //       err => {
-    //           this.notificationService.handleError(err);
-    //           this.notificationService.showWaitIndicator(false);
-    //       },
-    //       ()  => {
-    //           this.notificationService.showWaitIndicator(false);
-    //           if (!node.children || node.children.length === 0) {
-    //             node.leaf = true;
-    //           }
-    //       }
-    //     );
+    this.notificationService.showWaitIndicator(true);
+    this.businessRuleTreeService
+        .getBusinessRuleTreeOrphanSubsets(this.authToken, this.envId,
+                                          this.companyCode, this.productCode, this.planCode,
+                                          this.issueState, this.lob, this.effDate,
+                                          this.viewChanges)
+        .subscribe(
+          res => node.children = res,
+          err => {
+              this.notificationService.handleError(err);
+              this.notificationService.showWaitIndicator(false);
+          },
+          ()  => {
+              this.notificationService.showWaitIndicator(false);
+              if (!node.children || node.children.length === 0) {
+                node.leaf = true;
+              }
+          }
+        );
   }
 
   public onNodeCollapse(event: any) {

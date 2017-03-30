@@ -99,10 +99,25 @@ public class BusinessRuleTreeApiController
 	public ResponseEntity<List<TreeNode>> getBusinessRuleTreeOrphanSubsets(@RequestHeader(value = "authToken", required = true) String authToken,
 																		   @RequestHeader(value = "envId", required = true) String envId,
 																		   @RequestHeader(value = "companyCode", required = true) String companyCode,
-																		   @RequestHeader(value = "productCode", required = true) String productCode)
+																		   @RequestHeader(value = "productCode", required = true) String productCode,
+																		   @RequestHeader(value = "planCode", required = false) String planCode,
+																		   @RequestHeader(value = "issueState", required = false) String issueState,
+																		   @RequestHeader(value = "lob", required = false) String lob,
+																		   @RequestHeader(value = "effDate", required = false) String effDate,
+																		   @RequestHeader(value = "viewChanges", required = false) Boolean viewChanges)
 	{
 		RestServiceParam param = buildRestServiceParam(authToken, envId, companyCode);
-		List<TreeNode> orphans = businessRuleTreeService.getBusinessRuleTreeOrphanSubsets(param, productCode);
+		BusinessRuleTreeSearchInput searchInput = new BusinessRuleTreeSearchInput();
+
+		searchInput.setProductCode(productCode);
+		searchInput.setPlanCode(planCode);
+		searchInput.setIssueState(issueState);
+		searchInput.setLob(lob);
+		searchInput.setViewChanges(Boolean.TRUE.equals(viewChanges));
+		if (effDate != null)
+			searchInput.setEffDate(Date.valueOf(effDate));
+
+		List<TreeNode> orphans = businessRuleTreeService.getBusinessRuleTreeOrphanSubsets(param, searchInput);
 		return new ResponseEntity<>(orphans, HttpStatus.OK);
 	}
 }

@@ -44,10 +44,6 @@ public class OrphanTreeWriter {
 //		if (user.isPermitted(env, company,  PolicyConstants.UPDATE))
 			tableAuth = Constants.NODE_ATTR_UPDATE;
 		
-		treeStream.append("999999" + TAB + "3" + TAB + "16" + TAB).append(
-				tableAuth).append(TAB).append("Orphan Subsets").append(TAB);
-					treeStream.append(prefix+"*").append(NEW_LINE);
-				
 		OrphanTreeCreator otc = new OrphanTreeCreator(environment,prefix,conn/*,task*/);
 		Node node = otc.getOrphanTree(true);
 		TreeMap<String, ArrayList<Node>> nodesHash = groupOrphans(node);
