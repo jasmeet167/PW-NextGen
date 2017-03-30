@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 
 // PrimeNG
 import { DialogModule } from 'primeng/primeng';
+import { GrowlModule } from 'primeng/primeng';
 import { PanelModule } from 'primeng/primeng';
 import { MenubarModule, ContextMenuModule, MenuItem } from 'primeng/primeng';
 import { TabViewModule } from 'primeng/primeng';
@@ -43,6 +44,7 @@ import { HomeRoutingModule } from './home-routing.module';
     HttpModule,
     FormsModule,
     DialogModule,
+    GrowlModule,
     PanelModule,
     MenubarModule,
     ContextMenuModule,
@@ -54,7 +56,6 @@ import { HomeRoutingModule } from './home-routing.module';
     ButtonModule,
     HomeRoutingModule,
     PickListModule
-
  ],
   declarations: [
     HomeComponent,

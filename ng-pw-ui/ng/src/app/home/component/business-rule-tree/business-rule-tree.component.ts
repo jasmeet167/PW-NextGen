@@ -1,10 +1,13 @@
 import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
 
-import { TreeNode, MenuItem } from 'primeng/primeng';
+import { TreeNode } from 'primeng/primeng';
+import { MenuItem } from 'primeng/primeng';
+import { Message } from 'primeng/primeng';
 
 import { NotificationService } from 'app/notification/service/notification.service';
 import { MenuService } from 'app/util/service/menu.service';
 import { TreeNodeData } from './model/tree-node-data';
+import { TreeNodePlanKey } from './model/tree-node-plan-key';
 import { BusinessRuleTreeService } from './service/business-rule-tree.service';
 
 // The property encapsulation: ViewEncapsulation.None is required to load resources,
@@ -28,6 +31,7 @@ export class BusinessRuleTreeComponent implements OnInit {
 
   public businessRuleTree: TreeNode[];
   public selectedNode: TreeNode;
+  public tooltips: Message[];
   public contextMenuModel: MenuItem[];
 
   private authToken: string;
@@ -73,6 +77,7 @@ export class BusinessRuleTreeComponent implements OnInit {
       return;
     }
 
+    this.clearTooltips();
     this.businessRuleTree = null;
     this.notificationService.showWaitIndicator(true);
     this.businessRuleTreeService
@@ -89,6 +94,8 @@ export class BusinessRuleTreeComponent implements OnInit {
   }
 
   public onNodeExpand(event: any) {
+    this.clearTooltips();
+
     const node: TreeNode = event.node;
     const data: TreeNodeData = node.data;
 
@@ -216,6 +223,7 @@ export class BusinessRuleTreeComponent implements OnInit {
   }
 
   public onNodeCollapse(event: any) {
+    this.clearTooltips();
     const node: TreeNode = event.node;
     const data: TreeNodeData = node.data;
     if (data && data.lazyNode) {
@@ -223,9 +231,14 @@ export class BusinessRuleTreeComponent implements OnInit {
     }
   }
 
+  public onNodeSelect(event: any) {
+    const node: TreeNode = event.node;
+    this.showTooltip(node);
+  }
+
   public onNodeContextMenuSelect(event: any) {
     const node: TreeNode = event.node;
-    console.log('Context Menu for Node Type = ' + node.type);
+    this.showTooltip(node);
 
     switch (node.type) {
         case 'C':       // Company
@@ -246,5 +259,33 @@ export class BusinessRuleTreeComponent implements OnInit {
         default:
             this.contextMenuModel = null;
     }
+  }
+
+  private showTooltip(node: TreeNode) {
+    this.clearTooltips();
+
+    const data: TreeNodeData = node.data;
+    if (data) {
+      let tip: string = '';
+      if (data.name) {
+        tip += 'Table: ' + data.name + ' ';
+      }
+
+      if (data.planKey) {
+        const planKey: TreeNodePlanKey = data.planKey;
+        if (planKey.tablePtrSubset) {
+          tip += '\xa0\xa0\xa0Subset: ' + planKey.tablePtrSubset;
+        }
+      }
+
+      if (tip.trim().length > 0) {
+        this.tooltips.push({severity: 'info', detail: tip});
+        status = tip;
+      }
+    }
+  }
+
+  private clearTooltips() {
+    this.tooltips = <Message[]> [];
   }
 }
