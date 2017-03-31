@@ -264,23 +264,87 @@ export class BusinessRuleTreeComponent implements OnInit {
   private showTooltip(node: TreeNode) {
     this.clearTooltips();
 
+    if (node.type === 'PDF' || node.type === 'AF'
+     || node.type === 'TF' || node.type === 'UF') {
+      this.showProductTooltip(node);
+    } else if (node.type === 'P' || node.type === 'PP'
+            || node.type === 'R') {
+      this.showPlanTooltip(node);
+    } else {
+      this.showStandardTooltip(node);
+    }
+  }
+
+  private showProductTooltip(node: TreeNode) {
+    let toolTip = 'Product: ';
+
+    if (node.type === 'PDF') {
+      const data: TreeNodeData = node.data;
+      if (data) {
+        if (data.lazyType === 'PDF') {
+          toolTip += 'P';
+        } else if (data.lazyType === 'H') {
+          toolTip += 'C';
+        }
+      }
+    } else if (node.type === 'AF') {
+      toolTip += 'A';
+    } else if (node.type === 'TF') {
+      toolTip += 'T';
+    } else if (node.type === 'UF') {
+      toolTip += 'U';
+    }
+
+    this.tooltips.push({severity: 'info', detail: toolTip});
+  }
+
+  private showPlanTooltip(node: TreeNode) {
     const data: TreeNodeData = node.data;
     if (data) {
-      let tip = '';
+      let tipSummary: string;
       if (data.name) {
-        tip += 'Table: ' + data.name + ' ';
+        tipSummary = 'Table: ' + data.name;
+      }
+
+      let tipDetail = 'Company: ' + this.companyCode;
+      const planKey: TreeNodePlanKey = data.planKey;
+      if (planKey.productPrefix) {
+        tipDetail += ', Product: ' + planKey.productPrefix + planKey.productSuffix;
+      }
+      if (planKey.planCode) {
+        tipDetail += ', Plan: ' + planKey.planCode;
+      }
+      if (planKey.issueState) {
+        tipDetail += ',<br>Issue State: ' + planKey.issueState;
+      }
+      if (planKey.lob) {
+        tipDetail += ', LOB: ' + planKey.lob;
+      }
+      if (planKey.effDate) {
+        tipDetail += ', Eff. Date: ' + planKey.effDate;
+      }
+
+      this.tooltips.push({severity: 'info', summary: tipSummary, detail: tipDetail});
+    }
+  }
+
+  private showStandardTooltip(node: TreeNode) {
+    const data: TreeNodeData = node.data;
+    if (data) {
+      let toolTip = '';
+      if (data.name) {
+        toolTip += 'Table: ' + data.name + ' ';
       }
 
       if (data.planKey) {
         const planKey: TreeNodePlanKey = data.planKey;
         if (planKey.tablePtrSubset) {
-          tip += '\xa0\xa0\xa0Subset: ' + planKey.tablePtrSubset;
+          toolTip += '\xa0\xa0\xa0Subset: ' + planKey.tablePtrSubset;
         }
       }
 
-      if (tip.trim().length > 0) {
-        this.tooltips.push({severity: 'info', detail: tip});
-        status = tip;
+      if (toolTip.trim().length > 0) {
+        this.tooltips.push({severity: 'info', detail: toolTip});
       }
     }
   }
