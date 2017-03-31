@@ -6,6 +6,8 @@ import { Message } from 'primeng/primeng';
 
 import { NotificationService } from 'app/notification/service/notification.service';
 import { MenuService } from 'app/util/service/menu.service';
+import { MenuHelper } from 'app/util/menu.helper';
+
 import { TreeNodeData } from './model/tree-node-data';
 import { TreeNodePlanKey } from './model/tree-node-plan-key';
 import { BusinessRuleTreeService } from './service/business-rule-tree.service';
@@ -29,16 +31,23 @@ export class BusinessRuleTreeComponent implements OnInit {
   @Input() public effDate: string;
   @Input() public includeOrphans: boolean;
 
+  private readonly NODE_LABEL_DETAILED = 0;
+  private readonly NODE_LABEL_STANDARD = 1;
+  private readonly NODE_DETAILED_LABEL = 'Show Table ID and Subset';
+
   public businessRuleTree: TreeNode[];
   public selectedNode: TreeNode;
   public tooltips: Message[];
   public contextMenuModel: MenuItem[];
+  public nodeLabelType = this.NODE_LABEL_STANDARD;
 
   private authToken: string;
 
+  private generalMenuModel: MenuItem[];
   private companyMenuModel: MenuItem[];
   private planFolderMenuModel: MenuItem[];
-  private generalMenuModel: MenuItem[];
+
+  private displayToggleMenuItems: MenuItem[];
 
   constructor(private notificationService: NotificationService, private menuService: MenuService,
               private businessRuleTreeService: BusinessRuleTreeService) {
@@ -51,23 +60,28 @@ export class BusinessRuleTreeComponent implements OnInit {
       return;
     }
 
+    const menuHelper: MenuHelper = new MenuHelper();
+    const theDisplaySwitchCallback = (event: any) => {
+      this.swapNodeDisplayType();
+    };
+
     this.menuService.getMenu('assets/data/business-rule-tree/company-menu.json')
         .subscribe(
           res => this.companyMenuModel = res,
           err => this.notificationService.handleError(err),
-          ()  => {}
+          ()  => menuHelper.injectCallback(this.companyMenuModel, this.NODE_DETAILED_LABEL, theDisplaySwitchCallback)
         );
     this.menuService.getMenu('assets/data/business-rule-tree/plan-folder-menu.json')
         .subscribe(
           res => this.planFolderMenuModel = res,
           err => this.notificationService.handleError(err),
-          ()  => {}
+          ()  => menuHelper.injectCallback(this.planFolderMenuModel, this.NODE_DETAILED_LABEL, theDisplaySwitchCallback)
         );
     this.menuService.getMenu('assets/data/business-rule-tree/general-menu.json')
         .subscribe(
           res => this.generalMenuModel = res,
           err => this.notificationService.handleError(err),
-          ()  => {}
+          ()  => menuHelper.injectCallback(this.generalMenuModel, this.NODE_DETAILED_LABEL, theDisplaySwitchCallback)
         );
   }
 
@@ -351,5 +365,22 @@ export class BusinessRuleTreeComponent implements OnInit {
 
   private clearTooltips() {
     this.tooltips = <Message[]> [];
+  }
+
+  private swapNodeDisplayType() {
+    if (this.nodeLabelType === this.NODE_LABEL_STANDARD) {
+      this.nodeLabelType = this.NODE_LABEL_DETAILED;
+      this.changeMenuIcon('fa-check');
+    } else {
+      this.nodeLabelType = this.NODE_LABEL_STANDARD;
+      this.changeMenuIcon(null);
+    }
+  }
+
+  private changeMenuIcon(icon: string) {
+    const helper: MenuHelper = new MenuHelper();
+    helper.setIcon(this.generalMenuModel, this.NODE_DETAILED_LABEL, icon);
+    helper.setIcon(this.companyMenuModel, this.NODE_DETAILED_LABEL, icon);
+    helper.setIcon(this.planFolderMenuModel, this.NODE_DETAILED_LABEL, icon);
   }
 }

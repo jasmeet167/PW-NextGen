@@ -46,12 +46,10 @@ export class HomeComponent implements OnInit {
   }
 
   private buildMenuCallbacks() {
-    if (this.menuModel) {
-      const theAboutCallback = (event: any) => {
-        this.onAboutClick();
-      };
-      new MenuHelper().injectCallback(this.menuModel, 'About', theAboutCallback);
-    }
+    const theAboutCallback = (event: any) => {
+      this.onAboutClick();
+    };
+    new MenuHelper().injectCallback(this.menuModel, 'About', theAboutCallback);
   }
 
   onAboutClick() {

@@ -17,9 +17,26 @@ export class MenuHelper {
    *        of events from the selected menu item
    */
   injectCallback(menuModel: MenuItem[], itemLabel: string, callback: (event: any) => void) {
-    const aboutApplication: MenuItem = this.getMenuItem(menuModel, 'About');
-    if (aboutApplication) {
-      aboutApplication.command = callback;
+    const menuItem: MenuItem = this.getMenuItem(menuModel, itemLabel);
+    if (menuItem) {
+      menuItem.command = callback;
+    }
+  }
+
+  /**
+   * This method is used to set the icon property to a menu item identified
+   * by value of the argument 'itemLabel'.
+   *
+   * @param menuModel Data model corresponding to the menu component
+   * @param itemLabel Label used to identify the menu item, to which
+   *        the callback is to be injected; must be unique
+   * @param icon Icon, which should be displayed in the menu item.
+   *        If a null value is provided, the icon will be cleared.
+   */
+  setIcon(menuModel: MenuItem[], itemLabel: string, icon: string) {
+    const menuItem: MenuItem = this.getMenuItem(menuModel, itemLabel);
+    if (menuItem) {
+      menuItem.icon = icon;
     }
   }
 
