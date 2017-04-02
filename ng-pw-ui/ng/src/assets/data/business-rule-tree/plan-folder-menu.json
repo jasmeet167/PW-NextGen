@@ -1,3 +1,6 @@
 [
-    { "label": "Show Table ID and Subset" }
+  {
+    "label": "Show Table ID and Subset",
+    "icon": "fa-fw"
+  }
 ]

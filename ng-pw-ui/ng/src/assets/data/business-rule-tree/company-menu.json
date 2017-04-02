@@ -1,4 +1,10 @@
 [
-    { "label": "Validate Company" },
-    { "label": "Show Table ID and Subset" }
+  {
+    "label": "Validate Company",
+    "icon": "fa-fw"
+  },
+  {
+    "label": "Show Table ID and Subset",
+    "icon": "fa-fw"
+  }
 ]

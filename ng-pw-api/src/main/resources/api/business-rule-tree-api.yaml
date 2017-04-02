@@ -494,6 +494,8 @@ definitions:
         type: string
       tableId:
         type: string
+      tableName:
+        type: string
       projectName:
         type: string
       packageId:

@@ -62,7 +62,7 @@ export class BusinessRuleTreeComponent implements OnInit {
 
     const menuHelper: MenuHelper = new MenuHelper();
     const theDisplaySwitchCallback = (event: any) => {
-      this.swapNodeDisplayType();
+      this.toggleNodeDisplayType();
     };
 
     this.menuService.getMenu('assets/data/business-rule-tree/company-menu.json')
@@ -93,6 +93,8 @@ export class BusinessRuleTreeComponent implements OnInit {
 
     this.clearTooltips();
     this.businessRuleTree = null;
+    this.nodeLabelType = this.NODE_LABEL_STANDARD;
+
     this.notificationService.showWaitIndicator(true);
     this.businessRuleTreeService
         .getBusinessRuleTreeCore(this.authToken, this.envId, this.companyCode,
@@ -162,7 +164,10 @@ export class BusinessRuleTreeComponent implements OnInit {
               if (!node.children || node.children.length === 0) {
                 node.leaf = true;
               }
-          }
+              if (this.nodeLabelType === this.NODE_LABEL_DETAILED) {
+                this.changeNodeLabelType(node.children, this.NODE_LABEL_DETAILED);
+              }
+            }
         );
   }
 
@@ -186,6 +191,9 @@ export class BusinessRuleTreeComponent implements OnInit {
               if (!node.children || node.children.length === 0) {
                 node.leaf = true;
               }
+              if (this.nodeLabelType === this.NODE_LABEL_DETAILED) {
+                this.changeNodeLabelType(node.children, this.NODE_LABEL_DETAILED);
+              }
           }
         );
   }
@@ -207,6 +215,9 @@ export class BusinessRuleTreeComponent implements OnInit {
               this.notificationService.showWaitIndicator(false);
               if (!node.children || node.children.length === 0) {
                 node.leaf = true;
+              }
+              if (this.nodeLabelType === this.NODE_LABEL_DETAILED) {
+                this.changeNodeLabelType(node.children, this.NODE_LABEL_DETAILED);
               }
           }
         );
@@ -231,6 +242,9 @@ export class BusinessRuleTreeComponent implements OnInit {
               this.notificationService.showWaitIndicator(false);
               if (!node.children || node.children.length === 0) {
                 node.leaf = true;
+              }
+              if (this.nodeLabelType === this.NODE_LABEL_DETAILED) {
+                this.changeNodeLabelType(node.children, this.NODE_LABEL_DETAILED);
               }
           }
         );
@@ -278,14 +292,19 @@ export class BusinessRuleTreeComponent implements OnInit {
   private showTooltip(node: TreeNode) {
     this.clearTooltips();
 
-    if (node.type === 'PDF' || node.type === 'AF'
-     || node.type === 'TF' || node.type === 'UF') {
-      this.showProductTooltip(node);
-    } else if (node.type === 'P' || node.type === 'PP'
-            || node.type === 'R') {
-      this.showPlanTooltip(node);
+    const data: TreeNodeData = node.data;
+    if (data && data.tableName && node.type === 'TS') {
+      this.tooltips.push({severity: 'info', detail: 'Table Name: ' + data.tableName});
     } else {
-      this.showStandardTooltip(node);
+      if (node.type === 'PDF' || node.type === 'AF'
+      || node.type === 'TF' || node.type === 'UF') {
+        this.showProductTooltip(node);
+      } else if (node.type === 'P' || node.type === 'PP'
+              || node.type === 'R') {
+        this.showPlanTooltip(node);
+      } else {
+        this.showStandardTooltip(node);
+      }
     }
   }
 
@@ -367,13 +386,15 @@ export class BusinessRuleTreeComponent implements OnInit {
     this.tooltips = <Message[]> [];
   }
 
-  private swapNodeDisplayType() {
+  private toggleNodeDisplayType() {
     if (this.nodeLabelType === this.NODE_LABEL_STANDARD) {
       this.nodeLabelType = this.NODE_LABEL_DETAILED;
       this.changeMenuIcon('fa-check');
+      this.changeNodeLabelType(this.businessRuleTree, this.NODE_LABEL_DETAILED);
     } else {
       this.nodeLabelType = this.NODE_LABEL_STANDARD;
-      this.changeMenuIcon(null);
+      this.changeMenuIcon('fa-fw');
+      this.changeNodeLabelType(this.businessRuleTree, this.NODE_LABEL_STANDARD);
     }
   }
 
@@ -382,5 +403,83 @@ export class BusinessRuleTreeComponent implements OnInit {
     helper.setIcon(this.generalMenuModel, this.NODE_DETAILED_LABEL, icon);
     helper.setIcon(this.companyMenuModel, this.NODE_DETAILED_LABEL, icon);
     helper.setIcon(this.planFolderMenuModel, this.NODE_DETAILED_LABEL, icon);
+  }
+
+  private changeNodeLabelType(treeNodes: TreeNode[], newType: number) {
+    for (const treeNode of treeNodes) {
+      if (newType === this.NODE_LABEL_DETAILED) {
+        this.buildDetailedLabel(treeNode);
+      } else {
+        this.buildStandardLabel(treeNode);
+      }
+
+      if (treeNode.children) {
+        this.changeNodeLabelType(treeNode.children, newType);
+      }
+    }
+  }
+
+  // For reference see method toString() in class CscTreeNode in the old Product Wizard
+  private buildDetailedLabel(node: TreeNode) {
+    switch (node.type) {
+      case 'AF':      // Annuity Folder
+      case 'UF':      // UL Folder
+      case 'TF':      // Traditional Folder
+      case 'CTF':     // Common Table Folder
+      case 'PF':      // Plan Folder
+      case 'RF':      // Rider Folder
+      case 'PDF':     // PDF Plans Folder
+      case 'PPF':     // Payout Plan Folder
+      case 'OF':      // Orphan Folder
+            break;
+      default:
+            const data: TreeNodeData = node.data;
+            let planKey: TreeNodePlanKey;
+            if (data) {
+              planKey = data.planKey;
+            }
+
+            let displayString = '';
+            if (data && data.name) {
+              displayString = data.name.trim();
+            }
+
+            let tableSubsetString = '';
+            if (planKey && planKey.tablePtrSubset) {
+              tableSubsetString = planKey.tablePtrSubset.trim();
+            }
+
+            let variationString = '';
+            if (planKey && planKey.tablePtrVar) {
+              variationString = planKey.tablePtrVar.trim();
+            }
+
+            if (tableSubsetString !== '') {
+              displayString += '~' + tableSubsetString;
+              if (variationString !== '') {
+                displayString += '~' + variationString;
+              } else {
+                // TODO: implement this condition
+                // if (showBlankVariation()) {
+                //  displayString += '~Blank';
+                // }
+              }
+            }
+
+            if (displayString !== '') {
+              data.tableName = node.label;
+              node.label = displayString;
+            }
+
+            break;
+    }
+  }
+
+  private buildStandardLabel(node: TreeNode) {
+    const data: TreeNodeData = node.data;
+    if (data && data.tableName) {
+      node.label = data.tableName;
+      data.tableName = null;
+    }
   }
 }

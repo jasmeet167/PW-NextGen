@@ -1,4 +1,11 @@
 [
-    { "label": "Paste", "disabled": "true" },
-    { "label": "Show Table ID and Subset" }
+  {
+    "label": "Paste",
+    "disabled": "true",
+    "icon": "fa-fw"
+  },
+  {
+    "label": "Show Table ID and Subset",
+    "icon": "fa-fw"
+  }
 ]

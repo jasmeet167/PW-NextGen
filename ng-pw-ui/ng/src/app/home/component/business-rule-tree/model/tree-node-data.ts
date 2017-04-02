@@ -6,6 +6,7 @@ export class TreeNodeData {
   lazyType: string;
   name: string;
   tableId: string;
+  tableName: string;
   projectName: string;
   packageId: string;
   planKey: TreeNodePlanKey;
