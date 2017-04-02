@@ -5,7 +5,7 @@ import java.util.*;
 
 import com.csc.fsg.life.pw.common.util.Constants;
 import com.csc.fsg.life.pw.common.util.InstallConfigBean;
-//import com.csc.fsg.life.pw.web.actions.rcm.beans.ExternalAuditBean;
+import com.csc.fsg.life.pw.web.actions.rcm.beans.ExternalAuditBean;
 
 /* Modification: CONFIGENH, ENH946, T0129 */
 
@@ -38,7 +38,7 @@ public class ProductManager {
 		po.setVersion("1601");
 		//po.setTableConstraintsBean(TableConstraintsBean.getInstance());
 		po.setInstallBean((InstallConfigBean)AppConfig.getContext().getBean("wmaInstallConfig"));
-//		po.setExtAuditBean(ExternalAuditBean.getInstance());
+		po.setExtAuditBean(ExternalAuditBean.getInstance());
 		return po;
 	}
     

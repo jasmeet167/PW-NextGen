@@ -111,7 +111,7 @@
 								</goals>
 								<configuration>
 									<workingDirectory>${basedir}/ng</workingDirectory>
-									<arguments>install --no-optional @angular/cli@1.0.0-beta.32.3</arguments>
+									<arguments>install --no-optional @angular/cli@1.0.0</arguments>
 								</configuration>
 							</execution>
 							<execution>

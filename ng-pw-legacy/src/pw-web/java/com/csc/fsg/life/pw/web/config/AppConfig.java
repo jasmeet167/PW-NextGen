@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.csc.fsg.life.avm.environments.AVMConfigBean;
 import com.csc.fsg.life.common.util.ApplicationContextUtils;
-import com.csc.fsg.life.pw.web.environment.EnvProperties;
+import com.csc.fsg.life.pw.web.environment.*;
 
 /** Modifications: T0113 */
 

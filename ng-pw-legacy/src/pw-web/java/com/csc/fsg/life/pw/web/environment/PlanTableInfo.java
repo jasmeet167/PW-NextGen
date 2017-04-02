@@ -9,8 +9,8 @@ import com.csc.fsg.life.pw.common.util.Utils;
 import com.csc.fsg.life.pw.web.actions.tree.PlanMergeAssistent;
 import com.csc.fsg.life.pw.web.utils.*;
 import com.csc.fsg.life.pw.web.utils.sql.SQLBuilderMERGEDX;
-//import com.csc.fsg.life.pw.web.utils.sql.SQLBuilderPLANWIP;
-//import com.csc.fsg.life.pw.web.utils.sql.SQLBuilderT000X;
+import com.csc.fsg.life.pw.web.utils.sql.SQLBuilderPLANWIP;
+import com.csc.fsg.life.pw.web.utils.sql.SQLBuilderT000X;
 
 /* Modifications: T0103, T0091, WMABASEIXI-2749, CCCV-E-ISSUE_STATE */
 
@@ -128,28 +128,28 @@ public class PlanTableInfo {
 	
 	public ArrayList<String> getIssueStates(PlanCriteriaTO planCriteria)
 	throws Exception {
-//		Connection conn = null;
+		Connection conn = null;
 		ArrayList<String> products = new ArrayList<String>();
-//		ResultSet rs = null;
-//		Statement stmt = null;
-//		PlanMergeAssistent pma = null;
-//
-//		try {
-//			conn = DBConnMgr.getInstance().getConnection(env.getId(),DBConnMgr.APPL);
-//			stmt = conn.createStatement();
-//			
-//			pma = new PlanMergeAssistent(conn, planCriteria);
-//			String sql = new SQLBuilderMERGEDX(planCriteria.getEnvironment(), planCriteria).buildSelectIssueStateForIRU();
-//			rs = SqlPW.query(SqlPW.SQL_SRC_PLAN_FILTER, stmt, sql);
-//			PlanTableInfo.convertToAL(rs, products);
-//		
-//		} finally {
-//			if (pma != null)
-//				pma.clean(conn);
-//			Utils.closeStatement(stmt);
-//			Utils.closeResultSet(rs);
-//			DBConnMgr.getInstance().releaseConnection(conn);
-//		}
+		ResultSet rs = null;
+		Statement stmt = null;
+		PlanMergeAssistent pma = null;
+
+		try {
+			conn = DBConnMgr.getInstance().getConnection(env.getId(),DBConnMgr.APPL);
+			stmt = conn.createStatement();
+			
+			pma = new PlanMergeAssistent(conn, planCriteria);
+			String sql = new SQLBuilderMERGEDX(planCriteria.getEnvironment(), planCriteria).buildSelectIssueStateForIRU();
+			rs = SqlPW.query(SqlPW.SQL_SRC_PLAN_FILTER, stmt, sql);
+			PlanTableInfo.convertToAL(rs, products);
+		
+		} finally {
+			if (pma != null)
+				pma.clean(conn);
+			Utils.closeStatement(stmt);
+			Utils.closeResultSet(rs);
+			DBConnMgr.getInstance().releaseConnection(conn);
+		}
 		return products;
 	}
 	

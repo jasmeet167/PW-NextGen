@@ -9,9 +9,8 @@ import com.csc.fsg.life.exceptions.WrapperException;
 import com.csc.fsg.life.pw.common.util.Utils;
 import com.csc.fsg.life.pw.common.util.IOTokenizer;
 import com.csc.fsg.life.pw.web.environment.*;
-//import com.csc.fsg.life.pw.web.actions.importexport.ImportHelper;
+import com.csc.fsg.life.pw.web.actions.importexport.ImportHelper;
 import com.csc.fsg.life.pw.web.utils.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /* Modifications: T0103, T0091, T0129, WMA-954, WMA-1182, WMA-1550, WMA-1773 */
 // T0103 - IOTokenizer moved to common
@@ -30,32 +29,26 @@ public class Row extends WizObject {
 	private String _auditDate;
 	private String _auditProject;
 
-	@JsonIgnore
 	public String get_auditUserId() {
 		return _auditUserId;
 	}
 
-	@JsonIgnore
 	public String get_auditDate() {
 		return _auditDate;
 	}
 
-	@JsonIgnore
 	public String get_auditProject() {
 		return _auditProject;
 	}
 
-	@JsonIgnore
 	public void set_auditUserId(String auditUserId) {
 		_auditUserId = auditUserId;
 	}
 
-	@JsonIgnore
 	public void set_auditDate(String auditDate) {
 		_auditDate = auditDate;
 	}
 
-	@JsonIgnore
 	public void set_auditProject(String auditProject) {
 		_auditProject = auditProject;
 	}
@@ -64,32 +57,26 @@ public class Row extends WizObject {
 		return _companyCode;
 	}
 
-	@JsonIgnore
 	public String getDDLName() {
 		return _tableDescriptor.getDDLName();
 	}
 
-	@JsonIgnore
 	public String getKey() {
 		return _key;
 	}
 
-	@JsonIgnore
 	public int getNumberOfColumns() {
 		return _tableDescriptor.getNumberOfColumns();
 	}
 
-	@JsonIgnore
 	public String getTableId() {
 		return _tableDescriptor.getTableId();
 	}
 
-	@JsonIgnore
 	public String getOldConcatKey() {
 		return _oldConcatKey;
 	}
 
-	@JsonIgnore
 	public String getOldData() {
 		return _oldData;
 	}
@@ -98,12 +85,10 @@ public class Row extends WizObject {
 		return "BASECLASSNULLDATA";
 	}
 
-	@JsonIgnore
 	public TableDescriptor getTableDescriptor() {
 		return _tableDescriptor;
 	}
 
-	@JsonIgnore
 	public String getProductPrefix() {
 		return "BASECLASSNULLDATA";
 	}
@@ -112,32 +97,26 @@ public class Row extends WizObject {
 		_companyCode = s;
 	}
 
-	@JsonIgnore
 	public void setKey(String s) {
 		_key = s;
 	}
 
-	@JsonIgnore
 	public void setTableDescriptor(TableDescriptor td) {
 		_tableDescriptor = td;
 	}
 
-	@JsonIgnore
 	public void setOldConcatKey(String s) {
 		_oldConcatKey = s;
 	}
 
-	@JsonIgnore
 	public void setOldData(String s) {
 		_oldData = s;
 	}
 	
-	@JsonIgnore
 	public String getEnvId() {
 		return envId;
 	}
 	
-	@JsonIgnore
 	public void setEnvId(String envId) {
 		this.envId = envId;
 	}
@@ -182,12 +161,10 @@ public class Row extends WizObject {
 		return buildConcatString(dataColumnDescriptors);
 	}
 
-	@JsonIgnore
 	public String getColumnsAsString() throws Exception {
 		return buildConcatString(_tableDescriptor.getColumnDescriptors());
 	}
 
-	@JsonIgnore
 	public void setColumns(String value) throws Exception {
 		String delimit = "\t";
 		if (value.indexOf('|') != -1)
@@ -195,7 +172,6 @@ public class Row extends WizObject {
 		setColumns(value, delimit);
 	}
 	
-	@JsonIgnore
 	public void setColumns(String value, String delim) throws Exception {
 		
 		int startValue = 0;
@@ -265,7 +241,6 @@ public class Row extends WizObject {
 	}
 
 	
-	@JsonIgnore
 	public String getEBCDICKey(boolean dbVersion) throws Exception {
 
 		Environment environment = EnvironmentManager.getInstance().getEnvironment(envId);
@@ -375,7 +350,6 @@ public class Row extends WizObject {
 		return generatedKey;
 	}
 	
-	@JsonIgnore
 	public String getValueOf(String columnName)throws Exception {
 	    
 	    if (columnName==null)
@@ -393,7 +367,6 @@ public class Row extends WizObject {
 
 	
 	
-	@JsonIgnore
 	public String getKeyFromRow(String value, String delim, String replaceDelim) {
 
 		IOTokenizer strtok = new IOTokenizer(value, delim);
@@ -419,7 +392,6 @@ public class Row extends WizObject {
 		return sb.toString();
 	}
 	
-	@JsonIgnore
 	public String getColumnsAsString(String delim) throws Exception {
 		StringBuffer sb = new StringBuffer();
 		Vector<ColumnDescriptor> columndescriptors = _tableDescriptor.getColumnDescriptors();
@@ -437,7 +409,6 @@ public class Row extends WizObject {
 	public void setTableSubset(String subset) {
 	}
 	
-	@JsonIgnore
     public void setColumnValues(String concatRow, String delim) throws Exception {
 		
     	Vector<ColumnDescriptor> columndescriptors = _tableDescriptor.getColumnDescriptors();
@@ -512,7 +483,6 @@ public class Row extends WizObject {
 	}
 	
 	// WMA-1182
-	@JsonIgnore
     public void setValuesFromDelimited(String delimitedRow, String delim) throws Exception {
 		
     	Vector<ColumnDescriptor> columndescriptors = _tableDescriptor.getColumnDescriptors();
@@ -541,8 +511,8 @@ public class Row extends WizObject {
 			}
 			
 			// Accept dates in any supported format, and always convert them to yyyy-MM-dd
-//			if (cd.getDataType() == 91)
-//				columnValue = new SimpleDateFormat("yyyy-MM-dd").format(ImportHelper.parseDate(columnValue));
+			if (cd.getDataType() == 91)
+				columnValue = new SimpleDateFormat("yyyy-MM-dd").format(ImportHelper.parseDate(columnValue));
 
 			if (cd.isKey()) 
 				sb.append(columnValue);
@@ -555,19 +525,16 @@ public class Row extends WizObject {
 		setKey(sb.toString());
 	}
     
-	@JsonIgnore
     public String getKeyColumnsPadded(String delim) throws Exception {
 		Vector<ColumnDescriptor> columndescriptors = _tableDescriptor.getKeyColumnDescriptors();
 		return getColumnsPadded(columndescriptors, delim);
     }
     
-	@JsonIgnore
     public String getDataColumnsPadded(String delim) throws Exception {
 		Vector<ColumnDescriptor> columndescriptors = _tableDescriptor.getDataColumnDescriptors();
 		return getColumnsPadded(columndescriptors, delim);
     }
     
-	@JsonIgnore
     public String getColumnsPadded(Vector<ColumnDescriptor> columndescriptors, String delim) throws Exception {
 		StringBuffer sb = new StringBuffer();
 		int size = columndescriptors.size();
@@ -582,7 +549,6 @@ public class Row extends WizObject {
 		return sb.toString();
     }
     
-	@JsonIgnore
     public String getKeyColumnsAsString(String delim) throws Exception {
 		StringBuffer sb = new StringBuffer();
 		Vector<ColumnDescriptor> columndescriptors = _tableDescriptor.getKeyColumnDescriptors();
@@ -597,7 +563,6 @@ public class Row extends WizObject {
 		return sb.toString();
     }
     
-	@JsonIgnore
     public String getDataColumnsAsString(String delim) throws Exception {
 		StringBuffer sb = new StringBuffer();
 		Vector<ColumnDescriptor> columndescriptors = _tableDescriptor.getColumnDescriptors();
@@ -614,7 +579,6 @@ public class Row extends WizObject {
 		return sb.toString();
     }
     
-	@JsonIgnore
 	public void setValueOf(String columnName,String value)throws Exception {
 	    
 	    if (columnName==null)

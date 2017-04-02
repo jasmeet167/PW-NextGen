@@ -6,23 +6,13 @@
 
 package com.csc.fsg.life.pw.web.actions.tree;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.TreeMap;
-import java.util.Vector;
+import java.sql.*;
+import java.util.*;
 
 import com.csc.fsg.life.pw.common.transferobjects.PlanCriteriaTO;
-import com.csc.fsg.life.pw.common.util.Constants;
-import com.csc.fsg.life.pw.common.util.InstallConfigBean;
-import com.csc.fsg.life.pw.common.util.Utils;
-import com.csc.fsg.life.pw.web.config.ProductManager;
-import com.csc.fsg.life.pw.web.config.ProductObject;
-import com.csc.fsg.life.pw.web.environment.Environment;
-import com.csc.fsg.life.pw.web.environment.EnvironmentManager;
+import com.csc.fsg.life.pw.common.util.*;
+import com.csc.fsg.life.pw.web.config.*;
+import com.csc.fsg.life.pw.web.environment.*;
 import com.csc.fsg.life.rest.model.TreeNodeLazyType;
 
 /* Modifications: T0103, T0091 ,HAVMENH, CCCV-E501 ,T0120, WMABASEIXI-4515, T0129, ENH1063.06, WMA-1209 */
@@ -69,7 +59,7 @@ public class CompanyWriter {
 		
 		if (lazyType == TreeNodeLazyType.C) {
 			CommonTablesWriter ctw = new CommonTablesWriter(env, company,
-			        viewChanges, mfConn, wipConn /*, task,user*/);
+			        viewChanges, mfConn, wipConn);
 			treeStream.append("999999" + TAB + "2" + TAB + "7" + TAB).append(
 					tableAuth).append("\tCommon\n");
 			treeStream.append(ctw.getStream());

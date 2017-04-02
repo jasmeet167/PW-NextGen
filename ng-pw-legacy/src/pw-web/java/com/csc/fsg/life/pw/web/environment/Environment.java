@@ -99,20 +99,20 @@ public class Environment implements IEnvironment{
 				
 			// refactor plan key: set td mgr before highvalue check
 			setTableDescMgr(TableDescriptorManager.getInstance(getProductSystem()));
-//			
-//			HIGHVALUE_BYTE_RECEIVED = HighValueHandler.retrieveHighValue(brConn,getSchema(),getId());
-//			
-//			boolean reloadAppl = getProps().isInitReload();
-//			boolean unlockWIP = getProps().isInitUnlockWIPRows();
-//			
-//			if (reloadAppl || unlockWIP)
-//				applConn = DBConnMgr.getInstance().getConnection(id,DBConnMgr.APPL);
-//			
-//			if (reloadAppl)
-//				EnvironmentLoader.reloadLocal(brConn,applConn,this,null);
-//			
-//			if (unlockWIP)
-//				EnvironmentLoader.unLockRows(applConn,this);
+			
+			HIGHVALUE_BYTE_RECEIVED = HighValueHandler.retrieveHighValue(brConn,getSchema(),getId());
+			
+			boolean reloadAppl = getProps().isInitReload();
+			boolean unlockWIP = getProps().isInitUnlockWIPRows();
+			
+			if (reloadAppl || unlockWIP)
+				applConn = DBConnMgr.getInstance().getConnection(id,DBConnMgr.APPL);
+			
+			if (reloadAppl)
+				EnvironmentLoader.reloadLocal(brConn,applConn,this,null);
+			
+			if (unlockWIP)
+				EnvironmentLoader.unLockRows(applConn,this);
 
 			assistent = new EnvironmentAssistent(this);
 			

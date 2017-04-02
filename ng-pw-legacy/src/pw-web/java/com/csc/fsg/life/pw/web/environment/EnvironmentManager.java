@@ -1,18 +1,14 @@
 
 package com.csc.fsg.life.pw.web.environment;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.logging.Log;
 
-import com.csc.fsg.life.common.config.ApplicationEnvironmentBean;
-import com.csc.fsg.life.common.config.CommonApplicationConfigBean;
-import com.csc.fsg.life.common.config.EnvDbInfoBean;
-import com.csc.fsg.life.convert.ASCIIConverter;
+import com.csc.fsg.life.common.config.*;
+import com.csc.fsg.life.convert.*;
 import com.csc.fsg.life.pw.web.config.AppConfig;
 import com.csc.fsg.life.pw.web.io.InfoException;
 import com.csc.fsg.life.pw.web.io.StructureTableCache;
@@ -31,8 +27,7 @@ public class EnvironmentManager {
 	
     private SecurityManager securityManager = null;
     
-    public EnvironmentManager()   {
-    	_log.info("Creating Environment Manager");
+    private EnvironmentManager()   {
     }
     
     public static EnvironmentManager getInstance() {

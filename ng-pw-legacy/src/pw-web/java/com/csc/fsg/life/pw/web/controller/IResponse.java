@@ -31,5 +31,5 @@ public interface IResponse {
 	
 	public void close() throws IOException;
 	public void println(String s, boolean flush);
-//	public void writeExcelWB(org.apache.poi.hssf.usermodel.HSSFWorkbook wb) throws IOException;
+	public void writeExcelWB(org.apache.poi.hssf.usermodel.HSSFWorkbook wb) throws IOException;
 }

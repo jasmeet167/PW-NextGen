@@ -4,11 +4,8 @@ import java.sql.*;
 import java.util.*;
 
 import com.csc.fsg.life.pw.common.util.Utils;
-//import com.csc.fsg.life.pw.web.controller.PWTask;
 import com.csc.fsg.life.pw.web.environment.Environment;
-import com.csc.fsg.life.pw.web.environment.EnvironmentManager;
 import com.csc.fsg.life.pw.web.io.StructureTableCache;
-import com.csc.fsg.life.pw.web.io.TableDescriptor;
 
 /* Modifications: T0091, ENH961, CCCV-E768, T0129, WMA-1209, WMA-1550 */
 // ENH961 - set status in task.
@@ -22,7 +19,7 @@ public class OrphanTreeCreator {
 //	
 //	private Map<String, String> nonOrphanList = new HashMap<String, String>();
 	
-	public OrphanTreeCreator(Environment environment, String productPrefix, Connection conn/*, PWTask task*/){
+	public OrphanTreeCreator(Environment environment, String productPrefix, Connection conn){
 		this.environment = environment;
 		this.treeProductPrefix = productPrefix;
 		localConn = conn;
