@@ -1,12 +1,199 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { SelectItem } from 'primeng/primeng';
+import { NotificationService } from 'app/notification/service/notification.service';
+import { FilterService } from 'app/home/service/filter.service';
+import { PromoteTabMsg } from './model/promote-msg';
 
 @Component({
   selector: 'app-promote',
-  template: `
-    <div style="color:red;">
-      <p> Promote Pending Implementation
-    </div>
-  `
+  templateUrl: './promote.component.html',
+  styleUrls: ['./promote.component.css'],
 })
-export class PromoteComponent {
+export class PromoteComponent implements OnInit {
+  public enterPackage: string;
+
+  public filterSourceEnvOptions: SelectItem[];
+  public filterSourceEnv: string;
+  public filterTargetEnvOptions: SelectItem[];
+  public filterTargetEnv: string;
+
+  public filterPackageInputRows: SelectItem[];
+  public filterPackageOutputRows: SelectItem[];
+  public filterProjectInputRows: SelectItem[];
+  public filterProjectOutputRows: SelectItem[];
+
+  public isTargetEnvDisabled: boolean;
+  public isEnterPackageDisabled: boolean;
+
+  public isGoDisabled: boolean;
+
+  private authToken: string;
+
+  constructor(private notificationService: NotificationService, private filterService: FilterService) {
+    this.authToken = sessionStorage['authToken'];
+  }
+
+  ngOnInit() {
+    if (!this.authToken || this.authToken.trim() === '') {
+      this.notificationService.navigateToLogin();
+      return;
+    }
+
+    let envOptions: SelectItem[];
+
+    this.filterPackageInputRows = <SelectItem[]>[];
+    this.filterPackageOutputRows = <SelectItem[]>[];
+
+    this.filterProjectInputRows = <SelectItem[]>[];
+    this.filterProjectOutputRows = <SelectItem[]>[];
+
+    this.isTargetEnvDisabled = true;
+    this.isEnterPackageDisabled = true;
+
+    this.notificationService.showWaitIndicator(true);
+    this.filterService.getEnvOptions(this.authToken)
+      .subscribe(
+      res => envOptions = res,
+      err => {
+        if (err.status !== 404) {
+          this.notificationService.handleError(err);
+        }
+        this.buildSourceEnvDropdown(null);
+        this.notificationService.showWaitIndicator(false);
+      },
+      () => {
+        this.buildSourceEnvDropdown(envOptions);
+        this.notificationService.showWaitIndicator(false);
+      }
+      );
+    this.evaluateStatusOfGo();
+  }
+
+  private buildSourceEnvDropdown(options: SelectItem[]) {
+    this.filterSourceEnvOptions = <SelectItem[]>[{ label: '', value: null }];
+    if (options !== null) {
+      for (const option of options) {
+        this.filterSourceEnvOptions.push(option);
+      }
+    }
+  }
+
+  private buildTargetEnvDropdown(options: SelectItem[]) {
+    this.filterTargetEnvOptions = <SelectItem[]>[{ label: '', value: null }];
+    if (options !== null) {
+      for (const option of options) {
+        this.filterTargetEnvOptions.push(option);
+      }
+      this.filterTargetEnv = null;
+    }
+  }
+
+  onSourceEnvChange() {
+    this.filterProjectInputRows = <SelectItem[]>[];
+    this.filterProjectOutputRows = <SelectItem[]>[];
+    this.filterPackageInputRows = <SelectItem[]>[];
+    this.filterPackageOutputRows = <SelectItem[]>[];
+    if (this.filterSourceEnv == null) {
+      this.isTargetEnvDisabled = true;
+      this.isEnterPackageDisabled = true;
+    } else {
+      this.isTargetEnvDisabled = false;
+      this.isEnterPackageDisabled = false;
+
+      let envOptions: SelectItem[];
+      this.notificationService.showWaitIndicator(true);
+      this.filterService.getEnvOptions(this.authToken)
+        .subscribe(
+        res => envOptions = res,
+        err => {
+          if (err.status !== 404) {
+            this.notificationService.handleError(err);
+          }
+          this.buildTargetEnvDropdown(null);
+          this.notificationService.showWaitIndicator(false);
+        },
+        () => {
+          this.buildTargetEnvDropdown(envOptions);
+          this.notificationService.showWaitIndicator(false);
+        }
+        );
+    }
+  }
+
+  onTargetEnvChange() {
+    this.filterProjectInputRows = <SelectItem[]>[];
+    this.filterProjectOutputRows = <SelectItem[]>[];
+    this.filterPackageInputRows = <SelectItem[]>[];
+    this.filterPackageOutputRows = <SelectItem[]>[];
+    let promoteTabMsg: PromoteTabMsg;
+    promoteTabMsg = null;
+
+    if (this.filterSourceEnv != null && this.filterTargetEnv != null) {
+      if (this.filterSourceEnv === this.filterTargetEnv) {
+        this.notificationService.showMessage('Source and Target Environments can not be same.', 1);
+        this.onResetClick();
+        return null;
+      }
+    }
+
+    if (this.filterTargetEnv != null) {
+      this.notificationService.showWaitIndicator(true);
+      this.filterService.getPromoteDetails(this.authToken, this.filterSourceEnv, this.filterTargetEnv)
+        .subscribe(
+        res => promoteTabMsg = res,
+        err => {
+          if (err.status !== 404) {
+            this.notificationService.handleError(err);
+          }
+          this.buildPromotePageDetails(null);
+          this.notificationService.showWaitIndicator(false);
+        },
+        () => {
+          this.buildPromotePageDetails(promoteTabMsg);
+          this.notificationService.showWaitIndicator(false);
+        }
+        );
+    } else {
+      this.filterProjectInputRows = <SelectItem[]>[];
+      this.filterPackageInputRows = <SelectItem[]>[];
+    }
+  }
+
+  private buildPromotePageDetails(promoteTabMsg: PromoteTabMsg) {
+    this.filterProjectInputRows = <SelectItem[]>[];
+    this.filterPackageInputRows = <SelectItem[]>[];
+    if (promoteTabMsg.packages !== null) {
+      for (const packagesTab of promoteTabMsg.packages) {
+        this.filterPackageInputRows.push(packagesTab);
+      }
+    }
+    if (promoteTabMsg.projects != null) {
+      for (const project of promoteTabMsg.projects) {
+        this.filterProjectInputRows.push({ label: project, value: project });
+      }
+    }
+  }
+
+  private evaluateStatusOfGo() {
+    if ((this.filterSourceEnv && this.filterSourceEnv.trim() !== '')
+      && (this.filterTargetEnv && this.filterTargetEnv.trim() !== '')
+    ) {
+      this.isGoDisabled = false;
+    } else {
+      this.isGoDisabled = true;
+    }
+  }
+
+  onResetClick() {
+    this.enterPackage = null;
+    this.filterSourceEnv = null;
+    this.filterTargetEnvOptions = <SelectItem[]>[];
+    this.filterProjectInputRows = <SelectItem[]>[];
+    this.filterProjectOutputRows = <SelectItem[]>[];
+    this.filterPackageInputRows = <SelectItem[]>[];
+    this.filterPackageOutputRows = <SelectItem[]>[];
+    this.isTargetEnvDisabled = true;
+    this.isEnterPackageDisabled = true;
+  }
+
 }

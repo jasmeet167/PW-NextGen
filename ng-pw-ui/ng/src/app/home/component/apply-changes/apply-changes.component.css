@@ -1,0 +1,41 @@
+.ui-tree .ui-tree-container {
+  overflow: hidden !important;
+}
+
+.tn-1 .ui-treenode-icon {
+  color: rgba(228, 192, 46, 1) !important;
+}
+
+.tn-2 .ui-treenode-icon {
+  color: rgba(39, 143, 175, 1) !important;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: -8px;
+}
+
+li {
+    margin-top: 5px;
+}
+
+.li-extra-space {
+    margin-top: 20px;
+    margin-left: 145px;
+}
+button {
+    margin-bottom: 20px;
+    width: 90px;
+    
+}
+p-listbox {
+    margin-left: 10px;
+    margin-bottom: -7px;
+}
+label {
+    width: 100px;
+}
+.ui-picklist-buttons{
+   vertical-align:top;
+}

@@ -1,0 +1,85 @@
+<table>
+  <tr>
+    <td valign="top" width="360px" height="600px">
+      <ul>
+        <li>
+          <p-dropdown [options]="envIdOptions" [(ngModel)]="envId" (onChange)="onEnvIdChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="companyCodeOptions" [(ngModel)]="companyCode" [disabled]="isCompanyCodeDisabled" (onChange)="onCompanyCodeChange()"
+            [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="productCodeOptions" [(ngModel)]="productCode" [disabled]="isProductCodeDisabled" (onChange)="onProductChange()"
+            [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="planCodeOptions" [(ngModel)]="planCode" [disabled]="isPlanCodeDisabled" (onChange)="onPlanCodeChange()"
+            [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="issueStateOptions" [(ngModel)]="issueState" [disabled]="isIssueStateDisabled" (onChange)="onIssueStateChange()"
+            [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="lobOptions" [(ngModel)]="lob" [disabled]="isLobDisabled" (onChange)="onLobChange()" [autoWidth]="false"
+            [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="effDateOptions" [(ngModel)]="effDate" [disabled]="isEffDateDisabled" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li style="margin-top: 20px">
+          <label><span style="align-content: center"> As of Date </span></label>
+        </li>
+        <li>
+          <p-calendar [(ngModel)]="asOfDate" dateFormat="mm.dd.yy" [showIcon]="true" [inputStyle]="{'width':'318px'}"></p-calendar>
+        </li>
+        <li>
+          <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Remember my selections"></p-checkbox>
+          <button pButton type="button" [disabled]="isGoDisabled" label="Go" style="margin-left: 35px"></button>
+        </li>
+      </ul>
+    </td>
+    <td valign="top" style="width: 700px">
+      <div style="margin-left:23px; margin-top: 15px">
+        <label> <span style="align-content: center"> Display Aditional options for</span></label>
+      </div>
+      <div class="div-checkbox-space">
+        <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="General policy Infromation"></p-checkbox>
+      </div>
+      <div class="div-checkbox-space">
+        <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Death Benefit"></p-checkbox>
+      </div>
+      <div class="div-checkbox-space">
+        <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Cost of Insurance"></p-checkbox>
+      </div>
+      <div class="div-checkbox-space">
+        <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Loan Information"></p-checkbox>
+      </div>
+      <div class="div-checkbox-space">
+        <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Charges and Fees"></p-checkbox>
+      </div>
+      <div class="div-checkbox-space">
+        <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Compliance Provision"></p-checkbox>
+      </div>
+      <div class="div-checkbox-space">
+        <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Mode Premiums"></p-checkbox>
+      </div>
+      <div class="div-checkbox-space">
+        <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Lapse/NFO Options"></p-checkbox>
+      </div>
+      <div class="div-checkbox-space">
+        <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Payment Loads"></p-checkbox>
+      </div>
+      <div class="div-checkbox-space">
+        <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Guaranteed Cash Values"></p-checkbox>
+      </div>
+      <div class="div-checkbox-space">
+        <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Target Information"></p-checkbox>
+      </div>
+      <div class="div-checkbox-space">
+        <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="All Of the Above"></p-checkbox>
+      </div>
+    </td>
+  </tr>
+</table>

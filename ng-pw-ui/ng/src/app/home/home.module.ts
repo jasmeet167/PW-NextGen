@@ -16,6 +16,7 @@ import { ListboxModule } from 'primeng/primeng';
 import { CheckboxModule } from 'primeng/primeng';
 import { ButtonModule } from 'primeng/primeng';
 import { PickListModule } from 'primeng/primeng';
+import {CalendarModule} from 'primeng/primeng';
 
 // Module components
 import { HomeComponent } from './home.component';
@@ -55,7 +56,8 @@ import { HomeRoutingModule } from './home-routing.module';
     CheckboxModule,
     ButtonModule,
     HomeRoutingModule,
-    PickListModule
+    PickListModule,
+    CalendarModule
  ],
   declarations: [
     HomeComponent,
