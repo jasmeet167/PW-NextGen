@@ -495,12 +495,12 @@ definitions:
         type: string
         enum:
           - C   # COMMON
-          - PDF # PDF PLANS
-          - H   # COMMON COVERAGE
-          - B   # BASE PLANS
-          - R   # RIDER PLANS
-          - P   # PAYOUT PLANS
-          - O   # ORPHAN SUBSETS
+          - PDF # PDF_PLANS
+          - H   # COMMON_COVERAGE
+          - B   # BASE_PLANS
+          - R   # RIDER_PLANS
+          - P   # PAYOUT_PLANS
+          - O   # ORPHAN_SUBSETS
       name:
         type: string
       tableId:

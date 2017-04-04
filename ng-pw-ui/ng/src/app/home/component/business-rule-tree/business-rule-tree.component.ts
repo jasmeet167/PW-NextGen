@@ -8,6 +8,7 @@ import { NotificationService } from 'app/notification/service/notification.servi
 import { MenuService } from 'app/util/service/menu.service';
 import { MenuHelper } from 'app/util/menu.helper';
 
+import { TreeNodeType } from './model/tree-node-type';
 import { TreeNodeData } from './model/tree-node-data';
 import { TreeNodePlanKey } from './model/tree-node-plan-key';
 import { BusinessRuleTreeService } from './service/business-rule-tree.service';
@@ -126,25 +127,25 @@ export class BusinessRuleTreeComponent implements OnInit {
 
     node.children = <TreeNode[]> [];
     switch (node.type) {
-      case 'CTF':     // COMMON_TABLE_FOLDER
-            this.buildCommonTablesList(node);
-            break;
-      case 'PDF':     // PDFPLAN_FOLDER
-      case 'PF':      // PLAN_FOLDER
-      case 'PPF':     // PAYOUTPLAN_FOLDER
-      case 'RF':      // RIDER_FOLDER
-            this.buildPlanCodeList(node);
-            break;
-      case 'P':       // PLAN
-      case 'R':       // RIDER_FOLDER
-      case 'PP':      // PAYOUT_PLAN
-            this.buildPlanDetails(node);
-            break;
-      case 'OF':      // ORPHAN_FOLDER
-            this.buildOrphanSubsetList(node);
-            break;
+      case TreeNodeType.TypeEnum.CTF.toString():  // COMMON_TABLE_FOLDER
+           this.buildCommonTablesList(node);
+           break;
+      case TreeNodeType.TypeEnum.PDF.toString():  // PDFPLAN_FOLDER
+      case TreeNodeType.TypeEnum.PF.toString():   // PLAN_FOLDER
+      case TreeNodeType.TypeEnum.PPF.toString():  // PAYOUTPLAN_FOLDER
+      case TreeNodeType.TypeEnum.RF.toString():   // RIDER_FOLDER
+           this.buildPlanCodeList(node);
+           break;
+      case TreeNodeType.TypeEnum.P.toString():    // PLAN
+      case TreeNodeType.TypeEnum.R.toString():    // RIDER_FOLDER
+      case TreeNodeType.TypeEnum.PP.toString():   // PAYOUT_PLAN
+           this.buildPlanDetails(node);
+           break;
+      case TreeNodeType.TypeEnum.OF.toString():   // ORPHAN_FOLDER
+           this.buildOrphanSubsetList(node);
+           break;
       default:
-            break;
+           break;
     }
   }
 
@@ -269,23 +270,23 @@ export class BusinessRuleTreeComponent implements OnInit {
     this.showTooltip(node);
 
     switch (node.type) {
-        case 'C':       // Company
-                this.contextMenuModel = this.companyMenuModel;
-                break;
-        case 'CTF':     // Common Table Folder
-        case 'PDF':     // PDF Plans Folder
-        case 'PF':      // Plan Folder
-        case 'PPF':     // Payout Plan Folder
-        case 'RF':      // Rider Folder
-                this.contextMenuModel = this.generalMenuModel;
-                break;
-        case 'AF':      // Annuity Folder
-        case 'UF':      // UL Folder
-        case 'TF':      // Traditional Folder
-                this.contextMenuModel = this.planFolderMenuModel;
-                break;
+        case TreeNodeType.TypeEnum.C.toString():    // COMPANY
+             this.contextMenuModel = this.companyMenuModel;
+             break;
+        case TreeNodeType.TypeEnum.CTF.toString():  // COMMON_TABLE_FOLDER
+        case TreeNodeType.TypeEnum.PDF.toString():  // PDFPLAN_FOLDER
+        case TreeNodeType.TypeEnum.PF.toString():   // PLAN_FOLDER
+        case TreeNodeType.TypeEnum.PPF.toString():  // PAYOUTPLAN_FOLDER
+        case TreeNodeType.TypeEnum.RF.toString():   // RIDER_FOLDER
+             this.contextMenuModel = this.generalMenuModel;
+             break;
+        case TreeNodeType.TypeEnum.AF.toString():   // ANNUITIY_FOLDER
+        case TreeNodeType.TypeEnum.UF.toString():   // UNIV_LIFE_FOLDER
+        case TreeNodeType.TypeEnum.TF.toString():   // TRADITIONAL_FOLDER
+             this.contextMenuModel = this.planFolderMenuModel;
+             break;
         default:
-            this.contextMenuModel = null;
+             this.contextMenuModel = null;
     }
   }
 
@@ -293,14 +294,18 @@ export class BusinessRuleTreeComponent implements OnInit {
     this.clearTooltips();
 
     const data: TreeNodeData = node.data;
-    if (data && data.tableName && node.type === 'TS') {
+    if (data && data.tableName
+     && node.type === TreeNodeType.TypeEnum.TS.toString()) {          // TABLE_SUBSET
       this.tooltips.push({severity: 'info', detail: 'Table Name: ' + data.tableName});
     } else {
-      if (node.type === 'PDF' || node.type === 'AF'
-      || node.type === 'TF' || node.type === 'UF') {
+      if (node.type === TreeNodeType.TypeEnum.PDF.toString()          // PDFPLAN_FOLDER
+       || node.type === TreeNodeType.TypeEnum.AF.toString()           // ANNUITIY_FOLDER
+       || node.type === TreeNodeType.TypeEnum.TF.toString()           // TRADITIONAL_FOLDER
+       || node.type === TreeNodeType.TypeEnum.UF.toString()) {        // UNIV_LIFE_FOLDER
         this.showProductTooltip(node);
-      } else if (node.type === 'P' || node.type === 'PP'
-              || node.type === 'R') {
+      } else if (node.type === TreeNodeType.TypeEnum.P.toString()     // PLAN
+              || node.type === TreeNodeType.TypeEnum.PP.toString()    // PAYOUT_PLAN
+              || node.type === TreeNodeType.TypeEnum.R.toString()) {  // RIDER
         this.showPlanTooltip(node);
       } else {
         this.showStandardTooltip(node);
@@ -311,20 +316,20 @@ export class BusinessRuleTreeComponent implements OnInit {
   private showProductTooltip(node: TreeNode) {
     let toolTip = 'Product: ';
 
-    if (node.type === 'PDF') {
+    if (node.type === TreeNodeType.TypeEnum.PDF.toString()) {         // PDFPLAN_FOLDER
       const data: TreeNodeData = node.data;
       if (data) {
-        if (data.lazyType === TreeNodeData.LazyTypeEnum.PDF) {
+        if (data.lazyType === TreeNodeData.LazyTypeEnum.PDF) {        // PDF_PLANS
           toolTip += 'P';
-        } else if (data.lazyType === TreeNodeData.LazyTypeEnum.H) {
+        } else if (data.lazyType === TreeNodeData.LazyTypeEnum.H) {   // COMMON_COVERAGE
           toolTip += 'C';
         }
       }
-    } else if (node.type === 'AF') {
+    } else if (node.type === TreeNodeType.TypeEnum.AF.toString()) {   // ANNUITIY_FOLDER
       toolTip += 'A';
-    } else if (node.type === 'TF') {
+    } else if (node.type === TreeNodeType.TypeEnum.TF.toString()) {   // TRADITIONAL_FOLDER
       toolTip += 'T';
-    } else if (node.type === 'UF') {
+    } else if (node.type === TreeNodeType.TypeEnum.UF.toString()) {   // UNIV_LIFE_FOLDER
       toolTip += 'U';
     }
 
@@ -422,56 +427,56 @@ export class BusinessRuleTreeComponent implements OnInit {
   // For reference see method toString() in class CscTreeNode in the old Product Wizard
   private buildDetailedLabel(node: TreeNode) {
     switch (node.type) {
-      case 'AF':      // Annuity Folder
-      case 'UF':      // UL Folder
-      case 'TF':      // Traditional Folder
-      case 'CTF':     // Common Table Folder
-      case 'PF':      // Plan Folder
-      case 'RF':      // Rider Folder
-      case 'PDF':     // PDF Plans Folder
-      case 'PPF':     // Payout Plan Folder
-      case 'OF':      // Orphan Folder
-            break;
+      case TreeNodeType.TypeEnum.AF.toString():   // ANNUITIY_FOLDER
+      case TreeNodeType.TypeEnum.UF.toString():   // UNIV_LIFE_FOLDER
+      case TreeNodeType.TypeEnum.TF.toString():   // TRADITIONAL_FOLDER
+      case TreeNodeType.TypeEnum.CTF.toString():  // COMMON_TABLE_FOLDER
+      case TreeNodeType.TypeEnum.PF.toString():   // PLAN_FOLDER
+      case TreeNodeType.TypeEnum.RF.toString():   // RIDER_FOLDER
+      case TreeNodeType.TypeEnum.PDF.toString():  // PDFPLAN_FOLDER
+      case TreeNodeType.TypeEnum.PPF.toString():  // PAYOUTPLAN_FOLDER
+      case TreeNodeType.TypeEnum.OF.toString():   // ORPHAN_FOLDER
+           break;
       default:
-            const data: TreeNodeData = node.data;
-            let planKey: TreeNodePlanKey;
-            if (data) {
-              planKey = data.planKey;
-            }
+           const data: TreeNodeData = node.data;
+           let planKey: TreeNodePlanKey;
+           if (data) {
+             planKey = data.planKey;
+           }
 
-            let displayString = '';
-            if (data && data.name) {
-              displayString = data.name.trim();
-            }
+           let displayString = '';
+           if (data && data.name) {
+             displayString = data.name.trim();
+           }
 
-            let tableSubsetString = '';
-            if (planKey && planKey.tablePtrSubset) {
-              tableSubsetString = planKey.tablePtrSubset.trim();
-            }
+           let tableSubsetString = '';
+           if (planKey && planKey.tablePtrSubset) {
+             tableSubsetString = planKey.tablePtrSubset.trim();
+           }
 
-            let variationString = '';
-            if (planKey && planKey.tablePtrVar) {
-              variationString = planKey.tablePtrVar.trim();
-            }
+           let variationString = '';
+           if (planKey && planKey.tablePtrVar) {
+             variationString = planKey.tablePtrVar.trim();
+           }
 
-            if (tableSubsetString !== '') {
-              displayString += '~' + tableSubsetString;
-              if (variationString !== '') {
-                displayString += '~' + variationString;
-              } else {
-                // TODO: implement this condition
-                // if (showBlankVariation()) {
-                //  displayString += '~Blank';
-                // }
-              }
-            }
+           if (tableSubsetString !== '') {
+             displayString += '~' + tableSubsetString;
+             if (variationString !== '') {
+               displayString += '~' + variationString;
+             } else {
+               // TODO: implement this condition
+               // if (showBlankVariation()) {
+               //  displayString += '~Blank';
+               // }
+             }
+           }
 
-            if (displayString !== '') {
-              data.tableName = node.label;
-              node.label = displayString;
-            }
+           if (displayString !== '') {
+             data.tableName = node.label;
+             node.label = displayString;
+           }
 
-            break;
+           break;
     }
   }
 
