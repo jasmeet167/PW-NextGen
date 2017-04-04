@@ -295,7 +295,9 @@ export class BusinessRuleTreeComponent implements OnInit {
 
     const data: TreeNodeData = node.data;
     if (data && data.tableName
-     && node.type === TreeNodeType.TypeEnum.TS.toString()) {          // TABLE_SUBSET
+    && (node.type === TreeNodeType.TypeEnum.TS.toString()             // TABLE_SUBSET
+     || node.type === TreeNodeType.TypeEnum.CT.toString()             // COMMON_TABLE
+     || node.type === TreeNodeType.TypeEnum.CF.toString())) {         // COMMON_FOLDER
       this.tooltips.push({severity: 'info', detail: 'Table Name: ' + data.tableName});
     } else {
       if (node.type === TreeNodeType.TypeEnum.PDF.toString()          // PDFPLAN_FOLDER
