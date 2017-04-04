@@ -1,3 +1,3 @@
-export class Configuration {
+export interface Configuration {
   restServiceBaseUrl: string;
 }
