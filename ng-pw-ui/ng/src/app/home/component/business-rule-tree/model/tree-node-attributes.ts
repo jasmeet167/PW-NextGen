@@ -1,5 +1,5 @@
-export class TreeNodeAttributes {
-  disabled: boolean;
-  inquiryAllowed: boolean;
-  updateAllowed: boolean;
+export interface TreeNodeAttributes {
+  disabled?: boolean;
+  inquiryAllowed?: boolean;
+  updateAllowed?: boolean;
 }

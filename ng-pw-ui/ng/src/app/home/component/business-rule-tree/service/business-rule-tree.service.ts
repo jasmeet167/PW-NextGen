@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { TreeNode } from 'primeng/primeng';
 
+import { TreeNodeData } from '../model/tree-node-data';
 import { TreeNodePlanKey } from '../model/tree-node-plan-key';
 
 @Injectable()
@@ -60,7 +61,7 @@ export class BusinessRuleTreeService {
                .map(response => { return <TreeNode[]> response.json(); });
   }
 
-  getBusinessRuleTreePlanList(authToken: string, lazyType: string, envId: string,
+  getBusinessRuleTreePlanList(authToken: string, lazyType: TreeNodeData.LazyTypeEnum, envId: string,
                               companyCode: string, productCode: string, planCode: string,
                               issueState: string, lob: string, effDate: string,
                               viewChanges: boolean, includeOrphans: boolean): Observable<TreeNode[]> {
@@ -68,7 +69,7 @@ export class BusinessRuleTreeService {
     filterHeaders.append('Accept', 'application/json');
     filterHeaders.append('authToken', authToken);
     if (lazyType) {
-      filterHeaders.append('lazyType', lazyType);
+      filterHeaders.append('lazyType', lazyType.toString());
     }
     if (envId) {
       filterHeaders.append('envId', envId);

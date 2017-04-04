@@ -13,7 +13,7 @@ import com.csc.fsg.life.pw.common.transferobjects.PlanCriteriaTO;
 import com.csc.fsg.life.pw.common.util.*;
 import com.csc.fsg.life.pw.web.config.*;
 import com.csc.fsg.life.pw.web.environment.*;
-import com.csc.fsg.life.rest.model.TreeNodeLazyType;
+import com.csc.fsg.life.rest.model.TreeNodeData.LazyTypeEnum;
 
 /* Modifications: T0103, T0091 ,HAVMENH, CCCV-E501 ,T0120, WMABASEIXI-4515, T0129, ENH1063.06, WMA-1209 */
 
@@ -29,7 +29,7 @@ public class CompanyWriter {
 
 	private static final String NEW_LINE = "\n";
 
-	public String getStream(TreeNodeLazyType lazyType, String env, String company, String prefix,
+	public String getStream(LazyTypeEnum lazyType, String env, String company, String prefix,
 	        Connection wipConn, Connection mfConn, boolean viewChanges,
 	        boolean includeOrphans,PlanMergeAssistent pm, IndexMergeAssistent im)
 	        throws Exception {
@@ -57,7 +57,7 @@ public class CompanyWriter {
 			treeStream.append(company).append(NEW_LINE);
 		}
 		
-		if (lazyType == TreeNodeLazyType.C) {
+		if (lazyType == LazyTypeEnum.C) {
 			CommonTablesWriter ctw = new CommonTablesWriter(env, company,
 			        viewChanges, mfConn, wipConn);
 			treeStream.append("999999" + TAB + "2" + TAB + "7" + TAB).append(

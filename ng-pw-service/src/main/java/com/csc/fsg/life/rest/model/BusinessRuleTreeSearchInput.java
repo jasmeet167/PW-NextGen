@@ -5,12 +5,14 @@ import java.sql.Date;
 
 import org.springframework.util.StringUtils;
 
+import com.csc.fsg.life.rest.model.TreeNodeData.LazyTypeEnum;
+
 public class BusinessRuleTreeSearchInput
 	implements Serializable
 {
 	static private final long serialVersionUID = -9135750839082607328L;
 
-	private TreeNodeLazyType lazyType = null;
+	private LazyTypeEnum lazyType = null;
 	private String productCode = null;
 	private String planCode = null;
 	private String issueState = null;
@@ -19,12 +21,12 @@ public class BusinessRuleTreeSearchInput
 	private boolean viewChanges = true;
 	private boolean includeOrphans = false;
 
-	public TreeNodeLazyType getLazyType()
+	public LazyTypeEnum getLazyType()
 	{
 		return lazyType;
 	}
 
-	public void setLazyType(TreeNodeLazyType lazyType)
+	public void setLazyType(LazyTypeEnum lazyType)
 	{
 		this.lazyType = lazyType;
 	}
@@ -32,22 +34,22 @@ public class BusinessRuleTreeSearchInput
 	public void setLazyType(String lazyType)
 	{
 		if (StringUtils.hasText(lazyType)) {
-			if (TreeNodeLazyType.C.toString().equals(lazyType))
-				this.lazyType = TreeNodeLazyType.C;
-			else if (TreeNodeLazyType.PDF.toString().equals(lazyType))
-				this.lazyType = TreeNodeLazyType.PDF;
-			else if (TreeNodeLazyType.H.toString().equals(lazyType))
-				this.lazyType = TreeNodeLazyType.H;
-			else if (TreeNodeLazyType.B.toString().equals(lazyType))
-				this.lazyType = TreeNodeLazyType.B;
-			else if (TreeNodeLazyType.R.toString().equals(lazyType))
-				this.lazyType = TreeNodeLazyType.R;
-			else if (TreeNodeLazyType.P.toString().equals(lazyType))
-				this.lazyType = TreeNodeLazyType.P;
-			else if (TreeNodeLazyType.O.toString().equals(lazyType))
-				this.lazyType = TreeNodeLazyType.O;
+			if (LazyTypeEnum.C.toString().equals(lazyType))
+				this.lazyType = LazyTypeEnum.C;
+			else if (LazyTypeEnum.PDF.toString().equals(lazyType))
+				this.lazyType = LazyTypeEnum.PDF;
+			else if (LazyTypeEnum.H.toString().equals(lazyType))
+				this.lazyType = LazyTypeEnum.H;
+			else if (LazyTypeEnum.B.toString().equals(lazyType))
+				this.lazyType = LazyTypeEnum.B;
+			else if (LazyTypeEnum.R.toString().equals(lazyType))
+				this.lazyType = LazyTypeEnum.R;
+			else if (LazyTypeEnum.P.toString().equals(lazyType))
+				this.lazyType = LazyTypeEnum.P;
+			else if (LazyTypeEnum.O.toString().equals(lazyType))
+				this.lazyType = LazyTypeEnum.O;
 			else
-				throw new IllegalArgumentException("Unknown String equivalent of TreeNodeLazyType detected");
+				throw new IllegalArgumentException("Unknown String equivalent of LazyTypeEnum detected");
 		}
 	}
 

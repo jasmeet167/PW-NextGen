@@ -30,8 +30,8 @@ import com.csc.fsg.life.rest.exception.UnauthorizedException;
 import com.csc.fsg.life.rest.exception.UnexpectedException;
 import com.csc.fsg.life.rest.model.Credentials;
 import com.csc.fsg.life.rest.model.ErrorModel;
+import com.csc.fsg.life.rest.model.LoginResponse;
 import com.csc.fsg.life.rest.model.SelectItem;
-import com.csc.fsg.life.rest.model.AuthToken;
 import com.csc.fsg.life.rest.param.AuthorizationAction;
 import com.csc.fsg.life.rest.param.RestServiceParam;
 
@@ -60,10 +60,10 @@ public class SecurityServiceImpl
 	@Autowired
 	protected PolicyDecisionPointConfig pdpConfig = null;
 
-	public AuthToken authenticate(Credentials credentials)
+	public LoginResponse authenticate(Credentials credentials)
 	{
 		if (!pdpConfig.isSecurityEnabled()) {
-			AuthToken authToken = new AuthToken();
+			LoginResponse authToken = new LoginResponse();
 			authToken.setTokenId("");
 			return authToken;
 		}
@@ -84,7 +84,7 @@ public class SecurityServiceImpl
 			RestTemplate restTemplate = new RestTemplate();
 
 			String url = pdpConfig.getSecurityManagementUrl() + ACTION_AUTHENTICATE;
-			ResponseEntity<AuthToken> response = restTemplate.exchange(url, HttpMethod.POST, entity, AuthToken.class);
+			ResponseEntity<LoginResponse> response = restTemplate.exchange(url, HttpMethod.POST, entity, LoginResponse.class);
 			return response.getBody();
 		}
 		catch (HttpClientErrorException e) {

@@ -34,7 +34,7 @@ import com.csc.fsg.life.rest.model.ErrorModel;
 import com.csc.fsg.life.rest.model.TreeNode;
 import com.csc.fsg.life.rest.model.TreeNode.TypeEnum;
 import com.csc.fsg.life.rest.model.TreeNodeData;
-import com.csc.fsg.life.rest.model.TreeNodeLazyType;
+import com.csc.fsg.life.rest.model.TreeNodeData.LazyTypeEnum;
 import com.csc.fsg.life.rest.model.TreeNodePlanKey;
 import com.csc.fsg.life.rest.model.tree.Node;
 import com.csc.fsg.life.rest.param.RestServiceParam;
@@ -119,7 +119,7 @@ public class BusinessRuleTreeServiceImpl
 		setFolderIcons(common);
 		TreeNodeData commonData = new TreeNodeData();
 		commonData.setLazyNode(Boolean.TRUE);
-		commonData.setLazyType(TreeNodeLazyType.C);
+		commonData.setLazyType(LazyTypeEnum.C);
 		common.setData(commonData);
 		starterNodes.add(common);
 
@@ -131,7 +131,7 @@ public class BusinessRuleTreeServiceImpl
 		setFolderIcons(pdf);
 		TreeNodeData pdfData = new TreeNodeData();
 		pdfData.setLazyNode(Boolean.TRUE);
-		pdfData.setLazyType(TreeNodeLazyType.PDF);
+		pdfData.setLazyType(LazyTypeEnum.PDF);
 		pdf.setData(pdfData);
 
 		TreeNode commonCoverage = new TreeNode();
@@ -142,7 +142,7 @@ public class BusinessRuleTreeServiceImpl
 		setFolderIcons(commonCoverage);
 		TreeNodeData commonCovData = new TreeNodeData();
 		commonCovData.setLazyNode(Boolean.TRUE);
-		commonCovData.setLazyType(TreeNodeLazyType.H);
+		commonCovData.setLazyType(LazyTypeEnum.H);
 		commonCoverage.setData(commonCovData);
 
 		if (productCode.startsWith("N")) {
@@ -206,7 +206,7 @@ public class BusinessRuleTreeServiceImpl
 		basePlanFolder.setStyleClass(STYLE_FOLDER);
 		TreeNodeData basePlanData = new TreeNodeData();
 		basePlanData.setLazyNode(Boolean.TRUE);
-		basePlanData.setLazyType(TreeNodeLazyType.B);
+		basePlanData.setLazyType(LazyTypeEnum.B);
 		basePlanFolder.setData(basePlanData);
 		setFolderIcons(basePlanFolder);
 		if (productCode.matches("A[1234\\*]"))
@@ -221,7 +221,7 @@ public class BusinessRuleTreeServiceImpl
 		payoutPlanFolder.setStyleClass(STYLE_FOLDER);
 		TreeNodeData payoutPlanData = new TreeNodeData();
 		payoutPlanData.setLazyNode(Boolean.TRUE);
-		payoutPlanData.setLazyType(TreeNodeLazyType.P);
+		payoutPlanData.setLazyType(LazyTypeEnum.P);
 		payoutPlanFolder.setData(payoutPlanData);
 		setFolderIcons(payoutPlanFolder);
 		if (productCode.matches("A[5\\*]"))
@@ -244,7 +244,7 @@ public class BusinessRuleTreeServiceImpl
 		basePlanFolder.setLeaf(Boolean.FALSE);
 		TreeNodeData basePlanData = new TreeNodeData();
 		basePlanData.setLazyNode(Boolean.TRUE);
-		basePlanData.setLazyType(TreeNodeLazyType.B);
+		basePlanData.setLazyType(LazyTypeEnum.B);
 		basePlanFolder.setData(basePlanData);
 		setFolderIcons(basePlanFolder);
 
@@ -256,7 +256,7 @@ public class BusinessRuleTreeServiceImpl
 		riderPlanFolder.setLeaf(Boolean.FALSE);
 		TreeNodeData riderPlanData = new TreeNodeData();
 		riderPlanData.setLazyNode(Boolean.TRUE);
-		riderPlanData.setLazyType(TreeNodeLazyType.R);
+		riderPlanData.setLazyType(LazyTypeEnum.R);
 		riderPlanFolder.setData(riderPlanData);
 		setFolderIcons(riderPlanFolder);
 
@@ -275,7 +275,7 @@ public class BusinessRuleTreeServiceImpl
 		basePlanFolder.setLeaf(Boolean.FALSE);
 		TreeNodeData basePlanData = new TreeNodeData();
 		basePlanData.setLazyNode(Boolean.TRUE);
-		basePlanData.setLazyType(TreeNodeLazyType.B);
+		basePlanData.setLazyType(LazyTypeEnum.B);
 		basePlanFolder.setData(basePlanData);
 		setFolderIcons(basePlanFolder);
 
@@ -287,7 +287,7 @@ public class BusinessRuleTreeServiceImpl
 		riderPlanFolder.setLeaf(Boolean.FALSE);
 		TreeNodeData riderPlanData = new TreeNodeData();
 		riderPlanData.setLazyNode(Boolean.TRUE);
-		riderPlanData.setLazyType(TreeNodeLazyType.R);
+		riderPlanData.setLazyType(LazyTypeEnum.R);
 		riderPlanFolder.setData(riderPlanData);
 		setFolderIcons(riderPlanFolder);
 
@@ -305,7 +305,7 @@ public class BusinessRuleTreeServiceImpl
 
 		TreeNodeData orphansData = new TreeNodeData();
 		orphansData.setLazyNode(Boolean.TRUE);
-		orphansData.setLazyType(TreeNodeLazyType.O);
+		orphansData.setLazyType(LazyTypeEnum.O);
 		orphans.setData(orphansData);
 
 		return orphans;
@@ -429,8 +429,8 @@ public class BusinessRuleTreeServiceImpl
 
 			List<TreeNode> planList = getPlanList(brConn, wipConn, param, searchInput);
 			if (searchInput.getIncludeOrphans()) {
-				if ((productCode.startsWith("N") && searchInput.getLazyType() == TreeNodeLazyType.PDF) 
-				 || (productCode.startsWith("H") && searchInput.getLazyType() == TreeNodeLazyType.H)) {
+				if ((productCode.startsWith("N") && searchInput.getLazyType() == LazyTypeEnum.PDF) 
+				 || (productCode.startsWith("H") && searchInput.getLazyType() == LazyTypeEnum.H)) {
 					TreeNode orphanSubsetNode = getOrphanSubsetStarterNode();
 					planList.add(orphanSubsetNode);
 				}
@@ -473,7 +473,7 @@ public class BusinessRuleTreeServiceImpl
 		IndexMergeAssistent imAssist = null;
 
 		try {
-			TreeNodeLazyType lazyType = searchInput.getLazyType();
+			LazyTypeEnum lazyType = searchInput.getLazyType();
 			String envId = param.getEnvId();
 			String companyCode = param.getCompanyCode();
 			String productCode = searchInput.getProductCode();

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.csc.fsg.life.rest.api.SecurityApi;
 import com.csc.fsg.life.rest.model.Credentials;
-import com.csc.fsg.life.rest.model.AuthToken;
+import com.csc.fsg.life.rest.model.LoginResponse;
 import com.csc.fsg.life.rest.service.SecurityService;
 
 @Controller
@@ -23,9 +23,9 @@ public class SecurityApiController
 	private SecurityService securityService = null;
 
 	@RequestMapping(value = "/security/authentication", produces = { "application/json" }, consumes = { "application/json" }, method = RequestMethod.POST)
-	public ResponseEntity<AuthToken> authenticate(@RequestBody Credentials credentials)
+	public ResponseEntity<LoginResponse> authenticate(@RequestBody Credentials credentials)
 	{
-		AuthToken response = securityService.authenticate(credentials);
+		LoginResponse response = securityService.authenticate(credentials);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 

@@ -42,7 +42,7 @@ paths:
             used to link service requests to the corresponding security
             session, is returned.
           schema:
-            $ref: '#/definitions/authToken'
+            $ref: '#/definitions/loginResponse'
         401:
           description: |
             Unauthorized.  Required authorization information not found.
@@ -1520,6 +1520,9 @@ paths:
 definitions:
   credentials:
     type: object
+    required:
+      - userName
+      - password
     properties:
       userName:
         type: string
@@ -1528,8 +1531,10 @@ definitions:
         type: string
         description: Password.
 
-  authToken:
+  loginResponse:
     type: string
+    required:
+      - tokenId
     properties:
       tokenId:
         type: string
@@ -1537,6 +1542,10 @@ definitions:
 
   aboutApplication:
     type: object
+    required:
+      - appDesignator
+      - appVersion
+      - buildTimestamp
     properties:
       appDesignator:
         type: string
@@ -1549,6 +1558,9 @@ definitions:
 
   selectItem:
     type: object
+    required:
+      - label
+      - value
     properties:
       label:
         type: string
@@ -1617,8 +1629,16 @@ definitions:
         items:
           type: string
 
+# ========================================================
+# Common definitions, which begin at this point,
+# must exactly match those in each API specification.
+# ========================================================
   errorModel:
     type: object
+    required:
+      - severity
+      - errorCode
+      - message
     properties:
       severity:
         type: string

@@ -436,6 +436,9 @@ paths:
 definitions:
   treeNode:
     type: object
+    required:
+      - type
+      - label
     properties:
       type:
         type: string
@@ -489,7 +492,15 @@ definitions:
       lazyNode:
         type: boolean
       lazyType:
-        $ref: '#/definitions/treeNodeLazyType'
+        type: string
+        enum:
+          - C   # COMMON
+          - PDF # PDF PLANS
+          - H   # COMMON COVERAGE
+          - B   # BASE PLANS
+          - R   # RIDER PLANS
+          - P   # PAYOUT PLANS
+          - O   # ORPHAN SUBSETS
       name:
         type: string
       tableId:
@@ -504,17 +515,6 @@ definitions:
         $ref: '#/definitions/treeNodePlanKey'
       attributes:
         $ref: '#/definitions/treeNodeAttributes'
-
-  treeNodeLazyType:
-    type: string
-    enum:
-      - C   # COMMON
-      - PDF # PDF PLANS
-      - H   # COMMON COVERAGE
-      - B   # BASE PLANS
-      - R   # RIDER PLANS
-      - P   # PAYOUT PLANS
-      - O   # ORPHAN SUBSETS
 
   treeNodePlanKey:
     type: object
@@ -557,6 +557,10 @@ definitions:
 # ========================================================
   errorModel:
     type: object
+    required:
+      - severity
+      - errorCode
+      - message
     properties:
       severity:
         type: string

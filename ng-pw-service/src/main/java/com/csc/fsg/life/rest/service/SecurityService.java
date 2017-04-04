@@ -3,14 +3,14 @@ package com.csc.fsg.life.rest.service;
 import java.util.List;
 
 import com.csc.fsg.life.rest.model.Credentials;
+import com.csc.fsg.life.rest.model.LoginResponse;
 import com.csc.fsg.life.rest.model.SelectItem;
-import com.csc.fsg.life.rest.model.AuthToken;
 import com.csc.fsg.life.rest.param.AuthorizationAction;
 import com.csc.fsg.life.rest.param.RestServiceParam;
 
 public interface SecurityService
 {
-	public AuthToken authenticate(Credentials credentials);
+	public LoginResponse authenticate(Credentials credentials);
 
 	public void validateSession(String authToken);
 

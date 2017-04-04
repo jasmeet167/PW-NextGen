@@ -18,7 +18,7 @@ import com.csc.fsg.life.pw.web.avm.*;
 import com.csc.fsg.life.pw.web.environment.EnvironmentManager;
 import com.csc.fsg.life.pw.web.io.descriptor.wma.T000XARow;
 import com.csc.fsg.life.pw.web.utils.sql.SQLBuilderMERGEDX;
-import com.csc.fsg.life.rest.model.TreeNodeLazyType;
+import com.csc.fsg.life.rest.model.TreeNodeData.LazyTypeEnum;
 
 /**
  * Class ProductWriterThread
@@ -67,7 +67,7 @@ public class ProductWriter {
 		return new SQLBuilderMERGEDX(planCriteria.getEnvironment(), planCriteria).buildSelectTablePtrsForWriterStatement();
 	}
 
-	public PlanBuffer getPlanListStream(TreeNodeLazyType lazyType, String env, String company, String product,
+	public PlanBuffer getPlanListStream(LazyTypeEnum lazyType, String env, String company, String product,
 	        Connection conn, boolean viewChanges) throws Exception {
 
 		PlanBuffer buffer = new PlanBuffer();
@@ -98,29 +98,29 @@ public class ProductWriter {
 		return buffer;
 	}
 
-	private boolean isPlanApplicable(String planType, TreeNodeLazyType lazyType)
+	private boolean isPlanApplicable(String planType, LazyTypeEnum lazyType)
 	{
 		if (lazyType == null)
 			return true;
 
 		if (planType.equalsIgnoreCase("P"))
-			if (lazyType == TreeNodeLazyType.PDF)
+			if (lazyType == LazyTypeEnum.PDF)
 				return true;
 
 		if (planType.equalsIgnoreCase("H"))
-			if (lazyType == TreeNodeLazyType.H)
+			if (lazyType == LazyTypeEnum.H)
 				return true;
 
 		if (planType.equalsIgnoreCase("B"))
-			if (lazyType == TreeNodeLazyType.B)
+			if (lazyType == LazyTypeEnum.B)
 				return true;
 
 		if (planType.equalsIgnoreCase("R"))
-			if (lazyType == TreeNodeLazyType.R)
+			if (lazyType == LazyTypeEnum.R)
 				return true;
 
 		if (planType.equalsIgnoreCase("W"))
-			if (lazyType == TreeNodeLazyType.P)
+			if (lazyType == LazyTypeEnum.P)
 				return true;
 
 		return false;

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Response, ResponseType } from '@angular/http';
 
-import { ErrorMessage } from 'app/home/model/error-message';
+import { ErrorModel } from 'app/home/model/error-model';
 
 @Injectable()
 export class NotificationService {
@@ -62,9 +62,9 @@ export class NotificationService {
       return;
     }
 
-    let model: ErrorMessage.ErrorModel;
+    let model: ErrorModel;
     try {
-      model = <ErrorMessage.ErrorModel> err.json();
+      model = <ErrorModel> err.json();
     } catch (e) {
       model = null;
     }
@@ -76,15 +76,15 @@ export class NotificationService {
     } else {
       const message: string = model.message;
 
-      if (model.severity === ErrorMessage.SeverityEnum.INFO) {
-        console.log(message);
-        this.showInfo(message);
-      } else if (model.severity === ErrorMessage.SeverityEnum.WARNING) {
+      if (model.severity === ErrorModel.SeverityEnum.WARNING) {
         console.warn('Warning ' + model.errorCode + ': ' + message);
         this.showWarning(message);
-      } else {
+      } else if (model.severity === ErrorModel.SeverityEnum.ERROR) {
         console.error('Error ' + model.errorCode + ': ' + message);
         this.showError(message);
+      } else {
+        console.log(message);
+        this.showInfo(message);
       }
     }
   }

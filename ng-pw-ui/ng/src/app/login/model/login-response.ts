@@ -1,3 +1,3 @@
-export class LoginResponse {
+export interface LoginResponse {
   tokenId: string;
 }

@@ -314,9 +314,9 @@ export class BusinessRuleTreeComponent implements OnInit {
     if (node.type === 'PDF') {
       const data: TreeNodeData = node.data;
       if (data) {
-        if (data.lazyType === 'PDF') {
+        if (data.lazyType === TreeNodeData.LazyTypeEnum.PDF) {
           toolTip += 'P';
-        } else if (data.lazyType === 'H') {
+        } else if (data.lazyType === TreeNodeData.LazyTypeEnum.H) {
           toolTip += 'C';
         }
       }
