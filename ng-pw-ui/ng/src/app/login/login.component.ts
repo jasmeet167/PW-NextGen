@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ResponseType } from '@angular/http';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Message } from 'primeng/primeng';
 
@@ -15,7 +15,7 @@ import { LoginResponse } from './model/login-response';
   templateUrl: './login.component.html'
 })
 export class LoginComponent implements OnInit {
-  public loginForm: any;
+  public loginForm: FormGroup;
   public userName: string;
 
   constructor(private fb: FormBuilder, private router: Router,
@@ -41,6 +41,12 @@ export class LoginComponent implements OnInit {
     let response: LoginResponse;
     this.userName = value.userName;
 
+    if (this.userName.trim() === '') {
+      this.notificationService.showError('User Name must be provided');
+      this.resetInput();
+      return;
+    }
+
     this.notificationService.showWaitIndicator(true);
     this.loginService.login(this.userName, value.password)
         .subscribe(
@@ -57,6 +63,7 @@ export class LoginComponent implements OnInit {
               } else {
                 this.notificationService.showGenericCommError();
               }
+              this.resetInput();
               this.notificationService.showWaitIndicator(false);
           },
           ()  => {
@@ -64,6 +71,16 @@ export class LoginComponent implements OnInit {
               // this.notificationService.showWaitIndicator(false);
           }
         );
+  }
+
+  private resetInput() {
+    const formControls: any = this.loginForm.controls;
+
+    const userName: FormControl = formControls.userName;
+    userName.setValue('');
+
+    const password: FormControl = formControls.password;
+    password.setValue('');
   }
 
   private processSuccessfulLogin(response: LoginResponse) {
