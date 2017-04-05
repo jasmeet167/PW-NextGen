@@ -55,6 +55,8 @@ export class LoginComponent implements OnInit {
               if (err.type === ResponseType.Default) {
                 if (err.status === 401) {
                   this.notificationService.showError('Invalid User Name or Password');
+                } else if (err.status === 403) {
+                    this.notificationService.handleError(err);
                 } else if (err.statusText) {
                   this.notificationService.showError(err.statusText);
                 } else {

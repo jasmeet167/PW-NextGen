@@ -47,6 +47,12 @@ paths:
           description: |
             Unauthorized.  Required authorization information not found.
             Auth token is either missing or invalid.
+        403:
+          description: |
+            Forbidden.  The user is not authorized to access
+            any of the configured environments.
+          schema:
+            $ref: '#/definitions/errorModel'
         default:
           description: Unexpected Error.
           schema:

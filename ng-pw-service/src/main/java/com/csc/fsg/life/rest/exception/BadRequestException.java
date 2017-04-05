@@ -9,7 +9,7 @@ public class BadRequestException
 {
 	static private final long serialVersionUID = -6887132179428237225L;
 
-	static public HttpStatus HTTP_STATUS = HttpStatus.BAD_REQUEST;
+	static public final HttpStatus HTTP_STATUS = HttpStatus.BAD_REQUEST;
 
 	private ErrorModel errorModel = null;
 

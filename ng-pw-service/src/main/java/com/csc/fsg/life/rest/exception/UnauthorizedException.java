@@ -7,7 +7,7 @@ public class UnauthorizedException
 {
 	private static final long serialVersionUID = 2132126582671458675L;
 
-	static public HttpStatus HTTP_STATUS = HttpStatus.UNAUTHORIZED;
+	static public final HttpStatus HTTP_STATUS = HttpStatus.UNAUTHORIZED;
 
 	public UnauthorizedException()
 	{

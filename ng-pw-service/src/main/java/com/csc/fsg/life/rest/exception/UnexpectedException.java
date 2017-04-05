@@ -9,7 +9,7 @@ public class UnexpectedException
 {
 	static private final long serialVersionUID = -3200162802498998964L;
 
-	static public HttpStatus HTTP_STATUS = HttpStatus.INTERNAL_SERVER_ERROR;
+	static public final HttpStatus HTTP_STATUS = HttpStatus.INTERNAL_SERVER_ERROR;
 
 	private ErrorModel errorModel = null;
 

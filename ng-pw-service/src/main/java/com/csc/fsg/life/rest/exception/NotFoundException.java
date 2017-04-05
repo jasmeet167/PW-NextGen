@@ -9,7 +9,7 @@ public class NotFoundException
 {
 	static private final long serialVersionUID = -4580137477303021141L;
 
-	static public HttpStatus HTTP_STATUS = HttpStatus.NOT_FOUND;
+	static public final HttpStatus HTTP_STATUS = HttpStatus.NOT_FOUND;
 
 	private ErrorModel errorModel = null;
 

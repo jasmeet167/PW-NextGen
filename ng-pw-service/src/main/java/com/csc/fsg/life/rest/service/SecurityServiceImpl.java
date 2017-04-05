@@ -18,6 +18,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.csc.fsg.life.common.config.CommonApplicationConfigBean;
+import com.csc.fsg.life.common.config.MyBatisApplicationEnvironmentBean;
 import com.csc.fsg.life.openam.config.PolicyDecisionPointConfig;
 import com.csc.fsg.life.openam.model.AuthorizationQuery;
 import com.csc.fsg.life.openam.model.AuthorizationResponse;
@@ -60,11 +62,16 @@ public class SecurityServiceImpl
 	@Autowired
 	protected PolicyDecisionPointConfig pdpConfig = null;
 
+	public SecurityServiceImpl()
+	{
+		super("com.csc.fsg.life.rest.service.SecurityService");
+	}
+
 	public LoginResponse authenticate(Credentials credentials)
 	{
 		if (!pdpConfig.isSecurityEnabled()) {
 			LoginResponse authToken = new LoginResponse();
-			authToken.setTokenId("");
+			authToken.setTokenId("Security-Disabled");
 			return authToken;
 		}
 
@@ -85,7 +92,9 @@ public class SecurityServiceImpl
 
 			String url = pdpConfig.getSecurityManagementUrl() + ACTION_AUTHENTICATE;
 			ResponseEntity<LoginResponse> response = restTemplate.exchange(url, HttpMethod.POST, entity, LoginResponse.class);
-			return response.getBody();
+			LoginResponse loginResponse = response.getBody();
+			assertAccessToAtLeastOneEnvironment(loginResponse.getTokenId());
+			return loginResponse;
 		}
 		catch (HttpClientErrorException e) {
 			HttpStatus status = e.getStatusCode();
@@ -106,6 +115,31 @@ public class SecurityServiceImpl
 			ErrorModel model = errorModelFactory.newErrorModel(UnexpectedException.HTTP_STATUS);
 			throw new UnexpectedException(model);
 		}
+	}
+
+	private void assertAccessToAtLeastOneEnvironment(String authToken)
+	{
+		if (!pdpConfig.isSecurityEnabled())
+			return;
+
+		CommonApplicationConfigBean pwConfig = getBean(CommonApplicationConfigBean.class);
+		Map<String, MyBatisApplicationEnvironmentBean> environmentMap = pwConfig.getEnvironments();
+
+		List<String> resources = new ArrayList<>();
+		for (MyBatisApplicationEnvironmentBean env : environmentMap.values())
+			resources.add(ENVIRONMENT_URL_ROOT + env.getName());
+
+		Map<String, AuthorizationResponse> authMap = evaluateAuthorization(authToken, resources);
+
+		for (AuthorizationResponse authResponse : authMap.values()) {
+			Map<String, Boolean> actionMap = authResponse.getActions();
+			if (actionMap != null && Boolean.TRUE.equals(actionMap.get(AuthorizationAction.VIEW.toString())))
+				return;
+		}
+
+		HttpStatus status = ForbiddenException.HTTP_STATUS;
+		ErrorModel errorModel = errorModelFactory.newErrorModel(status, getMessage("no_authorized_envs"));
+		throw new ForbiddenException(errorModel);
 	}
 
 	public void validateSession(String authToken)
