@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SelectItem } from 'primeng/primeng';
 import { NotificationService } from 'app/notification/service/notification.service';
 import { FilterService } from 'app/home/service/filter.service';
-import { ApplyChangesTabMsg } from './model/apply-changes.msg';
+import { ApplyFilterData } from './model/apply-filter-data';
 
 @Component({
   selector: 'app-apply-changes',
@@ -76,7 +76,7 @@ export class ApplyChangesComponent implements OnInit {
       this.filterPackageInputRows = <SelectItem[]>[];
         this.filterProjectOutputRows = <SelectItem[]>[];
       this.filterPackageOutputRows = <SelectItem[]>[];
-    let applyChangesTabMsg: ApplyChangesTabMsg;
+    let applyChangesTabMsg: ApplyFilterData;
     applyChangesTabMsg = null;
 
     if (this.filterEnv != null) {
@@ -103,7 +103,7 @@ export class ApplyChangesComponent implements OnInit {
     this.evaluateStatusOfGo();
   }
 
-  private buildApplyChangesDetails(applyChangesTabMsg: ApplyChangesTabMsg) {
+  private buildApplyChangesDetails(applyChangesTabMsg: ApplyFilterData) {
     this.filterProjectInputRows = <SelectItem[]>[];
     this.filterPackageInputRows = <SelectItem[]>[];
     if (applyChangesTabMsg.packages !== null) {

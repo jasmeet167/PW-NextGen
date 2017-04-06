@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SelectItem } from 'primeng/primeng';
 import { NotificationService } from 'app/notification/service/notification.service';
 import { FilterService } from 'app/home/service/filter.service';
-import { PromoteTabMsg } from './model/promote-msg';
+import { PromoteFilterData } from './model/promote-filter-data';
 
 @Component({
   selector: 'app-promote',
@@ -125,7 +125,7 @@ export class PromoteComponent implements OnInit {
     this.filterProjectOutputRows = <SelectItem[]>[];
     this.filterPackageInputRows = <SelectItem[]>[];
     this.filterPackageOutputRows = <SelectItem[]>[];
-    let promoteTabMsg: PromoteTabMsg;
+    let promoteTabMsg: PromoteFilterData;
     promoteTabMsg = null;
 
     if (this.filterSourceEnv != null && this.filterTargetEnv != null) {
@@ -159,7 +159,7 @@ export class PromoteComponent implements OnInit {
     }
   }
 
-  private buildPromotePageDetails(promoteTabMsg: PromoteTabMsg) {
+  private buildPromotePageDetails(promoteTabMsg: PromoteFilterData) {
     this.filterProjectInputRows = <SelectItem[]>[];
     this.filterPackageInputRows = <SelectItem[]>[];
     if (promoteTabMsg.packages !== null) {

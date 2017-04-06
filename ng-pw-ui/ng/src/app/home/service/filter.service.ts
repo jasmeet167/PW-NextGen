@@ -4,8 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import { SelectItem } from 'primeng/primeng';
 
 import { ChangeOnlyTabMsg } from '../component/changes-only/model/changeonly.message';
-import { ApplyChangesTabMsg } from 'app/home/component/apply-changes/model/apply-changes.msg';
-import { PromoteTabMsg } from 'app/home/component/promote/model/promote-msg';
+import { ApplyFilterData } from 'app/home/component/apply-changes/model/apply-filter-data';
+import { PromoteFilterData } from 'app/home/component/promote/model/promote-filter-data';
 
 import 'rxjs/add/operator/map';
 
@@ -25,7 +25,7 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <SelectItem[]>response.json(); });
+               .map(response => { return <SelectItem[]> response.json(); });
   }
 
   getPlanCompanyOptions(authToken: string, viewChanges: boolean, envId: string): Observable<SelectItem[]> {
@@ -41,11 +41,11 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <SelectItem[]>response.json(); });
+               .map(response => { return <SelectItem[]> response.json(); });
   }
 
   getPlanProductOptions(authToken: string, viewChanges: boolean, envId: string,
-    companyCode: string): Observable<SelectItem[]> {
+                        companyCode: string): Observable<SelectItem[]> {
     const filterHeaders: Headers = new Headers();
     filterHeaders.append('Accept', 'application/json');
     filterHeaders.append('authToken', authToken);
@@ -59,11 +59,11 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <SelectItem[]>response.json(); });
+               .map(response => { return <SelectItem[]> response.json(); });
   }
 
   getPlanPlanCodeOptions(authToken: string, viewChanges: boolean, envId: string,
-    companyCode: string, productCode: string): Observable<SelectItem[]> {
+                         companyCode: string, productCode: string): Observable<SelectItem[]> {
     const filterHeaders: Headers = new Headers();
     filterHeaders.append('Accept', 'application/json');
     filterHeaders.append('authToken', authToken);
@@ -78,11 +78,11 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <SelectItem[]>response.json(); });
+               .map(response => { return <SelectItem[]> response.json(); });
   }
 
   getPlanIssueStateOptions(authToken: string, viewChanges: boolean, envId: string,
-    companyCode: string, productCode: string, planCode: string): Observable<SelectItem[]> {
+                           companyCode: string, productCode: string, planCode: string): Observable<SelectItem[]> {
     const filterHeaders: Headers = new Headers();
     filterHeaders.append('Accept', 'application/json');
     filterHeaders.append('authToken', authToken);
@@ -98,12 +98,12 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <SelectItem[]>response.json(); });
+               .map(response => { return <SelectItem[]> response.json(); });
   }
 
   getPlanLobOptions(authToken: string, viewChanges: boolean, envId: string,
-    companyCode: string, productCode: string, planCode: string,
-    issueState: string): Observable<SelectItem[]> {
+                    companyCode: string, productCode: string, planCode: string,
+                    issueState: string): Observable<SelectItem[]> {
     const filterHeaders: Headers = new Headers();
     filterHeaders.append('Accept', 'application/json');
     filterHeaders.append('authToken', authToken);
@@ -120,12 +120,12 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <SelectItem[]>response.json(); });
+               .map(response => { return <SelectItem[]> response.json(); });
   }
 
   getPlanEffDateOptions(authToken: string, viewChanges: boolean, envId: string,
-    companyCode: string, productCode: string, planCode: string,
-    issueState: string, lob: string): Observable<SelectItem[]> {
+                        companyCode: string, productCode: string, planCode: string,
+                        issueState: string, lob: string): Observable<SelectItem[]> {
     const filterHeaders: Headers = new Headers();
     filterHeaders.append('Accept', 'application/json');
     filterHeaders.append('authToken', authToken);
@@ -143,7 +143,7 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <SelectItem[]>response.json(); });
+               .map(response => { return <SelectItem[]> response.json(); });
   }
 
   getPlanProjectOptions(authToken: string, envId: string): Observable<SelectItem[]> {
@@ -158,7 +158,7 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <SelectItem[]>response.json(); });
+               .map(response => { return <SelectItem[]> response.json(); });
   }
 
   getChangesEnvOptions(authToken: string): Observable<SelectItem[]> {
@@ -172,7 +172,7 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <SelectItem[]>response.json(); });
+                    .map(response => { return <SelectItem[]> response.json(); });
   }
 
   getPlanTableOptions(authToken: string, envId: string, compCode: string): Observable<SelectItem[]> {
@@ -188,7 +188,7 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <SelectItem[]>response.json(); });
+               .map(response => { return <SelectItem[]> response.json(); });
   }
 
   getChangesWipDetails(authToken: string, envId: string): Observable<ChangeOnlyTabMsg> {
@@ -203,7 +203,7 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <ChangeOnlyTabMsg>response.json(); });
+               .map(response => { return <ChangeOnlyTabMsg> response.json(); });
   }
 
   getEnvOptions(authToken: string): Observable<SelectItem[]> {
@@ -353,7 +353,7 @@ export class FilterService {
       .map(response => { return <SelectItem[]>response.json(); });
   }
 
-  getApplyChangesDetails(authToken: string, envId: string): Observable<ApplyChangesTabMsg> {
+  getApplyChangesDetails(authToken: string, envId: string): Observable<ApplyFilterData> {
     const filterHeaders: Headers = new Headers();
     filterHeaders.append('Accept', 'application/json');
     filterHeaders.append('authToken', authToken);
@@ -366,11 +366,11 @@ export class FilterService {
 
 
     return this.http.request(new Request(options))
-      .map(response => { return <ApplyChangesTabMsg>response.json(); });
+      .map(response => { return <ApplyFilterData>response.json(); });
 
   }
 
-  getPromoteDetails(authToken: string, sourceEnvId: string, targetEnvId: string): Observable<PromoteTabMsg> {
+  getPromoteDetails(authToken: string, sourceEnvId: string, targetEnvId: string): Observable<PromoteFilterData> {
     const filterHeaders: Headers = new Headers();
     filterHeaders.append('Accept', 'application/json');
     filterHeaders.append('authToken', authToken);
@@ -384,7 +384,7 @@ export class FilterService {
 
 
     return this.http.request(new Request(options))
-      .map(response => { return <PromoteTabMsg>response.json(); });
+      .map(response => { return <PromoteFilterData>response.json(); });
 
   }
 
