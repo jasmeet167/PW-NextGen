@@ -116,6 +116,14 @@ export class BusinessRuleTreeComponent implements OnInit {
     const node: TreeNode = event.node;
     const data: TreeNodeData = node.data;
 
+    if (data && data.attributes) {
+      if (data.attributes.disabled) {
+        setTimeout(() => { node.expanded = false; }, 1);
+        this.notificationService.showError('You do not have permission to view \'' + node.label + '\'');
+        return false;
+      }
+    }
+
     // Ignore the event if node already has children
     if (node.children && node.children.length > 0) {
       return;
@@ -335,7 +343,15 @@ export class BusinessRuleTreeComponent implements OnInit {
       toolTip += 'U';
     }
 
-    this.tooltips.push({severity: 'info', detail: toolTip});
+    let suffix = '';
+    const data: TreeNodeData = node.data;
+    if (data && data.attributes) {
+      if (data.attributes.disabled) {
+        suffix = ', Read-Only';
+      }
+    }
+
+    this.tooltips.push({severity: 'info', detail: toolTip + suffix});
   }
 
   private showPlanTooltip(node: TreeNode) {

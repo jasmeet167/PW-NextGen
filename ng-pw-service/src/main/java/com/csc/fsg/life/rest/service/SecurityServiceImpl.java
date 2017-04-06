@@ -214,6 +214,21 @@ public class SecurityServiceImpl
 		}
 	}
 
+	public String buildEnvironmentUrl(String envId)
+	{
+		return ENVIRONMENT_URL_ROOT + envId;
+	}
+
+	public String buildCompanyUrl(String envId, String companyCode)
+	{
+		return COMPANY_URL_ROOT + envId + '/' + companyCode;
+	}
+
+	public String buildTableUrl(String envId, String companyCode, String tableDdlName)
+	{
+		return TABLE_URL_ROOT + envId + '/' + companyCode + '/' + tableDdlName;
+	}
+
 	public void assertAuthorization(RestServiceParam param, AuthorizationAction action)
 	{
 		if (!pdpConfig.isSecurityEnabled())
@@ -357,6 +372,23 @@ public class SecurityServiceImpl
 		}
 
 		return response;
+	}
+
+	public boolean isAuthorized(String authToken, List<String> resources, AuthorizationAction action)
+	{
+		if (!pdpConfig.isSecurityEnabled())
+			return true;
+		if (action == AuthorizationAction.NONE)
+			return true;
+
+		Map<String, AuthorizationResponse> authMap = evaluateAuthorization(authToken, resources);
+		for (AuthorizationResponse authResponse : authMap.values()) {
+			Map<String, Boolean> actionMap = authResponse.getActions();
+			if (actionMap != null && Boolean.TRUE.equals(actionMap.get(action.toString())))
+				return true;
+		}
+
+		return false;
 	}
 
 	private Map<String, AuthorizationResponse> evaluateAuthorization(String authToken, List<String> resources)

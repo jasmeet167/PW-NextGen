@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.sql.Connection;
 import java.sql.Date;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.joda.time.LocalDate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -33,10 +35,12 @@ import com.csc.fsg.life.rest.model.BusinessRuleTreeSearchInput;
 import com.csc.fsg.life.rest.model.ErrorModel;
 import com.csc.fsg.life.rest.model.TreeNode;
 import com.csc.fsg.life.rest.model.TreeNode.TypeEnum;
+import com.csc.fsg.life.rest.model.TreeNodeAttributes;
 import com.csc.fsg.life.rest.model.TreeNodeData;
 import com.csc.fsg.life.rest.model.TreeNodeData.LazyTypeEnum;
 import com.csc.fsg.life.rest.model.TreeNodePlanKey;
 import com.csc.fsg.life.rest.model.tree.Node;
+import com.csc.fsg.life.rest.param.AuthorizationAction;
 import com.csc.fsg.life.rest.param.RestServiceParam;
 
 @Service
@@ -45,11 +49,15 @@ public class BusinessRuleTreeServiceImpl
 	implements BusinessRuleTreeService
 {
 	static private final String STYLE_FOLDER = "tn-1";
+	static private final String STYLE_FOLDER_DISABLED = "tn-1-disabled";
 	static private final String STYLE_LEAF = "tn-2";
 
 	static private final String ICON_FOLDER_OPEN = "fa-folder-open";
 	static private final String ICON_FOLDER_CLOSED = "fa-folder";
 	static private final String ICON_LEAF = "fa-cube";
+
+	@Autowired
+	private SecurityService securityService = null;
 
 	public BusinessRuleTreeServiceImpl()
 	{
@@ -91,7 +99,7 @@ public class BusinessRuleTreeServiceImpl
 			node.setStyleClass(STYLE_FOLDER);
 			node.setExpanded(Boolean.TRUE);
 			setFolderIcons(node);
-			node.setChildren(getStarterNodes(productCode, includeOrphans));
+			node.setChildren(getStarterNodes(param, productCode, includeOrphans));
 
 			List<TreeNode> treeCore = new LinkedList<>();
 			treeCore.add(node);
@@ -107,7 +115,7 @@ public class BusinessRuleTreeServiceImpl
 		}
 	}
 
-	private List<TreeNode> getStarterNodes(String productCode, boolean includeOrphans)
+	private List<TreeNode> getStarterNodes(RestServiceParam param, String productCode, boolean includeOrphans)
 	{
 		LinkedList<TreeNode> starterNodes = new LinkedList<>();
 
@@ -123,27 +131,31 @@ public class BusinessRuleTreeServiceImpl
 		common.setData(commonData);
 		starterNodes.add(common);
 
+		boolean isAuthorized = isAuthorizedToViewSubsetIndex(param);
+
 		TreeNode pdf = new TreeNode();
 		pdf.setType(TypeEnum.PDF);
 		pdf.setLabel(getMessage("pdf_folder_label"));
-		pdf.setStyleClass(STYLE_FOLDER);
+		pdf.setStyleClass(isAuthorized ? STYLE_FOLDER : STYLE_FOLDER_DISABLED);
 		pdf.setLeaf(Boolean.FALSE);
 		setFolderIcons(pdf);
 		TreeNodeData pdfData = new TreeNodeData();
 		pdfData.setLazyNode(Boolean.TRUE);
 		pdfData.setLazyType(LazyTypeEnum.PDF);
 		pdf.setData(pdfData);
+		disableNode(pdf, !isAuthorized);
 
 		TreeNode commonCoverage = new TreeNode();
 		commonCoverage.setType(TypeEnum.PDF);
 		commonCoverage.setLabel(getMessage("common_cov_folder_label"));
-		commonCoverage.setStyleClass(STYLE_FOLDER);
+		commonCoverage.setStyleClass(isAuthorized ? STYLE_FOLDER : STYLE_FOLDER_DISABLED);
 		commonCoverage.setLeaf(Boolean.FALSE);
 		setFolderIcons(commonCoverage);
 		TreeNodeData commonCovData = new TreeNodeData();
 		commonCovData.setLazyNode(Boolean.TRUE);
 		commonCovData.setLazyType(LazyTypeEnum.H);
 		commonCoverage.setData(commonCovData);
+		disableNode(commonCoverage, !isAuthorized);
 
 		if (productCode.startsWith("N")) {
 			starterNodes.add(commonCoverage);
@@ -160,9 +172,10 @@ public class BusinessRuleTreeServiceImpl
 
 			ann.setType(TypeEnum.AF);
 			ann.setLabel(getMessage("annuity_folder_label"));
-			ann.setStyleClass(STYLE_FOLDER);
+			ann.setStyleClass(isAuthorized ? STYLE_FOLDER : STYLE_FOLDER_DISABLED);
 			setFolderIcons(ann);
 			ann.setChildren(getAnnuityStarterNodes(productCode));
+			disableNode(ann, !isAuthorized);
 		}
 		else if (productCode.startsWith("U")) {
 			TreeNode ul = new TreeNode();
@@ -170,9 +183,10 @@ public class BusinessRuleTreeServiceImpl
 
 			ul.setType(TypeEnum.UF);
 			ul.setLabel(getMessage("ul_folder_label"));
-			ul.setStyleClass(STYLE_FOLDER);
+			ul.setStyleClass(isAuthorized ? STYLE_FOLDER : STYLE_FOLDER_DISABLED);
 			setFolderIcons(ul);
 			ul.setChildren(getUlStarterNodes());
+			disableNode(ul, !isAuthorized);
 		}
 		else if (productCode.startsWith("T")) {
 			TreeNode trad = new TreeNode();
@@ -180,9 +194,10 @@ public class BusinessRuleTreeServiceImpl
 
 			trad.setType(TypeEnum.TF);
 			trad.setLabel(getMessage("trad_folder_label"));
-			trad.setStyleClass(STYLE_FOLDER);
+			trad.setStyleClass(isAuthorized ? STYLE_FOLDER : STYLE_FOLDER_DISABLED);
 			setFolderIcons(trad);
 			trad.setChildren(getTradStarterNodes());
+			disableNode(trad, !isAuthorized);
 		}
 
 		if (includeOrphans
@@ -193,6 +208,41 @@ public class BusinessRuleTreeServiceImpl
 		}
 
 		return starterNodes;
+	}
+
+	private boolean isAuthorizedToViewSubsetIndex(RestServiceParam param)
+	{
+		String envId = param.getEnvId();
+		if (!StringUtils.hasText(envId))
+			envId = "*";
+
+		String companyCode = param.getCompanyCode();
+		if (!StringUtils.hasText(companyCode))
+			companyCode = "*";
+
+		String resourceUrl = securityService.buildTableUrl(envId, companyCode, "T000XA");
+		List<String> resources = Arrays.asList(resourceUrl);
+
+		String authToken = param.getAuthToken();
+		boolean isAuthorized = securityService.isAuthorized(authToken, resources, AuthorizationAction.VIEW);
+		return isAuthorized;
+	}
+
+	private void disableNode(TreeNode node, boolean isDisabled)
+	{
+		TreeNodeData data = node.getData();
+		if (data == null) {
+			data = new TreeNodeData();
+			node.setData(data);
+		}
+
+		TreeNodeAttributes attributes = data.getAttributes();
+		if (attributes == null) {
+			attributes = new TreeNodeAttributes();
+			data.setAttributes(attributes);
+		}
+
+		attributes.setDisabled(Boolean.valueOf(isDisabled));
 	}
 
 	private List<TreeNode> getAnnuityStarterNodes(String productCode)
@@ -843,22 +893,22 @@ public class BusinessRuleTreeServiceImpl
 	static private class TreeNodeContainer
 	{
 		private Node node = null;
-	
+
 		private Node getNode()
 		{
 			return node;
 		}
-	
+
 		private void setNode(Node node)
 		{
 			this.node = node;
 		}
-	
+
 		private boolean isEmpty()
 		{
 			return node == null;
 		}
-	
+
 		private void clear()
 		{
 			node = null;
