@@ -72,6 +72,10 @@ export class ApplyChangesComponent implements OnInit {
   }
 
   onEnvChange() {
+      this.filterProjectInputRows = <SelectItem[]>[];
+      this.filterPackageInputRows = <SelectItem[]>[];
+        this.filterProjectOutputRows = <SelectItem[]>[];
+      this.filterPackageOutputRows = <SelectItem[]>[];
     let applyChangesTabMsg: ApplyChangesTabMsg;
     applyChangesTabMsg = null;
 

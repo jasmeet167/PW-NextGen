@@ -48,6 +48,25 @@ export class SummaryComponent implements OnInit {
   public filterAspect: string;
   private authToken: string;
 
+  public isTypeOneDisabled: boolean;
+  public isTypeTwoDisabled: boolean;
+  public isTypeThreeDisabled: boolean;
+
+  public genPolicyChkBox: boolean;
+  public deathBeneChkBox: boolean;
+  public costOfInsuranceChkBox: boolean;
+  public loanInfoChkBox: boolean;
+  public ChgAndFeeChkBox: boolean;
+  public compAndProChkBox: boolean;
+  public modePreChkBox: boolean;
+  public lapseNFOChkBox: boolean;
+  public payLoadsChkBox: boolean;
+  public guaCashValChkBox: boolean;
+  public targetInfoChkBox: boolean;
+  public allChkBox: boolean;
+
+  public productType: string;
+
   constructor(private notificationService: NotificationService, private filterService: FilterService) {
     this.authToken = sessionStorage['authToken'];
   }
@@ -96,7 +115,11 @@ export class SummaryComponent implements OnInit {
     this.isEffDateDisabled = true;
     this.buildEffDateDropdown(null);
 
-    this.rememberSelections = false;
+    this.rememberSelections = true;
+
+    this.isTypeOneDisabled = true;
+    this.isTypeTwoDisabled = true;
+    this.isTypeThreeDisabled = true;
 
     this.evaluateStatusOfGo();
   }
@@ -189,6 +212,8 @@ export class SummaryComponent implements OnInit {
     this.isLobDisabled = true;
     this.isEffDateDisabled = true;
 
+    this.unCheckAll();
+
     if (this.productCode == null) {
       this.isPlanCodeDisabled = true;
 
@@ -215,6 +240,7 @@ export class SummaryComponent implements OnInit {
         );
     }
     this.evaluateStatusOfGo();
+    this.evaluateCheckBoxes();
   }
 
   onPlanCodeChange() {
@@ -249,6 +275,7 @@ export class SummaryComponent implements OnInit {
         }
         );
     }
+    this.evaluateStatusOfGo();
   }
 
   onIssueStateChange() {
@@ -281,6 +308,7 @@ export class SummaryComponent implements OnInit {
         }
         );
     }
+    this.evaluateStatusOfGo();
   }
 
   onLobChange() {
@@ -311,6 +339,7 @@ export class SummaryComponent implements OnInit {
         }
         );
     }
+    this.evaluateStatusOfGo();
   }
 
   private buildEnvDropdown(options: SelectItem[]) {
@@ -376,11 +405,80 @@ export class SummaryComponent implements OnInit {
     }
   }
 
+  private evaluateCheckBoxes() {
+    this.isTypeOneDisabled = true;
+    this.isTypeTwoDisabled = true;
+    this.isTypeThreeDisabled = true;
+    if (this.productCode && this.productCode.trim() !== '') {
+      if (this.productCode.startsWith('T', 0)) {
+        this.productType = 'T';
+        this.isTypeOneDisabled = false;
+        this.isTypeThreeDisabled = false;
+      } else if (this.productCode.startsWith('U', 0)) {
+        this.productType = 'U';
+        this.isTypeTwoDisabled = false;
+        this.isTypeThreeDisabled = false;
+      } else if (this.productCode.startsWith('A', 0) && this.productCode !== 'A5') {
+        this.productType = 'A';
+        this.isTypeThreeDisabled = false;
+      }
+    }
+  }
+
+  onAllChkBoxClick() {
+    if (this.allChkBox === true) {
+      if (this.productType && this.productType.trim() !== '') {
+        if (this.productType === 'T') {
+          this.genPolicyChkBox = true;
+          this.deathBeneChkBox = true;
+          this.loanInfoChkBox = true;
+          this.ChgAndFeeChkBox = true;
+          this.lapseNFOChkBox = true;
+          this.modePreChkBox = true;
+          this.guaCashValChkBox = true;
+        } else if (this.productType === 'U') {
+          this.genPolicyChkBox = true;
+          this.costOfInsuranceChkBox = true;
+          this.loanInfoChkBox = true;
+          this.ChgAndFeeChkBox = true;
+          this.compAndProChkBox = true;
+          this.payLoadsChkBox = true;
+          this.targetInfoChkBox = true;
+        } else if (this.productType === 'A') {
+          this.genPolicyChkBox = true;
+          this.loanInfoChkBox = true;
+          this.ChgAndFeeChkBox = true;
+        }
+      }
+    } else {
+      this.unCheckAll();
+    }
+  }
+
+  private unCheckAll() {
+    this.genPolicyChkBox = false;
+    this.deathBeneChkBox = false;
+    this.loanInfoChkBox = false;
+    this.ChgAndFeeChkBox = false;
+    this.lapseNFOChkBox = false;
+    this.modePreChkBox = false;
+    this.guaCashValChkBox = false;
+    this.genPolicyChkBox = false;
+    this.costOfInsuranceChkBox = false;
+    this.compAndProChkBox = false;
+    this.payLoadsChkBox = false;
+    this.targetInfoChkBox = false;
+    this.allChkBox = false;
+  }
+
   private evaluateStatusOfGo() {
     if ((this.envId && this.envId.trim() !== '')
       && (this.companyCode && this.companyCode.trim() !== '')
       && (this.productCode && this.productCode.trim() !== '')
-      ) {
+      && (this.planCode && this.planCode.trim() !== '')
+      && (this.issueState && this.issueState.trim() !== '')
+      && (this.lob && this.lob.trim() !== '')
+    ) {
       this.isGoDisabled = false;
     } else {
       this.isGoDisabled = true;

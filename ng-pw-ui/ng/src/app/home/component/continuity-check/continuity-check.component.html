@@ -1,0 +1,53 @@
+<table>
+  <tr>
+    <td valign="top" width="360px" height="600px">
+      <ul>
+        <li>
+          <p-dropdown [options]="envIdOptions" [(ngModel)]="envId" (onChange)="onEnvIdChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="companyCodeOptions" [(ngModel)]="companyCode" [disabled]="isCompanyCodeDisabled" (onChange)="onCompanyCodeChange()"
+            [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="productCodeOptions" [(ngModel)]="productCode" [disabled]="isProductCodeDisabled" (onChange)="onProductChange()"
+            [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="planCodeOptions" [(ngModel)]="planCode" [disabled]="isPlanCodeDisabled" (onChange)="onPlanCodeChange()"
+            [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="issueStateOptions" [(ngModel)]="issueState" [disabled]="isIssueStateDisabled" (onChange)="onIssueStateChange()"
+            [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="lobOptions" [(ngModel)]="lob" [disabled]="isLobDisabled" (onChange)="onLobChange()" [autoWidth]="false"
+            [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="effDateOptions" [(ngModel)]="effDate" [disabled]="isEffDateDisabled" (onChange)="onEffDateChange()"
+            [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li style="margin-top: 20px">
+          <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Remember my selections"></p-checkbox>
+        </li>
+      </ul>
+    </td>
+    <td valign="top" style="width: 700px">
+      <ul>
+        <div [style.visibility]="isDivRendered ? 'visible' : 'hidden'">
+          <li style="margin-left:23px; margin-top: 35px">
+            <label> <span style="align-content: center"> Annuity Category Selection</span></label>
+          </li>
+          <li style="margin-left:23px; margin-top: 15px">
+            <p-checkbox [(ngModel)]="surrenders" binary="true" label="Surrenders"></p-checkbox>
+          </li>
+        </div>
+        <li style="margin-left:23px; margin-top: 250px">
+          <button pButton type="button" [disabled]="isNextDisabled" label="Next "></button>
+        </li>
+      </ul>
+    </td>
+  </tr>
+</table>

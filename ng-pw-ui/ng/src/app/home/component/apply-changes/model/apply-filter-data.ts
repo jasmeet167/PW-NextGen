@@ -1,7 +1,7 @@
 
 import { SelectItem } from 'primeng/primeng';
 
-export interface ApplyChangesTabMsg {
+export interface ApplyFilterData {
   packages: SelectItem[];
   projects: string[];
 }

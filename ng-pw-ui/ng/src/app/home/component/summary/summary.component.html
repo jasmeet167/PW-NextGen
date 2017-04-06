@@ -32,54 +32,60 @@
           <label><span style="align-content: center"> As of Date </span></label>
         </li>
         <li>
-          <p-calendar [(ngModel)]="asOfDate" dateFormat="mm.dd.yy" [showIcon]="true" [inputStyle]="{'width':'318px'}"></p-calendar>
+          <p-calendar [(ngModel)]="asOfDate" dateFormat="yy-mm-dd" [showIcon]="true" [inputStyle]="{'width':'318px'}"></p-calendar>
         </li>
-        <li>
+        <li style="margin-top: 20px">
           <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Remember my selections"></p-checkbox>
           <button pButton type="button" [disabled]="isGoDisabled" label="Go" style="margin-left: 35px"></button>
         </li>
       </ul>
     </td>
-    <td valign="top" style="width: 700px">
-      <div style="margin-left:23px; margin-top: 15px">
-        <label> <span style="align-content: center"> Display Aditional options for</span></label>
-      </div>
-      <div class="div-checkbox-space">
-        <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="General policy Infromation"></p-checkbox>
-      </div>
-      <div class="div-checkbox-space">
-        <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Death Benefit"></p-checkbox>
-      </div>
-      <div class="div-checkbox-space">
-        <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Cost of Insurance"></p-checkbox>
-      </div>
-      <div class="div-checkbox-space">
-        <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Loan Information"></p-checkbox>
-      </div>
-      <div class="div-checkbox-space">
-        <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Charges and Fees"></p-checkbox>
-      </div>
-      <div class="div-checkbox-space">
-        <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Compliance Provision"></p-checkbox>
-      </div>
-      <div class="div-checkbox-space">
-        <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Mode Premiums"></p-checkbox>
-      </div>
-      <div class="div-checkbox-space">
-        <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Lapse/NFO Options"></p-checkbox>
-      </div>
-      <div class="div-checkbox-space">
-        <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Payment Loads"></p-checkbox>
-      </div>
-      <div class="div-checkbox-space">
-        <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Guaranteed Cash Values"></p-checkbox>
-      </div>
-      <div class="div-checkbox-space">
-        <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Target Information"></p-checkbox>
-      </div>
-      <div class="div-checkbox-space">
-        <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="All Of the Above"></p-checkbox>
-      </div>
+    <td valign="top" style="width: 250px">
+      <ul style="margin-top: 35px">
+        <li style="margin-left:23px">
+          <label> <span style="align-content: center"> Display Additional Options For:</span></label>
+        </li>
+        <li class="li-checkbox-space">
+          <p-checkbox [(ngModel)]="genPolicyChkBox" binary="true" [disabled]="isTypeThreeDisabled" label="General Policy Information"></p-checkbox>
+        </li>
+        <li class="li-checkbox-space">
+          <p-checkbox [(ngModel)]="costOfInsuranceChkBox" binary="true" [disabled]="isTypeTwoDisabled" label="Cost of Insurance"></p-checkbox>
+        </li>
+        <li class="li-checkbox-space">
+          <p-checkbox [(ngModel)]="ChgAndFeeChkBox" binary="true" [disabled]="isTypeThreeDisabled" label="Charges And Fees"></p-checkbox>
+        </li>
+        <li class="li-checkbox-space">
+          <p-checkbox [(ngModel)]="modePreChkBox" binary="true" [disabled]="isTypeOneDisabled" label="Mode Premiums"></p-checkbox>
+        </li>
+        <li class="li-checkbox-space">
+          <p-checkbox [(ngModel)]="payLoadsChkBox" binary="true" [disabled]="isTypeTwoDisabled" label="Payment Loads"></p-checkbox>
+        </li>
+        <li class="li-checkbox-space">
+          <p-checkbox [(ngModel)]="targetInfoChkBox" binary="true" [disabled]="isTypeTwoDisabled" label="Target Information"></p-checkbox>
+        </li>
+      </ul>
+    </td>
+    <td valign="top" style="width: 250px">
+      <ul style="margin-top: 50px">
+        <li class="li-checkbox-space">
+          <p-checkbox [(ngModel)]="deathBeneChkBox" binary="true" [disabled]="isTypeOneDisabled" label="Death Benefits"></p-checkbox>
+        </li>
+        <li class="li-checkbox-space">
+          <p-checkbox [(ngModel)]="loanInfoChkBox" binary="true" [disabled]="isTypeThreeDisabled" label="Loan Information"></p-checkbox>
+        </li>
+        <li class="li-checkbox-space">
+          <p-checkbox [(ngModel)]="compAndProChkBox" binary="true" [disabled]="isTypeTwoDisabled" label="Compliance Provisions"></p-checkbox>
+        </li>
+        <li class="li-checkbox-space">
+          <p-checkbox [(ngModel)]="lapseNFOChkBox" binary="true" [disabled]="isTypeOneDisabled" label="Lapse/NFO Options"></p-checkbox>
+        </li>
+        <li class="li-checkbox-space">
+          <p-checkbox [(ngModel)]="guaCashValChkBox" binary="true" [disabled]="isTypeOneDisabled" label="Guaranteed Cash Values"></p-checkbox>
+        </li>
+        <li class="li-checkbox-space">
+          <p-checkbox [(ngModel)]="allChkBox" (onChange)="onAllChkBoxClick()" binary="true" [disabled]="isTypeThreeDisabled" label="All Of The Above"></p-checkbox>
+        </li>
+      </ul>
     </td>
   </tr>
 </table>

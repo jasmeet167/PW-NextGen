@@ -8,11 +8,7 @@ li {
   margin-top: 5px;
 }
 
-.li-extra-space {
-  margin-top: 20px;
-}
-
-.div-checkbox-space {
+.li-checkbox-space {
   margin-left:20px;
   margin-top: 15px;
   width: 250px;
