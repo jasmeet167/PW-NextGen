@@ -89,17 +89,16 @@ export class PromoteComponent implements OnInit {
   }
 
   onSourceEnvChange() {
+    this.filterTargetEnv = null;
     this.filterProjectInputRows = <SelectItem[]>[];
     this.filterProjectOutputRows = <SelectItem[]>[];
     this.filterPackageInputRows = <SelectItem[]>[];
     this.filterPackageOutputRows = <SelectItem[]>[];
+    this.isEnterPackageDisabled = true;
     if (this.filterSourceEnv == null) {
       this.isTargetEnvDisabled = true;
-      this.isEnterPackageDisabled = true;
     } else {
       this.isTargetEnvDisabled = false;
-      this.isEnterPackageDisabled = false;
-
       let envOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
       this.filterService.getEnvOptions(this.authToken)
@@ -138,6 +137,7 @@ export class PromoteComponent implements OnInit {
 
     if (this.filterTargetEnv != null) {
       this.notificationService.showWaitIndicator(true);
+      this.isEnterPackageDisabled = false;
       this.filterService.getPromoteDetails(this.authToken, this.filterSourceEnv, this.filterTargetEnv)
         .subscribe(
         res => promoteTabMsg = res,
@@ -156,6 +156,7 @@ export class PromoteComponent implements OnInit {
     } else {
       this.filterProjectInputRows = <SelectItem[]>[];
       this.filterPackageInputRows = <SelectItem[]>[];
+      this.isEnterPackageDisabled = true;
     }
   }
 
@@ -181,6 +182,7 @@ export class PromoteComponent implements OnInit {
       this.isGoDisabled = false;
     } else {
       this.isGoDisabled = true;
+      this.isEnterPackageDisabled = true;
     }
   }
 

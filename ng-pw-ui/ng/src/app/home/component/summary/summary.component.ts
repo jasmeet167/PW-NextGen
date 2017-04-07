@@ -39,7 +39,7 @@ export class SummaryComponent implements OnInit {
   public isEffDateDisabled: boolean;
 
   public asOfDateOptions: SelectItem[];
-  public asOfDate: string;
+  public asOfDate: Date;
   public isAsOfDateDisabled: boolean;
 
   public rememberSelections: boolean;
@@ -56,7 +56,7 @@ export class SummaryComponent implements OnInit {
   public deathBeneChkBox: boolean;
   public costOfInsuranceChkBox: boolean;
   public loanInfoChkBox: boolean;
-  public ChgAndFeeChkBox: boolean;
+  public chgAndFeeChkBox: boolean;
   public compAndProChkBox: boolean;
   public modePreChkBox: boolean;
   public lapseNFOChkBox: boolean;
@@ -115,8 +115,10 @@ export class SummaryComponent implements OnInit {
     this.isEffDateDisabled = true;
     this.buildEffDateDropdown(null);
 
-    this.rememberSelections = true;
+    this.isAsOfDateDisabled = true;
+    this.asOfDate = new Date();
 
+    this.rememberSelections = true;
     this.isTypeOneDisabled = true;
     this.isTypeTwoDisabled = true;
     this.isTypeThreeDisabled = true;
@@ -131,12 +133,14 @@ export class SummaryComponent implements OnInit {
     this.issueState = null;
     this.lob = null;
     this.effDate = null;
+    this.asOfDate = new Date();
 
     this.isProductCodeDisabled = true;
     this.isPlanCodeDisabled = true;
     this.isIssueStateDisabled = true;
     this.isLobDisabled = true;
     this.isEffDateDisabled = true;
+    this.isAsOfDateDisabled = true;
 
     if (this.envId == null) {
       this.isCompanyCodeDisabled = true;
@@ -174,6 +178,7 @@ export class SummaryComponent implements OnInit {
     this.isIssueStateDisabled = true;
     this.isLobDisabled = true;
     this.isEffDateDisabled = true;
+    this.asOfDate = new Date();
 
     if (this.companyCode == null) {
       this.isProductCodeDisabled = true;
@@ -211,6 +216,8 @@ export class SummaryComponent implements OnInit {
     this.isIssueStateDisabled = true;
     this.isLobDisabled = true;
     this.isEffDateDisabled = true;
+    this.asOfDate = new Date();
+    this.isAsOfDateDisabled =  true;
 
     this.unCheckAll();
 
@@ -250,6 +257,8 @@ export class SummaryComponent implements OnInit {
 
     this.isLobDisabled = true;
     this.isEffDateDisabled = true;
+    this.asOfDate = new Date();
+    this.isAsOfDateDisabled =  true;
 
     if (this.planCode == null) {
       this.isIssueStateDisabled = true;
@@ -282,6 +291,8 @@ export class SummaryComponent implements OnInit {
     this.lob = null;
     this.effDate = null;
     this.isEffDateDisabled = true;
+    this.asOfDate = new Date();
+    this.isAsOfDateDisabled =  true;
 
     if (this.issueState == null) {
       this.isLobDisabled = true;
@@ -313,6 +324,7 @@ export class SummaryComponent implements OnInit {
 
   onLobChange() {
     this.effDate = null;
+    this.asOfDate = new Date();
 
     if (this.lob == null) {
       this.isEffDateDisabled = true;
@@ -338,6 +350,17 @@ export class SummaryComponent implements OnInit {
           this.notificationService.showWaitIndicator(false);
         }
         );
+    }
+    this.evaluateStatusOfGo();
+  }
+
+  onEffDateChange() {
+    if (this.effDate !== null) {
+      this.isAsOfDateDisabled = false;
+    } else {
+      this.isAsOfDateDisabled = true;
+      this.asOfDate = new Date();
+      this.isAsOfDateDisabled =  true;
     }
     this.evaluateStatusOfGo();
   }
@@ -432,7 +455,7 @@ export class SummaryComponent implements OnInit {
           this.genPolicyChkBox = true;
           this.deathBeneChkBox = true;
           this.loanInfoChkBox = true;
-          this.ChgAndFeeChkBox = true;
+          this.chgAndFeeChkBox = true;
           this.lapseNFOChkBox = true;
           this.modePreChkBox = true;
           this.guaCashValChkBox = true;
@@ -440,14 +463,14 @@ export class SummaryComponent implements OnInit {
           this.genPolicyChkBox = true;
           this.costOfInsuranceChkBox = true;
           this.loanInfoChkBox = true;
-          this.ChgAndFeeChkBox = true;
+          this.chgAndFeeChkBox = true;
           this.compAndProChkBox = true;
           this.payLoadsChkBox = true;
           this.targetInfoChkBox = true;
         } else if (this.productType === 'A') {
           this.genPolicyChkBox = true;
           this.loanInfoChkBox = true;
-          this.ChgAndFeeChkBox = true;
+          this.chgAndFeeChkBox = true;
         }
       }
     } else {
@@ -459,7 +482,7 @@ export class SummaryComponent implements OnInit {
     this.genPolicyChkBox = false;
     this.deathBeneChkBox = false;
     this.loanInfoChkBox = false;
-    this.ChgAndFeeChkBox = false;
+    this.chgAndFeeChkBox = false;
     this.lapseNFOChkBox = false;
     this.modePreChkBox = false;
     this.guaCashValChkBox = false;

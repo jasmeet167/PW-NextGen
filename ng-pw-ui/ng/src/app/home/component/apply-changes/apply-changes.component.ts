@@ -72,10 +72,12 @@ export class ApplyChangesComponent implements OnInit {
   }
 
   onEnvChange() {
-      this.filterProjectInputRows = <SelectItem[]>[];
-      this.filterPackageInputRows = <SelectItem[]>[];
-        this.filterProjectOutputRows = <SelectItem[]>[];
-      this.filterPackageOutputRows = <SelectItem[]>[];
+    this.filterProjectInputRows = <SelectItem[]>[];
+    this.filterPackageInputRows = <SelectItem[]>[];
+    this.filterProjectOutputRows = <SelectItem[]>[];
+    this.filterPackageOutputRows = <SelectItem[]>[];
+    this.enterPackageName = null;
+
     let applyChangesTabMsg: ApplyFilterData;
     applyChangesTabMsg = null;
 
@@ -97,6 +99,7 @@ export class ApplyChangesComponent implements OnInit {
         }
         );
     } else {
+      this.isEnterPackageDisabled = true;
       this.filterProjectInputRows = <SelectItem[]>[];
       this.filterPackageInputRows = <SelectItem[]>[];
     }
