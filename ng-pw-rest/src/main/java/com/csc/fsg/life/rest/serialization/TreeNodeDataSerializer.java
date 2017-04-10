@@ -131,8 +131,6 @@ public class TreeNodeDataSerializer
 	{
 		if (attributes.getDisabled() != null)
 			return false;
-		if (attributes.getInquiryAllowed() != null)
-			return false;
 		if (attributes.getUpdateAllowed() != null)
 			return false;
 

@@ -3,8 +3,10 @@ package com.csc.fsg.life.rest.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -26,6 +28,7 @@ import com.csc.fsg.life.openam.model.AuthorizationResponse;
 import com.csc.fsg.life.openam.model.AuthorizationTreeQuery;
 import com.csc.fsg.life.openam.model.AuthorizationTreeResponse;
 import com.csc.fsg.life.openam.model.TokenValidationResponse;
+import com.csc.fsg.life.pw.web.io.TableDescriptor;
 import com.csc.fsg.life.rest.exception.ForbiddenException;
 import com.csc.fsg.life.rest.exception.RestServiceException;
 import com.csc.fsg.life.rest.exception.UnauthorizedException;
@@ -125,7 +128,7 @@ public class SecurityServiceImpl
 		CommonApplicationConfigBean pwConfig = getBean(CommonApplicationConfigBean.class);
 		Map<String, MyBatisApplicationEnvironmentBean> environmentMap = pwConfig.getEnvironments();
 
-		List<String> resources = new ArrayList<>();
+		Set<String> resources = new HashSet<>();
 		for (MyBatisApplicationEnvironmentBean env : environmentMap.values())
 			resources.add(ENVIRONMENT_URL_ROOT + env.getName());
 
@@ -214,19 +217,27 @@ public class SecurityServiceImpl
 		}
 	}
 
-	public String buildEnvironmentUrl(String envId)
+	public String buildEnvUrl(String envId)
 	{
-		return ENVIRONMENT_URL_ROOT + envId;
+		String effEnvId = (envId == null) ? "*" : envId;
+		return ENVIRONMENT_URL_ROOT + effEnvId;
 	}
 
 	public String buildCompanyUrl(String envId, String companyCode)
 	{
-		return COMPANY_URL_ROOT + envId + '/' + companyCode;
+		String effEnvId = (envId == null) ? "*" : envId;
+		String effCompanyCode = (companyCode == null) ? "*" : companyCode;
+
+		return COMPANY_URL_ROOT + effEnvId + '/' + effCompanyCode;
 	}
 
-	public String buildTableUrl(String envId, String companyCode, String tableDdlName)
+	public String buildTableUrl(String envId, String companyCode, String tableId)
 	{
-		return TABLE_URL_ROOT + envId + '/' + companyCode + '/' + tableDdlName;
+		String effEnvId = (envId == null) ? "*" : envId;
+		String effCompanyCode = (companyCode == null) ? "*" : companyCode;
+		String effTableId = (tableId == null) ? "*" : tableId;
+
+		return TABLE_URL_ROOT + effEnvId + '/' + effCompanyCode + '/' + effTableId;
 	}
 
 	public void assertAuthorization(RestServiceParam param, AuthorizationAction action)
@@ -236,7 +247,7 @@ public class SecurityServiceImpl
 		if (action == AuthorizationAction.NONE)
 			return;
 
-		List<String> resources = new ArrayList<>();
+		Set<String> resources = new HashSet<>();
 
 		boolean isEnv1Found = false;
 		String envId1 = param.getSourceEnvId();
@@ -258,16 +269,16 @@ public class SecurityServiceImpl
 		String companyCode = param.getCompanyCode();
 		if (StringUtils.hasText(companyCode)) {
 			if (isEnv1Found)
-				resources.add(COMPANY_URL_ROOT + envId1 + '/' + companyCode);
+				resources.add(buildCompanyUrl(envId1, companyCode));
 			if (isEnv2Found)
-				resources.add(COMPANY_URL_ROOT + envId2 + '/' + companyCode);
+				resources.add(buildCompanyUrl(envId2, companyCode));
 
-			String tableDdlName = param.getTableDdlName();
-			if (StringUtils.hasText(tableDdlName)) {
+			String tableId = param.getTableId();
+			if (StringUtils.hasText(tableId)) {
 				if (isEnv1Found)
-					resources.add(TABLE_URL_ROOT + envId1 + '/' + companyCode + '/');
+					resources.add(buildTableUrl(envId1, companyCode, tableId));
 				if (isEnv2Found)
-					resources.add(TABLE_URL_ROOT + envId2 + '/' + companyCode + '/');
+					resources.add(buildTableUrl(envId2, companyCode, tableId));
 			}
 		}
 
@@ -286,7 +297,7 @@ public class SecurityServiceImpl
 		if (!pdpConfig.isSecurityEnabled())
 			return new ArrayList<>(allEnvironments);
 
-		List<String> resources = new ArrayList<>();
+		Set<String> resources = new HashSet<>();
 		for (SelectItem env : allEnvironments)
 			resources.add(ENVIRONMENT_URL_ROOT + env.getValue());
 
@@ -315,11 +326,9 @@ public class SecurityServiceImpl
 		if (!pdpConfig.isSecurityEnabled())
 			return new ArrayList<>(allCompanies);
 
-		String urlPrefix = COMPANY_URL_ROOT + envId + '/';
-
-		List<String> resources = new ArrayList<>();
+		Set<String> resources = new HashSet<>();
 		for (SelectItem company : allCompanies)
-			resources.add(urlPrefix + company.getValue());
+			resources.add(buildCompanyUrl(envId, (String) company.getValue()));
 
 		// Map of authorization decisions for all companies, for which
 		// one or more authorization policies have been established;
@@ -330,7 +339,7 @@ public class SecurityServiceImpl
 
 		List<SelectItem> response = new ArrayList<>();
 		for (SelectItem company : allCompanies) {
-			AuthorizationResponse auth = authMap.get(urlPrefix + company.getValue());
+			AuthorizationResponse auth = authMap.get(buildCompanyUrl(envId, (String) company.getValue()));
 			if (auth != null) {
 				Map<String, Boolean> actionMap = auth.getActions();
 				if (actionMap != null
@@ -347,22 +356,18 @@ public class SecurityServiceImpl
 		if (!pdpConfig.isSecurityEnabled())
 			return new ArrayList<>(allTables);
 
-		String urlPrefix = TABLE_URL_ROOT + envId + '/' + companyCode + '/';
+		Set<String> resources = new HashSet<>();
+		for (SelectItem table : allTables) {
+			String tableId = TableDescriptor.ddlNameToId((String) table.getValue());
+			resources.add(buildTableUrl(envId, companyCode, tableId));
+		}
 
-		List<String> resources = new ArrayList<>();
-		for (SelectItem table : allTables)
-			resources.add(urlPrefix + table.getValue());
-
-		// Map of authorization decisions for all tables, for which
-		// one or more authorization policies have been established;
-		// the map is keyed by Environment ID/Company Code/Table DDL
-		// Name, and the corresponding value represents outcome of
-		// authorization evaluation:
 		Map<String, AuthorizationResponse> authMap = evaluateAuthorization(authToken, resources);
 
 		List<SelectItem> response = new ArrayList<>();
 		for (SelectItem table : allTables) {
-			AuthorizationResponse auth = authMap.get(urlPrefix + table.getValue());
+			String tableId = TableDescriptor.ddlNameToId((String) table.getValue());
+			AuthorizationResponse auth = authMap.get(buildTableUrl(envId, companyCode, tableId));
 			if (auth != null) {
 				Map<String, Boolean> actionMap = auth.getActions();
 				if (actionMap != null
@@ -374,7 +379,7 @@ public class SecurityServiceImpl
 		return response;
 	}
 
-	public boolean isAuthorized(String authToken, List<String> resources, AuthorizationAction action)
+	public boolean isAuthorized(String authToken, Set<String> resources, AuthorizationAction action)
 	{
 		if (!pdpConfig.isSecurityEnabled())
 			return true;
@@ -391,7 +396,30 @@ public class SecurityServiceImpl
 		return false;
 	}
 
-	private Map<String, AuthorizationResponse> evaluateAuthorization(String authToken, List<String> resources)
+	public Map<String, Boolean> evaluateAuthorization(String authToken, Set<String> resources, AuthorizationAction action)
+	{
+		Map<String, Boolean> responseMap = new HashMap<>();
+		if (resources == null || resources.isEmpty())
+			return responseMap;
+
+		if (!pdpConfig.isSecurityEnabled() || action == AuthorizationAction.NONE) {
+			for (String resource : resources)
+				responseMap.put(resource, Boolean.TRUE);
+		}
+		else {
+			Map<String, AuthorizationResponse> authResponseMap = evaluateAuthorization(authToken, resources);
+			for (AuthorizationResponse authResponseValue : authResponseMap.values()) {
+				String resource = authResponseValue.getResource();
+				Map<String, Boolean> actions = authResponseValue.getActions();
+				if (actions != null)
+					responseMap.put(resource, actions.get(action.toString()));
+			}
+		}
+
+		return responseMap;
+	}
+
+	private Map<String, AuthorizationResponse> evaluateAuthorization(String authToken, Set<String> resources)
 	{
 		AuthorizationQuery query = new AuthorizationQuery();
 		for (String resource : resources)

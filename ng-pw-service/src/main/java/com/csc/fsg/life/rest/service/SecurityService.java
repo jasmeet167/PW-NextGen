@@ -1,6 +1,8 @@
 package com.csc.fsg.life.rest.service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.csc.fsg.life.rest.model.Credentials;
 import com.csc.fsg.life.rest.model.LoginResponse;
@@ -16,11 +18,11 @@ public interface SecurityService
 
 	public void logout(String authToken);
 
-	public String buildEnvironmentUrl(String envId);
+	public String buildEnvUrl(String envId);
 
 	public String buildCompanyUrl(String envId, String companyCode);
 
-	public String buildTableUrl(String envId, String companyCode, String tableDdlName);
+	public String buildTableUrl(String envId, String companyCode, String tableId);
 
 	public void assertAuthorization(RestServiceParam param, AuthorizationAction action);
 
@@ -30,5 +32,7 @@ public interface SecurityService
 
 	public List<SelectItem> filterAuthorizedTables(String authToken, String envId, String companyCode, List<SelectItem> allTables);
 
-	public boolean isAuthorized(String authToken, List<String> resources, AuthorizationAction action);
+	public boolean isAuthorized(String authToken, Set<String> resources, AuthorizationAction action);
+
+	public Map<String, Boolean> evaluateAuthorization(String authToken, Set<String> resources, AuthorizationAction action);
 }

@@ -24,6 +24,7 @@ public class Node
 	private int nodeId = 0;
 	private short level = 0;
 	private TypeEnum type = null;
+	private int authTracer = 0;
 	private String display = null;
 
 	private TreeNodeData data = new TreeNodeData();
@@ -55,7 +56,7 @@ public class Node
 		nodeId = Integer.parseInt(payloadComponents[i++]);
 		level = Short.parseShort(payloadComponents[i++]);
 		type = getNodeType(Short.parseShort(payloadComponents[i++]));
-		parseNodeAttributes(Integer.parseInt(payloadComponents[i++]));
+		authTracer = Integer.parseInt(payloadComponents[i++]);
 		display = payloadComponents[i];
 
 		if (payloadComponents.length > (i + 1))
@@ -218,17 +219,6 @@ public class Node
 		}
 	}
 
-	private void parseNodeAttributes(int flags)
-	{
-		boolean isDisabled = (flags & CscTreeNode.ATTR_DISABLED) != 0;
-		boolean isInquiryAllowed = (flags & CscTreeNode.ATTR_INQUIRY) != 0;
-		boolean isUpdateAllowed = (flags & CscTreeNode.ATTR_UPDATE) != 0;
-
-		attributes.setDisabled(Boolean.valueOf(isDisabled));
-		attributes.setInquiryAllowed(Boolean.valueOf(isInquiryAllowed));
-		attributes.setUpdateAllowed(Boolean.valueOf(isUpdateAllowed));
-	}
-
 	private void setTableId(String tableId)
 	{
 		data.setTableId(tableId);
@@ -260,6 +250,11 @@ public class Node
 	public TypeEnum getType()
 	{
 		return type;
+	}
+
+	public int getAuthTracer()
+	{
+		return authTracer;
 	}
 
 	public String getDisplay()

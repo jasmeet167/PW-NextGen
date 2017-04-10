@@ -146,9 +146,11 @@ public class ProductWriter {
 			buffer.append("11").append(TAB);                     
 		}
 		
-		int tableAuth = Constants.NODE_ATTR_INQUIRY;
+//		int tableAuth = Constants.NODE_ATTR_INQUIRY;
 //		if (user.isPermitted(planCriteria.getEnvironment(), planCriteria.getCompanyCode(), "000", PolicyConstants.UPDATE))
-			tableAuth = Constants.NODE_ATTR_UPDATE;
+//			tableAuth = Constants.NODE_ATTR_UPDATE;
+
+		int tableAuth = TreeAuthorizationTracer.PRODUCT_1;
 		
 		buffer.append(tableAuth).append(TAB);                     
 		buffer.append(getDisplayName(planCriteria, conn)).append(TAB);
@@ -198,10 +200,12 @@ public class ProductWriter {
 				if ((productPrefix.equals("N") || productPrefix.equals("H"))) 
 					level = 4;
 				
-				int tableAuth = Constants.NODE_ATTR_INQUIRY;
+//				int tableAuth = Constants.NODE_ATTR_INQUIRY;
 //				if (user.isPermitted(planCriteria.getEnvironment(), planCriteria.getCompanyCode(), planCriteria.getTablePtrId(), PolicyConstants.UPDATE))
-					tableAuth = Constants.NODE_ATTR_UPDATE;
+//					tableAuth = Constants.NODE_ATTR_UPDATE;
 					
+				int tableAuth = TreeAuthorizationTracer.PRODUCT_2;
+
 				buffer.append(sn.getNodeId()+TAB+level+TAB);
 				buffer.append("14").append(TAB);
 				buffer.append(tableAuth);                         
@@ -361,10 +365,12 @@ public class ProductWriter {
 					.getEnvironment(planCriteria.getEnvironment())
 					.getTableDescMgr().getDDLName(planCriteria.getTablePtrId());
 
-				int tableAuth = Constants.NODE_ATTR_INQUIRY;
+//				int tableAuth = Constants.NODE_ATTR_INQUIRY;
 //				if (user.isPermitted(planCriteria.getEnvironment(), planCriteria.getCompanyCode(), planCriteria.getTablePtrId(), PolicyConstants.UPDATE))
-					tableAuth = Constants.NODE_ATTR_UPDATE;
-				
+//					tableAuth = Constants.NODE_ATTR_UPDATE;
+
+				int tableAuth = TreeAuthorizationTracer.PRODUCT_3;
+
 				buffer.append(nodeId).append(TAB);
 				buffer.append(childLevel).append(TAB);
 				buffer.append("14").append(TAB);

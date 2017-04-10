@@ -7,9 +7,11 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,7 @@ import com.csc.fsg.life.rest.model.TreeNodeData;
 import com.csc.fsg.life.rest.model.TreeNodeData.LazyTypeEnum;
 import com.csc.fsg.life.rest.model.TreeNodePlanKey;
 import com.csc.fsg.life.rest.model.tree.Node;
+import com.csc.fsg.life.rest.model.tree.TreeNodeWrapper;
 import com.csc.fsg.life.rest.param.AuthorizationAction;
 import com.csc.fsg.life.rest.param.RestServiceParam;
 
@@ -93,13 +96,16 @@ public class BusinessRuleTreeServiceImpl
 			if (companyName == null)
 				companyName = companyCode;
 
+			boolean isCompanyUpdateAllowed = isCompanyUpdateAllowed(param);
+
 			TreeNode node = new TreeNode();
 			node.setType(TypeEnum.C);
 			node.setLabel(companyName);
 			node.setStyleClass(STYLE_FOLDER);
 			node.setExpanded(Boolean.TRUE);
 			setFolderIcons(node);
-			node.setChildren(getStarterNodes(param, productCode, includeOrphans));
+			makeNodeUpdateable(node, isCompanyUpdateAllowed);
+			node.setChildren(getStarterNodes(param, productCode, isCompanyUpdateAllowed, includeOrphans));
 
 			List<TreeNode> treeCore = new LinkedList<>();
 			treeCore.add(node);
@@ -115,7 +121,8 @@ public class BusinessRuleTreeServiceImpl
 		}
 	}
 
-	private List<TreeNode> getStarterNodes(RestServiceParam param, String productCode, boolean includeOrphans)
+	private List<TreeNode> getStarterNodes(RestServiceParam param, String productCode,
+										   boolean isCompanyUpdateAllowed, boolean includeOrphans)
 	{
 		LinkedList<TreeNode> starterNodes = new LinkedList<>();
 
@@ -129,33 +136,39 @@ public class BusinessRuleTreeServiceImpl
 		commonData.setLazyNode(Boolean.TRUE);
 		commonData.setLazyType(LazyTypeEnum.C);
 		common.setData(commonData);
+		makeNodeUpdateable(common, isCompanyUpdateAllowed);
 		starterNodes.add(common);
 
-		boolean isAuthorized = isAuthorizedToViewSubsetIndex(param);
+		boolean isViewAllowed = isSubsetIndexAccessAllowed(param, AuthorizationAction.VIEW);
+		boolean isUpdateAllowed = isSubsetIndexAccessAllowed(param, AuthorizationAction.UPDATE);
 
 		TreeNode pdf = new TreeNode();
 		pdf.setType(TypeEnum.PDF);
 		pdf.setLabel(getMessage("pdf_folder_label"));
-		pdf.setStyleClass(isAuthorized ? STYLE_FOLDER : STYLE_FOLDER_DISABLED);
+		pdf.setStyleClass(isViewAllowed ? STYLE_FOLDER : STYLE_FOLDER_DISABLED);
 		pdf.setLeaf(Boolean.FALSE);
 		setFolderIcons(pdf);
+
 		TreeNodeData pdfData = new TreeNodeData();
 		pdfData.setLazyNode(Boolean.TRUE);
 		pdfData.setLazyType(LazyTypeEnum.PDF);
 		pdf.setData(pdfData);
-		disableNode(pdf, !isAuthorized);
+		disableNode(pdf, !isViewAllowed);
+		makeNodeUpdateable(pdf, isUpdateAllowed);
 
 		TreeNode commonCoverage = new TreeNode();
 		commonCoverage.setType(TypeEnum.PDF);
 		commonCoverage.setLabel(getMessage("common_cov_folder_label"));
-		commonCoverage.setStyleClass(isAuthorized ? STYLE_FOLDER : STYLE_FOLDER_DISABLED);
+		commonCoverage.setStyleClass(isViewAllowed ? STYLE_FOLDER : STYLE_FOLDER_DISABLED);
 		commonCoverage.setLeaf(Boolean.FALSE);
 		setFolderIcons(commonCoverage);
+
 		TreeNodeData commonCovData = new TreeNodeData();
 		commonCovData.setLazyNode(Boolean.TRUE);
 		commonCovData.setLazyType(LazyTypeEnum.H);
 		commonCoverage.setData(commonCovData);
-		disableNode(commonCoverage, !isAuthorized);
+		disableNode(commonCoverage, !isViewAllowed);
+		makeNodeUpdateable(commonCoverage, isUpdateAllowed);
 
 		if (productCode.startsWith("N")) {
 			starterNodes.add(commonCoverage);
@@ -172,10 +185,11 @@ public class BusinessRuleTreeServiceImpl
 
 			ann.setType(TypeEnum.AF);
 			ann.setLabel(getMessage("annuity_folder_label"));
-			ann.setStyleClass(isAuthorized ? STYLE_FOLDER : STYLE_FOLDER_DISABLED);
+			ann.setStyleClass(isViewAllowed ? STYLE_FOLDER : STYLE_FOLDER_DISABLED);
 			setFolderIcons(ann);
-			ann.setChildren(getAnnuityStarterNodes(productCode));
-			disableNode(ann, !isAuthorized);
+			disableNode(ann, !isViewAllowed);
+			makeNodeUpdateable(ann, isUpdateAllowed);
+			ann.setChildren(getAnnuityStarterNodes(productCode, isUpdateAllowed));
 		}
 		else if (productCode.startsWith("U")) {
 			TreeNode ul = new TreeNode();
@@ -183,10 +197,11 @@ public class BusinessRuleTreeServiceImpl
 
 			ul.setType(TypeEnum.UF);
 			ul.setLabel(getMessage("ul_folder_label"));
-			ul.setStyleClass(isAuthorized ? STYLE_FOLDER : STYLE_FOLDER_DISABLED);
+			ul.setStyleClass(isViewAllowed ? STYLE_FOLDER : STYLE_FOLDER_DISABLED);
 			setFolderIcons(ul);
-			ul.setChildren(getUlStarterNodes());
-			disableNode(ul, !isAuthorized);
+			disableNode(ul, !isViewAllowed);
+			makeNodeUpdateable(ul, isUpdateAllowed);
+			ul.setChildren(getUlStarterNodes(isUpdateAllowed));
 		}
 		else if (productCode.startsWith("T")) {
 			TreeNode trad = new TreeNode();
@@ -194,23 +209,22 @@ public class BusinessRuleTreeServiceImpl
 
 			trad.setType(TypeEnum.TF);
 			trad.setLabel(getMessage("trad_folder_label"));
-			trad.setStyleClass(isAuthorized ? STYLE_FOLDER : STYLE_FOLDER_DISABLED);
+			trad.setStyleClass(isViewAllowed ? STYLE_FOLDER : STYLE_FOLDER_DISABLED);
 			setFolderIcons(trad);
-			trad.setChildren(getTradStarterNodes());
-			disableNode(trad, !isAuthorized);
+			disableNode(trad, !isViewAllowed);
+			makeNodeUpdateable(trad, isUpdateAllowed);
+			trad.setChildren(getTradStarterNodes(isUpdateAllowed));
 		}
 
-		if (includeOrphans
-		&& !productCode.startsWith("H")
-		&& !productCode.startsWith("N")) {
-			TreeNode orphanSubsetNode = getOrphanSubsetStarterNode();
+		if (includeOrphans && !productCode.startsWith("H") && !productCode.startsWith("N")) {
+			TreeNode orphanSubsetNode = getOrphanSubsetStarterNode(isCompanyUpdateAllowed);
 			starterNodes.getLast().getChildren().add(orphanSubsetNode);
 		}
 
 		return starterNodes;
 	}
 
-	private boolean isAuthorizedToViewSubsetIndex(RestServiceParam param)
+	private boolean isCompanyUpdateAllowed(RestServiceParam param)
 	{
 		String envId = param.getEnvId();
 		if (!StringUtils.hasText(envId))
@@ -220,32 +234,33 @@ public class BusinessRuleTreeServiceImpl
 		if (!StringUtils.hasText(companyCode))
 			companyCode = "*";
 
-		String resourceUrl = securityService.buildTableUrl(envId, companyCode, "T000XA");
-		List<String> resources = Arrays.asList(resourceUrl);
+		String resourceUrl = securityService.buildCompanyUrl(envId, companyCode);
+		Set<String> resources = new HashSet<>(Arrays.asList(resourceUrl));
 
 		String authToken = param.getAuthToken();
-		boolean isAuthorized = securityService.isAuthorized(authToken, resources, AuthorizationAction.VIEW);
+		boolean isAuthorized = securityService.isAuthorized(authToken, resources, AuthorizationAction.UPDATE);
 		return isAuthorized;
 	}
 
-	private void disableNode(TreeNode node, boolean isDisabled)
+	private boolean isSubsetIndexAccessAllowed(RestServiceParam param, AuthorizationAction action)
 	{
-		TreeNodeData data = node.getData();
-		if (data == null) {
-			data = new TreeNodeData();
-			node.setData(data);
-		}
+		String envId = param.getEnvId();
+		if (!StringUtils.hasText(envId))
+			envId = "*";
 
-		TreeNodeAttributes attributes = data.getAttributes();
-		if (attributes == null) {
-			attributes = new TreeNodeAttributes();
-			data.setAttributes(attributes);
-		}
+		String companyCode = param.getCompanyCode();
+		if (!StringUtils.hasText(companyCode))
+			companyCode = "*";
 
-		attributes.setDisabled(Boolean.valueOf(isDisabled));
+		String resourceUrl = securityService.buildTableUrl(envId, companyCode, "00X");
+		Set<String> resources = new HashSet<>(Arrays.asList(resourceUrl));
+
+		String authToken = param.getAuthToken();
+		boolean isAuthorized = securityService.isAuthorized(authToken, resources, action);
+		return isAuthorized;
 	}
 
-	private List<TreeNode> getAnnuityStarterNodes(String productCode)
+	private List<TreeNode> getAnnuityStarterNodes(String productCode, boolean isUpdateAllowed)
 	{
 		List<TreeNode> starterNodes = new LinkedList<>();
 
@@ -254,35 +269,39 @@ public class BusinessRuleTreeServiceImpl
 		basePlanFolder.setType(TypeEnum.PF);
 		basePlanFolder.setLabel(getMessage("base_plans_folder_label"));
 		basePlanFolder.setStyleClass(STYLE_FOLDER);
-		TreeNodeData basePlanData = new TreeNodeData();
-		basePlanData.setLazyNode(Boolean.TRUE);
-		basePlanData.setLazyType(LazyTypeEnum.B);
-		basePlanFolder.setData(basePlanData);
 		setFolderIcons(basePlanFolder);
 		if (productCode.matches("A[1234\\*]"))
 			basePlanFolder.setLeaf(Boolean.FALSE);
 		else
 			basePlanFolder.setLeaf(Boolean.TRUE);
 
+		TreeNodeData basePlanData = new TreeNodeData();
+		basePlanData.setLazyNode(Boolean.TRUE);
+		basePlanData.setLazyType(LazyTypeEnum.B);
+		basePlanFolder.setData(basePlanData);
+		makeNodeUpdateable(basePlanFolder, isUpdateAllowed);
+
 		TreeNode payoutPlanFolder = new TreeNode();
 		starterNodes.add(payoutPlanFolder);
 		payoutPlanFolder.setType(TypeEnum.PPF);
 		payoutPlanFolder.setLabel(getMessage("payout_plans_folder_label"));
 		payoutPlanFolder.setStyleClass(STYLE_FOLDER);
-		TreeNodeData payoutPlanData = new TreeNodeData();
-		payoutPlanData.setLazyNode(Boolean.TRUE);
-		payoutPlanData.setLazyType(LazyTypeEnum.P);
-		payoutPlanFolder.setData(payoutPlanData);
 		setFolderIcons(payoutPlanFolder);
 		if (productCode.matches("A[5\\*]"))
 			payoutPlanFolder.setLeaf(Boolean.FALSE);
 		else
 			payoutPlanFolder.setLeaf(Boolean.TRUE);
 
+		TreeNodeData payoutPlanData = new TreeNodeData();
+		payoutPlanData.setLazyNode(Boolean.TRUE);
+		payoutPlanData.setLazyType(LazyTypeEnum.P);
+		payoutPlanFolder.setData(payoutPlanData);
+		makeNodeUpdateable(payoutPlanFolder, isUpdateAllowed);
+
 		return starterNodes;
 	}
 
-	private List<TreeNode> getUlStarterNodes()
+	private List<TreeNode> getUlStarterNodes(boolean isUpdateAllowed)
 	{
 		List<TreeNode> starterNodes = new LinkedList<>();
 
@@ -292,11 +311,13 @@ public class BusinessRuleTreeServiceImpl
 		basePlanFolder.setLabel(getMessage("base_plans_folder_label"));
 		basePlanFolder.setStyleClass(STYLE_FOLDER);
 		basePlanFolder.setLeaf(Boolean.FALSE);
+		setFolderIcons(basePlanFolder);
+
 		TreeNodeData basePlanData = new TreeNodeData();
 		basePlanData.setLazyNode(Boolean.TRUE);
 		basePlanData.setLazyType(LazyTypeEnum.B);
 		basePlanFolder.setData(basePlanData);
-		setFolderIcons(basePlanFolder);
+		makeNodeUpdateable(basePlanFolder, isUpdateAllowed);
 
 		TreeNode riderPlanFolder = new TreeNode();
 		starterNodes.add(riderPlanFolder);
@@ -304,16 +325,18 @@ public class BusinessRuleTreeServiceImpl
 		riderPlanFolder.setLabel(getMessage("rider_plans_folder_label"));
 		riderPlanFolder.setStyleClass(STYLE_FOLDER);
 		riderPlanFolder.setLeaf(Boolean.FALSE);
+		setFolderIcons(riderPlanFolder);
+
 		TreeNodeData riderPlanData = new TreeNodeData();
 		riderPlanData.setLazyNode(Boolean.TRUE);
 		riderPlanData.setLazyType(LazyTypeEnum.R);
 		riderPlanFolder.setData(riderPlanData);
-		setFolderIcons(riderPlanFolder);
+		makeNodeUpdateable(riderPlanFolder, isUpdateAllowed);
 
 		return starterNodes;
 	}
 
-	private List<TreeNode> getTradStarterNodes()
+	private List<TreeNode> getTradStarterNodes(boolean isUpdateAllowed)
 	{
 		List<TreeNode> starterNodes = new LinkedList<>();
 
@@ -323,11 +346,13 @@ public class BusinessRuleTreeServiceImpl
 		basePlanFolder.setLabel(getMessage("base_plans_folder_label"));
 		basePlanFolder.setStyleClass(STYLE_FOLDER);
 		basePlanFolder.setLeaf(Boolean.FALSE);
+		setFolderIcons(basePlanFolder);
+
 		TreeNodeData basePlanData = new TreeNodeData();
 		basePlanData.setLazyNode(Boolean.TRUE);
 		basePlanData.setLazyType(LazyTypeEnum.B);
 		basePlanFolder.setData(basePlanData);
-		setFolderIcons(basePlanFolder);
+		makeNodeUpdateable(basePlanFolder, isUpdateAllowed);
 
 		TreeNode riderPlanFolder = new TreeNode();
 		starterNodes.add(riderPlanFolder);
@@ -335,18 +360,20 @@ public class BusinessRuleTreeServiceImpl
 		riderPlanFolder.setLabel(getMessage("rider_plans_folder_label"));
 		riderPlanFolder.setStyleClass(STYLE_FOLDER);
 		riderPlanFolder.setLeaf(Boolean.FALSE);
+		setFolderIcons(riderPlanFolder);
+
 		TreeNodeData riderPlanData = new TreeNodeData();
 		riderPlanData.setLazyNode(Boolean.TRUE);
 		riderPlanData.setLazyType(LazyTypeEnum.R);
 		riderPlanFolder.setData(riderPlanData);
-		setFolderIcons(riderPlanFolder);
+		makeNodeUpdateable(riderPlanFolder, isUpdateAllowed);
 
 		return starterNodes;
 	}
 
-	private TreeNode getOrphanSubsetStarterNode()
+	private TreeNodeWrapper getOrphanSubsetStarterNode(boolean isUpdateAllowed)
 	{
-		TreeNode orphans = new TreeNode();
+		TreeNodeWrapper orphans = new TreeNodeWrapper();
 		orphans.setType(TypeEnum.OF);
 		orphans.setLabel(getMessage("orphan_subsets_folder_label"));
 		orphans.setStyleClass(STYLE_FOLDER);
@@ -357,6 +384,7 @@ public class BusinessRuleTreeServiceImpl
 		orphansData.setLazyNode(Boolean.TRUE);
 		orphansData.setLazyType(LazyTypeEnum.O);
 		orphans.setData(orphansData);
+		makeNodeUpdateable(orphans, isUpdateAllowed);
 
 		return orphans;
 	}
@@ -391,8 +419,8 @@ public class BusinessRuleTreeServiceImpl
 			brConn = DBConnMgr.getInstance().getConnection(envId, DBConnMgr.BUSINESS_RULES);
 			wipConn = DBConnMgr.getInstance().getConnection(envId, DBConnMgr.APPL);
 
-			List<TreeNode> commonTableList = getCommonTableList(brConn, wipConn, param, includeChanges);
-			return commonTableList;
+			List<TreeNodeWrapper> commonTableList = getCommonTableList(brConn, wipConn, param, includeChanges);
+			return applyAuthorization(param, commonTableList);
 		}
 		catch (RestServiceException e) {
 			throw e;
@@ -422,7 +450,7 @@ public class BusinessRuleTreeServiceImpl
 		}
 	}
 
-	private List<TreeNode> getCommonTableList(Connection brConn, Connection wipConn, RestServiceParam param, boolean includeChanges)
+	private List<TreeNodeWrapper> getCommonTableList(Connection brConn, Connection wipConn, RestServiceParam param, boolean includeChanges)
 		throws Exception
 	{
 		String envId = param.getEnvId();
@@ -436,7 +464,7 @@ public class BusinessRuleTreeServiceImpl
 		processTreeNode(reader, root, new TreeNodeContainer(), envId);
 
 		List<Node> commonTableNodes = root.getChildren();
-		List<TreeNode> commonTableTreeNodes = transformToDeclaredTypes(commonTableNodes, false);
+		List<TreeNodeWrapper> commonTableTreeNodes = transformToDeclaredTypes(commonTableNodes, false);
 		return commonTableTreeNodes;
 	}
 
@@ -477,16 +505,17 @@ public class BusinessRuleTreeServiceImpl
 			brConn = DBConnMgr.getInstance().getConnection(envId, DBConnMgr.BUSINESS_RULES);
 			wipConn = DBConnMgr.getInstance().getConnection(envId, DBConnMgr.APPL);
 
-			List<TreeNode> planList = getPlanList(brConn, wipConn, param, searchInput);
+			List<TreeNodeWrapper> planList = getPlanList(brConn, wipConn, param, searchInput);
 			if (searchInput.getIncludeOrphans()) {
 				if ((productCode.startsWith("N") && searchInput.getLazyType() == LazyTypeEnum.PDF) 
 				 || (productCode.startsWith("H") && searchInput.getLazyType() == LazyTypeEnum.H)) {
-					TreeNode orphanSubsetNode = getOrphanSubsetStarterNode();
+					boolean isCompanyUpdateAllowed = isCompanyUpdateAllowed(param);
+					TreeNodeWrapper orphanSubsetNode = getOrphanSubsetStarterNode(isCompanyUpdateAllowed);
 					planList.add(orphanSubsetNode);
 				}
 			}
 
-			return planList;
+			return applyAuthorization(param, planList);
 		}
 		catch (RestServiceException e) {
 			throw e;
@@ -516,7 +545,7 @@ public class BusinessRuleTreeServiceImpl
 		}
 	}
 
-	private List<TreeNode> getPlanList(Connection brConn, Connection wipConn, RestServiceParam param, BusinessRuleTreeSearchInput searchInput)
+	private List<TreeNodeWrapper> getPlanList(Connection brConn, Connection wipConn, RestServiceParam param, BusinessRuleTreeSearchInput searchInput)
 		throws Exception
 	{
 		PlanMergeAssistent pmAssist = null;
@@ -568,7 +597,7 @@ public class BusinessRuleTreeServiceImpl
 				planNodes.add(node);
 			}
 
-			List<TreeNode> planList = transformToDeclaredTypes(planNodes, true);
+			List<TreeNodeWrapper> planList = transformToDeclaredTypes(planNodes, true);
 			return planList;
 		}
 		finally {
@@ -606,8 +635,8 @@ public class BusinessRuleTreeServiceImpl
 			}
 
 			wipConn = DBConnMgr.getInstance().getConnection(envId, DBConnMgr.APPL);
-			List<TreeNode> planDetails = getPlanDetails(wipConn, param, viewChanges, planKey);
-			return planDetails;
+			List<TreeNodeWrapper> planDetails = getPlanDetails(wipConn, param, viewChanges, planKey);
+			return applyAuthorization(param, planDetails);
 		}
 		catch (RestServiceException e) {
 			throw e;
@@ -629,7 +658,7 @@ public class BusinessRuleTreeServiceImpl
 		}
 	}
 
-	private List<TreeNode> getPlanDetails(Connection wipConn, RestServiceParam param, boolean viewChanges, TreeNodePlanKey planKey)
+	private List<TreeNodeWrapper> getPlanDetails(Connection wipConn, RestServiceParam param, boolean viewChanges, TreeNodePlanKey planKey)
 		throws Exception
 	{
 		PlanMergeAssistent pmAssist = null;
@@ -672,7 +701,7 @@ public class BusinessRuleTreeServiceImpl
 			processTreeNode(reader, root, new TreeNodeContainer(), envId);
 
 			List<Node> planDetails = root.getChildren();
-			List<TreeNode> planDetailsTreeNodes = transformToDeclaredTypes(planDetails, false);
+			List<TreeNodeWrapper> planDetailsTreeNodes = transformToDeclaredTypes(planDetails, false);
 			return planDetailsTreeNodes;
 		}
 		finally {
@@ -717,8 +746,8 @@ public class BusinessRuleTreeServiceImpl
 			}
 
 			wipConn = DBConnMgr.getInstance().getConnection(envId, DBConnMgr.APPL);
-			List<TreeNode> planDetails = getOrphans(wipConn, param, searchInput);
-			return planDetails;
+			List<TreeNodeWrapper> planDetails = getOrphans(wipConn, param, searchInput);
+			return applyAuthorization(param, planDetails);
 		}
 		catch (RestServiceException e) {
 			throw e;
@@ -740,7 +769,7 @@ public class BusinessRuleTreeServiceImpl
 		}
 	}
 
-	private List<TreeNode> getOrphans(Connection wipConn, RestServiceParam param, BusinessRuleTreeSearchInput searchInput)
+	private List<TreeNodeWrapper> getOrphans(Connection wipConn, RestServiceParam param, BusinessRuleTreeSearchInput searchInput)
 		throws Exception
 	{
 		PlanMergeAssistent pmAssist = null;
@@ -788,7 +817,7 @@ public class BusinessRuleTreeServiceImpl
 			processTreeNode(reader, root, new TreeNodeContainer(), envId);
 
 			List<Node> orphans = root.getChildren();
-			List<TreeNode> orphansTreeNodes = transformToDeclaredTypes(orphans, false);
+			List<TreeNodeWrapper> orphansTreeNodes = transformToDeclaredTypes(orphans, false);
 			return orphansTreeNodes;
 		}
 		finally {
@@ -847,16 +876,18 @@ public class BusinessRuleTreeServiceImpl
 		return node;
 	}
 
-	private List<TreeNode> transformToDeclaredTypes(List<Node> existingNodes, boolean isEachNodeLazy)
+	private List<TreeNodeWrapper> transformToDeclaredTypes(List<Node> existingNodes, boolean isEachNodeLazy)
 	{
-		List<TreeNode> transformedNodes = new LinkedList<>();
+		List<TreeNodeWrapper> transformedNodes = new LinkedList<>();
 
 		for (Node existingNode : existingNodes) {
-			TreeNode transformedNode = new TreeNode();
+			TreeNodeWrapper transformedNode = new TreeNodeWrapper();
 			transformedNodes.add(transformedNode);
 			transformedNode.setType(existingNode.getType());
 			transformedNode.setLabel(existingNode.getDisplay());
+			transformedNode.setAuthTracer(existingNode.getAuthTracer());
 			transformedNode.setData(existingNode.getData());
+			transformedNode.deriveAuthTableId();
 
 			if (isEachNodeLazy) {
 				transformedNode.setLeaf(Boolean.FALSE);
@@ -866,7 +897,7 @@ public class BusinessRuleTreeServiceImpl
 			}
 			else {
 				// The flag isEachNodeLazy is overridden with false for each subsequent level
-				List<TreeNode> transformedChildren = transformToDeclaredTypes(existingNode.getChildren(), false);
+				List<TreeNodeWrapper> transformedChildren = transformToDeclaredTypes(existingNode.getChildren(), false);
 				transformedNode.getChildren().addAll(transformedChildren);
 
 				if (transformedChildren.isEmpty()) {
@@ -888,6 +919,123 @@ public class BusinessRuleTreeServiceImpl
 		node.setIcon(null);
 		node.setExpandedIcon(ICON_FOLDER_OPEN);
 		node.setCollapsedIcon(ICON_FOLDER_CLOSED);
+	}
+
+	private List<TreeNode> applyAuthorization(RestServiceParam param, List<TreeNodeWrapper> sourceTree)
+	{
+		Set<String> resources = new HashSet<>();
+		buildAuthResources(param, sourceTree, resources);
+
+		String authToken = param.getAuthToken();
+		Map<String, Boolean> authMap = securityService.evaluateAuthorization(authToken, resources, AuthorizationAction.UPDATE);
+		applyUpdateAuthorization(param, sourceTree, authMap);
+
+		List<TreeNode> nodes = new LinkedList<>();
+		for (TreeNode node : sourceTree)
+			nodes.add(node);
+
+		return nodes;
+	}
+
+	private void buildAuthResources(RestServiceParam param, List<? extends TreeNode> sourceTree, Set<String> resources)
+	{
+		for (TreeNode node : sourceTree) {
+			TreeNodeWrapper wrapper = (TreeNodeWrapper) node;
+
+			if (wrapper.isSecured()) {
+				String envId = param.getEnvId();
+				String companyCode = param.getCompanyCode();
+				String authTableId = wrapper.getAuthTableId();
+
+				String authResource = null;
+				if (StringUtils.hasText(authTableId))
+					authResource = securityService.buildTableUrl(envId, companyCode, authTableId);
+				else
+					authResource = securityService.buildCompanyUrl(envId, companyCode);
+
+				resources.add(authResource);
+			}
+
+			buildAuthResources(param, node.getChildren(), resources);
+		}
+	}
+
+	private void applyUpdateAuthorization(RestServiceParam param, List<? extends TreeNode> sourceTree, Map<String, Boolean> authMap)
+	{
+		String envId = param.getEnvId();
+		String companyCode = param.getCompanyCode();
+
+		for (TreeNode node : sourceTree) {
+			TreeNodeWrapper wrapper = (TreeNodeWrapper) node;
+
+			if (wrapper.isSecured()) {
+				String authTableId = wrapper.getAuthTableId();
+
+				String authResource = null;
+				if (StringUtils.hasText(authTableId))
+					authResource = securityService.buildTableUrl(envId, companyCode, authTableId);
+				else
+					authResource = securityService.buildCompanyUrl(envId, companyCode);
+
+				makeNodeUpdateable(node, authMap.get(authResource));
+			}
+
+			applyUpdateAuthorization(param, node.getChildren(), authMap);
+		}
+	}
+
+	private void makeNodeUpdateable(TreeNode node, Boolean isUpdateable)
+	{
+		TreeNodeData data = node.getData();
+		if (data == null) {
+			data = new TreeNodeData();
+			node.setData(data);
+		}
+
+		TreeNodeAttributes attributes = data.getAttributes();
+		if (attributes == null) {
+			attributes = new TreeNodeAttributes();
+			data.setAttributes(attributes);
+		}
+
+		if (isUpdateable == null)
+			isUpdateable = Boolean.FALSE;
+
+		attributes.setUpdateAllowed(isUpdateable);
+	}
+
+	private void disableNode(TreeNode node, boolean isDisabled)
+	{
+		TreeNodeData data = node.getData();
+		if (data == null) {
+			data = new TreeNodeData();
+			node.setData(data);
+		}
+
+		TreeNodeAttributes attributes = data.getAttributes();
+		if (attributes == null) {
+			attributes = new TreeNodeAttributes();
+			data.setAttributes(attributes);
+		}
+
+		attributes.setDisabled(Boolean.valueOf(isDisabled));
+	}
+
+	private void makeNodeUpdateable(TreeNode node, boolean updateAllowed)
+	{
+		TreeNodeData data = node.getData();
+		if (data == null) {
+			data = new TreeNodeData();
+			node.setData(data);
+		}
+
+		TreeNodeAttributes attributes = data.getAttributes();
+		if (attributes == null) {
+			attributes = new TreeNodeAttributes();
+			data.setAttributes(attributes);
+		}
+
+		attributes.setUpdateAllowed(Boolean.valueOf(updateAllowed));
 	}
 
 	static private class TreeNodeContainer

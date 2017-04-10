@@ -11,7 +11,7 @@ public class RestServiceParam
 	private String sourceEnvId = null;
 	private String targetEnvId = null;
 	private String companyCode = null;
-	private String tableDdlName = null;
+	private String tableId = null;
 
 	public RestServiceParam(String authToken)
 	{
@@ -42,12 +42,12 @@ public class RestServiceParam
 		this.companyCode = companyCode;
 	}
 
-	public RestServiceParam(String authToken, String envId, String companyCode, String tableDddlName)
+	public RestServiceParam(String authToken, String envId, String companyCode, String tableId)
 	{
 		this.authToken = authToken;
 		this.sourceEnvId = envId;
 		this.companyCode = companyCode;
-		this.tableDdlName = tableDddlName;
+		this.tableId = tableId;
 	}
 
 	public String getAuthToken()
@@ -75,8 +75,8 @@ public class RestServiceParam
 		return companyCode;
 	}
 
-	public String getTableDdlName()
+	public String getTableId()
 	{
-		return tableDdlName;
+		return tableId;
 	}
 }

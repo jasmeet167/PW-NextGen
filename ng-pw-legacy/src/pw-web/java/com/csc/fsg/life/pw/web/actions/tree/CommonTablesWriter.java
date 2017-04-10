@@ -91,9 +91,11 @@ public class CommonTablesWriter {
 			int tableAuth = -1;
 			if (type.equals("F")) {
 				
-				tableAuth = Constants.NODE_ATTR_INQUIRY;
+//				tableAuth = Constants.NODE_ATTR_INQUIRY;
 //				if (user.isPermitted(env, company, PolicyConstants.UPDATE))
-					tableAuth = Constants.NODE_ATTR_UPDATE;
+//					tableAuth = Constants.NODE_ATTR_UPDATE;
+
+				tableAuth = TreeAuthorizationTracer.COMMMON_TABLES_1;
 						
 				ctTree.append("999999\t").append(level).append("\t7\t").append(
 				        tableAuth).append("\t" + tableName + "\n");
@@ -101,9 +103,11 @@ public class CommonTablesWriter {
 				if (EnvironmentManager.getInstance().getEnvironment(env).getTableDescMgr().getDDLName(tableId) != null) {
 					if (rowCounter.get(tableName) != null) {
 						
-						tableAuth = Constants.NODE_ATTR_INQUIRY;
+//						tableAuth = Constants.NODE_ATTR_INQUIRY;
 //						if (user.isPermitted(env, company, tableId, PolicyConstants.UPDATE))
-							tableAuth = Constants.NODE_ATTR_UPDATE;
+//							tableAuth = Constants.NODE_ATTR_UPDATE;
+
+						tableAuth = TreeAuthorizationTracer.COMMMON_TABLES_2;
 						
 						ctTree.append("999999\t").append(level)
 						        .append("\t17\t").append(tableAuth)
@@ -120,9 +124,11 @@ public class CommonTablesWriter {
 				if (EnvironmentManager.getInstance().getEnvironment(env).getTableDescMgr().getDDLName(tableId) != null) {
 					if (rowCounter.get(tableName) != null) {
 						
-						tableAuth = Constants.NODE_ATTR_INQUIRY;
+//						tableAuth = Constants.NODE_ATTR_INQUIRY;
 //						if (user.isPermitted(env, company, tableId, PolicyConstants.UPDATE))
-							tableAuth = Constants.NODE_ATTR_UPDATE;
+//							tableAuth = Constants.NODE_ATTR_UPDATE;
+
+						tableAuth = TreeAuthorizationTracer.COMMMON_TABLES_3;
 						
 						ctTree.append("999999\t").append(level)
 						        .append("\t13\t").append(tableAuth)

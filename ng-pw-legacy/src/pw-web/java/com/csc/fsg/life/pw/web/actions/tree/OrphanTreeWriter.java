@@ -40,11 +40,17 @@ public class OrphanTreeWriter {
 		Environment environment = EnvironmentManager.getInstance().getEnvironment(env);
 		tableDescMgr = environment.getTableDescMgr();
 		
-		int tableAuth = Constants.NODE_ATTR_INQUIRY;
+//		int tableAuth = Constants.NODE_ATTR_INQUIRY;
 //		if (user.isPermitted(env, company,  PolicyConstants.UPDATE))
-			tableAuth = Constants.NODE_ATTR_UPDATE;
+//			tableAuth = Constants.NODE_ATTR_UPDATE;
+
+		int tableAuth = TreeAuthorizationTracer.ORPHAN_TREE_1;
 		
-		OrphanTreeCreator otc = new OrphanTreeCreator(environment,prefix,conn/*,task*/);
+//		treeStream.append("999999" + TAB + "3" + TAB + "16" + TAB).append(
+//				tableAuth).append(TAB).append("Orphan Subsets").append(TAB);
+//					treeStream.append(prefix+"*").append(NEW_LINE);
+				
+		OrphanTreeCreator otc = new OrphanTreeCreator(environment,prefix,conn);
 		Node node = otc.getOrphanTree(true);
 		TreeMap<String, ArrayList<Node>> nodesHash = groupOrphans(node);
 		node = null;
@@ -61,10 +67,12 @@ public class OrphanTreeWriter {
 			} else {
 				String tableName = AVManager.getTableName(env, ddlName).trim();
 				
-				tableAuth = Constants.NODE_ATTR_INQUIRY;
+//				tableAuth = Constants.NODE_ATTR_INQUIRY;
 //				if (user.isPermitted(env, company, tableId, PolicyConstants.UPDATE))
-					tableAuth = Constants.NODE_ATTR_UPDATE;
-				
+//					tableAuth = Constants.NODE_ATTR_UPDATE;
+
+				tableAuth = TreeAuthorizationTracer.ORPHAN_TREE_2;
+
 				treeStream.append("999999" + TAB + "4" + TAB + "26" + TAB).append(
 						tableAuth).append(TAB).append(tableName).append(TAB);
 						treeStream.append(company).append(TAB);
@@ -101,10 +109,12 @@ public class OrphanTreeWriter {
 	private void processNode(Node node, StringBuffer treeStream,int level,String parentNodeId) 
 			throws Exception{
 		
-		int tableAuth = Constants.NODE_ATTR_INQUIRY;
+//		int tableAuth = Constants.NODE_ATTR_INQUIRY;
 //		if (user.isPermitted(env, company, node.getNodeId(), PolicyConstants.UPDATE))
-			tableAuth = Constants.NODE_ATTR_UPDATE;
-		
+//			tableAuth = Constants.NODE_ATTR_UPDATE;
+
+		int tableAuth = TreeAuthorizationTracer.ORPHAN_TREE_3;
+
 		String ddlName = tableDescMgr.getDDLName(node.getNodeId());
 		String tableName = AVManager.getTableName(env, ddlName).trim();
 		

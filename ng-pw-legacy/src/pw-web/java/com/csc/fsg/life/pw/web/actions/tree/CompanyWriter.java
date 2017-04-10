@@ -37,12 +37,14 @@ public class CompanyWriter {
 		StringBuffer treeStream = new StringBuffer();
 
 		// WMABASEIXI-4515 - check for disabled
-		int tableAuth = Constants.NODE_ATTR_DISABLED;
+//		int tableAuth = Constants.NODE_ATTR_DISABLED;
 //		if (user.isPermitted(env, company, PolicyConstants.VIEW)) {
 //			tableAuth = Constants.NODE_ATTR_INQUIRY;
 //			if (user.isPermitted(env, company, PolicyConstants.UPDATE))
-				tableAuth = Constants.NODE_ATTR_UPDATE;
+//				tableAuth = Constants.NODE_ATTR_UPDATE;
 //		}
+
+		int tableAuth = TreeAuthorizationTracer.COMPANY_1;
 		
 		// Return the Company information only if not lazy-loading a branch in Business Rule Tree
 		if (lazyType == null) {
@@ -74,12 +76,14 @@ public class CompanyWriter {
 			al = installBean.getDefaultProductList();
 		}
 
-		tableAuth = Constants.NODE_ATTR_DISABLED;
+//		tableAuth = Constants.NODE_ATTR_DISABLED;
 //		if (user.isPermitted(env, company, PolicyConstants.VIEW)) {
 //			tableAuth = Constants.NODE_ATTR_INQUIRY;
 //			if (user.isPermitted(env, company, "00X", PolicyConstants.UPDATE))
-				tableAuth = Constants.NODE_ATTR_UPDATE;
+//				tableAuth = Constants.NODE_ATTR_UPDATE;
 //		}
+
+		tableAuth = TreeAuthorizationTracer.COMPANY_2;
 
 		ProductWriter pw = new ProductWriter(pm, im);
 

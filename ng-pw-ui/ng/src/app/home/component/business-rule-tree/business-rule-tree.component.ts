@@ -262,9 +262,17 @@ export class BusinessRuleTreeComponent implements OnInit {
   public onNodeCollapse(event: any) {
     this.clearTooltips();
     const node: TreeNode = event.node;
+    this.clearLazyChildren(node);
+  }
+
+  private clearLazyChildren(node: TreeNode) {
     const data: TreeNodeData = node.data;
     if (data && data.lazyNode) {
       node.children = <TreeNode[]> [];
+    } else if (node.children && node.children.length > 0) {
+      for (const child of node.children) {
+        this.clearLazyChildren(child);
+      }
     }
   }
 

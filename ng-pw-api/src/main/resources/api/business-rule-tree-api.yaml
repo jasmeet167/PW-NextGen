@@ -546,8 +546,6 @@ definitions:
     properties:
       disabled:
         type: boolean
-      inquiryAllowed:
-        type: boolean
       updateAllowed:
         type: boolean
 

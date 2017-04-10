@@ -20,7 +20,7 @@ public class ForbiddenException
 
 	public ForbiddenException(ErrorModel errorModel)
 	{
-		super(errorModel.getMessage());
+		super((errorModel == null) ? null : errorModel.getMessage());
 		this.errorModel = errorModel;
 	}
 
