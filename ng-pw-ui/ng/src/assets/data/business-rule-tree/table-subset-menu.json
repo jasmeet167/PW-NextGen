@@ -1,0 +1,30 @@
+[
+  {
+    "label": "Copy",
+    "icon": "fa-fw"
+  },
+  {
+    "label": "Paste",
+    "icon": "fa-fw"
+  },
+  {
+    "label": "Disassociate Subset",
+    "icon": "fa-fw"
+  },
+  {
+    "label": "Clone Subset",
+    "icon": "fa-fw"
+  },
+  {
+    "label": "Rename Subset",
+    "icon": "fa-fw"
+  },
+  {
+    "label": "Where {subset} Used",
+    "icon": "fa-fw"
+  },
+  {
+    "label": "Show Table ID and Subset",
+    "icon": "fa-fw"
+  }
+]

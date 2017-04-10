@@ -1,0 +1,30 @@
+[
+  {
+    "label": "Copy",
+    "icon": "fa-fw"
+  },
+  {
+    "label": "Paste",
+    "icon": "fa-fw"
+  },
+  {
+    "label": "Plan Summary",
+    "icon": "fa-fw"
+  },
+  {
+    "label": "Validate Plan",
+    "icon": "fa-fw"
+  },
+  {
+    "label": "Delete Plan",
+    "icon": "fa-fw"
+  },
+  {
+    "label": "Rename Plan",
+    "icon": "fa-fw"
+  },
+  {
+    "label": "Show Table ID and Subset",
+    "icon": "fa-fw"
+  }
+]

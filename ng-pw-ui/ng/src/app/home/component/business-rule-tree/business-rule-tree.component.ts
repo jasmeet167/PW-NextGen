@@ -10,6 +10,7 @@ import { MenuHelper } from 'app/util/menu.helper';
 
 import { TreeNodeType } from './model/tree-node-type';
 import { TreeNodeData } from './model/tree-node-data';
+import { TreeNodeAttributes } from './model/tree-node-attributes';
 import { TreeNodePlanKey } from './model/tree-node-plan-key';
 import { BusinessRuleTreeService } from './service/business-rule-tree.service';
 
@@ -32,21 +33,30 @@ export class BusinessRuleTreeComponent implements OnInit {
   @Input() public effDate: string;
   @Input() public includeOrphans: boolean;
 
-  private readonly NODE_LABEL_DETAILED = 0;
-  private readonly NODE_LABEL_STANDARD = 1;
-  private readonly NODE_DETAILED_LABEL = 'Show Table ID and Subset';
+  private readonly NODE_LABEL_PASTE = 'Paste';
+  private readonly NODE_LABEL_RENAME_PLAN = 'Delete Plan';
+  private readonly NODE_LABEL_DELETE_PLAN = 'Rename Plan';
+  private readonly NODE_LABEL_DISASSOCIATE_SUBSET = 'Disassociate Subset';
+  private readonly NODE_LABEL_CLONE_SUBSET = 'Clone Subset';
+  private readonly NODE_LABEL_RENAME_SUBSET = 'Rename Subset';
+
+  private readonly NODE_LABEL_TABLE_ID = 'Show Table ID and Subset';
+  private readonly NODE_LABEL_TABLE_ID_DETAILED = 0;
+  private readonly NODE_LABEL_TABLE_ID_STANDARD = 1;
 
   public businessRuleTree: TreeNode[];
   public selectedNode: TreeNode;
   public tooltips: Message[];
   public contextMenuModel: MenuItem[];
-  public nodeLabelType = this.NODE_LABEL_STANDARD;
+  public nodeLabelType = this.NODE_LABEL_TABLE_ID_STANDARD;
 
   private authToken: string;
 
-  private generalMenuModel: MenuItem[];
   private companyMenuModel: MenuItem[];
   private planFolderMenuModel: MenuItem[];
+  private planMenuModel: MenuItem[];
+  private tableSubsetMenuModel: MenuItem[];
+  private generalMenuModel: MenuItem[];
 
   private displayToggleMenuItems: MenuItem[];
 
@@ -70,19 +80,31 @@ export class BusinessRuleTreeComponent implements OnInit {
         .subscribe(
           res => this.companyMenuModel = res,
           err => this.notificationService.handleError(err),
-          ()  => menuHelper.injectCallback(this.companyMenuModel, this.NODE_DETAILED_LABEL, theDisplaySwitchCallback)
+          ()  => menuHelper.injectCallback(this.companyMenuModel, this.NODE_LABEL_TABLE_ID, theDisplaySwitchCallback)
         );
     this.menuService.getMenu('assets/data/business-rule-tree/plan-folder-menu.json')
         .subscribe(
           res => this.planFolderMenuModel = res,
           err => this.notificationService.handleError(err),
-          ()  => menuHelper.injectCallback(this.planFolderMenuModel, this.NODE_DETAILED_LABEL, theDisplaySwitchCallback)
+          ()  => menuHelper.injectCallback(this.planFolderMenuModel, this.NODE_LABEL_TABLE_ID, theDisplaySwitchCallback)
+        );
+    this.menuService.getMenu('assets/data/business-rule-tree/plan-menu.json')
+        .subscribe(
+          res => this.planMenuModel = res,
+          err => this.notificationService.handleError(err),
+          ()  => menuHelper.injectCallback(this.planMenuModel, this.NODE_LABEL_TABLE_ID, theDisplaySwitchCallback)
+        );
+    this.menuService.getMenu('assets/data/business-rule-tree/table-subset-menu.json')
+        .subscribe(
+          res => this.tableSubsetMenuModel = res,
+          err => this.notificationService.handleError(err),
+          ()  => menuHelper.injectCallback(this.tableSubsetMenuModel, this.NODE_LABEL_TABLE_ID, theDisplaySwitchCallback)
         );
     this.menuService.getMenu('assets/data/business-rule-tree/general-menu.json')
         .subscribe(
           res => this.generalMenuModel = res,
           err => this.notificationService.handleError(err),
-          ()  => menuHelper.injectCallback(this.generalMenuModel, this.NODE_DETAILED_LABEL, theDisplaySwitchCallback)
+          ()  => menuHelper.injectCallback(this.generalMenuModel, this.NODE_LABEL_TABLE_ID, theDisplaySwitchCallback)
         );
   }
 
@@ -94,7 +116,7 @@ export class BusinessRuleTreeComponent implements OnInit {
 
     this.clearTooltips();
     this.businessRuleTree = null;
-    this.nodeLabelType = this.NODE_LABEL_STANDARD;
+    this.nodeLabelType = this.NODE_LABEL_TABLE_ID_STANDARD;
 
     this.notificationService.showWaitIndicator(true);
     this.businessRuleTreeService
@@ -173,8 +195,8 @@ export class BusinessRuleTreeComponent implements OnInit {
               if (!node.children || node.children.length === 0) {
                 node.leaf = true;
               }
-              if (this.nodeLabelType === this.NODE_LABEL_DETAILED) {
-                this.changeNodeLabelType(node.children, this.NODE_LABEL_DETAILED);
+              if (this.nodeLabelType === this.NODE_LABEL_TABLE_ID_DETAILED) {
+                this.changeNodeLabelType(node.children, this.NODE_LABEL_TABLE_ID_DETAILED);
               }
             }
         );
@@ -200,8 +222,8 @@ export class BusinessRuleTreeComponent implements OnInit {
               if (!node.children || node.children.length === 0) {
                 node.leaf = true;
               }
-              if (this.nodeLabelType === this.NODE_LABEL_DETAILED) {
-                this.changeNodeLabelType(node.children, this.NODE_LABEL_DETAILED);
+              if (this.nodeLabelType === this.NODE_LABEL_TABLE_ID_DETAILED) {
+                this.changeNodeLabelType(node.children, this.NODE_LABEL_TABLE_ID_DETAILED);
               }
           }
         );
@@ -225,8 +247,8 @@ export class BusinessRuleTreeComponent implements OnInit {
               if (!node.children || node.children.length === 0) {
                 node.leaf = true;
               }
-              if (this.nodeLabelType === this.NODE_LABEL_DETAILED) {
-                this.changeNodeLabelType(node.children, this.NODE_LABEL_DETAILED);
+              if (this.nodeLabelType === this.NODE_LABEL_TABLE_ID_DETAILED) {
+                this.changeNodeLabelType(node.children, this.NODE_LABEL_TABLE_ID_DETAILED);
               }
           }
         );
@@ -252,8 +274,8 @@ export class BusinessRuleTreeComponent implements OnInit {
               if (!node.children || node.children.length === 0) {
                 node.leaf = true;
               }
-              if (this.nodeLabelType === this.NODE_LABEL_DETAILED) {
-                this.changeNodeLabelType(node.children, this.NODE_LABEL_DETAILED);
+              if (this.nodeLabelType === this.NODE_LABEL_TABLE_ID_DETAILED) {
+                this.changeNodeLabelType(node.children, this.NODE_LABEL_TABLE_ID_DETAILED);
               }
           }
         );
@@ -286,6 +308,13 @@ export class BusinessRuleTreeComponent implements OnInit {
     const node: TreeNode = event.node;
     this.showTooltip(node);
 
+    let isUpdateAllowed = true;
+    const data: TreeNodeData  = node.data;
+    if (data) {
+      const attributes: TreeNodeAttributes = data.attributes;
+      isUpdateAllowed = attributes.updateAllowed;
+    }
+
     switch (node.type) {
         case TreeNodeType.TypeEnum.C.toString():    // COMPANY
              this.contextMenuModel = this.companyMenuModel;
@@ -296,11 +325,30 @@ export class BusinessRuleTreeComponent implements OnInit {
         case TreeNodeType.TypeEnum.PPF.toString():  // PAYOUTPLAN_FOLDER
         case TreeNodeType.TypeEnum.RF.toString():   // RIDER_FOLDER
              this.contextMenuModel = this.generalMenuModel;
+             new MenuHelper().disable(this.generalMenuModel, [
+                 this.NODE_LABEL_PASTE], !isUpdateAllowed);
              break;
         case TreeNodeType.TypeEnum.AF.toString():   // ANNUITIY_FOLDER
         case TreeNodeType.TypeEnum.UF.toString():   // UNIV_LIFE_FOLDER
         case TreeNodeType.TypeEnum.TF.toString():   // TRADITIONAL_FOLDER
              this.contextMenuModel = this.planFolderMenuModel;
+             break;
+        case TreeNodeType.TypeEnum.P.toString():    // PLAN
+        case TreeNodeType.TypeEnum.R.toString():    // RIDER
+        case TreeNodeType.TypeEnum.PP.toString():   // PAYOUT_PLAN
+             this.contextMenuModel = this.planMenuModel;
+             new MenuHelper().disable(this.planMenuModel, [
+                 this.NODE_LABEL_PASTE,
+                 this.NODE_LABEL_RENAME_PLAN,
+                 this.NODE_LABEL_DELETE_PLAN ], !isUpdateAllowed);
+             break;
+        case TreeNodeType.TypeEnum.TS.toString():   // TABLE_SUBSET
+             this.contextMenuModel = this.tableSubsetMenuModel;
+             new MenuHelper().disable(this.tableSubsetMenuModel, [
+                 this.NODE_LABEL_PASTE,
+                 this.NODE_LABEL_DISASSOCIATE_SUBSET,
+                 this.NODE_LABEL_CLONE_SUBSET,
+                 this.NODE_LABEL_RENAME_SUBSET ], !isUpdateAllowed);
              break;
         default:
              this.contextMenuModel = null;
@@ -419,27 +467,29 @@ export class BusinessRuleTreeComponent implements OnInit {
   }
 
   private toggleNodeDisplayType() {
-    if (this.nodeLabelType === this.NODE_LABEL_STANDARD) {
-      this.nodeLabelType = this.NODE_LABEL_DETAILED;
+    if (this.nodeLabelType === this.NODE_LABEL_TABLE_ID_STANDARD) {
+      this.nodeLabelType = this.NODE_LABEL_TABLE_ID_DETAILED;
       this.changeMenuIcon('fa-check');
-      this.changeNodeLabelType(this.businessRuleTree, this.NODE_LABEL_DETAILED);
+      this.changeNodeLabelType(this.businessRuleTree, this.NODE_LABEL_TABLE_ID_DETAILED);
     } else {
-      this.nodeLabelType = this.NODE_LABEL_STANDARD;
+      this.nodeLabelType = this.NODE_LABEL_TABLE_ID_STANDARD;
       this.changeMenuIcon('fa-fw');
-      this.changeNodeLabelType(this.businessRuleTree, this.NODE_LABEL_STANDARD);
+      this.changeNodeLabelType(this.businessRuleTree, this.NODE_LABEL_TABLE_ID_STANDARD);
     }
   }
 
   private changeMenuIcon(icon: string) {
     const helper: MenuHelper = new MenuHelper();
-    helper.setIcon(this.generalMenuModel, this.NODE_DETAILED_LABEL, icon);
-    helper.setIcon(this.companyMenuModel, this.NODE_DETAILED_LABEL, icon);
-    helper.setIcon(this.planFolderMenuModel, this.NODE_DETAILED_LABEL, icon);
+    helper.setIcon(this.companyMenuModel, this.NODE_LABEL_TABLE_ID, icon);
+    helper.setIcon(this.planFolderMenuModel, this.NODE_LABEL_TABLE_ID, icon);
+    helper.setIcon(this.planMenuModel, this.NODE_LABEL_TABLE_ID, icon);
+    helper.setIcon(this.tableSubsetMenuModel, this.NODE_LABEL_TABLE_ID, icon);
+    helper.setIcon(this.generalMenuModel, this.NODE_LABEL_TABLE_ID, icon);
   }
 
   private changeNodeLabelType(treeNodes: TreeNode[], newType: number) {
     for (const treeNode of treeNodes) {
-      if (newType === this.NODE_LABEL_DETAILED) {
+      if (newType === this.NODE_LABEL_TABLE_ID_DETAILED) {
         this.buildDetailedLabel(treeNode);
       } else {
         this.buildStandardLabel(treeNode);

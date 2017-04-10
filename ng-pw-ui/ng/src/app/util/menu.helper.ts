@@ -16,7 +16,7 @@ export class MenuHelper {
    * @param callback The callback function to be used for handling
    *        of events from the selected menu item
    */
-  injectCallback(menuModel: MenuItem[], itemLabel: string, callback: (event: any) => void) {
+  public injectCallback(menuModel: MenuItem[], itemLabel: string, callback: (event: any) => void) {
     const menuItem: MenuItem = this.getMenuItem(menuModel, itemLabel);
     if (menuItem) {
       menuItem.command = callback;
@@ -33,17 +33,36 @@ export class MenuHelper {
    * @param icon Icon, which should be displayed in the menu item.
    *        If a null value is provided, the icon will be cleared.
    */
-  setIcon(menuModel: MenuItem[], itemLabel: string, icon: string) {
+  public setIcon(menuModel: MenuItem[], itemLabel: string, icon: string) {
     const menuItem: MenuItem = this.getMenuItem(menuModel, itemLabel);
     if (menuItem) {
       menuItem.icon = icon;
     }
   }
 
-  private getMenuItem(menuItems: MenuItem[], label: string): MenuItem {
-    if (menuItems) {
-      for (const menuItem of menuItems) {
-        const foundItem: MenuItem = this.getMenuItemFromTree(menuItem, label);
+  /**
+   * This method is used to set value of the property 'disabled'
+   * of each menu item with a label matching one of elements
+   * in the argument 'labels', to value of the argument 'isDisabled'.
+   *
+   * @param menuModel Data model corresponding to the menu component
+   * @param labels Labels used to identify menu items, to which
+   *        the argument 'isDisabled' is to be applied.
+   * @param isDisabled Value indicating whether the menu items are
+   *        to be enabled or disabled.
+   */
+  public disable(menuModel: MenuItem[], labels: string[], isDisabled: boolean) {
+    const foundItems: MenuItem[] = [];
+    this.getMenuItemsFromModel(foundItems, menuModel, labels);
+    for (const menuItem of foundItems) {
+      menuItem.disabled = isDisabled;
+    }
+  }
+
+  private getMenuItem(menuModel: MenuItem[], label: string): MenuItem {
+    if (menuModel) {
+      for (const menuItem of menuModel) {
+        const foundItem: MenuItem = this.getMenuItemFromModel(menuItem, label);
         if (foundItem) {
           return foundItem;
         }
@@ -52,7 +71,7 @@ export class MenuHelper {
     return null;
   }
 
-  private getMenuItemFromTree(root: MenuItem, label: string): MenuItem {
+  private getMenuItemFromModel(root: MenuItem, label: string): MenuItem {
     if (root) {
       if (root.label === label) {
         return root;
@@ -61,12 +80,35 @@ export class MenuHelper {
         return null;
       }
       for (const menuItem of root.items) {
-        const item = this.getMenuItemFromTree(menuItem, label);
+        const item = this.getMenuItemFromModel(menuItem, label);
         if (item) {
           return item;
         }
       }
     }
     return null;
+  }
+
+  private getMenuItemsFromModel(foundItems: MenuItem[], menuModel: MenuItem[], labels: string[]) {
+    if (menuModel) {
+      for (const menuItem of menuModel) {
+        if (this.isInArray(menuItem.label, labels)) {
+          foundItems.push(menuItem);
+        }
+        const children: MenuItem[] = menuItem.items;
+        if (children) {
+            this.getMenuItemsFromModel(foundItems, children, labels);
+        }
+      }
+    }
+  }
+
+  private isInArray(element: string, array: string[]): boolean {
+    for (const arrayElement of array) {
+      if (element === arrayElement) {
+        return true;
+      }
+    }
+    return false;
   }
 }
