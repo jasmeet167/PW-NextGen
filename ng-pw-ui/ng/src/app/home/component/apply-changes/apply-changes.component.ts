@@ -148,7 +148,7 @@ export class ApplyChangesComponent implements OnInit {
     this.filterPackageOutputRows = <SelectItem[]>[];
     this.isEnterPackageDisabled = true;
     this.isGoDisabled = true;
-    this.isResetDisabled =true;
+    this.isResetDisabled = true;
   }
 
 }
