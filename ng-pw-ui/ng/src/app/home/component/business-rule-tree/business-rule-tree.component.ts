@@ -271,6 +271,7 @@ export class BusinessRuleTreeComponent implements OnInit {
       node.children = <TreeNode[]> [];
     } else if (node.children && node.children.length > 0) {
       for (const child of node.children) {
+        setTimeout(() => { child.expanded = false; }, 1);
         this.clearLazyChildren(child);
       }
     }

@@ -79,8 +79,13 @@ public class SearchServiceImpl
 
 			String authToken = param.getAuthToken();
 			List<SelectItem> response = securityService.filterAuthorizedEnvironments(authToken, envList);
-			if (response.isEmpty())
-				throw new ForbiddenException();
+			if (response.isEmpty()) {
+				if (response.isEmpty()) {
+					HttpStatus status = ForbiddenException.HTTP_STATUS;
+					ErrorModel model = errorModelFactory.newErrorModel(status, getMessage("no_env_auth"));
+					throw new ForbiddenException(model);
+				}
+			}
 
 			return response;
 		}
@@ -162,8 +167,11 @@ public class SearchServiceImpl
 			if (isCompanyCodesSearch) {
 				String authToken = param.getAuthToken();
 				List<SelectItem> response = securityService.filterAuthorizedCompanies(authToken, envId, commonValues);
-				if (response.isEmpty())
-					throw new ForbiddenException();
+				if (response.isEmpty()) {
+					HttpStatus status = ForbiddenException.HTTP_STATUS;
+					ErrorModel model = errorModelFactory.newErrorModel(status, getMessage("no_company_auth"));
+					throw new ForbiddenException(model);
+				}
 
 				return response;
 			}

@@ -163,6 +163,8 @@ paths:
           description: |
             Forbidden.  The user is not authorized to access
             any of the configured environments.
+          schema:
+            $ref: '#/definitions/errorModel'
         404:
           description: |
             Not Found.  No configured environments have been found.
@@ -226,6 +228,8 @@ paths:
           description: |
             Forbidden.  The user is not authorized to access
             the required resources.
+          schema:
+            $ref: '#/definitions/errorModel'
         404:
           description: |
             Not Found.  No data found matching the provided key values.
