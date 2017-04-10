@@ -3,7 +3,7 @@ import { Http, Response, Headers, RequestOptions, RequestMethod, Request } from 
 import { Observable } from 'rxjs/Observable';
 import { SelectItem } from 'primeng/primeng';
 
-import { ChangeOnlyTabMsg } from '../component/changes-only/model/changeonly.message';
+import { ChangesFilterData } from '../component/changes-only/model/changes-filter-data';
 import { ApplyFilterData } from 'app/home/component/apply-changes/model/apply-filter-data';
 import { PromoteFilterData } from 'app/home/component/promote/model/promote-filter-data';
 
@@ -191,7 +191,7 @@ export class FilterService {
                .map(response => { return <SelectItem[]> response.json(); });
   }
 
-  getChangesWipDetails(authToken: string, envId: string): Observable<ChangeOnlyTabMsg> {
+  getChangesWipDetails(authToken: string, envId: string): Observable<ChangesFilterData> {
     const filterHeaders: Headers = new Headers();
     filterHeaders.append('Accept', 'application/json');
     filterHeaders.append('authToken', authToken);
@@ -203,7 +203,7 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-               .map(response => { return <ChangeOnlyTabMsg> response.json(); });
+               .map(response => { return <ChangesFilterData> response.json(); });
   }
 
   getEnvOptions(authToken: string): Observable<SelectItem[]> {
