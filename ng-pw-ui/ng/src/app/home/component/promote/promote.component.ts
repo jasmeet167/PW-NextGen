@@ -26,6 +26,7 @@ export class PromoteComponent implements OnInit {
   public isEnterPackageDisabled: boolean;
 
   public isGoDisabled: boolean;
+  public isResetDisabled: boolean;
 
   private authToken: string;
 
@@ -49,6 +50,8 @@ export class PromoteComponent implements OnInit {
 
     this.isTargetEnvDisabled = true;
     this.isEnterPackageDisabled = true;
+
+     this.isResetDisabled = true;
 
     this.notificationService.showWaitIndicator(true);
     this.filterService.getEnvOptions(this.authToken)
@@ -97,8 +100,10 @@ export class PromoteComponent implements OnInit {
     this.isEnterPackageDisabled = true;
     if (this.filterSourceEnv == null) {
       this.isTargetEnvDisabled = true;
+      this.isResetDisabled = true;
     } else {
       this.isTargetEnvDisabled = false;
+      this.isResetDisabled = false;
       let envOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
       this.filterService.getEnvOptions(this.authToken)
@@ -196,6 +201,7 @@ export class PromoteComponent implements OnInit {
     this.filterPackageOutputRows = <SelectItem[]>[];
     this.isTargetEnvDisabled = true;
     this.isEnterPackageDisabled = true;
+    this.isResetDisabled = true;
   }
 
 }

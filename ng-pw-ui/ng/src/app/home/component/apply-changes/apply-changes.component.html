@@ -47,7 +47,7 @@
     </td>
     <td style="float: right;">
       <button pButton type="button" label="Go" [disabled]="isGoDisabled"></button>
-      <button pButton type="button" label="Reset" (click)="onResetClick()"></button>
+      <button pButton type="button" label="Reset" [disabled]="isResetDisabled" (click)="onResetClick()"></button>
     </td>
   </tr>
 </table>

@@ -22,6 +22,7 @@ export class ApplyChangesComponent implements OnInit {
 
   public isEnterPackageDisabled: boolean;
   public isGoDisabled: boolean;
+  public isResetDisabled: boolean;
 
   private authToken: string;
 
@@ -36,7 +37,7 @@ export class ApplyChangesComponent implements OnInit {
     }
     let envOptions: SelectItem[];
     this.isEnterPackageDisabled = true;
-
+    this.isResetDisabled = true;
     this.filterPackageInputRows = <SelectItem[]>[];
     this.filterPackageOutputRows = <SelectItem[]>[];
     this.filterProjectInputRows = <SelectItem[]>[];
@@ -102,6 +103,7 @@ export class ApplyChangesComponent implements OnInit {
       this.isEnterPackageDisabled = true;
       this.filterProjectInputRows = <SelectItem[]>[];
       this.filterPackageInputRows = <SelectItem[]>[];
+      this.isResetDisabled = true;
     }
     this.evaluateStatusOfGo();
   }
@@ -109,6 +111,13 @@ export class ApplyChangesComponent implements OnInit {
   private buildApplyChangesDetails(applyChangesTabMsg: ApplyFilterData) {
     this.filterProjectInputRows = <SelectItem[]>[];
     this.filterPackageInputRows = <SelectItem[]>[];
+    if (applyChangesTabMsg != null) {
+      this.isGoDisabled = false;
+      this.isResetDisabled = false;
+    } else {
+      this.isGoDisabled = true;
+      this.isResetDisabled = true;
+    }
     if (applyChangesTabMsg.packages !== null) {
       for (const packagesTab of applyChangesTabMsg.packages) {
         this.filterPackageInputRows.push(packagesTab);
@@ -139,6 +148,7 @@ export class ApplyChangesComponent implements OnInit {
     this.filterPackageOutputRows = <SelectItem[]>[];
     this.isEnterPackageDisabled = true;
     this.isGoDisabled = true;
+    this.isResetDisabled =true;
   }
 
 }

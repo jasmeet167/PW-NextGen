@@ -161,5 +161,7 @@ export class ChangesOnlyComponent implements OnInit {
     this.filterBussRulesOutputRows = <SelectItem[]>[];
     this.filterUserIdOutputRows = <SelectItem[]>[];
     this.filterUserIdInputRows = <SelectItem[]>[];
+    this.isGoDisabled = true;
+    this.isResetDisabled = true;
   }
 }
