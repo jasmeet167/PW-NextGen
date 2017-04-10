@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
-
 import { SelectItem } from 'primeng/primeng';
 
 import { NotificationService } from 'app/notification/service/notification.service';
@@ -8,13 +7,13 @@ import { FilterService } from 'app/home/service/filter.service';
 
 @Component({
   selector: 'app-entire-table-view',
-  templateUrl: './entire-table-view.component.html' ,
+  templateUrl: './entire-table-view.component.html',
   styleUrls: ['./entire-table-view.component.css']
 
 })
-export class EntireTableViewComponent implements  OnInit{
+export class EntireTableViewComponent implements OnInit {
 
- public filterChangesOptions: SelectItem[];
+  public filterChangesOptions: SelectItem[];
   public filterChanges: boolean;
 
   public filterEnvOptions: SelectItem[];
@@ -30,6 +29,7 @@ export class EntireTableViewComponent implements  OnInit{
   public filterTables: string[];
 
   public filterRememberSelections: boolean;
+  public isGoDisabled: boolean;
 
   constructor(private filterService: FilterService, private notificationService: NotificationService) {
     this.authToken = sessionStorage['authToken'];
@@ -42,39 +42,38 @@ export class EntireTableViewComponent implements  OnInit{
     }
 
     this.filterChangesOptions = [];
-    this.filterChangesOptions.push({label: 'Rules with Changes', value: true});
-    this.filterChangesOptions.push({label: 'Rules', value: false});
+    this.filterChangesOptions.push({ label: 'Rules with Changes', value: true });
+    this.filterChangesOptions.push({ label: 'Rules', value: false });
     this.filterChanges = true;
 
     let envOptions: SelectItem[];
     this.notificationService.showWaitIndicator(true);
 
-     this.filterService.getCommonEnvOptions(this.authToken)
-        .subscribe(
-          res => envOptions = res,
-          err => {
-              if (err.status !== 404) {
-                this.notificationService.handleError(err);
-              }
-              this.buildEnvDropdown(null);
-              this.notificationService.showWaitIndicator(false);
-          },
-          ()  => {
-              this.buildEnvDropdown(envOptions);
-              this.notificationService.showWaitIndicator(false);
-          }
-        );
+    this.filterService.getCommonEnvOptions(this.authToken)
+      .subscribe(
+      res => envOptions = res,
+      err => {
+        if (err.status !== 404) {
+          this.notificationService.handleError(err);
+        }
+        this.buildEnvDropdown(null);
+        this.notificationService.showWaitIndicator(false);
+      },
+      () => {
+        this.buildEnvDropdown(envOptions);
+        this.notificationService.showWaitIndicator(false);
+      }
+      );
+    this.filterCompanyDisabled = true;
+    this.buildCompanyDropdown(null);
+    this.filterRememberSelections = true;
+    this.filterTableRows = <SelectItem[]>[];
 
-          this.filterCompanyDisabled = true;
-          this.buildCompanyDropdown(null);
-          this.filterRememberSelections = false;
-           this.filterTableRows = <SelectItem[]> [];
-            this.filterTables = <string[]> [];
+    this.evaluateStatusOfGo();
+  }
 
-}
-
-    private buildEnvDropdown (options: SelectItem[]) {
-    this.filterEnvOptions = <SelectItem[]> [{label: 'Environment', value: null}];
+  private buildEnvDropdown(options: SelectItem[]) {
+    this.filterEnvOptions = <SelectItem[]>[{ label: 'Environment', value: null }];
     if (options !== null) {
       for (const option of options) {
         this.filterEnvOptions.push(option);
@@ -83,7 +82,7 @@ export class EntireTableViewComponent implements  OnInit{
   }
 
   private buildCompanyDropdown(options: SelectItem[]) {
-    this.filterCompanyOptions = <SelectItem[]> [{label: 'Company', value: null}];
+    this.filterCompanyOptions = <SelectItem[]>[{ label: 'Company', value: null }];
     if (options !== null) {
       for (const option of options) {
         this.filterCompanyOptions.push(option);
@@ -91,10 +90,15 @@ export class EntireTableViewComponent implements  OnInit{
     }
   }
 
- onEnvChange() {
+  onChangesChange() {
+    this.filterEnv = null;
     this.filterCompany = null;
+    this.filterTableRows = <SelectItem[]>[];
+  }
 
-
+  onEnvChange() {
+    this.filterCompany = null;
+    this.filterTableRows = <SelectItem[]>[];
     if (this.filterEnv == null) {
       this.filterCompanyDisabled = true;
     } else {
@@ -103,69 +107,68 @@ export class EntireTableViewComponent implements  OnInit{
       let companyOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
       this.filterService.getPlanCompanyOptions(this.authToken, this.filterChanges, this.filterEnv)
-          .subscribe(
-            res => companyOptions = res,
-            err => {
-                if (err.status !== 404) {
-                  this.notificationService.handleError(err);
-                }
-                this.buildCompanyDropdown(null);
-                 this.notificationService.showWaitIndicator(false);
-            },
-            ()  =>
-            {
-              this.buildCompanyDropdown(companyOptions);
-               this.notificationService.showWaitIndicator(false);
-            }
-          );
-
-
+        .subscribe(
+        res => companyOptions = res,
+        err => {
+          if (err.status !== 404) {
+            this.notificationService.handleError(err);
+          }
+          this.buildCompanyDropdown(null);
+          this.notificationService.showWaitIndicator(false);
+        },
+        () => {
+          this.buildCompanyDropdown(companyOptions);
+          this.notificationService.showWaitIndicator(false);
+        }
+        );
     }
+    this.evaluateStatusOfGo();
   }
 
-onCompanyChange(){
-let tableRowsOptions: SelectItem[];
-this.notificationService.showWaitIndicator(true);
+  onCompanyChange() {
+    this.filterTableRows = <SelectItem[]>[];
+    let tableRowsOptions: SelectItem[];
+    this.notificationService.showWaitIndicator(true);
+    this.filterService.getPlanTableOptions(this.authToken, this.filterEnv, this.filterCompany)
+      .subscribe(
+      res => tableRowsOptions = res,
+      err => {
+        if (err.status !== 404) {
+          this.notificationService.handleError(err);
+        }
+        this.notificationService.showWaitIndicator(false);
+      },
+      () => {
+        this.buildTableRows(tableRowsOptions);
+        this.notificationService.showWaitIndicator(false);
+      }
+      );
+    this.evaluateStatusOfGo();
+  }
 
-     this.filterService.getPlanTableOptions(this.authToken, this.filterEnv,this.filterCompany)
-          .subscribe(
-            res => tableRowsOptions = res,
-            err => {
-                if (err.status !== 404) {
-                  this.notificationService.handleError(err);
-                }
-               // this.buildTableRows(null);
-                this.notificationService.showWaitIndicator(false);
-            },
-            ()  => {
-                this.buildTableRows(tableRowsOptions);
-                this.notificationService.showWaitIndicator(false);
-            }
-          );
-
-
-
-}
-
-buildTableRows(tableRowsOptions:SelectItem[])
-{   if (tableRowsOptions == null) {
-      this.filterTableRows = <SelectItem[]> [];
-      this.filterTables = <string[]> [];
+  buildTableRows(tableRowsOptions: SelectItem[]) {
+    if (tableRowsOptions == null) {
+      this.filterTableRows = <SelectItem[]>[];
+      this.filterTables = <string[]>[];
     }
-    if(tableRowsOptions!=null)
-     {
-
+    if (tableRowsOptions != null) {
       for (const row of tableRowsOptions) {
         this.filterTableRows.push(row);
       }
-      this.filterTables = <string[]> [null];
+      this.filterTables = <string[]>[null];
     }
+  }
 
-}
-onGoClick()
-{
-  console.log("Go functionality currently not available ");
-}
+  private evaluateStatusOfGo() {
+    if (this.filterCompany && this.filterCompany.trim() !== '') {
+      this.isGoDisabled = false;
+    } else {
+      this.isGoDisabled = true;
+    }
+  }
 
+  onGoClick() {
+    console.log('Go functionality currently not available');
+  }
 
 }

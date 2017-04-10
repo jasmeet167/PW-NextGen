@@ -1,23 +1,25 @@
-<ul>
-  <li>
-    <p-dropdown [options]="filterChangesOptions" [(ngModel)]="filterChanges" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
-  </li>
-  <li>
-    <p-dropdown [options]="filterEnvOptions" [(ngModel)]="filterEnv" (onChange)="onEnvChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
-  </li>
-  <li>
-    <p-dropdown [options]="filterCompanyOptions" [(ngModel)]="filterCompany" [disabled]="filterCompanyDisabled" (onChange)="onCompanyChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
-  </li>
-    <li>
-    <p-listbox  [options]="filterTableRows" [(ngModel)]="filterTables" [multiple]="true" [style]="{'width':'350px','height':'150px','margin-bottom':'15px'}"></p-listbox>
-  </li>
-
-
-  <li>
-    <p-checkbox [(ngModel)]="filterRememberSelections" binary="true" label="Remember my selections"></p-checkbox>
-  </li>
-  <li class="li-extra-space">
-    <button pButton type="button" (click)="onGoClick()" label="Go"></button>
-  </li>
-  
-</ul>
+<table>
+  <tr>
+    <td valign="top" width="360px" height="600px">
+      <ul>
+        <li>
+          <p-dropdown [options]="filterChangesOptions" [(ngModel)]="filterChanges" (onChange)="onChangesChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="filterEnvOptions" [(ngModel)]="filterEnv" (onChange)="onEnvChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-dropdown [options]="filterCompanyOptions" [(ngModel)]="filterCompany" [disabled]="filterCompanyDisabled" (onChange)="onCompanyChange()"
+            [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+        </li>
+        <li>
+          <p-listbox [options]="filterTableRows" [(ngModel)]="filterTables" [multiple]="true" [style]="{'width':'350px','height':'150px','margin-bottom':'15px'}"></p-listbox>
+        </li>
+        <li style="margin-top: 20px">
+          <p-checkbox [(ngModel)]="filterRememberSelections" binary="true" label="Remember my selections"></p-checkbox>
+          <button pButton type="button" [disabled]="isGoDisabled" label="Go" style="margin-left: 35px"></button>
+        </li>
+      </ul>
+    </td>
+  </tr>
+</table>
