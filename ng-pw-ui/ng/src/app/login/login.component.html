@@ -1,31 +1,31 @@
 <p-panel header="Log in to Product Wizard">
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm.value)">
     <div style="margin-left: 40px; margin-top: 30px; margin-bottom: 30px;">
-      <table>
-        <tr>
-          <td>
+      <div style="display: table;">
+        <div style="display: table-row;">
+          <div style="display: table-cell;">
             <span>User Name:&#xa0;</span>
-          </td>
-          <td>
+          </div>
+          <div style="display: table-cell;">
             <input pInputText type="text" formControlName="userName" placeholder="Required"/>
-          </td>
-        </tr>
-        <tr>
-          <td style="padding-top: 5px">
+          </div>
+        </div>
+        <div style="display: table-row;">
+          <div style="display: table-cell; padding-top: 5px;">
             <span>Password:&#xa0;</span>
-          </td>
-          <td style="padding-top: 5px">
+          </div>
+          <div style="display: table-cell; padding-top: 5px;">
              <input pInputText type="password" formControlName="password" placeholder="Required"/>
-          </td>
-        </tr>
-        <tr>
-          <td>
-          </td>
-          <td style="padding-top: 20px">
+          </div>
+        </div>
+        <div style="display: table-row;">
+          <div style="display: table-cell;">
+          </div>
+          <div style="display: table-cell; padding-top: 20px;">
             <button pButton type="submit" label="Log in" [disabled]="!loginForm.valid"></button>
-          </td>
-        </tr>
-      </table>
+          </div>
+        </div>
+      </div>
     </div>
   </form>
 </p-panel>
