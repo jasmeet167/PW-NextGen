@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { OnInit } from '@angular/core';
 
 import { NotificationService } from 'app/notification/service/notification.service';
 
@@ -7,14 +8,14 @@ import { NotificationService } from 'app/notification/service/notification.servi
   templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit {
-  public waitBoxVisibility = 'hidden';
+  public isWaitBoxVisible = true;
 
   constructor(private notificationService: NotificationService) {
   }
 
   ngOnInit() {
     this.notificationService.initWaitControl((isWaitVisible: boolean) => {
-      this.waitBoxVisibility = isWaitVisible ? 'visible' : 'hidden';
+      this.isWaitBoxVisible = isWaitVisible;
     });
   }
 }

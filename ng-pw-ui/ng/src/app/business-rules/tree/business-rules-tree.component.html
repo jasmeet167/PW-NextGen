@@ -1,0 +1,11 @@
+<p-growl [value]="tooltips" [style]="{'width':'450px'}" sticky="sticky"></p-growl>
+<p-contextMenu #treeContextMenu [model]="contextMenuModel" [style]="{'width':'280px'}"></p-contextMenu>
+
+<p-tree [value]="businessRulesTree"
+        [contextMenu]="treeContextMenu"
+        (onNodeExpand)="onNodeExpand($event)"
+        (onNodeCollapse)="onNodeCollapse($event)"
+        [(selection)]="selectedNode" selectionMode="single"
+        (onNodeSelect)="onNodeSelect($event)"
+        (onNodeContextMenuSelect)="onNodeContextMenuSelect($event)"
+        [style]="{'border':'none','width':'inherit','max-width':'inherit'}"></p-tree>

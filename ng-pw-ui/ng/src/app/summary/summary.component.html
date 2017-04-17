@@ -1,0 +1,93 @@
+<div class="ui-widget ui-widget-content ui-corner-all" style="padding: 0.75em">
+  <table>
+    <tr>
+      <td valign="top">
+        <ul>
+          <li>
+            <p-dropdown [options]="envIdOptions" [(ngModel)]="envId" (onChange)="onEnvIdChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+          </li>
+          <li>
+            <p-dropdown [options]="companyCodeOptions" [(ngModel)]="companyCode" [disabled]="isCompanyCodeDisabled" (onChange)="onCompanyCodeChange()"
+              [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+          </li>
+          <li>
+            <p-dropdown [options]="productCodeOptions" [(ngModel)]="productCode" [disabled]="isProductCodeDisabled" (onChange)="onProductChange()"
+              [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+          </li>
+          <li>
+            <p-dropdown [options]="planCodeOptions" [(ngModel)]="planCode" [disabled]="isPlanCodeDisabled" (onChange)="onPlanCodeChange()"
+              [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+          </li>
+          <li>
+            <p-dropdown [options]="issueStateOptions" [(ngModel)]="issueState" [disabled]="isIssueStateDisabled" (onChange)="onIssueStateChange()"
+              [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+          </li>
+          <li>
+            <p-dropdown [options]="lobOptions" [(ngModel)]="lob" [disabled]="isLobDisabled" (onChange)="onLobChange()" [autoWidth]="false"
+              [style]="{'width':'350px'}"></p-dropdown>
+          </li>
+          <li>
+            <p-dropdown [options]="effDateOptions" [(ngModel)]="effDate" [disabled]="isEffDateDisabled" (onChange)="onEffDateChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+          </li>
+          <li style="margin-top: 20px">
+            <label><span style="align-content: center"> As of Date </span></label>
+          </li>
+          <li>
+            <p-calendar [(ngModel)]="asOfDate" [disabled]="isAsOfDateDisabled" dateFormat="yy-mm-dd" [showIcon]="true" [inputStyle]="{'width':'318px'}"></p-calendar>
+          </li>
+          <li style="margin-top: 20px">
+            <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Remember my selections"></p-checkbox>
+            <button pButton type="button" [disabled]="isGoDisabled" label="Go" style="margin-left: 35px"></button>
+          </li>
+        </ul>
+      </td>
+      <td valign="top" style="width: 250px">
+        <ul style="margin-top: 35px">
+          <li style="margin-left:23px">
+            <label> <span style="align-content: center"> Display Additional Options For:</span></label>
+          </li>
+          <li class="li-checkbox-space">
+            <p-checkbox [(ngModel)]="genPolicyChkBox" binary="true" [disabled]="isTypeThreeDisabled" label="General Policy Information"></p-checkbox>
+          </li>
+          <li class="li-checkbox-space">
+            <p-checkbox [(ngModel)]="costOfInsuranceChkBox" binary="true" [disabled]="isTypeTwoDisabled" label="Cost of Insurance"></p-checkbox>
+          </li>
+          <li class="li-checkbox-space">
+            <p-checkbox [(ngModel)]="chgAndFeeChkBox" binary="true" [disabled]="isTypeThreeDisabled" label="Charges And Fees"></p-checkbox>
+          </li>
+          <li class="li-checkbox-space">
+            <p-checkbox [(ngModel)]="modePreChkBox" binary="true" [disabled]="isTypeOneDisabled" label="Mode Premiums"></p-checkbox>
+          </li>
+          <li class="li-checkbox-space">
+            <p-checkbox [(ngModel)]="payLoadsChkBox" binary="true" [disabled]="isTypeTwoDisabled" label="Payment Loads"></p-checkbox>
+          </li>
+          <li class="li-checkbox-space">
+            <p-checkbox [(ngModel)]="targetInfoChkBox" binary="true" [disabled]="isTypeTwoDisabled" label="Target Information"></p-checkbox>
+          </li>
+        </ul>
+      </td>
+      <td valign="top" style="width: 250px">
+        <ul style="margin-top: 50px">
+          <li class="li-checkbox-space">
+            <p-checkbox [(ngModel)]="deathBeneChkBox" binary="true" [disabled]="isTypeOneDisabled" label="Death Benefits"></p-checkbox>
+          </li>
+          <li class="li-checkbox-space">
+            <p-checkbox [(ngModel)]="loanInfoChkBox" binary="true" [disabled]="isTypeThreeDisabled" label="Loan Information"></p-checkbox>
+          </li>
+          <li class="li-checkbox-space">
+            <p-checkbox [(ngModel)]="compAndProChkBox" binary="true" [disabled]="isTypeTwoDisabled" label="Compliance Provisions"></p-checkbox>
+          </li>
+          <li class="li-checkbox-space">
+            <p-checkbox [(ngModel)]="lapseNFOChkBox" binary="true" [disabled]="isTypeOneDisabled" label="Lapse/NFO Options"></p-checkbox>
+          </li>
+          <li class="li-checkbox-space">
+            <p-checkbox [(ngModel)]="guaCashValChkBox" binary="true" [disabled]="isTypeOneDisabled" label="Guaranteed Cash Values"></p-checkbox>
+          </li>
+          <li class="li-checkbox-space">
+            <p-checkbox [(ngModel)]="allChkBox" (onChange)="onAllChkBoxClick()" binary="true" [disabled]="isTypeThreeDisabled" label="All Of The Above"></p-checkbox>
+          </li>
+        </ul>
+      </td>
+    </tr>
+  </table>
+</div>

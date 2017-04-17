@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ResponseType } from '@angular/http';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+
 import { Message } from 'primeng/primeng';
 
 import { NotificationService } from 'app/notification/service/notification.service';
@@ -88,7 +89,7 @@ export class LoginComponent implements OnInit {
   private processSuccessfulLogin(response: LoginResponse) {
     sessionStorage['userName'] = this.userName;
     sessionStorage['authToken'] = response.tokenId;
-    this.router.navigate(['/home']);
+    this.router.navigate(['/business-rules']);
   }
 
   private logout(authToken: string) {

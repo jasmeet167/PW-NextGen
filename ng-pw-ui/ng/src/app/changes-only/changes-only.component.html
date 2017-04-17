@@ -1,0 +1,61 @@
+<div class="ui-widget ui-widget-content ui-corner-all" style="padding: 0.75em">
+  <table cellpadding="3">
+    <tr>
+      <td>
+        <label> <span style="align-content: center"> Environment </span></label>
+      </td>
+      <td>
+        <p-dropdown [options]="filterEnvOptions" [(ngModel)]="filterEnv" (onChange)="onEnvChange()" [autoWidth]="false" [style]="{'width':'350px','margin-left':'10px'}"></p-dropdown>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        <label><span style="align-content: center"> Projects </span></label>
+      </td>
+      <td>
+        <p-pickList [source]="filterProjectInputRows" [target]="filterProjectOutputRows" [showSourceControls]="false" [showTargetControls]="false"
+          [sourceStyle]="{'width':'350px','margin-left': '6px','margin-bottom':'5px','height':'145px'}" [targetStyle]="{'width':'350px','margin-bottom':'5px','height':'145px'}">
+          <template let-project pTemplate="item">
+            <div>{{project.label}}</div>
+          </template>
+          </p-pickList>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        <label><span style="align-content: center"> Business Rules </span></label>
+      </td>
+      <td>
+        <tr class="ui-picklist-buttons">
+          <p-pickList [source]="filterBussRulesInputRows" [target]="filterBussRulesOutputRows" [showSourceControls]="false" [showTargetControls]="false"
+            [sourceStyle]="{'width':'350px','margin-left': '6px','margin-bottom':'5px','height':'145px'}" [targetStyle]="{'width':'350px','margin-bottom':'5px','height':'145px'}">
+            <template let-bussRule pTemplate="item">
+              <div style="margin-bottom:3px">{{bussRule.label}}</div>
+            </template>
+            </p-pickList>
+        </tr>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        <label><span style="align-content: center"> User ID's </span></label>
+      </td>
+      <td>
+        <p-pickList [source]="filterUserIdInputRows" [target]="filterUserIdOutputRows" [showSourceControls]="false" [showTargetControls]="false"
+          [sourceStyle]="{'width':'350px','margin-left': '6px','margin-bottom':'5px','height':'145px'}" [targetStyle]="{'width':'350px','margin-bottom':'5px','height':'145px'}">
+          <template let-userId pTemplate="item">
+            <div>{{userId.label}}</div>
+          </template>
+          </p-pickList>
+      </td>
+    </tr>
+    <tr>
+      <td>
+      </td>
+      <td style="float: right;">
+        <button pButton type="button" label="Go" [disabled]="isGoDisabled"></button>
+        <button pButton type="button" label="Reset" [disabled]="isResetDisabled" (click)="onResetClick()"></button>
+      </td>
+    </tr>
+  </table>
+</div>

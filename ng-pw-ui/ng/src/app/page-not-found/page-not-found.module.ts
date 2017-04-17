@@ -9,15 +9,15 @@ import { ButtonModule } from 'primeng/primeng';
 // Module components
 import { PageNotFoundComponent } from './page-not-found.component';
 
-// Routing module
-import { PageNotFoundRoutingModule } from './page-not-found-routing.module';
+// Routing
+import { routing } from './page-not-found-routing';
 
 @NgModule({
   imports: [
     CommonModule,
     PanelModule,
     ButtonModule,
-    PageNotFoundRoutingModule
+    routing
   ],
   declarations: [
     PageNotFoundComponent

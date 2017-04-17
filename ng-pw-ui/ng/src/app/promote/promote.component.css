@@ -1,0 +1,14 @@
+button {
+    margin-bottom: 20px;
+    width: 90px;
+}
+
+label {
+    width: 100px;
+}
+
+.ui-picklist .ui-picklist-buttons {
+  vertical-align: top !important;
+  height: 10px !important;
+  padding-top: 8px !important;
+}

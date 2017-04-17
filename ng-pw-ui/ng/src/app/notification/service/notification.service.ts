@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Response, ResponseType } from '@angular/http';
 
-import { ErrorModel } from 'app/home/model/error-model';
+import { ErrorModel } from 'app/util/model/error-model';
 
 @Injectable()
 export class NotificationService {

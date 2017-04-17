@@ -17,8 +17,8 @@ import { LoginComponent } from './login.component';
 import { ConfigService } from './service/config.service';
 import { LoginService } from './service/login.service';
 
-// Routing module
-import { LoginRoutingModule } from './login-routing.module';
+// Routing
+import { routing } from './login-routing';
 
 @NgModule({
   imports: [
@@ -30,7 +30,7 @@ import { LoginRoutingModule } from './login-routing.module';
     PanelModule,
     ButtonModule,
     InputTextModule,
-    LoginRoutingModule
+    routing
   ],
   declarations: [
     LoginComponent

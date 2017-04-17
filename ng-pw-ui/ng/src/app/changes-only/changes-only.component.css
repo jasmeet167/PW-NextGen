@@ -1,0 +1,29 @@
+ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: -5px;
+}
+
+li {
+  margin-top: 5px;
+}
+
+.li-extra-space {
+  margin-top: 20px;
+  margin-left: 145px;
+}
+
+button {
+  margin-bottom: 20px;
+  width: 90px;
+}
+
+label {
+  width: 100px;
+}
+
+.ui-picklist .ui-picklist-buttons {
+  vertical-align: top !important;
+  height: 10px !important;
+  padding-top: 8px !important;
+}
