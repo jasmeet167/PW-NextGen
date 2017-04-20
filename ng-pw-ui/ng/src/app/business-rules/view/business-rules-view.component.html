@@ -1,0 +1,100 @@
+<div class="ui-widget ui-widget-content ui-corner-all" style="display: table; width: 100%; margin-top: -5px;">
+  <p-toolbar [style]="{'margin':'0.25em'}">
+    <div class="ui-toolbar-group-left">
+        <button pButton type="button" icon="fa-search" title="Search Business Rules in Left Panel"
+                (click)="onLeftPanelSearchClick();" style="margin-right: 10px;">
+        </button>
+        <button pButton type="button" icon="fa-expand" title="Open Left Panel"
+                [disabled]="isLeftPanelOpenDisabled()" (click)="onLeftPanelOpenClick()">
+        </button>
+        <button pButton type="button" icon="fa-compress" title="Close Left Panel"
+                [disabled]="isLeftPanelCloseDisabled()" (click)="onLeftPanelCloseClick()">
+        </button>
+    </div>
+    <div class="ui-toolbar-group-right">
+        <button pButton type="button" icon="fa-search" title="Search Business Rules in Right Panel"
+                (click)="onRightPanelSearchClick();" style="margin-right: 10px;">
+        </button>
+        <button pButton type="button" icon="fa-expand" title="Open Right Panel"
+                [disabled]="isRightPanelOpenDisabled()" (click)="onRightPanelOpenClick()">
+        </button>
+        <button pButton type="button" icon="fa-compress" title="Close Right Panel"
+                [disabled]="isRightPanelCloseDisabled()" (click)="onRightPanelCloseClick()">
+        </button>
+    </div>
+  </p-toolbar>
+
+  <div style="display: table; width: 100%; padding: 0.25em; min-height: 38em;">
+    <div style="display: table-row;">
+      <!-- The ngIf directive cannot be used here, because hiding a component results in immediate garbage collection and loss of data -->
+      <div [style.display]="getLeftSearchPanelDisplayStyle()" style="padding: 0.25em; vertical-align: top; width: 50%;">
+        <div style="display: table; border-collapse: collapse; width:100%;">
+          <div *ngIf="isLeftProjectVisible" style="display: table-row; border-bottom: 1px dotted;">
+            <div style="display:table-cell; padding-bottom: 8px;">
+              <span>Project:</span>
+              <p-dropdown [options]="leftProjectOptions" [(ngModel)]="leftProject" [style]="{'min-width':'100px'}" editable="editable"></p-dropdown>
+            </div>
+            <div style="display:table-cell; padding-bottom: 8px;">
+            </div>
+          </div>
+          <div style="display: table-row">
+            <div style="display:table-cell; vertical-align: top;">
+              <app-business-rules-tree #leftTree
+                [viewChanges]="leftSearchPanel.viewChanges" [envId]="leftSearchPanel.envId" [companyCode]="leftSearchPanel.companyCode"
+                [productCode]="leftSearchPanel.productCode" [planCode]="leftSearchPanel.planCode" [issueState]="leftSearchPanel.issueState"
+                [lob]="leftSearchPanel.lob" [effDate]="leftSearchPanel.effDate" [includeOrphans]="leftSearchPanel.includeOrphans"
+                [project]="leftProject">
+              </app-business-rules-tree>
+            </div>
+            <div style="display:table-cell; vertical-align: top;">
+              <!-- Grid Data -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- The ngIf directive cannot be used here, because hiding a component results in immediate garbage collection and loss of data -->
+      <div [style.display]="getRightSearchPanelDisplayStyle()" [style.border-left]="getSearchPanelSplitBorderStyle()"
+            style="padding: 0.25em; vertical-align: top; width: 50%;">
+        <div style="display: table; border-collapse: collapse; width:100%;">
+          <div *ngIf="isRightProjectVisible" style="display: table-row; border-bottom: 1px dotted;">
+            <div style="display:table-cell; padding-bottom: 8px;">
+              <span>Project:</span>
+              <p-dropdown [options]="rightProjectOptions" [(ngModel)]="rightProject" [style]="{'min-width':'100px'}" editable="editable"></p-dropdown>
+            </div>
+            <div style="display:table-cell; padding-bottom: 8px;">
+            </div>
+          </div>
+          <div style="display: table-row">
+            <div style="display: table-cell; vertical-align: top;">
+              <app-business-rules-tree #rightTree
+                [viewChanges]="rightSearchPanel.viewChanges" [envId]="rightSearchPanel.envId" [companyCode]="rightSearchPanel.companyCode"
+                [productCode]="rightSearchPanel.productCode" [planCode]="rightSearchPanel.planCode" [issueState]="rightSearchPanel.issueState"
+                [lob]="rightSearchPanel.lob" [effDate]="rightSearchPanel.effDate" [includeOrphans]="rightSearchPanel.includeOrphans"
+                [project]="rightProject">
+              </app-business-rules-tree>
+            </div>
+            <div style="display:table-cell; vertical-align: top;">
+              <!-- Grid Data -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-dialog [(visible)]="isLeftSearchPanelVisible" styleClass="left-panel">
+  <p-header>
+    <span class="fa fa-long-arrow-left" style="margin-right: 10px;"></span>
+    <span>Business Rules Search</span>
+  </p-header>
+  <app-business-rules-search #leftSearchPanel></app-business-rules-search>
+</p-dialog>
+
+<p-dialog [(visible)]="isRightSearchPanelVisible" styleClass="right-panel">
+  <p-header>
+    <span>Business Rules Search</span>
+    <span class="fa fa-long-arrow-right" style="margin-left: 10px;"></span>
+  </p-header>
+  <app-business-rules-search #rightSearchPanel></app-business-rules-search>
+</p-dialog>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, ViewChild } from '@angular/core';
 
 import { TreeNode } from 'primeng/primeng';
 import { MenuItem } from 'primeng/primeng';
@@ -30,6 +30,7 @@ export class BusinessRulesTreeComponent implements OnInit {
   @Input() public lob: string;
   @Input() public effDate: string;
   @Input() public includeOrphans: boolean;
+  @Input() public project: string;
 
   private readonly NODE_LABEL_PASTE = 'Paste';
   private readonly NODE_LABEL_RENAME_PLAN = 'Delete Plan';
@@ -47,6 +48,9 @@ export class BusinessRulesTreeComponent implements OnInit {
   public tooltips: Message[];
   public contextMenuModel: MenuItem[];
   public nodeLabelType = this.NODE_LABEL_TABLE_ID_STANDARD;
+
+  // This callback method is used to clear tooltip display in all instances of Business Rules Tree.
+  public clearTreeNodeTooltips: () => void;
 
   private authToken: string;
 
@@ -313,6 +317,9 @@ export class BusinessRulesTreeComponent implements OnInit {
       isUpdateAllowed = attributes.updateAllowed;
     }
 
+    isUpdateAllowed = isUpdateAllowed
+                   && this.project && this.project.trim() !== '';
+
     switch (node.type) {
         case TreeNodeType.TypeEnum.C.toString():    // COMPANY
              this.contextMenuModel = this.companyMenuModel;
@@ -361,6 +368,7 @@ export class BusinessRulesTreeComponent implements OnInit {
     && (node.type === TreeNodeType.TypeEnum.TS.toString()             // TABLE_SUBSET
      || node.type === TreeNodeType.TypeEnum.CT.toString()             // COMMON_TABLE
      || node.type === TreeNodeType.TypeEnum.CF.toString())) {         // COMMON_FOLDER
+      this.clearTreeNodeTooltips();
       this.tooltips.push({severity: 'info', detail: 'Table Name: ' + data.tableName});
     } else {
       if (node.type === TreeNodeType.TypeEnum.PDF.toString()          // PDFPLAN_FOLDER
@@ -406,6 +414,7 @@ export class BusinessRulesTreeComponent implements OnInit {
       }
     }
 
+    this.clearTreeNodeTooltips();
     this.tooltips.push({severity: 'info', detail: toolTip + suffix});
   }
 
@@ -435,6 +444,7 @@ export class BusinessRulesTreeComponent implements OnInit {
         tipDetail += ', Eff. Date: ' + planKey.effDate;
       }
 
+      this.clearTreeNodeTooltips();
       this.tooltips.push({severity: 'info', summary: tipSummary, detail: tipDetail});
     }
   }
@@ -455,13 +465,14 @@ export class BusinessRulesTreeComponent implements OnInit {
       }
 
       if (toolTip.trim().length > 0) {
+        this.clearTreeNodeTooltips();
         this.tooltips.push({severity: 'info', detail: toolTip});
       }
     }
   }
 
   private clearTooltips() {
-    this.tooltips = <Message[]> [];
+    this.clearTreeNodeTooltips();
   }
 
   private toggleNodeDisplayType() {

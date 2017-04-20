@@ -1,10 +1,10 @@
 import { RouterModule } from '@angular/router';
 import { Routes } from '@angular/router';
 
-import { BusinessRulesSearchComponent } from './search/business-rules-search.component';
+import { BusinessRulesViewComponent } from './view/business-rules-view.component';
 
 const routes: Routes = [
-  { path: '', component: BusinessRulesSearchComponent }
+  { path: '', component: BusinessRulesViewComponent }
 ];
 
 export const routing = RouterModule.forChild(routes);

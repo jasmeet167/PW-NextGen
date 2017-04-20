@@ -1,0 +1,9 @@
+.left-panel {
+    top:  115px !important;
+    left: 10px !important;
+}
+
+.right-panel {
+    top:  115px !important;
+    left: calc(100% - 385px) !important;
+}

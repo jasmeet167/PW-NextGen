@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 import { SelectItem } from 'primeng/primeng';
 
@@ -8,52 +8,53 @@ import { NotificationService } from 'app/notification/service/notification.servi
 import { FilterService } from 'app/util/service/filter.service';
 
 @Component({
+  selector: 'app-business-rules-search',
   templateUrl: './business-rules-search.component.html',
   styleUrls: ['./business-rules-search.component.css']
 })
 export class BusinessRulesSearchComponent implements OnInit  {
+  @Input() public viewChanges: boolean;
   public viewChangesOptions: SelectItem[];
-  public viewChanges: boolean;
 
+  @Input() public envId: string;
   public envIdOptions: SelectItem[];
-  public envId: string;
 
+  @Input() public companyCode: string;
   public companyCodeOptions: SelectItem[];
-  public companyCode: string;
   public isCompanyCodeDisabled: boolean;
 
+  @Input() public productCode: string;
   public productCodeOptions: SelectItem[];
-  public productCode: string;
   public isProductCodeDisabled: boolean;
 
+  @Input() public planCode: string;
   public planCodeOptions: SelectItem[];
-  public planCode: string;
   public isPlanCodeDisabled: boolean;
 
+  @Input() public issueState: string;
   public issueStateOptions: SelectItem[];
-  public issueState: string;
   public isIssueStateDisabled: boolean;
 
+  @Input() public lob: string;
   public lobOptions: SelectItem[];
-  public lob: string;
   public isLobDisabled: boolean;
 
+  @Input() public effDate: string;
   public effDateOptions: SelectItem[];
-  public effDate: string;
   public isEffDateDisabled: boolean;
 
   public projectRows: SelectItem[];
   public projects: string[];
 
-  public includeOrphans: boolean;
+  @Input() public includeOrphans: boolean;
   public isIncludeOrphansDisabled: boolean;
 
   public rememberSelections: boolean;
+
   public isGoDisabled: boolean;
+  public goCallback: () => void;
 
   private authToken: string;
-
-  @ViewChild('tree') tree: BusinessRulesTreeComponent;
 
   constructor(private notificationService: NotificationService, private filterService: FilterService) {
     this.authToken = sessionStorage['authToken'];
@@ -443,6 +444,6 @@ export class BusinessRulesSearchComponent implements OnInit  {
   }
 
   onGoClick() {
-    this.tree.showTree();
+    this.goCallback();
   }
 }

@@ -5,6 +5,8 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
 // PrimeNG
+import { DialogModule } from 'primeng/primeng';
+import { ToolbarModule } from 'primeng/primeng';
 import { GrowlModule } from 'primeng/primeng';
 import { TreeModule } from 'primeng/primeng';
 import { ContextMenuModule } from 'primeng/primeng';
@@ -14,6 +16,7 @@ import { CheckboxModule } from 'primeng/primeng';
 import { ButtonModule } from 'primeng/primeng';
 
 // Module components
+import { BusinessRulesViewComponent } from './view/business-rules-view.component';
 import { BusinessRulesSearchComponent } from './search/business-rules-search.component';
 import { BusinessRulesTreeComponent } from './tree/business-rules-tree.component';
 
@@ -29,6 +32,8 @@ import { routing } from './business-rules-routing';
     CommonModule,
     HttpModule,
     FormsModule,
+    DialogModule,
+    ToolbarModule,
     GrowlModule,
     TreeModule,
     ContextMenuModule,
@@ -39,6 +44,7 @@ import { routing } from './business-rules-routing';
     routing
  ],
   declarations: [
+    BusinessRulesViewComponent,
     BusinessRulesSearchComponent,
     BusinessRulesTreeComponent
   ],
