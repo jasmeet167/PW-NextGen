@@ -23,12 +23,12 @@ export class LoginService {
     credentials.userName = userName;
     credentials.password = password;
 
-    const filterHeaders: Headers = new Headers();
-    filterHeaders.append('Content-Type', 'application/json');
-    filterHeaders.append('Accept', 'application/json');
+    const httpHeaders: Headers = new Headers();
+    httpHeaders.append('Content-Type', 'application/json');
+    httpHeaders.append('Accept', 'application/json');
 
     const options: RequestOptions = new RequestOptions();
-    options.headers = filterHeaders;
+    options.headers = httpHeaders;
     options.body = credentials;
     options.url = sessionStorage['restServiceBaseUrl'] + 'security/authentication';
     options.method = RequestMethod.Post;
@@ -38,13 +38,13 @@ export class LoginService {
   }
 
   logout(authToken: string) {
-    const filterHeaders: Headers = new Headers();
-    filterHeaders.append('Content-Type', 'application/json');
-    filterHeaders.append('Accept', 'application/json');
-    filterHeaders.append('authToken', authToken);
+    const httpHeaders: Headers = new Headers();
+    httpHeaders.append('Content-Type', 'application/json');
+    httpHeaders.append('Accept', 'application/json');
+    httpHeaders.append('authToken', authToken);
 
     const options: RequestOptions = new RequestOptions();
-    options.headers = filterHeaders;
+    options.headers = httpHeaders;
     options.url = sessionStorage['restServiceBaseUrl'] + 'security/logout';
     options.method = RequestMethod.Post;
 

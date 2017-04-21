@@ -5,7 +5,7 @@ import { OnInit } from '@angular/core';
 import { SelectItem } from 'primeng/primeng';
 
 import { NotificationService } from 'app/notification/service/notification.service';
-import { FilterService } from 'app/util/service/filter.service';
+import { SearchService } from 'app/util/service/search.service';
 import { PromoteFilterData } from 'app/util/model/promote-filter-data';
 
 @Component({
@@ -34,7 +34,7 @@ export class PromoteComponent implements OnInit {
 
   private authToken: string;
 
-  constructor(private notificationService: NotificationService, private filterService: FilterService) {
+  constructor(private notificationService: NotificationService, private searchService: SearchService) {
     this.authToken = sessionStorage['authToken'];
   }
 
@@ -58,7 +58,7 @@ export class PromoteComponent implements OnInit {
      this.isResetDisabled = true;
 
     this.notificationService.showWaitIndicator(true);
-    this.filterService.getEnvOptions(this.authToken)
+    this.searchService.getEnvOptions(this.authToken)
       .subscribe(
       res => envOptions = res,
       err => {
@@ -110,7 +110,7 @@ export class PromoteComponent implements OnInit {
       this.isResetDisabled = false;
       let envOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getEnvOptions(this.authToken)
+      this.searchService.getEnvOptions(this.authToken)
         .subscribe(
         res => envOptions = res,
         err => {
@@ -147,7 +147,7 @@ export class PromoteComponent implements OnInit {
     if (this.filterTargetEnv != null) {
       this.notificationService.showWaitIndicator(true);
       this.isEnterPackageDisabled = false;
-      this.filterService.getPromoteDetails(this.authToken, this.filterSourceEnv, this.filterTargetEnv)
+      this.searchService.getPromoteDetails(this.authToken, this.filterSourceEnv, this.filterTargetEnv)
         .subscribe(
         res => promoteTabMsg = res,
         err => {

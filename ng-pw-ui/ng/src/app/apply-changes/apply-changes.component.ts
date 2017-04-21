@@ -5,7 +5,7 @@ import { OnInit } from '@angular/core';
 import { SelectItem } from 'primeng/primeng';
 
 import { NotificationService } from 'app/notification/service/notification.service';
-import { FilterService } from 'app/util/service/filter.service';
+import { SearchService } from 'app/util/service/search.service';
 import { ApplyFilterData } from 'app/util/model/apply-filter-data';
 
 @Component({
@@ -30,7 +30,7 @@ export class ApplyChangesComponent implements OnInit {
 
   private authToken: string;
 
-  constructor(private notificationService: NotificationService, private filterService: FilterService) {
+  constructor(private notificationService: NotificationService, private searchService: SearchService) {
     this.authToken = sessionStorage['authToken'];
   }
 
@@ -48,7 +48,7 @@ export class ApplyChangesComponent implements OnInit {
     this.filterProjectOutputRows = <SelectItem[]>[];
 
     this.notificationService.showWaitIndicator(true);
-    this.filterService.getEnvOptions(this.authToken)
+    this.searchService.getEnvOptions(this.authToken)
       .subscribe(
       res => envOptions = res,
       err => {
@@ -88,7 +88,7 @@ export class ApplyChangesComponent implements OnInit {
 
     if (this.filterEnv != null) {
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getApplyChangesDetails(this.authToken, this.filterEnv)
+      this.searchService.getApplyChangesDetails(this.authToken, this.filterEnv)
         .subscribe(
         res => applyChangesTabMsg = res,
         err => {

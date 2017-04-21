@@ -14,7 +14,7 @@ import { ButtonModule } from 'primeng/primeng';
 import { SummaryComponent } from './summary.component';
 
 // Module services
-import { FilterService } from 'app/util/service/filter.service';
+import { SearchService } from 'app/util/service/search.service';
 
 // Routing
 import { routing } from './summary-routing';
@@ -34,7 +34,7 @@ import { routing } from './summary-routing';
     SummaryComponent
   ],
   providers: [
-    FilterService
+    SearchService
   ]
 })
 export default class SummaryModule {

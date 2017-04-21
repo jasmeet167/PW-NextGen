@@ -21,24 +21,24 @@ export class BusinessRulesTreeService {
 
   getBusinessRulesTreeCore(authToken: string, envId: string, companyCode: string,
                           productCode: string, includeOrphans: boolean): Observable<TreeNode[]> {
-    const filterHeaders: Headers = new Headers();
-    filterHeaders.append('Accept', 'application/json');
-    filterHeaders.append('authToken', authToken);
+    const httpHeaders: Headers = new Headers();
+    httpHeaders.append('Accept', 'application/json');
+    httpHeaders.append('authToken', authToken);
     if (envId) {
-      filterHeaders.append('envId', envId);
+      httpHeaders.append('envId', envId);
     }
     if (companyCode) {
-      filterHeaders.append('companyCode', companyCode);
+      httpHeaders.append('companyCode', companyCode);
     }
     if (productCode) {
-      filterHeaders.append('productCode', productCode);
+      httpHeaders.append('productCode', productCode);
     }
     if (includeOrphans) {
-      filterHeaders.append('includeOrphans', includeOrphans.toString());
+      httpHeaders.append('includeOrphans', includeOrphans.toString());
     }
 
     const options: RequestOptions = new RequestOptions();
-    options.headers = filterHeaders;
+    options.headers = httpHeaders;
     options.url = sessionStorage['restServiceBaseUrl'] + '/business-rules-tree/core';
     options.method = RequestMethod.Get;
 
@@ -48,19 +48,19 @@ export class BusinessRulesTreeService {
 
   getBusinessRulesTreeCommonTablesList(authToken: string, envId: string,
                                       companyCode: string, viewChanges: boolean) {
-    const filterHeaders: Headers = new Headers();
-    filterHeaders.append('Accept', 'application/json');
-    filterHeaders.append('authToken', authToken);
+    const httpHeaders: Headers = new Headers();
+    httpHeaders.append('Accept', 'application/json');
+    httpHeaders.append('authToken', authToken);
     if (envId) {
-      filterHeaders.append('envId', envId);
+      httpHeaders.append('envId', envId);
     }
     if (companyCode) {
-      filterHeaders.append('companyCode', companyCode);
+      httpHeaders.append('companyCode', companyCode);
     }
-    filterHeaders.append('viewChanges', viewChanges.toString());
+    httpHeaders.append('viewChanges', viewChanges.toString());
 
     const options: RequestOptions = new RequestOptions();
-    options.headers = filterHeaders;
+    options.headers = httpHeaders;
     options.url = sessionStorage['restServiceBaseUrl'] + 'business-rules-tree/common/tables';
     options.method = RequestMethod.Get;
 
@@ -72,38 +72,38 @@ export class BusinessRulesTreeService {
                               companyCode: string, productCode: string, planCode: string,
                               issueState: string, lob: string, effDate: string,
                               viewChanges: boolean, includeOrphans: boolean): Observable<TreeNode[]> {
-    const filterHeaders: Headers = new Headers();
-    filterHeaders.append('Accept', 'application/json');
-    filterHeaders.append('authToken', authToken);
+    const httpHeaders: Headers = new Headers();
+    httpHeaders.append('Accept', 'application/json');
+    httpHeaders.append('authToken', authToken);
     if (lazyType) {
-      filterHeaders.append('lazyType', lazyType.toString());
+      httpHeaders.append('lazyType', lazyType.toString());
     }
     if (envId) {
-      filterHeaders.append('envId', envId);
+      httpHeaders.append('envId', envId);
     }
     if (companyCode) {
-      filterHeaders.append('companyCode', companyCode);
+      httpHeaders.append('companyCode', companyCode);
     }
     if (productCode) {
-      filterHeaders.append('productCode', productCode);
+      httpHeaders.append('productCode', productCode);
     }
     if (planCode) {
-      filterHeaders.append('planCode', planCode);
+      httpHeaders.append('planCode', planCode);
     }
     if (issueState) {
-      filterHeaders.append('issueState', issueState);
+      httpHeaders.append('issueState', issueState);
     }
     if (lob) {
-      filterHeaders.append('lob', lob);
+      httpHeaders.append('lob', lob);
     }
     if (effDate) {
-      filterHeaders.append('effDate', effDate);
+      httpHeaders.append('effDate', effDate);
     }
-    filterHeaders.append('viewChanges', viewChanges.toString());
-    filterHeaders.append('includeOrphans', includeOrphans.toString());
+    httpHeaders.append('viewChanges', viewChanges.toString());
+    httpHeaders.append('includeOrphans', includeOrphans.toString());
 
     const options: RequestOptions = new RequestOptions();
-    options.headers = filterHeaders;
+    options.headers = httpHeaders;
     options.url = sessionStorage['restServiceBaseUrl'] + 'business-rules-tree/plan/list';
     options.method = RequestMethod.Get;
 
@@ -113,20 +113,20 @@ export class BusinessRulesTreeService {
 
   getBusinessRulesTreePlanDetails(authToken: string, envId: string, companyCode: string,
                                  planKey: TreeNodePlanKey, viewChanges: boolean): Observable<TreeNode[]> {
-    const filterHeaders: Headers = new Headers();
-    filterHeaders.append('Content-Type', 'application/json');
-    filterHeaders.append('Accept', 'application/json');
-    filterHeaders.append('authToken', authToken);
+    const httpHeaders: Headers = new Headers();
+    httpHeaders.append('Content-Type', 'application/json');
+    httpHeaders.append('Accept', 'application/json');
+    httpHeaders.append('authToken', authToken);
     if (envId) {
-      filterHeaders.append('envId', envId);
+      httpHeaders.append('envId', envId);
     }
     if (companyCode) {
-      filterHeaders.append('companyCode', companyCode);
+      httpHeaders.append('companyCode', companyCode);
     }
-    filterHeaders.append('viewChanges', viewChanges.toString());
+    httpHeaders.append('viewChanges', viewChanges.toString());
 
     const options: RequestOptions = new RequestOptions();
-    options.headers = filterHeaders;
+    options.headers = httpHeaders;
     options.body = planKey;
     options.url = sessionStorage['restServiceBaseUrl'] + 'business-rules-tree/plan/detail';
     options.method = RequestMethod.Post;
@@ -139,34 +139,34 @@ export class BusinessRulesTreeService {
                                    companyCode: string, productCode: string, planCode: string,
                                    issueState: string, lob: string, effDate: string,
                                    viewChanges: boolean): Observable<TreeNode[]> {
-    const filterHeaders: Headers = new Headers();
-    filterHeaders.append('Accept', 'application/json');
-    filterHeaders.append('authToken', authToken);
+    const httpHeaders: Headers = new Headers();
+    httpHeaders.append('Accept', 'application/json');
+    httpHeaders.append('authToken', authToken);
     if (envId) {
-      filterHeaders.append('envId', envId);
+      httpHeaders.append('envId', envId);
     }
     if (companyCode) {
-      filterHeaders.append('companyCode', companyCode);
+      httpHeaders.append('companyCode', companyCode);
     }
     if (productCode) {
-      filterHeaders.append('productCode', productCode);
+      httpHeaders.append('productCode', productCode);
     }
     if (planCode) {
-      filterHeaders.append('planCode', planCode);
+      httpHeaders.append('planCode', planCode);
     }
     if (issueState) {
-      filterHeaders.append('issueState', issueState);
+      httpHeaders.append('issueState', issueState);
     }
     if (lob) {
-      filterHeaders.append('lob', lob);
+      httpHeaders.append('lob', lob);
     }
     if (effDate) {
-      filterHeaders.append('effDate', effDate);
+      httpHeaders.append('effDate', effDate);
     }
-    filterHeaders.append('viewChanges', viewChanges.toString());
+    httpHeaders.append('viewChanges', viewChanges.toString());
 
     const options: RequestOptions = new RequestOptions();
-    options.headers = filterHeaders;
+    options.headers = httpHeaders;
     options.url = sessionStorage['restServiceBaseUrl'] + 'business-rules-tree/orphans';
     options.method = RequestMethod.Get;
 

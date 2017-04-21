@@ -14,7 +14,7 @@ import { ButtonModule } from 'primeng/primeng';
 import { ApplyChangesComponent } from './apply-changes.component';
 
 // Module services
-import { FilterService } from 'app/util/service/filter.service';
+import { SearchService } from 'app/util/service/search.service';
 
 // Routing
 import { routing } from './apply-changes-routing';
@@ -34,7 +34,7 @@ import { routing } from './apply-changes-routing';
     ApplyChangesComponent
   ],
   providers: [
-    FilterService
+    SearchService
   ]
 })
 export default class ApplyChangesModule {

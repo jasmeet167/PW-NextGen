@@ -14,7 +14,7 @@ import { ButtonModule } from 'primeng/primeng';
 import { PromoteComponent } from './promote.component';
 
 // Module services
-import { FilterService } from 'app/util/service/filter.service';
+import { SearchService } from 'app/util/service/search.service';
 
 // Routing
 import { routing } from './promote-routing';
@@ -34,7 +34,7 @@ import { routing } from './promote-routing';
     PromoteComponent
   ],
   providers: [
-    FilterService
+    SearchService
   ]
 })
 export default class PromoteModule {

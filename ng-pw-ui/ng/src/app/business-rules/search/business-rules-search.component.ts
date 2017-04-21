@@ -5,7 +5,7 @@ import { Input } from '@angular/core';
 import { SelectItem } from 'primeng/primeng';
 
 import { NotificationService } from 'app/notification/service/notification.service';
-import { FilterService } from 'app/util/service/filter.service';
+import { SearchService } from 'app/util/service/search.service';
 
 import { BusinessRulesTreeComponent } from '../tree/business-rules-tree.component';
 
@@ -58,7 +58,7 @@ export class BusinessRulesSearchComponent implements OnInit  {
 
   private authToken: string;
 
-  constructor(private notificationService: NotificationService, private filterService: FilterService) {
+  constructor(private notificationService: NotificationService, private searchService: SearchService) {
     this.authToken = sessionStorage['authToken'];
   }
 
@@ -75,7 +75,7 @@ export class BusinessRulesSearchComponent implements OnInit  {
 
     let envOptions: SelectItem[];
     this.notificationService.showWaitIndicator(true);
-    this.filterService.getCommonEnvOptions(this.authToken)
+    this.searchService.getCommonEnvOptions(this.authToken)
         .subscribe(
           res => envOptions = res,
           err => {
@@ -144,7 +144,7 @@ export class BusinessRulesSearchComponent implements OnInit  {
 
       let companyOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getPlanCompanyOptions(this.authToken, this.viewChanges, this.envId)
+      this.searchService.getPlanCompanyOptions(this.authToken, this.viewChanges, this.envId)
           .subscribe(
             res => companyOptions = res,
             err => {
@@ -158,7 +158,7 @@ export class BusinessRulesSearchComponent implements OnInit  {
           );
 
       let projectOptions: SelectItem[];
-      this.filterService.getPlanProjectOptions(this.authToken, this.envId)
+      this.searchService.getPlanProjectOptions(this.authToken, this.envId)
           .subscribe(
             res => projectOptions = res,
             err => {
@@ -200,7 +200,7 @@ export class BusinessRulesSearchComponent implements OnInit  {
 
       let productOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getPlanProductOptions(this.authToken, this.viewChanges, this.envId,
+      this.searchService.getPlanProductOptions(this.authToken, this.viewChanges, this.envId,
                                            this.companyCode)
           .subscribe(
             res => productOptions = res,
@@ -241,7 +241,7 @@ export class BusinessRulesSearchComponent implements OnInit  {
 
       let planCodeOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getPlanPlanCodeOptions(this.authToken, this.viewChanges, this.envId,
+      this.searchService.getPlanPlanCodeOptions(this.authToken, this.viewChanges, this.envId,
                                             this.companyCode, this.productCode)
           .subscribe(
             res => planCodeOptions = res,
@@ -277,7 +277,7 @@ export class BusinessRulesSearchComponent implements OnInit  {
 
       let issueStateOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getPlanIssueStateOptions(this.authToken, this.viewChanges, this.envId,
+      this.searchService.getPlanIssueStateOptions(this.authToken, this.viewChanges, this.envId,
                                               this.companyCode, this.productCode, this.planCode)
           .subscribe(
             res => issueStateOptions = res,
@@ -309,7 +309,7 @@ export class BusinessRulesSearchComponent implements OnInit  {
 
       let lobOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getPlanLobOptions(this.authToken, this.viewChanges, this.envId,
+      this.searchService.getPlanLobOptions(this.authToken, this.viewChanges, this.envId,
                                        this.companyCode, this.productCode, this.planCode,
                                        this.issueState)
           .subscribe(
@@ -339,7 +339,7 @@ export class BusinessRulesSearchComponent implements OnInit  {
 
       let effDateOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getPlanEffDateOptions(this.authToken, this.viewChanges, this.envId,
+      this.searchService.getPlanEffDateOptions(this.authToken, this.viewChanges, this.envId,
                                            this.companyCode, this.productCode, this.planCode,
                                            this.issueState, this.lob)
           .subscribe(

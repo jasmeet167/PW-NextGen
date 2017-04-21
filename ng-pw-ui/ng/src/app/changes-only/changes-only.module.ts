@@ -13,7 +13,7 @@ import { ButtonModule } from 'primeng/primeng';
 import { ChangesOnlyComponent } from './changes-only.component';
 
 // Module services
-import { FilterService } from 'app/util/service/filter.service';
+import { SearchService } from 'app/util/service/search.service';
 
 // Routing
 import { routing } from './changes-only-routing';
@@ -32,7 +32,7 @@ import { routing } from './changes-only-routing';
     ChangesOnlyComponent
   ],
   providers: [
-    FilterService
+    SearchService
   ]
 })
 export default class ChangesOnlyModule {

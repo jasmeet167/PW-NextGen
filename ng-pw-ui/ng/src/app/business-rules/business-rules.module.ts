@@ -21,7 +21,7 @@ import { BusinessRulesSearchComponent } from './search/business-rules-search.com
 import { BusinessRulesTreeComponent } from './tree/business-rules-tree.component';
 
 // Module services
-import { FilterService } from 'app/util/service/filter.service';
+import { SearchService } from 'app/util/service/search.service';
 import { BusinessRulesTreeService } from './tree/service/business-rules-tree.service';
 
 // Routing
@@ -49,7 +49,7 @@ import { routing } from './business-rules-routing';
     BusinessRulesTreeComponent
   ],
   providers: [
-    FilterService,
+    SearchService,
     BusinessRulesTreeService
   ]
 })

@@ -18,12 +18,12 @@ export class AboutService {
   }
 
   getAboutApplication(authToken: string): Observable<AboutApplication> {
-    const filterHeaders: Headers = new Headers();
-    filterHeaders.append('Accept', 'application/json');
-    filterHeaders.append('authToken', authToken);
+    const httpHeaders: Headers = new Headers();
+    httpHeaders.append('Accept', 'application/json');
+    httpHeaders.append('authToken', authToken);
 
     const options: RequestOptions = new RequestOptions();
-    options.headers = filterHeaders;
+    options.headers = httpHeaders;
     options.url = sessionStorage['restServiceBaseUrl'] + 'application/about';
     options.method = RequestMethod.Get;
 

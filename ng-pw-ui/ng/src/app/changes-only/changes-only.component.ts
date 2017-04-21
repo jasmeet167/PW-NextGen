@@ -5,7 +5,7 @@ import { OnInit } from '@angular/core';
 import { SelectItem } from 'primeng/primeng';
 
 import { NotificationService } from 'app/notification/service/notification.service';
-import { FilterService } from 'app/util/service/filter.service';
+import { SearchService } from 'app/util/service/search.service';
 import { ChangesFilterData } from 'app/util/model/changes-filter-data';
 
 @Component({
@@ -28,7 +28,7 @@ export class ChangesOnlyComponent implements OnInit {
   public isGoDisabled: boolean;
   public isResetDisabled: boolean;
 
-  constructor(private filterService: FilterService, private notificationService: NotificationService) {
+  constructor(private searchService: SearchService, private notificationService: NotificationService) {
     this.authToken = sessionStorage['authToken'];
   }
 
@@ -47,7 +47,7 @@ export class ChangesOnlyComponent implements OnInit {
     this.isResetDisabled = true;
     let envOptions: SelectItem[];
 
-    this.filterService.getChangesEnvOptions(this.authToken)
+    this.searchService.getChangesEnvOptions(this.authToken)
       .subscribe(
       res => envOptions = res,
       err => {
@@ -87,7 +87,7 @@ export class ChangesOnlyComponent implements OnInit {
 
     if (this.filterEnv != null) {
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getChangesWipDetails(this.authToken, this.filterEnv)
+      this.searchService.getChangesWipDetails(this.authToken, this.filterEnv)
         .subscribe(
         res => changeOnlyTabmsg = res,
         err => {

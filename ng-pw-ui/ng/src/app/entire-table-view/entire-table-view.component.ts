@@ -4,7 +4,7 @@ import { OnInit } from '@angular/core';
 import { SelectItem } from 'primeng/primeng';
 
 import { NotificationService } from 'app/notification/service/notification.service';
-import { FilterService } from 'app/util/service/filter.service';
+import { SearchService } from 'app/util/service/search.service';
 
 @Component({
   templateUrl: './entire-table-view.component.html',
@@ -29,7 +29,7 @@ export class EntireTableViewComponent implements OnInit {
   public filterRememberSelections: boolean;
   public isGoDisabled: boolean;
 
-  constructor(private filterService: FilterService, private notificationService: NotificationService) {
+  constructor(private searchService: SearchService, private notificationService: NotificationService) {
     this.authToken = sessionStorage['authToken'];
   }
 
@@ -47,7 +47,7 @@ export class EntireTableViewComponent implements OnInit {
     let envOptions: SelectItem[];
     this.notificationService.showWaitIndicator(true);
 
-    this.filterService.getCommonEnvOptions(this.authToken)
+    this.searchService.getCommonEnvOptions(this.authToken)
       .subscribe(
       res => envOptions = res,
       err => {
@@ -104,7 +104,7 @@ export class EntireTableViewComponent implements OnInit {
 
       let companyOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getPlanCompanyOptions(this.authToken, this.filterChanges, this.filterEnv)
+      this.searchService.getPlanCompanyOptions(this.authToken, this.filterChanges, this.filterEnv)
         .subscribe(
         res => companyOptions = res,
         err => {
@@ -127,7 +127,7 @@ export class EntireTableViewComponent implements OnInit {
     this.filterTableRows = <SelectItem[]>[];
     let tableRowsOptions: SelectItem[];
     this.notificationService.showWaitIndicator(true);
-    this.filterService.getPlanTableOptions(this.authToken, this.filterEnv, this.filterCompany)
+    this.searchService.getPlanTableOptions(this.authToken, this.filterEnv, this.filterCompany)
       .subscribe(
       res => tableRowsOptions = res,
       err => {

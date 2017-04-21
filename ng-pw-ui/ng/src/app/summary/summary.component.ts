@@ -4,7 +4,7 @@ import { OnInit } from '@angular/core';
 import { SelectItem } from 'primeng/primeng';
 
 import { NotificationService } from 'app/notification/service/notification.service';
-import { FilterService } from 'app/util/service/filter.service';
+import { SearchService } from 'app/util/service/search.service';
 
 @Component({
   templateUrl: './summary.component.html',
@@ -67,7 +67,7 @@ export class SummaryComponent implements OnInit {
 
   public productType: string;
 
-  constructor(private notificationService: NotificationService, private filterService: FilterService) {
+  constructor(private notificationService: NotificationService, private searchService: SearchService) {
     this.authToken = sessionStorage['authToken'];
   }
 
@@ -81,7 +81,7 @@ export class SummaryComponent implements OnInit {
 
     let envOptions: SelectItem[];
     this.notificationService.showWaitIndicator(true);
-    this.filterService.getEnvOptions(this.authToken)
+    this.searchService.getEnvOptions(this.authToken)
       .subscribe(
       res => envOptions = res,
       err => {
@@ -149,7 +149,7 @@ export class SummaryComponent implements OnInit {
 
       let companyOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getCompanyForSummary(this.authToken, this.filterAspect, this.envId)
+      this.searchService.getCompanyForSummary(this.authToken, this.filterAspect, this.envId)
         .subscribe(
         res => companyOptions = res,
         err => {
@@ -187,7 +187,7 @@ export class SummaryComponent implements OnInit {
 
       let productOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getProductOptionsForSummary(this.authToken, this.filterAspect, this.envId,
+      this.searchService.getProductOptionsForSummary(this.authToken, this.filterAspect, this.envId,
         this.companyCode)
         .subscribe(
         res => productOptions = res,
@@ -229,7 +229,7 @@ export class SummaryComponent implements OnInit {
 
       let planCodeOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getPlanCodeOptionsForSummary(this.authToken, this.filterAspect, this.envId,
+      this.searchService.getPlanCodeOptionsForSummary(this.authToken, this.filterAspect, this.envId,
         this.companyCode, this.productCode)
         .subscribe(
         res => planCodeOptions = res,
@@ -267,7 +267,7 @@ export class SummaryComponent implements OnInit {
 
       let issueStateOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getIssueStateOptionsForSummary(this.authToken, this.filterAspect, this.envId,
+      this.searchService.getIssueStateOptionsForSummary(this.authToken, this.filterAspect, this.envId,
         this.companyCode, this.productCode, this.planCode)
         .subscribe(
         res => issueStateOptions = res,
@@ -301,7 +301,7 @@ export class SummaryComponent implements OnInit {
 
       let lobOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getLobOptionsForSummary(this.authToken, this.filterAspect, this.envId,
+      this.searchService.getLobOptionsForSummary(this.authToken, this.filterAspect, this.envId,
         this.companyCode, this.productCode, this.planCode,
         this.issueState)
         .subscribe(
@@ -333,7 +333,7 @@ export class SummaryComponent implements OnInit {
 
       let effDateOptions: SelectItem[];
       this.notificationService.showWaitIndicator(true);
-      this.filterService.getEffDateOptionsForSummary(this.authToken, this.filterAspect, this.envId,
+      this.searchService.getEffDateOptionsForSummary(this.authToken, this.filterAspect, this.envId,
         this.companyCode, this.productCode, this.planCode,
         this.issueState, this.lob)
         .subscribe(

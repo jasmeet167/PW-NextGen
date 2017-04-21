@@ -14,7 +14,7 @@ import { ButtonModule } from 'primeng/primeng';
 import { EntireTableViewComponent } from './entire-table-view.component';
 
 // Module services
-import { FilterService } from 'app/util/service/filter.service';
+import { SearchService } from 'app/util/service/search.service';
 
 // Routing
 import { routing } from './entire-table-view-routing';
@@ -34,7 +34,7 @@ import { routing } from './entire-table-view-routing';
     EntireTableViewComponent
   ],
   providers: [
-    FilterService
+    SearchService
   ]
 })
 export default class EntireTableViewModule {
