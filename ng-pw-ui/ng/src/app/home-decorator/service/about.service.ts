@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers, RequestOptions, RequestMethod, Request } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
 
+import { Http } from '@angular/http';
+import { Response } from '@angular/http';
+import { Headers } from '@angular/http';
+import { RequestOptions } from '@angular/http';
+import { RequestMethod } from '@angular/http';
+import { Request } from '@angular/http';
+
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
 import { AboutApplication } from 'app/home-decorator/model/about-application';

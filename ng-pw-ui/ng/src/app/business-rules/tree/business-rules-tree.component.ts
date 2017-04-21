@@ -1,4 +1,8 @@
-import { Component, OnInit, ViewEncapsulation, Input, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
+import { OnInit } from '@angular/core';
+import { ViewEncapsulation } from '@angular/core';
+import { Input } from '@angular/core';
+import { ViewChild } from '@angular/core';
 
 import { TreeNode } from 'primeng/primeng';
 import { MenuItem } from 'primeng/primeng';

@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, RequestMethod, Request } from '@angular/http';
+
+import { Http } from '@angular/http';
+import { Headers } from '@angular/http';
+import { RequestOptions } from '@angular/http';
+import { RequestMethod } from '@angular/http';
+import { Request } from '@angular/http';
+
 import { Observable } from 'rxjs/Observable';
 
 import { Credentials } from 'app/login/model/credentials';

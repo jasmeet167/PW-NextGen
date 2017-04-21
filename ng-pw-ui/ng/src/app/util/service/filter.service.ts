@@ -1,6 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers, RequestOptions, RequestMethod, Request } from '@angular/http';
+
+import { Http } from '@angular/http';
+import { Response } from '@angular/http';
+import { Headers } from '@angular/http';
+import { RequestOptions } from '@angular/http';
+import { RequestMethod } from '@angular/http';
+import { Request } from '@angular/http';
+
 import { Observable } from 'rxjs/Observable';
+
 import { SelectItem } from 'primeng/primeng';
 
 import { ChangesFilterData } from 'app/util/model/changes-filter-data';
@@ -172,7 +180,7 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-                    .map(response => { return <SelectItem[]> response.json(); });
+               .map(response => { return <SelectItem[]> response.json(); });
   }
 
   getPlanTableOptions(authToken: string, envId: string, compCode: string): Observable<SelectItem[]> {
@@ -217,7 +225,7 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <SelectItem[]>response.json(); });
+               .map(response => { return <SelectItem[]>response.json(); });
   }
 
   getCompanyOptions(authToken: string, viewChanges: boolean, envId: string): Observable<SelectItem[]> {
@@ -233,7 +241,7 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <SelectItem[]>response.json(); });
+               .map(response => { return <SelectItem[]>response.json(); });
   }
 
   getProductOptions(authToken: string, viewChanges: boolean, envId: string,
@@ -251,7 +259,7 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <SelectItem[]>response.json(); });
+               .map(response => { return <SelectItem[]>response.json(); });
   }
 
   getPlanCodeOptions(authToken: string, viewChanges: boolean, envId: string,
@@ -270,7 +278,7 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <SelectItem[]>response.json(); });
+               .map(response => { return <SelectItem[]>response.json(); });
   }
 
   getIssueStateOptions(authToken: string, viewChanges: boolean, envId: string,
@@ -290,7 +298,7 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <SelectItem[]>response.json(); });
+               .map(response => { return <SelectItem[]>response.json(); });
   }
 
   getLobOptions(authToken: string, viewChanges: boolean, envId: string,
@@ -312,7 +320,7 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <SelectItem[]>response.json(); });
+               .map(response => { return <SelectItem[]>response.json(); });
   }
 
   getEffDateOptions(authToken: string, viewChanges: boolean, envId: string,
@@ -335,7 +343,7 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <SelectItem[]>response.json(); });
+               .map(response => { return <SelectItem[]>response.json(); });
   }
 
   getProjects(authToken: string, envId: string): Observable<SelectItem[]> {
@@ -350,7 +358,7 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <SelectItem[]>response.json(); });
+               .map(response => { return <SelectItem[]>response.json(); });
   }
 
   getApplyChangesDetails(authToken: string, envId: string): Observable<ApplyFilterData> {
@@ -365,7 +373,7 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <ApplyFilterData>response.json(); });
+               .map(response => { return <ApplyFilterData>response.json(); });
   }
 
   getPromoteDetails(authToken: string, sourceEnvId: string, targetEnvId: string): Observable<PromoteFilterData> {
@@ -381,7 +389,7 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <PromoteFilterData>response.json(); });
+               .map(response => { return <PromoteFilterData>response.json(); });
   }
 
   getCompanyForSummary(authToken: string, filterAspect: string, envId: string): Observable<SelectItem[]> {
@@ -397,7 +405,7 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <SelectItem[]>response.json(); });
+               .map(response => { return <SelectItem[]>response.json(); });
   }
 
   getProductOptionsForSummary(authToken: string, filterAspect: string, envId: string,
@@ -414,7 +422,7 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <SelectItem[]>response.json(); });
+               .map(response => { return <SelectItem[]>response.json(); });
   }
 
   getPlanCodeOptionsForSummary(authToken: string, filterAspect: string, envId: string,
@@ -433,7 +441,7 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <SelectItem[]>response.json(); });
+               .map(response => { return <SelectItem[]>response.json(); });
   }
 
   getIssueStateOptionsForSummary(authToken: string, filterAspect: string, envId: string,
@@ -453,7 +461,7 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <SelectItem[]>response.json(); });
+               .map(response => { return <SelectItem[]>response.json(); });
   }
 
   getLobOptionsForSummary(authToken: string, filterAspect: string, envId: string,
@@ -475,7 +483,7 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <SelectItem[]>response.json(); });
+               .map(response => { return <SelectItem[]>response.json(); });
   }
 
   getEffDateOptionsForSummary(authToken: string, filterAspect: string, envId: string,
@@ -498,6 +506,6 @@ export class FilterService {
     options.method = RequestMethod.Get;
 
     return this.http.request(new Request(options))
-      .map(response => { return <SelectItem[]>response.json(); });
+               .map(response => { return <SelectItem[]>response.json(); });
   }
 }

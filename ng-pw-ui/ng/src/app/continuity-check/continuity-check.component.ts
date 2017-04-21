@@ -1,14 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { OnInit } from '@angular/core';
+
 import { SelectItem } from 'primeng/primeng';
 
 import { NotificationService } from 'app/notification/service/notification.service';
 import { FilterService } from 'app/util/service/filter.service';
+
 @Component({
   templateUrl: './continuity-check.component.html',
   styleUrls: ['./continuity-check.component.css']
 })
 export class ContinuityCheckComponent implements OnInit {
-
   public envIdOptions: SelectItem[];
   public envId: string;
 

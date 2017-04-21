@@ -1,11 +1,13 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component } from '@angular/core';
+import { OnInit } from '@angular/core';
+import { Input } from '@angular/core';
 
 import { SelectItem } from 'primeng/primeng';
 
-import { BusinessRulesTreeComponent } from '../tree/business-rules-tree.component';
-
 import { NotificationService } from 'app/notification/service/notification.service';
 import { FilterService } from 'app/util/service/filter.service';
+
+import { BusinessRulesTreeComponent } from '../tree/business-rules-tree.component';
 
 @Component({
   selector: 'app-business-rules-search',

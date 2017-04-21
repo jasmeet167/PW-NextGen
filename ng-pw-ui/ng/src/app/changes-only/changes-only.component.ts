@@ -1,10 +1,11 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component } from '@angular/core';
+import { ViewEncapsulation } from '@angular/core';
 import { OnInit } from '@angular/core';
+
 import { SelectItem } from 'primeng/primeng';
 
 import { NotificationService } from 'app/notification/service/notification.service';
 import { FilterService } from 'app/util/service/filter.service';
-
 import { ChangesFilterData } from 'app/util/model/changes-filter-data';
 
 @Component({

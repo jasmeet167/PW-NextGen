@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
+
 import { Http } from '@angular/http';
-import { MenuItem } from 'primeng/primeng';
 
 import { Observable } from 'rxjs/Observable';
+
+import { MenuItem } from 'primeng/primeng';
 
 @Injectable()
 export class MenuService {

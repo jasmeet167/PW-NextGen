@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
+
 import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavigationEnd } from '@angular/router';
+
 import { Subscription } from 'rxjs/Subscription';
 
 import { MenuItem } from 'primeng/primeng';
@@ -9,8 +11,8 @@ import { MenuItem } from 'primeng/primeng';
 import { NotificationService } from 'app/notification/service/notification.service';
 import { MenuService } from 'app/util/service/menu.service';
 import { AboutService } from 'app/home-decorator/service/about.service';
-
 import { MenuHelper } from 'app/util/menu.helper';
+
 import { AboutApplication } from './model/about-application';
 
 @Component({

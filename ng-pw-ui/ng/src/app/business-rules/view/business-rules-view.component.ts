@@ -1,11 +1,15 @@
-import { Component, ViewEncapsulation, OnInit, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
+import { ViewEncapsulation } from '@angular/core';
+import { OnInit } from '@angular/core';
+import { ViewChild } from '@angular/core';
 
 import { Message } from 'primeng/primeng';
 import { SelectItem } from 'primeng/primeng';
 
+import { NotificationService } from 'app/notification/service/notification.service';
+
 import { BusinessRulesSearchComponent } from '../search/business-rules-search.component';
 import { BusinessRulesTreeComponent } from '../tree/business-rules-tree.component';
-import { NotificationService } from 'app/notification/service/notification.service';
 
 @Component({
   templateUrl: './business-rules-view.component.html',

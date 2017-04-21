@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Response, ResponseType } from '@angular/http';
+
+import { Response } from '@angular/http';
+import { ResponseType } from '@angular/http';
 
 import { ErrorModel } from 'app/util/model/error-model';
 

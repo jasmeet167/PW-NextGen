@@ -1,5 +1,9 @@
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { ViewEncapsulation } from '@angular/core';
+import { OnInit } from '@angular/core';
+
 import { SelectItem } from 'primeng/primeng';
+
 import { NotificationService } from 'app/notification/service/notification.service';
 import { FilterService } from 'app/util/service/filter.service';
 import { PromoteFilterData } from 'app/util/model/promote-filter-data';
@@ -203,5 +207,4 @@ export class PromoteComponent implements OnInit {
     this.isEnterPackageDisabled = true;
     this.isResetDisabled = true;
   }
-
 }

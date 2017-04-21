@@ -1,14 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { OnInit } from '@angular/core';
+
 import { ResponseType } from '@angular/http';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+
+import { FormBuilder } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
+import { FormControl } from '@angular/forms';
+import { Validators } from '@angular/forms';
+
 import { Router } from '@angular/router';
 
 import { Message } from 'primeng/primeng';
 
 import { NotificationService } from 'app/notification/service/notification.service';
+
 import { ConfigService } from './service/config.service';
 import { LoginService } from './service/login.service';
-
 import { Configuration } from './model/configuration';
 import { LoginResponse } from './model/login-response';
 

@@ -1,4 +1,3 @@
-
 import { SelectItem } from 'primeng/primeng';
 
 export interface ApplyFilterData {

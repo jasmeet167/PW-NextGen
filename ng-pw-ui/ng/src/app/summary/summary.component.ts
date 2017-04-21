@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { OnInit } from '@angular/core';
+
 import { SelectItem } from 'primeng/primeng';
 
 import { NotificationService } from 'app/notification/service/notification.service';
@@ -9,7 +11,6 @@ import { FilterService } from 'app/util/service/filter.service';
   styleUrls: ['./summary.component.css']
 })
 export class SummaryComponent implements OnInit {
-
   public envIdOptions: SelectItem[];
   public envId: string;
 
@@ -506,5 +507,4 @@ export class SummaryComponent implements OnInit {
       this.isGoDisabled = true;
     }
   }
-
 }
