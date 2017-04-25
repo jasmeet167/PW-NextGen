@@ -1,6 +1,7 @@
 package com.csc.fsg.life.rest.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,8 @@ public class BusinessRulesTableServiceImpl
 		super("com.csc.fsg.life.rest.service.BusinessRulesTableService");
 	}
 
-	public TableModel getBusinessRulesTable(RestServiceParam param, boolean viewChanges, String productPrefix, String tableName, String tableSubset, TreeNodePlanKey planKey)
+	public TableModel getBusinessRulesTable(RestServiceParam param, boolean viewChanges, String productPrefix, String tableName, String tableSubset,
+											TreeNodePlanKey planKey, List<String> projects)
 	{
 		try {
 			String envId = param.getEnvId();

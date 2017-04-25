@@ -72,13 +72,15 @@ paths:
             Table subset matching the selected tree node.
           required: true
           type: string
-        - name: planKey
+        - name: remainingKeyData
           in: body
           description: |
-            Plan key data associated with the selected tree node.
+            Remaining key information, which is not suitable
+            to be suppliad via headers, and which is required
+            to complete the inquiry.
           required: false
           schema:
-            $ref: '#/definitions/treeNodePlanKey'
+            $ref: '#/definitions/remainingKeyData'
       tags:
         - Business Rules Table
       responses:
@@ -107,6 +109,18 @@ paths:
             $ref: '#/definitions/errorModel'
 
 definitions:
+  remainingKeyData:
+    type: object
+    properties:
+      planKey:
+        $ref: '#/definitions/treeNodePlanKey'
+      projects:
+        description: |
+          Selected projects.
+        type: array
+        items:
+          type: string
+
   tableModel:
     type: object
     required:

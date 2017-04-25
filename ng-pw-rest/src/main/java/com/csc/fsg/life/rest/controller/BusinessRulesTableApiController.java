@@ -1,5 +1,7 @@
 package com.csc.fsg.life.rest.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.csc.fsg.life.rest.api.BusinessRulesTableApi;
+import com.csc.fsg.life.rest.model.RemainingKeyData;
 import com.csc.fsg.life.rest.model.TableModel;
 import com.csc.fsg.life.rest.model.TreeNodePlanKey;
 import com.csc.fsg.life.rest.param.RestServiceParam;
@@ -31,15 +34,22 @@ public class BusinessRulesTableApiController
 																	 @RequestHeader(value = "productCode", required = true) String productCode,
 																	 @RequestHeader(value = "tableName", required = true) String tableName,
 																	 @RequestHeader(value = "tableSubset", required = true) String tableSubset,
-																	 @RequestBody TreeNodePlanKey planKey)	
+																	 @RequestBody RemainingKeyData remainingKeyData)
 	{
 		String productPrefix = null;
 		if (productCode != null && productCode.length() > 0)
 			productPrefix = productCode.substring(0, 1);
 		boolean includeChanges = Boolean.TRUE.equals(viewChanges);
 
+		TreeNodePlanKey planKey = null;
+		List<String> projects = null;
+		if (remainingKeyData != null) {
+			planKey = remainingKeyData.getPlanKey();
+			projects = remainingKeyData.getProjects();
+		}
+
 		RestServiceParam param = buildRestServiceParam(authToken, envId, companyCode);
-		TableModel tableModel = businessRulesTableService.getBusinessRulesTable(param, includeChanges, productPrefix, tableName, tableSubset, planKey);
+		TableModel tableModel = businessRulesTableService.getBusinessRulesTable(param, includeChanges, productPrefix, tableName, tableSubset, planKey, projects);
 		return new ResponseEntity<>(tableModel, HttpStatus.OK);
 	}
 }
