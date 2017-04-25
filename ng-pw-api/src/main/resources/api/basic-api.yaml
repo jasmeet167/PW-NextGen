@@ -1566,19 +1566,6 @@ definitions:
         format: date-time
         description: Timestamp indicating when this application was built.
 
-  selectItem:
-    type: object
-    required:
-      - label
-      - value
-    properties:
-      label:
-        type: string
-        description: Representation of value of this item suitable for display.
-      value:
-        type: object
-        description: The internal representation of value of this item.
-
   changesFilterData:
     type: object
     properties:
@@ -1643,6 +1630,19 @@ definitions:
 # Common definitions, which begin at this point,
 # must exactly match those in each API specification.
 # ========================================================
+  selectItem:
+    type: object
+    required:
+      - label
+      - value
+    properties:
+      label:
+        type: string
+        description: Representation of value of this item suitable for display.
+      value:
+        type: object
+        description: The internal representation of value of this item.
+
   errorModel:
     type: object
     required:

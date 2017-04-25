@@ -68,6 +68,20 @@
 						</configuration>
 					</execution>
 					<execution>
+						<id>generate-business-rules-table-api</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${basedir}/src/main/resources/api/business-rules-table-api.yaml</inputSpec>
+							<apiPackage>com.csc.fsg.life.rest.api</apiPackage>
+							<modelPackage>com.csc.fsg.life.rest.model</modelPackage>
+							<language>spring</language>
+							<output>${basedir}</output>
+						</configuration>
+					</execution>
+					<execution>
 						<id>generate-basic-scripts</id>
 						<phase>generate-sources</phase>
 						<goals>
@@ -89,6 +103,20 @@
 						</goals>
 						<configuration>
 							<inputSpec>${basedir}/src/main/resources/api/business-rules-tree-api.yaml</inputSpec>
+							<apiPackage>api</apiPackage>
+							<modelPackage>model</modelPackage>
+							<language>typescript-angular</language>
+							<output>${basedir}/src/main/ts</output>
+						</configuration>
+					</execution>
+					<execution>
+						<id>generate-business-rules-table-scripts</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${basedir}/src/main/resources/api/business-rules-table-api.yaml</inputSpec>
 							<apiPackage>api</apiPackage>
 							<modelPackage>model</modelPackage>
 							<language>typescript-angular</language>

@@ -28,11 +28,6 @@ public class LocalDateSerializer
 	public void serialize(LocalDate value, JsonGenerator gen, SerializerProvider provider)
 		throws IOException, JsonProcessingException
 	{
-		// gen.writeStartObject();
-		// gen.writeStringField("fieldName", value);
-		// gen.writeNumberField("fieldName", value);
-		// gen.writeEndObject();
-
 		gen.writeString(value.toString());
 	}
 }

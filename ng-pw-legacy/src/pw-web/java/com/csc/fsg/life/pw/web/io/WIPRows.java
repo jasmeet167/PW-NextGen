@@ -14,8 +14,14 @@ import org.apache.commons.logging.Log;
 
 import com.csc.fsg.life.exceptions.WrapperException;
 import com.csc.fsg.life.pw.common.rules.SpecialHandling;
+import com.csc.fsg.life.pw.common.transferobjects.PlanCriteriaTO;
 import com.csc.fsg.life.pw.common.util.*;
+import com.csc.fsg.life.pw.web.actions.rcm.beans.*;
+import com.csc.fsg.life.pw.web.actions.table.MergedDataAssistent;
+import com.csc.fsg.life.pw.web.actions.tree.IndexMergeAssistent;
+import com.csc.fsg.life.pw.web.actions.tree.PlanMergeAssistent;
 import com.csc.fsg.life.pw.web.environment.*;
+//import com.csc.fsg.life.pw.web.io.pointermaintenance.*;
 import com.csc.fsg.life.pw.web.log.PWServerLogManager;
 import com.csc.fsg.life.pw.web.utils.*;
 
@@ -170,18 +176,18 @@ public class WIPRows extends ArrayList<WIPRow> implements IWIPRows {
 		//
 		try {
 			
-//			if (filter instanceof AuditTableFilter ){
-//				AuditTableFilter auditFilter = (AuditTableFilter)filter;
-//				Environment environment = EnvironmentManager. getInstance().getEnvironment(filter.getEnvironment());
+			if (filter instanceof AuditTableFilter ){
+				AuditTableFilter auditFilter = (AuditTableFilter)filter;
+				Environment environment = EnvironmentManager. getInstance().getEnvironment(filter.getEnvironment());
 			//	if (environment.isRemoteAudit())
 				//	connection = DBConnMgr.getInstance().getConnection(filter.getEnvironment(),DBConnMgr.BUSINESS_RULES);
 			//	else
-//					connection = DBConnMgr.getInstance().getConnection(filter.getEnvironment(),DBConnMgr.APPL);
-//				
-//				
-//			}else{
+					connection = DBConnMgr.getInstance().getConnection(filter.getEnvironment(),DBConnMgr.APPL);
+				
+				
+			}else{
 				connection = DBConnMgr.getInstance().getConnection(filter.getEnvironment(),DBConnMgr.APPL);
-//			}
+			}
 		
 			stmt = connection.createStatement();
 			if (lockRowsForPromotion) {

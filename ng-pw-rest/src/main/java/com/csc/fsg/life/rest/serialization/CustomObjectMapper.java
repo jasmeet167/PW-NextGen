@@ -6,6 +6,7 @@ import org.joda.time.LocalDate;
 import com.csc.fsg.life.rest.model.TreeNode;
 import com.csc.fsg.life.rest.model.TreeNodeData;
 import com.csc.fsg.life.rest.model.TreeNodePlanKey;
+import com.csc.fsg.life.rest.model.table.TableRow;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,6 +31,8 @@ public class CustomObjectMapper
 		module.addSerializer(TreeNodeData.class, new TreeNodeDataSerializer());
 		module.addSerializer(TreeNodePlanKey.class, new TreeNodePlanKeySerializer());
 
+		module.addSerializer(TableRow.class, new TableRowSerializer());
+		
 		registerModule(module);
 	}
 }

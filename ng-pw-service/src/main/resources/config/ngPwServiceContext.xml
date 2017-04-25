@@ -58,4 +58,5 @@
 
 	<import resource="classpath:config/pwEnvContext.xml"/>
 	<import resource="classpath:config/pwConfigContext.xml"/>
+	<import resource="classpath:tableConstraints/tableConstraints.xml"/>
 </beans>

@@ -1,0 +1,249 @@
+# Product Wizard REST API
+swagger: '2.0'
+
+info:
+  title: Product Wizard Business Rules Table API
+  description: Business Rules table REST API for Product Wizard
+  version: "0.0.1"
+
+host: localhost:8443
+
+schemes:
+  - https
+
+basePath: /ng-pw-rest
+
+paths:
+  /business-rules-table/inquiry/first:
+    post:
+      summary: |
+        Initial subset of contents of a Business Rules Table
+        within the indicated Environment and Company.
+      description: |
+        This endpoint returns the initial subset of contents of
+        a Business Rules Table within the indicated Environment
+        and Company.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: getBusinessRulesTableFirstPage
+      parameters:
+        - name: authToken
+          in: header
+          description: | 
+            Auth Token.
+          required: true
+          type: string
+        - name: viewChanges
+          in: header
+          description: |
+            Indicator used to request Rules or Rules with Changes.
+          required: true
+          type: boolean
+        - name: envId
+          in: header
+          description: |
+            Environment Id.
+          required: true
+          type: string
+        - name: companyCode
+          in: header
+          description: |
+            Company Code.
+          required: true
+          type: string
+        - name: productCode
+          in: header
+          description: |
+            Product Code.
+          required: true
+          type: string
+        - name: tableName
+          in: header
+          description: | 
+            Name of the business rule table, contents of which
+            are to be retrieved.
+          required: true
+          type: string
+        - name: tableSubset
+          in: header
+          description: | 
+            Table subset matching the selected tree node.
+          required: true
+          type: string
+        - name: planKey
+          in: body
+          description: |
+            Plan key data associated with the selected tree node.
+          required: false
+          schema:
+            $ref: '#/definitions/treeNodePlanKey'
+      tags:
+        - Business Rules Table
+      responses:
+        200:
+          description: |
+            OK.  The data model corresponding to the Business Rule
+            matching the provided criteria is returned.
+          schema:
+            $ref: '#/definitions/tableModel'
+        400:
+          description: |
+            Bad Request.  Invalid or malformed request detected.
+          schema:
+            $ref: '#/definitions/errorModel'
+        401:
+          description: |
+            Unauthorized.  Required authorization information not found.
+            Auth token is either missing or invalid.
+        403:
+          description: |
+            Forbidden.  The user is not authorized to access
+            the required resources.
+        default:
+          description: Unexpected Error.
+          schema:
+            $ref: '#/definitions/errorModel'
+
+definitions:
+  tableModel:
+    type: object
+    required:
+      - table
+      - columns
+      - rows
+    properties:
+      table:
+        $ref: '#/definitions/table'
+      columns:
+        type: array
+        items:
+          $ref: '#/definitions/column'
+      rows:
+        type: array
+        items:
+          type: object
+
+  table:
+    type: object
+    required:
+      - columnCount
+      - name
+      - id
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      columnCount:
+        type: integer
+
+  column:
+    type: object
+    required:
+      - dbName
+      - keyColumn
+      - label
+      - updateable
+      - dataType
+      - controlType
+    properties:
+      dbName:
+        type: string
+      keyColumn:
+        type: boolean
+      label:
+        type: string
+      updateable:
+        type: boolean
+      dataType:
+        type: string
+        enum:
+          - STRING
+          - BOOLEAN
+          - INTEGER
+          - REAL
+      controlType:
+        type: string
+        enum:
+          - TEXT_BOX
+          - DROPDOWN
+      allowedValues:
+        type: array
+        items:
+          $ref: '#/definitions/selectItem'
+      allowedRange:
+        $ref: '#/definitions/allowedRange'
+
+  allowedRange:
+    type: object
+    required:
+      - min
+      - max
+    properties:
+      min:
+        type: number
+        format: double
+      max:
+        type: number
+        format: double
+  
+# ========================================================
+# Common definitions, which begin at this point,
+# must exactly match those in the basic API specification.
+# ========================================================
+  treeNodePlanKey:
+    type: object
+    properties:
+      productPrefix:
+        type: string
+      productSuffix:
+        type: string
+      planCode:
+        type: string
+      issueState:
+        type: string
+      lob:
+        type: string
+      effDate:
+        type: string
+        format: date
+      planType:
+        type: string
+      tablePtrId:
+        type: string
+      tablePtrVar:
+        type: string
+      tablePtrSubset:
+        type: string
+
+  selectItem:
+    type: object
+    required:
+      - label
+      - value
+    properties:
+      label:
+        type: string
+        description: Representation of value of this item suitable for display.
+      value:
+        type: object
+        description: The internal representation of value of this item.
+
+  errorModel:
+    type: object
+    required:
+      - severity
+      - errorCode
+      - message
+    properties:
+      severity:
+        type: string
+        enum:
+          - ERROR
+          - WARNING
+      errorCode:
+        type: string
+      message:
+        type: string

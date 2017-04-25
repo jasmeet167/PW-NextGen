@@ -1,0 +1,739 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Modifications: ENH1053, WMA-1373, ENH1052, ENH1167, WMA-1769, ENH1046, T0196 -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id ="stateCodes011" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="T011X"/>
+		<property name="selectColumns" value="STATE_CODE"/>
+		<property name="applyPlanFilter" value="true"/>
+	</bean>
+	
+	<bean id ="stateCodes011NoPlanFilter" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="T011X"/>
+		<property name="selectColumns" value="STATE_CODE"/>
+	</bean>
+	
+	<bean id ="stateCodes211" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="T211B"/>
+		<property name="selectColumns" value="STATE_CODE"/>
+		<property name="applyPlanFilter" value="true"/>
+	</bean>
+	
+	<bean id ="allFunds010_009MinusFundTypeA" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="T010X"/>
+		<property name="selectColumns" value="FUND_NUMBER"/>
+		<property name="applyPlanFilter" value="true"/>
+		<property name="translationTable" value="T009X"/>
+		<property name="translationJoin" value="FUND_NUMBER"/>
+		<property name="translationJoinCond" value="FUND_TYPE != 'A'"/>
+		<property name="translationCol" value="FUND_NAME"/>
+	</bean>
+	<bean id ="allFunds010_009" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="T010X"/>
+		<property name="selectColumns" value="FUND_NUMBER"/>
+		<property name="applyPlanFilter" value="true"/>
+		<property name="translationTable" value="T009X"/>
+		<property name="translationJoin" value="FUND_NUMBER"/>
+		<property name="translationCol" value="FUND_NAME"/>
+	</bean>
+	<bean id ="funds010_009FundTypeI" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="T010X"/>
+		<property name="selectColumns" value="FUND_NUMBER"/>
+		<property name="applyPlanFilter" value="true"/>
+		<property name="translationTable" value="T009X"/>
+		<property name="translationJoin" value="FUND_NUMBER"/>
+		<property name="translationJoinCond" value="FUND_TYPE = 'I'"/>
+		<property name="translationCol" value="FUND_NAME"/>
+	</bean> 
+	<bean id ="funds010_009FundTypeF" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="T010X"/>
+		<property name="selectColumns" value="FUND_NUMBER"/>
+		<property name="applyPlanFilter" value="true"/>
+		<property name="translationTable" value="T009X"/>
+		<property name="translationJoin" value="FUND_NUMBER"/>
+		<property name="translationJoinCond" value="FUND_TYPE = 'F'"/>
+		<property name="translationCol" value="FUND_NAME"/>
+	</bean> 
+	<bean id ="funds010_009FundTypeCL" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="T010X"/>
+		<property name="selectColumns" value="FUND_NUMBER"/>
+		<property name="applyPlanFilter" value="true"/>
+		<property name="translationTable" value="T009X"/>
+		<property name="translationJoin" value="FUND_NUMBER"/>
+		<property name="translationJoinCond" value="FUND_TYPE = 'C' OR FUND_TYPE = 'L'"/>
+		<property name="translationCol" value="FUND_NAME"/>
+	</bean> 
+	<bean id ="funds010_009FundTypeFLC" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="T010X"/>
+		<property name="selectColumns" value="FUND_NUMBER"/>
+		<property name="applyPlanFilter" value="true"/>
+		<property name="translationTable" value="T009X"/>
+		<property name="translationJoin" value="FUND_NUMBER"/>
+		<property name="translationJoinCond" value="FUND_TYPE = 'F' OR FUND_TYPE = 'L' OR FUND_TYPE = 'C'"/>
+		<property name="translationCol" value="FUND_NAME"/>
+	</bean>
+	<bean id ="funds010_009FundTypeFLCM" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="T010X"/>
+		<property name="selectColumns" value="FUND_NUMBER"/>
+		<property name="applyPlanFilter" value="true"/>
+		<property name="translationTable" value="T009X"/>
+		<property name="translationJoin" value="FUND_NUMBER"/>
+		<property name="translationJoinCond" value="FUND_TYPE = 'F' OR FUND_TYPE = 'L' OR FUND_TYPE = 'C' OR FUND_TYPE = 'M'"/>
+		<property name="translationCol" value="FUND_NAME"/>
+	</bean>
+	<bean id ="funds010_009FundTypeM" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="T010X"/>
+		<property name="selectColumns" value="FUND_NUMBER"/>
+		<property name="applyPlanFilter" value="true"/>
+		<property name="translationTable" value="T009X"/>
+		<property name="translationJoin" value="FUND_NUMBER"/>
+		<property name="translationJoinCond" value="FUND_TYPE = 'M'"/>
+		<property name="translationCol" value="FUND_NAME"/>
+	</bean>
+	<bean id ="allFunds010_009FundTypeFIMV" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="T010X"/>
+		<property name="selectColumns" value="FUND_NUMBER"/>
+		<property name="applyPlanFilter" value="true"/>
+		<property name="translationTable" value="T009X"/>
+		<property name="translationJoin" value="FUND_NUMBER"/>
+		<property name="translationJoinCond" value="FUND_TYPE = 'F' OR FUND_TYPE = 'I' OR FUND_TYPE = 'M' OR FUND_TYPE = 'V'"/>
+		<property name="translationCol" value="FUND_NAME"/>
+	</bean>
+	
+	<bean id ="funds210_009FundTypeD" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="T210B"/>
+		<property name="selectColumns" value="FUND_NUMBER"/>
+		<property name="applyPlanFilter" value="true"/>
+		<property name="translationTable" value="T009X"/>
+		<property name="translationJoin" value="FUND_NUMBER"/>
+		<property name="translationJoinCond" value="FUND_TYPE = 'D'"/>
+		<property name="translationCol" value="FUND_NAME"/>
+	</bean> 
+
+	<bean id ="allFunds009MinusFundTypeA" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="T009X"/>
+		<property name="onCondition" value="FUND_TYPE != 'A'"/>
+		<property name="selectColumns" value="FUND_NUMBER"/>
+		<property name="translationCol" value="FUND_NAME"/>
+	</bean>
+	<bean id ="allFunds009" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="T009X"/>
+		<property name="selectColumns" value="FUND_NUMBER"/>
+		<property name="translationCol" value="FUND_NAME"/>
+	</bean>
+	<bean id ="funds009FundTypeL" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="T009X"/>
+		<property name="onCondition" value="FUND_TYPE = 'L'"/>
+		<property name="selectColumns" value="FUND_NUMBER"/>
+		<property name="translationCol" value="FUND_NAME"/>
+	</bean> 
+	<bean id ="funds009FundTypeD" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="T009X"/>
+		<property name="onCondition" value="FUND_TYPE = 'D'"/>
+		<property name="selectColumns" value="FUND_NUMBER"/>
+		<property name="translationCol" value="FUND_NAME"/>
+	</bean> 
+	<bean id ="funds009FundTypeVI" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="T009X"/>
+		<property name="onCondition" value="FUND_TYPE = 'V' OR FUND_TYPE = 'I'"/>
+		<property name="selectColumns" value="FUND_NUMBER"/>
+		<property name="translationCol" value="FUND_NAME"/>
+	</bean> 
+	<bean id ="funds009FundTypeVFMI" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="T009X"/>
+		<property name="onCondition" value="FUND_TYPE = 'V' OR FUND_TYPE = 'F' OR FUND_TYPE = 'M' OR FUND_TYPE = 'I'"/>
+		<property name="selectColumns" value="FUND_NUMBER"/>
+		<property name="translationCol" value="FUND_NAME"/>
+	</bean> 	
+	<bean id ="fundFamily009" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="T009X"/>
+		<property name="selectColumns" value="FUND_FAMILY"/>
+	</bean>
+	<bean id ="fundStrategy009" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="T009X"/>
+		<property name="selectColumns" value="FUND_STRATEGY"/>
+	</bean>
+	
+	<bean id ="planCodes000" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="T000X"/>
+		<property name="selectColumns" value="PLAN_CODE"/>
+	</bean> 
+	<bean id ="favCodes113" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="T113X"/>
+		<property name="selectColumns" value="FAV_CODE"/>
+	</bean> 
+	
+	<bean id ="purchSeriesCodeW05" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="TW05X"/>
+		<property name="selectColumns" value="FXD_PUR_SER_CD,VAR_PUR_SER_CD,FXD_PYMT_SER_CD,VAR_PYMT_SER_CD,ABL_PUR_SER_CD,ABL_PYMT_SER_CD"/>
+	</bean> 
+	<bean id ="benDescrCodeW15" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="TW15X"/>
+		<property name="selectColumns" value="BENEFIT_DESCRIPTOR"/>
+	</bean> 
+	
+	<bean id ="allLobs008" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="T008X"/>
+		<property name="selectColumns" value="LOB_CODE"/>
+		<property name="translationCol" value="LOB_NAME"/>
+	</bean> 
+
+	<bean id="planCodesH01" class="com.csc.fsg.life.pw.web.io.TCSource">
+		<property name="fromTable" value="TH01H"/>
+		<property name="selectColumns" value="HCC_RIDER_PLAN_CD"/>
+		<property name="applyPlanFilter" value="true"/>
+	</bean>
+		
+	<bean id="tcObject" class="com.csc.fsg.life.pw.web.io.TCBean" >
+	
+		<property name="targetList" >
+		
+		<list>
+		
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T009X"/>
+				<property name="column" value="HARD_CLOSE_SUCCESSOR_FUND"/>
+				<property name="source" ref="funds009FundTypeVFMI"/>
+				<property name="addValues" value="0-Empty"/>
+			</bean>
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T009X"/>
+				<property name="column" value="LIQUIDATION_SUCCESSOR_FUND"/>
+				<property name="source" ref="funds009FundTypeVFMI"/>
+				<property name="addValues" value="0-Empty"/>
+			</bean>
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T010X"/>
+				<property name="column" value="LINE_OF_BUSINESS"/>
+				<property name="source" ref="allLobs008"/>
+				<property name="addValues" value="***-Default"/>
+			</bean>
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T010X"/>
+				<property name="column" value="FUND_NUMBER"/>
+				<property name="productPrefix" value="A"/>
+				<property name="source" ref="allFunds009MinusFundTypeA"/>
+				<property name="addValues" value="0-Empty"/>
+			</bean>
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T010X"/>
+				<property name="column" value="FUND_NUMBER"/>
+				<property name="productPrefix" value="U"/>
+				<property name="source" ref="allFunds009MinusFundTypeA"/>
+				<property name="addValues" value="0-Empty"/>
+			</bean>
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T010X"/>
+				<property name="column" value="FUND_NUMBER"/>
+				<property name="source" ref="allFunds009"/>
+				<property name="productPrefix" value="A"/>
+				<property name="productSuffix" value="5"/>
+				<property name="addValues" value="0-Empty"/>
+			</bean>
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T010X"/>
+				<property name="column" value="STATE_CODE"/>
+				<property name="source" ref="stateCodes011"/>
+				<property name="addValues" value="***-All States"/>
+			</bean>
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T014X"/>
+				<property name="column" value="LOB_CODE"/>
+				<property name="source" ref="allLobs008"/>
+				<property name="addValues" value="***-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T014X"/>
+				<property name="column" value="FUND_NUMBER"/>
+				<property name="source" ref="allFunds009"/>
+				<property name="addValues" value="99999999"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T015X"/>
+				<property name="column" value="LOB_CODE"/>
+				<property name="source" ref="allLobs008"/>
+				<property name="addValues" value="***-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T016X"/>
+				<property name="column" value="PLAN_CODE"/>
+				<property name="source" ref="planCodes000"/>
+				<property name="addValues" value="******"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T016X"/>
+				<property name="column" value="LOB_CODE"/>
+				<property name="source" ref="allLobs008"/>
+				<property name="addValues" value="***-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T018X"/>
+				<property name="column" value="LOB_CODE"/>
+				<property name="source" ref="allLobs008"/>
+				<property name="addValues" value="***-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T023X"/>
+				<property name="column" value="FUND_NUMBER"/>
+				<property name="source" ref="funds010_009FundTypeCL"/>
+				<property name="addValues" value="99999999-Default Fund"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T024X"/>
+				<property name="column" value="FUND_NUMBER"/>
+				<property name="productPrefix" value="A"/>
+				<property name="source" ref="funds010_009FundTypeFLCM"/>
+				<property name="addValues" value="99999999-Default Fund"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T024X"/>
+				<property name="column" value="FUND_NUMBER"/>
+				<property name="productPrefix" value="U"/>
+				<property name="source" ref="funds010_009FundTypeFLC"/>
+				<property name="addValues" value="99999999-Default Fund"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T025X"/>
+				<property name="column" value="ISSUE_STATE"/>
+				<property name="source" ref="stateCodes011"/>
+				<property name="addValues" value="***-All States"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T026X"/>
+				<property name="column" value="ISSUE_STATE"/>
+				<property name="source" ref="stateCodes011"/>
+				<property name="addValues" value="***-All States"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T035E"/>
+				<property name="column" value="STATE_CODE"/>
+				<property name="source" ref="stateCodes011"/>
+				<property name="addValues" value="***-All States"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T040X"/>
+				<property name="column" value="FUND_NUMBER"/>
+				<property name="source" ref="allFunds010_009MinusFundTypeA"/>
+				<property name="addValues" value="99999999-Default Fund"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T047X"/>
+				<property name="column" value="PLAN_CODE"/>
+				<property name="source" ref="planCodes000"/>
+				<property name="addValues" value="******"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T048E"/>
+				<property name="column" value="COV_PLAN_CODE"/>
+				<property name="source" ref="planCodes000"/>
+				<property name="addValues" value="******"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T057X"/>
+				<property name="column" value="FUND_NUMBER"/>
+				<property name="source" ref="allFunds009MinusFundTypeA"/>
+				<property name="addValues" value="99999999-Default Fund"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T058X"/>
+				<property name="column" value="PLAN_CODE"/>
+				<property name="productPrefix" value="T"/>
+				<property name="source" ref="planCodes000"/>
+				<property name="addValues" value="******"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T060X"/>
+				<property name="column" value="FUND_NUMBER"/>
+				<property name="productPrefix" value="A"/>
+				<property name="source" ref="allFunds010_009MinusFundTypeA"/>
+				<property name="addValues" value="99999999-Default Fund"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T060X"/>
+				<property name="column" value="ISSUE_STATE"/>
+				<property name="source" ref="stateCodes011"/>
+				<property name="addValues" value="***-All States"/>
+			</bean>
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T097E"/>
+				<property name="column" value="FUND_NUMBER"/>
+				<property name="source" ref="allFunds010_009MinusFundTypeA"/>
+				<property name="addValues" value="99999999-Default Fund"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T097E"/>
+				<property name="column" value="LINE_OF_BUSINESS"/>
+				<property name="source" ref="allLobs008"/>
+				<property name="addValues" value="***-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T0C5X"/>
+				<property name="column" value="ISSUE_STATE"/>
+				<property name="source" ref="stateCodes011"/>
+				<property name="addValues" value="***-All States"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T0C6X"/>
+				<property name="column" value="STATE_CODE"/>
+				<property name="source" ref="stateCodes011"/>
+				<property name="addValues" value="***-All States"/>
+			</bean>
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T0C8X"/>
+				<property name="column" value="FUND_NUMBER"/>
+				<property name="source" ref="funds010_009FundTypeI"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T0C8X"/>
+				<property name="column" value="LOB_CODE"/>
+				<property name="source" ref="allLobs008"/>
+				<property name="addValues" value="***-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T0C8X"/>
+				<property name="column" value="INITIAL_HOLD_FUND"/>
+				<property name="source" ref="funds010_009FundTypeF"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T0C8X"/>
+				<property name="column" value="STATE_CODE"/>
+				<property name="source" ref="stateCodes011"/>
+				<property name="addValues" value="***-All States"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T0C8X"/>
+				<property name="column" value="RENEWAL_HOLD_FUND"/>
+				<property name="source" ref="funds010_009FundTypeF"/>
+				<property name="addValues" value="99999999-Default Fund"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T0D4X"/>
+				<property name="column" value="FUND_NUMBER"/>
+				<property name="source" ref="funds010_009FundTypeM"/>
+				<property name="addValues" value="99999999-Default Fund"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T0D4X"/>
+				<property name="column" value="STATE_CODE"/>
+				<property name="source" ref="stateCodes011"/>
+				<property name="addValues" value="***-All States"/>
+			</bean>
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T105X"/>
+				<property name="column" value="FUND_NUMBER"/>
+				<property name="source" ref="allFunds009MinusFundTypeA"/>
+				<property name="addValues" value="99999999-Default Fund"/>
+			</bean> 
+		
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T108X"/>
+				<property name="column" value="LINE_OF_BUSINESS"/>
+				<property name="source" ref="allLobs008"/>
+				<property name="addValues" value="***-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T113X"/>
+				<property name="column" value="FAV_FUND_NUMBER"/>
+				<property name="source" ref="funds009FundTypeVI"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T114X"/>
+				<property name="column" value="PLAN_CODE"/>
+				<property name="source" ref="planCodes000"/>
+				<property name="addValues" value="******"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T114X"/>
+				<property name="column" value="ISSUE_STATE"/>
+				<property name="source" ref="stateCodes011NoPlanFilter"/>
+				<property name="addValues" value="***-All States"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T114X"/>
+				<property name="column" value="LINE_OF_BUSINESS"/>
+				<property name="source" ref="allLobs008"/>
+			<property name="addValues" value="***-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T114X"/>
+				<property name="column" value="INIT_FAV_CODE"/>
+				<property name="source" ref="favCodes113"/>
+				<property name="addValues" value="******-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T115X"/>
+				<property name="column" value="CURRENT_FAV_CODE"/>
+				<property name="source" ref="favCodes113"/>
+				<property name="addValues" value="******-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T115X"/>
+				<property name="column" value="NEW_FAV_CODE"/>
+				<property name="source" ref="favCodes113"/>
+				<property name="addValues" value="******-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T119X"/>
+				<property name="column" value="FAV_CODE"/>
+				<property name="source" ref="favCodes113"/>
+			</bean>
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T125X"/>
+				<property name="column" value="FUND_FAMILY"/>
+				<property name="source" ref="fundFamily009"/>
+				<property name="addValues" value="**-Default"/>
+			</bean>
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T125X"/>
+				<property name="column" value="FUND_STRATEGY"/>
+				<property name="source" ref="fundStrategy009"/>
+				<property name="addValues" value="**-Default"/>
+			</bean>  
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T125X"/>
+				<property name="column" value="FUND_NUMBER"/>
+				<property name="source" ref="allFunds009MinusFundTypeA"/>
+				<property name="addValues" value="99999999-Default Fund"/>
+			</bean>
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T125X"/>
+				<property name="column" value="PLAN_CODE"/>
+				<property name="source" ref="planCodes000"/>
+				<property name="addValues" value="******-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T128X"/>
+				<property name="column" value="LOB_CODE"/>
+				<property name="source" ref="allLobs008"/>
+			<property name="addValues" value="***-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T205B"/>
+				<property name="column" value="FUND_NUMBER"/>
+				<property name="source" ref="funds210_009FundTypeD"/>
+				<property name="addValues" value="99999999"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T210B"/>
+				<property name="column" value="LINE_OF_BUSINESS"/>
+				<property name="source" ref="allLobs008"/>
+				<property name="addValues" value="***-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">	
+				<property name="table" value="T210B"/>
+				<property name="column" value="FUND_NUMBER"/>
+				<property name="source" ref="funds009FundTypeD"/>
+				<property name="addValues" value="0-Empty"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T224B"/>
+				<property name="column" value="FUND_NUMBER"/>
+				<property name="source" ref="funds210_009FundTypeD"/>
+				<property name="addValues" value="99999999-Default Fund"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T225B"/>
+				<property name="column" value="ISSUE_STATE"/>
+				<property name="source" ref="stateCodes211"/>
+				<property name="addValues" value="***-All States"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TA04F"/>
+				<property name="column" value="LINE_OF_BUSINESS"/>
+				<property name="source" ref="allLobs008"/>
+				<property name="addValues" value="***-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TA59F"/>
+				<property name="column" value="LINE_OF_BUSINESS"/>
+				<property name="source" ref="allLobs008"/>
+				<property name="addValues" value="***-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TA61F"/>
+				<property name="column" value="FUND_NUMBER"/>
+				<property name="source" ref="allFunds010_009MinusFundTypeA"/>
+				<property name="addValues" value="99999999-Default Fund"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TA62F"/>
+				<property name="column" value="FUND_NUMBER"/>
+				<property name="source" ref="allFunds010_009MinusFundTypeA"/>
+				<property name="addValues" value="99999999-Default Fund"/>
+			</bean> 
+			
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TAB3F"/>
+				<property name="column" value="FUND_NUMBER"/>
+				<property name="source" ref="allFunds010_009MinusFundTypeA"/>
+				<property name="addValues" value="99999999-Default Fund"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TAB6F"/>
+				<property name="column" value="LOB_CODE"/>
+				<property name="source" ref="allLobs008"/>
+				<property name="addValues" value="***-Default"/>
+			</bean>
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TAC1F"/>
+				<property name="column" value="LOB_CODE"/>
+				<property name="source" ref="allLobs008"/>
+				<property name="addValues" value="***-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TAC2F"/>
+				<property name="column" value="LOB_CODE"/>
+				<property name="source" ref="allLobs008"/>
+				<property name="addValues" value="***-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TEC5Z"/>
+				<property name="column" value="LINE_OF_BUSINESS"/>
+				<property name="source" ref="allLobs008"/>
+				<property name="addValues" value="***-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TT15T"/>
+				<property name="column" value="LOB_CODE"/>
+				<property name="source" ref="allLobs008"/>
+				<property name="addValues" value="***-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TT15T"/>
+				<property name="column" value="STATE_CODE"/>
+				<property name="source" ref="stateCodes011"/>
+				<property name="addValues" value="***-All States"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TT33T"/>
+				<property name="column" value="ISSUE_STATE"/>
+				<property name="source" ref="stateCodes011"/>
+				<property name="addValues" value="***-All States"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TT79T"/>
+				<property name="column" value="LOB"/>
+				<property name="source" ref="allLobs008"/>
+				<property name="addValues" value="***-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TTC1T"/>
+				<property name="column" value="LOB_CODE"/>
+				<property name="source" ref="allLobs008"/>
+				<property name="addValues" value="***-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TW04X"/>
+				<property name="column" value="LOB_CODE"/>
+				<property name="source" ref="allLobs008"/>
+				<property name="addValues" value="***-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TW05X"/>
+				<property name="column" value="LOB_CODE"/>
+				<property name="source" ref="allLobs008"/>
+				<property name="addValues" value="***-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TW24X"/>
+				<property name="column" value="FUND_NUMBER"/>
+				<property name="source" ref="funds010_009FundTypeF"/>
+				<property name="addValues" value="99999999-Default Fund"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TW30X"/>
+				<property name="column" value="BENEFIT_DESCRIPTOR"/>
+				<property name="source" ref="benDescrCodeW15"/>
+				<property name="addValues" value="********"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TW30X"/>
+				<property name="column" value="PUR_SERIES_CODE"/>
+				<property name="source" ref="purchSeriesCodeW05"/>
+				<property name="addValues" value="*****"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TW54X"/>
+				<property name="column" value="PURCH_SERIES_CODE"/>
+				<property name="source" ref="purchSeriesCodeW05"/>
+				<property name="addValues" value="*****"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TW56X"/>
+				<property name="column" value="PURCH_SERIES_CODE"/>
+				<property name="source" ref="purchSeriesCodeW05"/>
+				<property name="addValues" value="*****"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TW57X"/>
+				<property name="column" value="BENEFIT_DESCRIPTOR"/>
+				<property name="source" ref="benDescrCodeW15"/>
+				<property name="addValues" value="********"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TW57X"/>
+				<property name="column" value="PURCH_SERIES_CODE"/>
+				<property name="source" ref="purchSeriesCodeW05"/>
+				<property name="addValues" value="*****"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TW66X"/>
+				<property name="column" value="FUND_NUMBER"/>
+				<property name="source" ref="allFunds010_009"/>
+			</bean>  
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TW71X"/>
+				<property name="column" value="LOB_CODE"/>
+				<property name="source" ref="allLobs008"/>
+				<property name="addValues" value="***-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="TXW1X"/>
+				<property name="column" value="LINE_OF_BUSINESS"/>
+				<property name="source" ref="allLobs008"/>
+				<property name="addValues" value="***-Default"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T046E"/>
+				<property name="column" value="PCT_INIT_PREM_FND"/>
+				<property name="source" ref="funds009FundTypeL"/>
+				<property name="addValues" value="99999999-Default Fund"/>
+			</bean>
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T091X"/>
+				<property name="column" value="HCC_RIDER_PLAN_CD"/>
+				<property name="source" ref="planCodesH01"/>
+				<property name="addValues" value="******-Not a factor"/>
+			</bean> 
+			<bean class="com.csc.fsg.life.pw.web.io.TCTarget">
+				<property name="table" value="T091X"/>
+				<property name="column" value="FUND_NUMBER"/>
+				<property name="source" ref="allFunds010_009FundTypeFIMV"/>
+				<property name="addValues" value="99999999-Not a factor"/>
+			</bean> 
+			
+		</list>
+	</property>
+
+	<property name="dynamicTargetList" >
+		<list>
+			<bean class="com.csc.fsg.life.pw.web.io.T007xTrdPlanCodeSource">
+				<property name="table" value="T007X"/>
+				<property name="productPrefix" value="T"/>
+				<property name="controlColumn" value="RIDER_BENE_TYPE"/>
+				<property name="column" value="RIDER_PLAN_CODE"/>
+			</bean>
+			<bean class="com.csc.fsg.life.pw.web.io.T007xUlPlanCodeSource">
+				<property name="table" value="T007X"/>
+				<property name="productPrefix" value="U"/>
+				<property name="controlColumn" value="RIDER_BENE_TYPE"/>
+				<property name="column" value="RIDER_PLAN_CODE"/>
+			</bean>
+		</list>
+	</property>
+	</bean>
+
+</beans>

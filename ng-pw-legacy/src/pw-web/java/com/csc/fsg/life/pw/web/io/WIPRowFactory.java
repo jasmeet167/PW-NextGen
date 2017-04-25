@@ -8,9 +8,12 @@ package com.csc.fsg.life.pw.web.io;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.csc.fsg.life.pw.common.transferobjects.PlanRowTO;
 import com.csc.fsg.life.pw.common.util.*;
+//import com.csc.fsg.life.pw.web.actions.rcm.beans.AuditRow;
+import com.csc.fsg.life.pw.web.actions.rcm.beans.AuditTableFilter;
 import com.csc.fsg.life.pw.web.environment.Environment;
 import com.csc.fsg.life.pw.web.environment.EnvironmentManager;
 
@@ -47,36 +50,36 @@ public final class WIPRowFactory {
 	public static void createWIPRow(ResultSet rs, IWIPRows iWipRows, int wipType)
 	        throws WIPRowException, Exception {
 
-//		// ResultSetMetaData rsmd = rs.getMetaData();
-//		WIPProperties wipProp = WIPProperties.getInstance();
-//		WIPRows rows = (WIPRows) iWipRows;
-//		WIPTableFilter filter = rows.getRequestFilter();
-//		SqlExpressionEvaluator ee = null;
-//		if ( filter.hasUserCondition() )
-//			ee = new SqlExpressionEvaluator(filter.getUserCondition());
-//
-//		if (wipType == Constants.PLAN_WIP) {
-//			while (rs.next()) {
-//				PlanWIPRow pWipRow = createPlanRow(rs);
-//				
-//				if ( filter.hasUserCondition() ) {
-//					if ( !wipRowMatchesFilter(ee, filter, pWipRow) )
-//						continue;
-//				}
-//
-//				iWipRows.add(pWipRow);
-//			}
-//		} else if (wipType == Constants.INDEX_WIP) {
-//			while (rs.next()) {
-//				IndexWIPRow iWipRow = createIndexRow(rs, wipProp);
-//				
-//				if ( filter.hasUserCondition() ) {
-//					if ( !wipRowMatchesFilter(ee, filter, iWipRow) )
-//						continue;
-//				}
-//
-//				iWipRows.add(iWipRow);
-//			}
+		// ResultSetMetaData rsmd = rs.getMetaData();
+		WIPProperties wipProp = WIPProperties.getInstance();
+		WIPRows rows = (WIPRows) iWipRows;
+		WIPTableFilter filter = rows.getRequestFilter();
+		SqlExpressionEvaluator ee = null;
+		if ( filter.hasUserCondition() )
+			ee = new SqlExpressionEvaluator(filter.getUserCondition());
+
+		if (wipType == Constants.PLAN_WIP) {
+			while (rs.next()) {
+				PlanWIPRow pWipRow = createPlanRow(rs);
+				
+				if ( filter.hasUserCondition() ) {
+					if ( !wipRowMatchesFilter(ee, filter, pWipRow) )
+						continue;
+				}
+
+				iWipRows.add(pWipRow);
+			}
+		} else if (wipType == Constants.INDEX_WIP) {
+			while (rs.next()) {
+				IndexWIPRow iWipRow = createIndexRow(rs, wipProp);
+				
+				if ( filter.hasUserCondition() ) {
+					if ( !wipRowMatchesFilter(ee, filter, iWipRow) )
+						continue;
+				}
+
+				iWipRows.add(iWipRow);
+			}
 //		} else if (wipType == Constants.AUDIT_LOG) {
 //			// ENH874 - support audit paging
 //			if (filter.getPagingSize() == -1) {
@@ -87,25 +90,25 @@ public final class WIPRowFactory {
 //			} else {
 //				pageAuditRows(rs, rows, wipProp);
 //			}
-//		} else {
-//			int pagingSize = filter.getPagingSize();
-//
-//			if (pagingSize == -1) {
-//				while (rs.next()) {
-//					CommonWIPRow cWipRow = createCommonWIPRow(rs, wipProp);
-//
-//					if ( filter.hasUserCondition() ) {
-//						if ( !wipRowMatchesFilter(ee, filter, cWipRow) )
-//							continue;
-//					}
-//
-//					rows.add(cWipRow);
-//				}
-//			} else {
-//				pageWIPRows(rs, rows, wipProp);
-//			}
-//
-//		}
+		} else {
+			int pagingSize = filter.getPagingSize();
+
+			if (pagingSize == -1) {
+				while (rs.next()) {
+					CommonWIPRow cWipRow = createCommonWIPRow(rs, wipProp);
+
+					if ( filter.hasUserCondition() ) {
+						if ( !wipRowMatchesFilter(ee, filter, cWipRow) )
+							continue;
+					}
+
+					rows.add(cWipRow);
+				}
+			} else {
+				pageWIPRows(rs, rows, wipProp);
+			}
+
+		}
 	}
 
 	private static void pageWIPRows(ResultSet rs, WIPRows rows,

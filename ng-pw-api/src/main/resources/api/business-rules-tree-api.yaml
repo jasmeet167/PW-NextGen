@@ -516,6 +516,18 @@ definitions:
       attributes:
         $ref: '#/definitions/treeNodeAttributes'
 
+  treeNodeAttributes:
+    type: object
+    properties:
+      disabled:
+        type: boolean
+      updateAllowed:
+        type: boolean
+
+# ========================================================
+# Common definitions, which begin at this point,
+# must exactly match those in the basic API specification.
+# ========================================================
   treeNodePlanKey:
     type: object
     properties:
@@ -541,18 +553,6 @@ definitions:
       tablePtrSubset:
         type: string
 
-  treeNodeAttributes:
-    type: object
-    properties:
-      disabled:
-        type: boolean
-      updateAllowed:
-        type: boolean
-
-# ========================================================
-# Common definitions, which begin at this point,
-# must exactly match those in the basic API specification.
-# ========================================================
   errorModel:
     type: object
     required:

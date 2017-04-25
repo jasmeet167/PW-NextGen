@@ -42,7 +42,7 @@ public class TableManagerFactory {
 //			if (isEntireTable)
 //				return new EntireTableData();
 //			else
-//				return new DataWithChanges();
+				return new DataWithChanges();
 		} else if (isWithoutChanges) {
 			return new DataWithoutChanges();
 		}

@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.csc.fsg.life.pw.common.transferobjects.PlanTO;
 import com.csc.fsg.life.pw.common.util.Constants;
+import com.csc.fsg.life.pw.web.avm.AVKey;
 import com.csc.fsg.life.pw.web.controller.BaseAction;
 import com.csc.fsg.life.pw.web.environment.*;
 import com.csc.fsg.life.pw.web.io.*;
@@ -82,7 +83,7 @@ public class DataWithoutChanges implements ITableManager {
 	 *            Object
 	 * @return Data Stream to be returned to client
 	 */
-	public final List<Row> getData(HashMap req, int userAuthority)
+	public final StringBuffer getData(HashMap req, int userAuthority)
 	        throws Exception {
 
 		StringBuffer stream = new StringBuffer();
@@ -93,32 +94,28 @@ public class DataWithoutChanges implements ITableManager {
 		TableFilter filter = getFilter(req, envId);
 
 		TableDescriptor td = environment.getTableDescMgr().getTableDescriptor(filter.getTableId());
-		if (td == null)
-			throw new NoSuchTableException();
-
 		Vector<Row> sourceRows = td.getTableRows(environment, filter);
-		return sourceRows;
-//
-//		String pp = filter.getProductPrefix();
-//		if (pp != null) {
-//			if (pp.equals("N") || pp.equals("C"))
-//				filter.setProductPrefix(null); // For Common tables the product
-//			// prefix should go as ALL(null)
-//		}
-//
-//		// WMA TT SPR# 489 - AVM Translation in "Rules" view
-//		PlanTO plan = null;
-//		String planKey = (String) req.get("plan_key");
-//		if (planKey != null) {
-//			plan = new PlanTO(planKey, "|");
-//		}
-//
-//		String table = (String) req.get("table");
-//		addPagingStream(stream, filter, td);
-//		addDescStream(stream, td, filter, envId, plan, table);
-//		addDataStream(stream, td, sourceRows, envId);
-//
-//		return stream;
+
+		String pp = filter.getProductPrefix();
+		if (pp != null) {
+			if (pp.equals("N") || pp.equals("C"))
+				filter.setProductPrefix(null); // For Common tables the product
+			// prefix should go as ALL(null)
+		}
+
+		// WMA TT SPR# 489 - AVM Translation in "Rules" view
+		PlanTO plan = null;
+		String planKey = (String) req.get("plan_key");
+		if (planKey != null) {
+			plan = new PlanTO(planKey, "|");
+		}
+
+		String table = (String) req.get("table");
+		addPagingStream(stream, filter, td);
+		addDescStream(stream, td, filter, envId, plan, table);
+		addDataStream(stream, td, sourceRows, envId);
+
+		return stream;
 	}
 
 	/**
