@@ -14,6 +14,7 @@ import { SelectItem } from 'primeng/primeng';
 import { ChangesFilterData } from 'app/util/model/changes-filter-data';
 import { ApplyFilterData } from 'app/util/model/apply-filter-data';
 import { PromoteFilterData } from 'app/util/model/promote-filter-data';
+import { AuditFilterData } from 'app/util/model/audit-filter-data';
 
 import 'rxjs/add/operator/map';
 
@@ -507,5 +508,21 @@ export class SearchService {
 
     return this.http.request(new Request(options))
                .map(response => { return <SelectItem[]>response.json(); });
+  }
+
+   getAuditErrorDetails(authToken: string, filterAspect: string, envId: string): Observable<AuditFilterData> {
+    const httpHeaders: Headers = new Headers();
+    httpHeaders.append('Accept', 'application/json');
+    httpHeaders.append('authToken', authToken);
+    httpHeaders.append('filterAspect', filterAspect);
+    httpHeaders.append('envId', envId);
+
+    const options: RequestOptions = new RequestOptions();
+    options.headers = httpHeaders;
+    options.url = sessionStorage['restServiceBaseUrl'] + 'search/audit/filter';
+    options.method = RequestMethod.Get;
+
+    return this.http.request(new Request(options))
+               .map(response => { return <AuditFilterData>response.json(); });
   }
 }

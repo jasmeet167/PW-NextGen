@@ -1,65 +1,63 @@
 <div class="ui-widget ui-widget-content ui-corner-all" style="padding: 0.75em">
-  <table cellpadding="3">
-    <tr>
-      <td>
+  <div style="display: table;padding: 0.25em; min-height: 500px">
+    <div style="display: table-row;">
+      <div style="display:table-cell;">
         <label> <span style="align-content: center"> Source Environment </span></label>
-      </td>
-      <td>
+      </div>
+      <div style="display:table-cell;">
         <p-dropdown [options]="filterSourceEnvOptions" [(ngModel)]="filterSourceEnv" (onChange)="onSourceEnvChange()" [autoWidth]="false"
-          [style]="{'width':'350px','margin-left':'10px'}"></p-dropdown>
-      </td>
-    </tr>
-    <tr>
-      <td>
-      <label> <span style="align-content: center"> Target Environment </span></label>
-      </td>
-      <td>
+          [style]="{'width':'350px','margin-left':'5px'}"></p-dropdown>
+      </div>
+    </div>
+    <div style="display: table-row;">
+      <div style="display:table-cell;">
+        <label> <span style="align-content: center"> Target Environment </span></label>
+      </div>
+      <div style="display:table-cell;">
         <p-dropdown [options]="filterTargetEnvOptions" [(ngModel)]="filterTargetEnv" [disabled]="isTargetEnvDisabled" (onChange)="onTargetEnvChange()"
-          [autoWidth]="false" [style]="{'width':'350px','margin-left':'10px'}"></p-dropdown>
-      </td>
-    </tr>
-    <tr>
-      <td>
+          [autoWidth]="false" [style]="{'width':'350px','margin-left':'5px'}"></p-dropdown>
+      </div>
+    </div>
+    <div style="display: table-row;">
+      <div style="display:table-cell;">
         <label> <span style="align-content: center"> Enter Package Name (Optional) </span></label>
-      </td>
-      <td>
-        <input type="text" pInputText [(ngModel)]="enterPackage" [disabled]="isEnterPackageDisabled" style="margin-left: 10px; width: 350px"
+      </div>
+      <div style="display:table-cell;">
+        <input type="text" pInputText [(ngModel)]="enterPackage" [disabled]="isEnterPackageDisabled" style="margin-left: 5px; width: 350px"
         />
-      </td>
-    </tr>
-    <tr>
-      <td valign="top">
+      </div>
+    </div>
+    <div style="display: table-row;">
+      <div style="display:table-cell; vertical-align: top">
         <label><span style="align-content: center"> Packages </span></label>
-      </td>
-      <td>
-      <p-pickList [source]="filterPackageInputRows" [target]="filterPackageOutputRows" [showSourceControls]="false" [showTargetControls]="false"
-          [sourceStyle]="{'width':'350px','margin-left': '6px','margin-bottom':'5px','height':'145px'}" [targetStyle]="{'width':'350px','margin-bottom':'5px','height':'145px'}">
+      </div>
+      <div style="display:table-cell;">
+        <p-pickList [source]="filterPackageInputRows" [target]="filterPackageOutputRows" [showSourceControls]="false" [showTargetControls]="false"
+          [sourceStyle]="{'width':'350px','margin-left': '6px','height':'145px'}" [targetStyle]="{'width':'350px','height':'145px'}">
           <template let-project pTemplate="item">
             <div>{{project.label}}</div>
           </template>
           </p-pickList>
-      </td>
-    </tr>
-    <tr>
-      <td valign="top">
+      </div>
+    </div>
+    <div style="display: table-row;">
+      <div style="display:table-cell; vertical-align: top">
         <label><span style="align-content: center"> Projects </span></label>
-      </td>
-      <td>
+      </div>
+      <div style="display:table-cell;">
         <p-pickList [source]="filterProjectInputRows" [target]="filterProjectOutputRows" [showSourceControls]="false" [showTargetControls]="false"
           [sourceStyle]="{'width':'350px','margin-left': '6px','margin-bottom':'15px','height':'145px'}" [targetStyle]="{'width':'350px','margin-bottom':'15px','height':'145px'}">
           <template let-project pTemplate="item">
             <div>{{project.label}}</div>
           </template>
           </p-pickList>
-      </td>
-    </tr>
-    <tr>
-      <td>
-      </td>
-      <td style="float: right;">
+      </div>
+    </div>
+    <div style="display: table-row;">
+      <div style="display:table-cell;position: relative;left: 820px;">
         <button pButton type="button" label="Go" [disabled]="isGoDisabled"></button>
         <button pButton type="button" label="Reset" [disabled]="isResetDisabled" (click)="onResetClick()"></button>
-      </td>
-    </tr>
-  </table>
+      </div>
+    </div>
+  </div>
 </div>

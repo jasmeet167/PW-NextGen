@@ -1,0 +1,127 @@
+<div class="ui-widget ui-widget-content ui-corner-all" style="padding: 0.75em">
+  <div style="display: table; padding: 0.25em;">
+    <div style="display: table-row;">
+      <div style="display: table-cell;">
+        <p-radioButton name="radioGroup" [(ngModel)]="radioAudit" value="audit" (onClick)="onRadioAuditClick()"></p-radioButton>
+        <label> View Audit Log </label>
+      </div>
+      <div style="display: table-cell;">
+        <p-radioButton name="radioGroup" [(ngModel)]="radioError" value="error" (onClick)="onRadioErrorClick()"></p-radioButton>
+        <label> View Error Log</label>
+      </div>
+    </div>
+    <div style="display: table-row;">
+      <div style="display: table-cell;">
+        <label> <span style="align-content: center"> Environment </span></label>
+      </div>
+      <div style="display: table-cell;">
+        <p-dropdown [options]="filterEnvOptions" [(ngModel)]="filterEnv" (onChange)="onEnvChange()" [autoWidth]="false" [style]="{'width':'350px','margin-left':'5px', 'margin-bottom':'5px'}"></p-dropdown>
+      </div>
+      <div style="display: table-cell;">
+        <label> <span style="align-content: center;margin-left: 10px; width: 20px;display: inline-block"> Sort Priority </span></label>
+      </div>
+      <div style="display: table-cell;">
+        <label> <span style="align-content: center;margin-left: 30px; width: 20px;display: inline-block"> Sort Order </span></label>
+      </div>
+    </div>
+    <div style="display: table-row;">
+      <div style="display: table-cell; vertical-align: top">
+        <label><span style="align-content: initial"> Packages </span></label>
+      </div>
+      <div style="display: table-cell;">
+        <p-pickList [source]="filterPackageInputRows" [target]="filterPackageOutputRows" [showSourceControls]="false" [showTargetControls]="false"
+          [sourceStyle]="{'width':'350px','margin-left': '6px','margin-bottom':'5px','height':'145px'}" [targetStyle]="{'width':'350px','margin-bottom':'5px','height':'145px'}">
+          <template let-project pTemplate="item">
+            <div>{{project.label}}</div>
+          </template>
+          </p-pickList>
+      </div>
+      <div style="display: table-cell; vertical-align: middle">
+        <input type="text" pInputText [(ngModel)]="packagesSortPriority" style="margin-left: 10px; width: 50px" />
+      </div>
+      <div style="display: table-cell;vertical-align: middle">
+        <p-toggleButton [style]="{'width':'40px','height':'30px','margin-top':'1px' ,'margin-left':'30px'}" [(ngModel)]="packagesSortOrder"
+          onLabel="" offLabel="" onIcon="fa-arrow-down" offIcon="fa-arrow-up"></p-toggleButton>
+      </div>
+    </div>
+    <div style="display: table-row;">
+      <div style="display: table-cell; vertical-align: top">
+        <label><span style="align-content: initial"> Projects </span></label>
+      </div>
+      <div style="display: table-cell;">
+        <p-pickList [source]="filterProjectInputRows" [target]="filterProjectOutputRows" [showSourceControls]="false" [showTargetControls]="false"
+          [sourceStyle]="{'width':'350px','margin-left': '6px','margin-bottom':'5px','height':'145px'}" [targetStyle]="{'width':'350px','margin-bottom':'5px','height':'145px'}">
+          <template let-project pTemplate="item">
+            <div>{{project.label}}</div>
+          </template>
+          </p-pickList>
+      </div>
+      <div style="display: table-cell; vertical-align: middle">
+        <input type="text" pInputText [(ngModel)]="projectsSortPriority" style="margin-left: 10px; width: 50px" />
+      </div>
+      <div style="display: table-cell; vertical-align: middle">
+        <p-toggleButton [style]="{'width':'40px','height':'30px','margin-top':'1px','margin-left':'30px'}" [(ngModel)]="projectsSortOrder"
+          onLabel="" offLabel="" onIcon="fa-arrow-down" offIcon="fa-arrow-up"></p-toggleButton>
+      </div>
+    </div>
+    <div style="display: table-row;">
+      <div style="display: table-cell; vertical-align: top">
+        <label><span style="align-content: initial"> Business Rules </span></label>
+      </div>
+      <div style="display: table-cell;">
+        <p-pickList [source]="filterBusinessRuleInputRows" [target]="filterBusinessRuleOutputRows" [showSourceControls]="false" [showTargetControls]="false"
+          [sourceStyle]="{'width':'350px','margin-left': '6px','margin-bottom':'5px','height':'145px'}" [targetStyle]="{'width':'350px','margin-bottom':'5px','height':'145px'}">
+          <template let-project pTemplate="item">
+            <div>{{project.label}}</div>
+          </template>
+          </p-pickList>
+      </div>
+      <div style="display: table-cell; vertical-align: middle">
+        <input type="text" pInputText [(ngModel)]="businessSortPriority" style="margin-left: 10px; width: 50px" />
+      </div>
+      <div style="display: table-cell; vertical-align: middle">
+        <p-toggleButton [style]="{'width':'40px','height':'30px','margin-top':'1px','margin-left':'30px'}" [(ngModel)]="businessSortOrder"
+          onLabel="" offLabel="" onIcon="fa-arrow-down" offIcon="fa-arrow-up"></p-toggleButton>
+      </div>
+    </div>
+    <div style="display: table-row;">
+      <div style="display: table-cell; vertical-align: top">
+        <label><span style="align-content: initial"> User IDs </span></label>
+      </div>
+      <div style="display: table-cell;">
+        <p-pickList [source]="filterUserIDInputRows" [target]="filterUserIDOutputRows" [showSourceControls]="false" [showTargetControls]="false"
+          [sourceStyle]="{'width':'350px','margin-left': '6px','margin-bottom':'5px','height':'145px'}" [targetStyle]="{'width':'350px','margin-bottom':'5px','height':'145px'}">
+          <template let-project pTemplate="item">
+            <div>{{project.label}}</div>
+          </template>
+          </p-pickList>
+      </div>
+      <div style="display: table-cell; vertical-align: middle">
+        <input type="text" pInputText [(ngModel)]="usersSortPriority" style="margin-left: 10px; width: 50px" />
+      </div>
+      <div style="display: table-cell; vertical-align: middle">
+        <p-toggleButton [style]="{'width':'40px','height':'30px','margin-top':'1px','margin-left':'30px'}" [(ngModel)]="usersSortOrder"
+          onLabel="" offLabel="" onIcon="fa-arrow-down" offIcon="fa-arrow-up"></p-toggleButton>
+      </div>
+    </div>
+    <div style="display: table-row;">
+      <div style="display: table-cell; vertical-align: top" [style.visibility]="isAudit ? 'visible' : 'hidden'">
+        <label><span style="align-content: initial"> Start Date </span></label>
+        <p-calendar [disabled]="isStartDateDisabled" dateFormat="yy-mm-dd" [showIcon]="true" [inputStyle]="{'width':'150px'}"></p-calendar>
+      </div>
+
+      <div style="display: table-cell; vertical-align: top">
+        <div [style.visibility]="isAudit ? 'visible' : 'hidden'">
+          <label style="margin-left:50px"><span> End Date </span></label>
+          <p-calendar [disabled]="isEndDateDisabled" dateFormat="yy-mm-dd" [showIcon]="true" [inputStyle]="{'width':'150px'}"></p-calendar>
+        </div>
+      </div>
+      <div style="display: table-cell;">
+        <button pButton type="button" label="Go" [disabled]="isGoDisabled" (click)="onGoClick()"></button>
+      </div>
+      <div style="display: table-cell;">
+        <button style="margin-left: 5px" pButton type="button" label="Reset" (click)="onResetClick()"></button>
+      </div>
+    </div>
+  </div>
+</div>

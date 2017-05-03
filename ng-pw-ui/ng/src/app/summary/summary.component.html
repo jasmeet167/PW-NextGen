@@ -1,7 +1,7 @@
 <div class="ui-widget ui-widget-content ui-corner-all" style="padding: 0.75em">
-  <table>
-    <tr>
-      <td valign="top">
+  <div style="display: table; padding: 0.25em; height: 500px">
+    <div style="display: table-row;">
+      <div style="display:table-cell; vertical-align: top">
         <ul>
           <li>
             <p-dropdown [options]="envIdOptions" [(ngModel)]="envId" (onChange)="onEnvIdChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
@@ -27,7 +27,8 @@
               [style]="{'width':'350px'}"></p-dropdown>
           </li>
           <li>
-            <p-dropdown [options]="effDateOptions" [(ngModel)]="effDate" [disabled]="isEffDateDisabled" (onChange)="onEffDateChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
+            <p-dropdown [options]="effDateOptions" [(ngModel)]="effDate" [disabled]="isEffDateDisabled" (onChange)="onEffDateChange()"
+              [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
           </li>
           <li style="margin-top: 20px">
             <label><span style="align-content: center"> As of Date </span></label>
@@ -37,13 +38,13 @@
           </li>
           <li style="margin-top: 20px">
             <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Remember my selections"></p-checkbox>
-            <button pButton type="button" [disabled]="isGoDisabled" label="Go" style="margin-left: 35px"></button>
+            <button pButton type="button" [disabled]="isGoDisabled" label="Go" style="float: right"></button>
           </li>
         </ul>
-      </td>
-      <td valign="top" style="width: 250px">
-        <ul style="margin-top: 35px">
-          <li style="margin-left:23px">
+      </div>
+      <div style="display:table-cell; vertical-align: top;width: 250px">
+        <ul style="margin-top: 30px">
+          <li style="margin-left:20px">
             <label> <span style="align-content: center"> Display Additional Options For:</span></label>
           </li>
           <li class="li-checkbox-space">
@@ -65,8 +66,8 @@
             <p-checkbox [(ngModel)]="targetInfoChkBox" binary="true" [disabled]="isTypeTwoDisabled" label="Target Information"></p-checkbox>
           </li>
         </ul>
-      </td>
-      <td valign="top" style="width: 250px">
+      </div>
+      <div style="display:table-cell; vertical-align: top;width: 250px">
         <ul style="margin-top: 50px">
           <li class="li-checkbox-space">
             <p-checkbox [(ngModel)]="deathBeneChkBox" binary="true" [disabled]="isTypeOneDisabled" label="Death Benefits"></p-checkbox>
@@ -87,7 +88,7 @@
             <p-checkbox [(ngModel)]="allChkBox" (onChange)="onAllChkBoxClick()" binary="true" [disabled]="isTypeThreeDisabled" label="All Of The Above"></p-checkbox>
           </li>
         </ul>
-      </td>
-    </tr>
-  </table>
+      </div>
+    </div>
+  </div>
 </div>

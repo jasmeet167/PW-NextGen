@@ -1,7 +1,7 @@
 <div class="ui-widget ui-widget-content ui-corner-all" style="padding: 0.75em">
-  <table>
-    <tr>
-      <td valign="top">
+  <div style="display: table; width: 50%; min-height: 38em;">
+    <div style="display: table-row; height: 25px">
+      <div style="display:table-cell; padding-bottom: 8px;">
         <ul>
           <li>
             <p-dropdown [options]="envIdOptions" [(ngModel)]="envId" (onChange)="onEnvIdChange()" [autoWidth]="false" [style]="{'width':'350px'}"></p-dropdown>
@@ -34,22 +34,22 @@
             <p-checkbox [(ngModel)]="rememberSelections" binary="true" label="Remember my selections"></p-checkbox>
           </li>
         </ul>
-      </td>
-      <td valign="top" style="width: 700px">
-        <ul>
-          <div [style.visibility]="isDivRendered ? 'visible' : 'hidden'">
-            <li style="margin-left:23px; margin-top: 35px">
-              <label> <span style="align-content: center"> Annuity Category Selection</span></label>
-            </li>
-            <li style="margin-left:23px; margin-top: 15px">
-              <p-checkbox [(ngModel)]="surrenders" binary="true" label="Surrenders"></p-checkbox>
-            </li>
-          </div>
-          <li style="margin-left:23px; margin-top: 250px">
+      </div>
+      <div style="display:table-cell;column-span: 10px">
+        <ul style="position: relative; top: 25px; left: -150px" [style.visibility]="isDivRendered ? 'visible' : 'hidden'">
+          <li>
+            <label> <span style="align-content: center"> Annuity Category Selection</span></label>
+          </li>
+          <li style="margin-top:10px">
+            <p-checkbox [(ngModel)]="surrenders" binary="true" label="Surrenders"></p-checkbox>
+          </li>
+        </ul>
+        <ul style="position: relative; top: 220px; left: -150px">
+          <li>
             <button pButton type="button" [disabled]="isNextDisabled" label="Next "></button>
           </li>
         </ul>
-      </td>
-    </tr>
-  </table>
+      </div>
+    </div>
+  </div>
 </div>
