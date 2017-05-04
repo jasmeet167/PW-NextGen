@@ -184,11 +184,11 @@ export class PromoteComponent implements OnInit {
     }
   }
 
-  private sortPickList(filterRows: SelectItem[]) {
+  public sortPickList(filterRows: SelectItem[]) {
     filterRows.sort(function (a, b) { return (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0); });
   }
 
-  private evaluateStatusOfGo() {
+  public evaluateStatusOfGo() {
     if ((this.filterSourceEnv && this.filterSourceEnv.trim() !== '')
       && (this.filterTargetEnv && this.filterTargetEnv.trim() !== '')
     ) {

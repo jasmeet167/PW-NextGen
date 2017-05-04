@@ -142,7 +142,7 @@ export class ChangesOnlyComponent implements OnInit {
 
   }
 
-  private sortPickList(filterRows: SelectItem[]) {
+  public sortPickList(filterRows: SelectItem[]) {
     filterRows.sort(function (a, b) { return (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0); });
   }
 
