@@ -1,10 +1,12 @@
 button {
-    margin-bottom: 20px;
-    width: 90px;
+  margin-bottom: 20px;
+  width: 90px;
 }
+
 label {
-    width: 100px;
+  width: 100px;
 }
+
 ul {
   list-style-type: none;
   padding-left: 0;
@@ -13,4 +15,10 @@ ul {
 
 li {
   margin-top: 5px;
+}
+
+.ui-picklist .ui-picklist-buttons {
+  vertical-align: top !important;
+  height: 10px !important;
+  padding-top: 8px !important;
 }
