@@ -55,7 +55,7 @@ export class PromoteComponent implements OnInit {
     this.isTargetEnvDisabled = true;
     this.isEnterPackageDisabled = true;
 
-     this.isResetDisabled = true;
+    this.isResetDisabled = true;
 
     this.notificationService.showWaitIndicator(true);
     this.searchService.getEnvOptions(this.authToken)
@@ -182,6 +182,10 @@ export class PromoteComponent implements OnInit {
         this.filterProjectInputRows.push({ label: project, value: project });
       }
     }
+  }
+
+  private sortPickList(filterRows: SelectItem[]) {
+    filterRows.sort(function (a, b) { return (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0); });
   }
 
   private evaluateStatusOfGo() {

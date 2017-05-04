@@ -14,7 +14,8 @@
       </div>
       <div style="display: table-cell;">
         <p-pickList [source]="filterProjectInputRows" [target]="filterProjectOutputRows" [showSourceControls]="false" [showTargetControls]="false"
-          [sourceStyle]="{'width':'350px','margin-left': '6px','margin-bottom':'5px','height':'145px'}" [targetStyle]="{'width':'350px','margin-bottom':'5px','height':'145px'}">
+          [sourceStyle]="{'width':'350px','margin-left': '6px','margin-bottom':'5px','height':'145px'}" [targetStyle]="{'width':'350px','margin-bottom':'5px','height':'145px'}"
+          (onMoveToSource)="sortPickList(filterProjectInputRows)" (onMoveToTarget)="sortPickList(filterProjectOutputRows)">
           <template let-project pTemplate="item">
             <div>{{project.label}}</div>
           </template>
@@ -28,7 +29,8 @@
       <div style="display: table-cell;">
         <div style="display: table-row;">
           <p-pickList [source]="filterBussRulesInputRows" [target]="filterBussRulesOutputRows" [showSourceControls]="false" [showTargetControls]="false"
-            [sourceStyle]="{'width':'350px','margin-left': '6px','margin-bottom':'5px','height':'145px'}" [targetStyle]="{'width':'350px','margin-bottom':'5px','height':'145px'}">
+            [sourceStyle]="{'width':'350px','margin-left': '6px','margin-bottom':'5px','height':'145px'}" [targetStyle]="{'width':'350px','margin-bottom':'5px','height':'145px'}"
+            (onMoveToSource)="sortPickList(filterBussRulesInputRows)" (onMoveToTarget)="sortPickList(filterBussRulesOutputRows)">
             <template let-bussRule pTemplate="item">
               <div style="margin-bottom:3px">{{bussRule.label}}</div>
             </template>
@@ -42,7 +44,8 @@
       </div>
       <div style="display: table-cell;">
         <p-pickList [source]="filterUserIdInputRows" [target]="filterUserIdOutputRows" [showSourceControls]="false" [showTargetControls]="false"
-          [sourceStyle]="{'width':'350px','margin-left': '6px','margin-bottom':'5px','height':'145px'}" [targetStyle]="{'width':'350px','margin-bottom':'5px','height':'145px'}">
+          [sourceStyle]="{'width':'350px','margin-left': '6px','margin-bottom':'5px','height':'145px'}" [targetStyle]="{'width':'350px','margin-bottom':'5px','height':'145px'}"
+          (onMoveToSource)="sortPickList(filterUserIdInputRows)" (onMoveToTarget)="sortPickList(filterUserIdOutputRows)">
           <template let-userId pTemplate="item">
             <div>{{userId.label}}</div>
           </template>

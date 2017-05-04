@@ -139,6 +139,11 @@ export class ChangesOnlyComponent implements OnInit {
         this.filterUserIdInputRows.push({ label: user, value: user });
       }
     }
+
+  }
+
+  private sortPickList(filterRows: SelectItem[]) {
+    filterRows.sort(function (a, b) { return (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0); });
   }
 
   private evaluateStatusOfGo() {

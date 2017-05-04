@@ -134,6 +134,10 @@ export class ApplyChangesComponent implements OnInit {
     }
   }
 
+  private sortPickList(filterRows: SelectItem[]) {
+    filterRows.sort(function (a, b) { return (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0); });
+  }
+
   private evaluateStatusOfGo() {
     if (this.filterEnv && this.filterEnv.trim() !== '') {
       this.isGoDisabled = false;

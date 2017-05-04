@@ -23,7 +23,8 @@
       </div>
       <div style="display:table-cell;">
         <p-pickList [source]="filterPackageInputRows" [target]="filterPackageOutputRows" [showSourceControls]="false" [showTargetControls]="false"
-          [sourceStyle]="{'width':'350px','margin-left': '6px','margin-bottom':'5px','height':'145px'}" [targetStyle]="{'width':'350px','margin-bottom':'5px','height':'145px'}">
+          [sourceStyle]="{'width':'350px','margin-left': '6px','margin-bottom':'5px','height':'145px'}" [targetStyle]="{'width':'350px','margin-bottom':'5px','height':'145px'}"
+          (onMoveToSource)="sortPickList(filterPackageInputRows)" (onMoveToTarget)="sortPickList(filterPackageOutputRows)">
           <template let-project pTemplate="item">
             <div>{{project.label}}</div>
           </template>
@@ -36,7 +37,8 @@
       </div>
       <div style="display:table-cell;">
         <p-pickList [source]="filterProjectInputRows" [target]="filterProjectOutputRows" [showSourceControls]="false" [showTargetControls]="false"
-          [sourceStyle]="{'width':'350px','margin-left': '6px','margin-bottom':'15px','height':'145px'}" [targetStyle]="{'width':'350px','margin-bottom':'15px','height':'145px'}">
+          [sourceStyle]="{'width':'350px','margin-left': '6px','margin-bottom':'15px','height':'145px'}" [targetStyle]="{'width':'350px','margin-bottom':'15px','height':'145px'}"
+          (onMoveToSource)="sortPickList(filterProjectInputRows)" (onMoveToTarget)="sortPickList(filterProjectOutputRows)">
           <template let-project pTemplate="item">
             <div>{{project.label}}</div>
           </template>
