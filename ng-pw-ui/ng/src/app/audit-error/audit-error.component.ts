@@ -6,7 +6,6 @@ import { SearchService } from 'app/util/service/search.service';
 import { AuditFilterData } from 'app/util/model/audit-filter-data';
 
 @Component({
-  selector: 'app-audit-error',
   templateUrl: './audit-error.component.html',
   styleUrls: ['./audit-error.component.css'],
   encapsulation: ViewEncapsulation.None
@@ -14,9 +13,6 @@ import { AuditFilterData } from 'app/util/model/audit-filter-data';
 export class AuditErrorComponent implements OnInit {
   public filterEnvOptions: SelectItem[];
   public filterEnv: string;
-
-  public radioAudit: string;
-  public radioError: string;
 
   public filterPackageInputRows: SelectItem[];
   public filterPackageOutputRows: SelectItem[];
@@ -38,7 +34,6 @@ export class AuditErrorComponent implements OnInit {
   public usersSortPriority: string;
 
   public isGoDisabled: boolean;
-  public isAudit: boolean;
 
   public isStartDateDisabled: boolean;
   public isEndDateDisabled: boolean;
@@ -50,8 +45,7 @@ export class AuditErrorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.radioAudit = 'audit';
-    this.isAudit = true;
+    this.filterAspect = 'A';
 
     if (!this.authToken || this.authToken.trim() === '') {
       this.notificationService.navigateToLogin();
@@ -100,7 +94,6 @@ export class AuditErrorComponent implements OnInit {
   }
 
   onEnvChange() {
-    this.filterAspect = this.isAudit ? 'A' : 'E';
     this.filterPackageInputRows = <SelectItem[]>[];
     this.filterPackageOutputRows = <SelectItem[]>[];
     this.filterProjectInputRows = <SelectItem[]>[];
@@ -112,7 +105,6 @@ export class AuditErrorComponent implements OnInit {
 
     let auditFilterData: AuditFilterData;
     auditFilterData = null;
-
     if (this.filterEnv != null) {
       this.notificationService.showWaitIndicator(true);
 
@@ -147,7 +139,6 @@ export class AuditErrorComponent implements OnInit {
     if (auditFilterData !== null) {
       this.isStartDateDisabled = false;
       this.isEndDateDisabled = false;
-
       if (auditFilterData.packages != null) {
         for (const packages of auditFilterData.packages) {
           this.filterPackageInputRows.push(packages);
@@ -172,7 +163,7 @@ export class AuditErrorComponent implements OnInit {
   }
 
   public sortPickList(filterRows: SelectItem[]) {
-    filterRows.sort(function (a, b) { return (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0); });
+    filterRows.sort((a, b) => { return (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0); });
   }
 
   private evaluateStatusOfGo() {
@@ -181,37 +172,6 @@ export class AuditErrorComponent implements OnInit {
     } else {
       this.isGoDisabled = true;
     }
-  }
-
-  onRadioAuditClick() {
-    this.filterPackageInputRows = <SelectItem[]>[];
-    this.filterPackageOutputRows = <SelectItem[]>[];
-    this.filterProjectInputRows = <SelectItem[]>[];
-    this.filterProjectOutputRows = <SelectItem[]>[];
-    this.filterBusinessRuleInputRows = <SelectItem[]>[];
-    this.filterBusinessRuleOutputRows = <SelectItem[]>[];
-    this.filterUserIDInputRows = <SelectItem[]>[];
-    this.filterUserIDOutputRows = <SelectItem[]>[];
-
-    this.radioError = null;
-    this.radioAudit = 'audit';
-    this.isAudit = true;
-  }
-
-  onRadioErrorClick() {
-    this.filterEnv = null;
-    this.filterPackageInputRows = <SelectItem[]>[];
-    this.filterPackageOutputRows = <SelectItem[]>[];
-    this.filterProjectInputRows = <SelectItem[]>[];
-    this.filterProjectOutputRows = <SelectItem[]>[];
-    this.filterBusinessRuleInputRows = <SelectItem[]>[];
-    this.filterBusinessRuleOutputRows = <SelectItem[]>[];
-    this.filterUserIDInputRows = <SelectItem[]>[];
-    this.filterUserIDOutputRows = <SelectItem[]>[];
-
-    this.radioAudit = null;
-    this.radioError = 'error';
-    this.isAudit = false;
   }
 
   onResetClick() {

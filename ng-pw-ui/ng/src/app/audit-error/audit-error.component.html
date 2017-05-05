@@ -1,12 +1,12 @@
 <div class="ui-widget ui-widget-content ui-corner-all" style="padding: 0.75em">
   <div style="display: table; padding: 0.25em;">
     <div style="display: table-row;">
-      <div style="display: table-cell;">
-        <p-radioButton name="radioGroup" [(ngModel)]="radioAudit" value="audit" (onClick)="onRadioAuditClick()"></p-radioButton>
+      <div style="display: table-cell; width: 160px">
+        <p-radioButton name="filterAspect" [(ngModel)]="filterAspect" value="A" (onClick)="onResetClick()"></p-radioButton>
         <label> View Audit Log </label>
       </div>
-      <div style="display: table-cell;">
-        <p-radioButton name="radioGroup" [(ngModel)]="radioError" value="error" (onClick)="onRadioErrorClick()"></p-radioButton>
+      <div style="display: table-cell; margin-left: 20px">
+        <p-radioButton name="filterAspect" [style]="{'margin-left': '100px'}" [(ngModel)]="filterAspect" value="E" (onClick)="onResetClick()"></p-radioButton>
         <label> View Error Log</label>
       </div>
     </div>
@@ -108,20 +108,21 @@
           onLabel="" offLabel="" onIcon="fa-arrow-down" offIcon="fa-arrow-up"></p-toggleButton>
       </div>
     </div>
+  </div>
+  <div style="display: table; padding: 0.25em;">
     <div style="display: table-row;">
-      <div style="display: table-cell; vertical-align: top" [style.visibility]="isAudit ? 'visible' : 'hidden'">
+      <div style="display: table-cell; vertical-align: top" [style.visibility]="(filterAspect==='A') ? 'visible' : 'hidden'">
         <label><span style="align-content: initial"> Start Date </span></label>
         <p-calendar [disabled]="isStartDateDisabled" dateFormat="yy-mm-dd" [showIcon]="true" [inputStyle]="{'width':'150px'}"></p-calendar>
       </div>
-
       <div style="display: table-cell; vertical-align: top">
-        <div [style.visibility]="isAudit ? 'visible' : 'hidden'">
+        <div [style.visibility]="(filterAspect==='A') ? 'visible' : 'hidden'">
           <label style="margin-left:50px"><span> End Date </span></label>
           <p-calendar [disabled]="isEndDateDisabled" dateFormat="yy-mm-dd" [showIcon]="true" [inputStyle]="{'width':'150px'}"></p-calendar>
         </div>
       </div>
       <div style="display: table-cell;">
-        <button pButton type="button" label="Go" [disabled]="isGoDisabled" (click)="onGoClick()"></button>
+        <button style="margin-left: 350px" pButton type="button" label="Go" [disabled]="isGoDisabled" (click)="onGoClick()"></button>
       </div>
       <div style="display: table-cell;">
         <button style="margin-left: 5px" pButton type="button" label="Reset" (click)="onResetClick()"></button>

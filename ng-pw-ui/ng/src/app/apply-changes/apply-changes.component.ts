@@ -135,7 +135,7 @@ export class ApplyChangesComponent implements OnInit {
   }
 
   public sortPickList(filterRows: SelectItem[]) {
-    filterRows.sort(function (a, b) { return (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0); });
+    filterRows.sort((a, b) => { return (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0); });
   }
 
   private evaluateStatusOfGo() {
