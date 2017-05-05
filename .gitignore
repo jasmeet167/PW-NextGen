@@ -40,6 +40,7 @@
 
 # /ng-pw-ui/
 /ng-pw-ui/.apt_generated
+/ng-pw-ui/ng/.vscode
 /ng-pw-ui/ng/dist
 /ng-pw-ui/ng/node
 /ng-pw-ui/ng/node_modules
