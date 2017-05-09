@@ -1,13 +1,11 @@
 <div class="ui-widget ui-widget-content ui-corner-all" style="padding: 0.75em">
   <div style="display: table; padding: 0.25em;">
     <div style="display: table-row;">
-      <div style="display: table-cell; width: 160px">
-        <p-radioButton name="filterAspect" [(ngModel)]="filterAspect" value="A" (onClick)="onResetClick()"></p-radioButton>
-        <label> View Audit Log </label>
+      <div style="display: table-cell;">
+        <p-radioButton name="filterAspect" [(ngModel)]="filterAspect" value="A" (onClick)="onResetClick()" label="View Audit Log"></p-radioButton>
       </div>
-      <div style="display: table-cell; margin-left: 20px">
-        <p-radioButton name="filterAspect" [(ngModel)]="filterAspect" value="E" (onClick)="onResetClick()"></p-radioButton>
-        <label> View Error Log</label>
+      <div style="display: table-cell;">
+        <p-radioButton name="filterAspect" [(ngModel)]="filterAspect" value="E" (onClick)="onResetClick()" label="View Error Log"></p-radioButton>
       </div>
     </div>
     <div style="display: table-row;">
